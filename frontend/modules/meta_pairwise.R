@@ -494,6 +494,12 @@ run_pairwise_ma <- function(data, outcome = NULL, method = "REML", model = "rand
   if (ma$k >= 5) {
     tf <- tryCatch({
       tf_ma <- trimfill(ma)
+
+      # Extract filled data correctly from metafor trimfill object
+      # tf_ma$yi contains all values (original + imputed)
+      # tf_ma$fill is logical vector indicating which are imputed
+      # tf_ma$k is total studies, tf_ma$k0 is number imputed
+
       list(
         k0 = tf_ma$k0,  # Number of studies imputed
         side = tf_ma$side,  # Side where studies were imputed ("left" or "right")
@@ -504,9 +510,9 @@ run_pairwise_ma <- function(data, outcome = NULL, method = "REML", model = "rand
         p_value = as.numeric(tf_ma$pval),
         model_object = tf_ma,
         data_filled = data.frame(
-          yi = c(data$yi, tf_ma$yi.fill),
-          sei = c(data$sei, tf_ma$sei.fill),
-          imputed = c(rep(FALSE, nrow(data)), rep(TRUE, tf_ma$k0))
+          yi = tf_ma$yi,                    # All effect sizes (original + imputed)
+          sei = sqrt(tf_ma$vi),             # Convert variance to SE
+          imputed = if (!is.null(tf_ma$fill)) tf_ma$fill else rep(FALSE, tf_ma$k)
         )
       )
     }, error = function(e) NULL)

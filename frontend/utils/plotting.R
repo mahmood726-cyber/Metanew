@@ -396,3 +396,63 @@ create_all_ma_plots <- function(ma_result, outcome_name, output_dir = "outputs/p
     funnel_file = funnel_file
   )
 }
+
+# Wrapper functions for consistent API with reporting module
+
+#' Save forest plot to file
+#'
+#' @param ma_result Meta-analysis result object
+#' @param outcome_name Name of the outcome
+#' @param save_path Path to save the plot
+#' @param width Plot width in inches (default: 10)
+#' @param height Plot height in inches (default: 8)
+#' @return ggplot object
+save_forest_plot <- function(ma_result, outcome_name, save_path,
+                             width = 10, height = 8) {
+  # Use the static version for saving
+  save_forest_plot_static(ma_result, outcome_name, save_path)
+}
+
+#' Save funnel plot to file
+#'
+#' @param ma_result Meta-analysis result object
+#' @param outcome_name Name of the outcome
+#' @param save_path Path to save the plot (must end in .png)
+#' @param width Plot width in inches (default: 8)
+#' @param height Plot height in inches (default: 8)
+#' @return ggplot object
+save_funnel_plot <- function(ma_result, outcome_name, save_path,
+                             width = 8, height = 8) {
+
+  data <- ma_result$data
+
+  # Create static funnel plot using ggplot2 (for PNG export)
+  p <- ggplot(data, aes(x = yi, y = sei)) +
+    geom_point(color = "steelblue", size = 3, alpha = 0.6) +
+    geom_vline(xintercept = ma_result$pooled_effect,
+               linetype = "dashed", color = "red", size = 1) +
+    # Add funnel (pseudo confidence interval)
+    geom_abline(intercept = 0, slope = 1.96, linetype = "dotted", color = "gray50") +
+    geom_abline(intercept = 0, slope = -1.96, linetype = "dotted", color = "gray50") +
+    scale_y_reverse() +
+    labs(
+      title = paste("Funnel Plot:", outcome_name),
+      subtitle = if (!is.null(ma_result$egger_test)) {
+        sprintf("Egger's test: p = %.3f", ma_result$egger_test$p_value)
+      } else {
+        "Funnel plot for publication bias assessment"
+      },
+      x = "Effect Size",
+      y = "Standard Error"
+    ) +
+    theme_minimal() +
+    theme(
+      plot.title = element_text(size = 14, face = "bold"),
+      plot.subtitle = element_text(size = 10, color = "gray40")
+    )
+
+  # Save the plot
+  ggsave(save_path, p, width = width, height = height, dpi = 300)
+
+  return(p)
+}

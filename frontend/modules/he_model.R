@@ -392,8 +392,31 @@ run_psa_from_ma <- function(params, base_prob_prog, base_prob_death,
                                      rate = (1/0.2)^2 / params$cost_comparator)
 
   # Sample utility parameters (beta distributions bounded 0-1)
-  utility_stable_samples <- rbeta(n_sim, 80, 20)  # Mean ~0.8
-  utility_progressed_samples <- rbeta(n_sim, 50, 50)  # Mean ~0.5
+  # Calculate alpha/beta parameters from mean and assumed SE
+  # Using method of moments: for beta(alpha, beta):
+  #   mean = alpha / (alpha + beta)
+  #   var = (alpha * beta) / ((alpha + beta)^2 * (alpha + beta + 1))
+
+  utility_stable_se <- 0.05  # Assumed SE for utilities
+  utility_progressed_se <- 0.05
+
+  # Calculate alpha and beta for stable utility
+  utility_stable_mean <- params$utility_stable
+  utility_stable_var <- utility_stable_se^2
+  temp_stable <- utility_stable_mean * (1 - utility_stable_mean) / utility_stable_var - 1
+  alpha_stable <- utility_stable_mean * temp_stable
+  beta_stable <- (1 - utility_stable_mean) * temp_stable
+
+  # Calculate alpha and beta for progressed utility
+  utility_progressed_mean <- params$utility_progressed
+  utility_progressed_var <- utility_progressed_se^2
+  temp_progressed <- utility_progressed_mean * (1 - utility_progressed_mean) / utility_progressed_var - 1
+  alpha_progressed <- utility_progressed_mean * temp_progressed
+  beta_progressed <- (1 - utility_progressed_mean) * temp_progressed
+
+  # Sample from beta distributions with calculated parameters
+  utility_stable_samples <- rbeta(n_sim, alpha_stable, beta_stable)
+  utility_progressed_samples <- rbeta(n_sim, alpha_progressed, beta_progressed)
 
   # Run model for each PSA iteration
   inc_qalys_sim <- numeric(n_sim)

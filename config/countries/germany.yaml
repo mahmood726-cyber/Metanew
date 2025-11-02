@@ -9,8 +9,8 @@ currency_symbol: €
 # Note: Germany does not use explicit WTP thresholds
 # Decisions based on efficiency frontier and added benefit assessment
 wtp:
-  implicit_threshold: 50000  # €50,000 per QALY (estimated from decisions)
-  high_efficiency: 35000  # €35,000 per QALY
+  primary_threshold: 50000  # €50,000 per QALY (implicit threshold estimated from decisions)
+  secondary_threshold: 35000  # €35,000 per QALY (high efficiency)
 
 # Discount rates (per year)
 discounting:

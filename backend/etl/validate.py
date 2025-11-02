@@ -87,6 +87,9 @@ def validate_table(df: pd.DataFrame, data_type: str = "binary") -> ValidationRes
     # Check for outliers
     problems.extend(detect_outliers(df, data_type))
 
+    # Check multi-arm trial consistency
+    problems.extend(validate_multi_arm_trial(df))
+
     # Summary statistics
     summary = {
         "errors": sum(1 for p in problems if p.severity == "error"),

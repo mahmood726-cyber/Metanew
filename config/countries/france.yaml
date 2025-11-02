@@ -8,8 +8,8 @@ currency_symbol: €
 # Willingness-to-pay thresholds
 # Note: France does not use explicit thresholds but has implicit ranges
 wtp:
-  implicit_threshold: 50000  # €50,000 per QALY (estimated)
-  innovative_therapy: 80000  # Higher threshold for innovative therapies
+  primary_threshold: 50000  # €50,000 per QALY (implicit threshold estimated)
+  secondary_threshold: 80000  # Higher threshold for innovative therapies
 
 # Discount rates (per year)
 discounting:
