@@ -1,0 +1,17 @@
+study_id,author,year,treatment,outcome,events,n,risk_of_bias
+Study_001,Smith,2020,Treatment A,Mortality,45,200,Low
+Study_001,Smith,2020,Placebo,Mortality,67,198,Low
+Study_002,Jones,2019,Treatment A,Mortality,32,150,Low
+Study_002,Jones,2019,Placebo,Mortality,48,155,Low
+Study_003,Brown,2021,Treatment A,Mortality,21,100,Unclear
+Study_003,Brown,2021,Placebo,Mortality,29,102,Unclear
+Study_004,Davis,2018,Treatment A,Mortality,56,220,Low
+Study_004,Davis,2018,Placebo,Mortality,78,215,Low
+Study_005,Wilson,2022,Treatment A,Mortality,38,180,Low
+Study_005,Wilson,2022,Placebo,Mortality,52,175,Low
+Study_006,Taylor,2020,Treatment A,Mortality,44,190,High
+Study_006,Taylor,2020,Placebo,Mortality,61,188,High
+Study_007,Anderson,2021,Treatment A,Mortality,27,130,Low
+Study_007,Anderson,2021,Placebo,Mortality,39,128,Low
+Study_008,Thomas,2019,Treatment A,Mortality,19,95,Low
+Study_008,Thomas,2019,Placebo,Mortality,26,98,Low

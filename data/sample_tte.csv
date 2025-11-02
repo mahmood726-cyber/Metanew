@@ -1,0 +1,8 @@
+study_id,author,year,treatment,comparator,outcome,hr,ci_lower,ci_upper,risk_of_bias
+Study_201,Garcia,2020,Treatment C,Placebo,Progression-Free Survival,0.72,0.58,0.89,Low
+Study_202,Martinez,2021,Treatment C,Placebo,Progression-Free Survival,0.68,0.52,0.88,Low
+Study_203,Rodriguez,2019,Treatment C,Placebo,Progression-Free Survival,0.75,0.61,0.92,Unclear
+Study_204,Hernandez,2022,Treatment C,Placebo,Progression-Free Survival,0.70,0.55,0.89,Low
+Study_205,Lopez,2020,Treatment C,Placebo,Progression-Free Survival,0.65,0.49,0.86,Low
+Study_206,Gonzalez,2021,Treatment C,Placebo,Progression-Free Survival,0.78,0.63,0.96,High
+Study_207,Perez,2019,Treatment C,Placebo,Progression-Free Survival,0.73,0.57,0.93,Low

@@ -1,0 +1,124 @@
+---
+title: "`r params$title`"
+author: "`r params$author`"
+date: "`r format(Sys.time(), '%d %B %Y')`"
+output:
+  word_document:
+    reference_docx: word_template.docx
+  pdf_document:
+    toc: true
+    number_sections: true
+params:
+  title: "Meta-Analysis Report"
+  author: "Author"
+  protocol: NULL
+  results: NULL
+  he_results: NULL
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+library(knitr)
+library(ggplot2)
+```
+
+# Executive Summary
+
+This report presents the results of a systematic review and meta-analysis.
+
+# Protocol
+
+**Population:** `r if(!is.null(params$protocol)) params$protocol$population else "Not specified"`
+
+**Intervention:** `r if(!is.null(params$protocol)) params$protocol$intervention else "Not specified"`
+
+**Comparator:** `r if(!is.null(params$protocol)) params$protocol$comparator else "Not specified"`
+
+**Outcomes:** `r if(!is.null(params$protocol)) paste(params$protocol$outcomes, collapse = ", ") else "Not specified"`
+
+# Methods
+
+## Search Strategy
+
+A comprehensive search was conducted in accordance with PRISMA guidelines.
+
+## Data Extraction
+
+Data were extracted independently by two reviewers.
+
+## Statistical Analysis
+
+Meta-analysis was performed using a random-effects model with the REML estimator.
+
+# Results
+
+## Study Characteristics
+
+```{r study-table}
+# Placeholder for study characteristics table
+```
+
+## Meta-Analysis Results
+
+```{r results-summary}
+if (!is.null(params$results)) {
+  for (outcome in names(params$results)) {
+    result <- params$results[[outcome]]
+    cat(sprintf("\n### %s\n\n", outcome))
+    cat(sprintf("Pooled effect: %.3f (95%% CI: %.3f to %.3f)\n\n",
+                result$pooled_effect, result$ci_lower, result$ci_upper))
+    cat(sprintf("Heterogeneity: I² = %.1f%%, τ² = %.3f\n\n",
+                result$i_squared, result$tau_squared))
+  }
+}
+```
+
+## Heterogeneity Assessment
+
+Heterogeneity was assessed using the I² statistic and Q test.
+
+## Publication Bias
+
+Funnel plots and Egger's test were used to assess publication bias.
+
+# Health Economic Analysis
+
+```{r he-results}
+if (!is.null(params$he_results)) {
+  cat(sprintf("ICER: £%.2f per QALY\n\n", params$he_results$icer))
+  cat(sprintf("Incremental QALYs: %.3f\n\n", params$he_results$inc_qalys))
+  cat(sprintf("Incremental Costs: £%.2f\n\n", params$he_results$inc_costs))
+}
+```
+
+# Discussion
+
+## Summary of Findings
+
+The meta-analysis demonstrates...
+
+## Limitations
+
+Limitations include...
+
+## Conclusions
+
+In conclusion...
+
+# References
+
+References would be listed here.
+
+# Appendices
+
+## Appendix A: Search Strategy
+
+Full search strategy...
+
+## Appendix B: Excluded Studies
+
+List of excluded studies with reasons...
+
+## Appendix C: Risk of Bias Assessment
+
+Risk of bias tables...
