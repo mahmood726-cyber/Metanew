@@ -333,6 +333,16 @@ run_markov_model <- function(params, base_prob_prog, base_prob_death,
   inc_costs <- costs_trt - costs_comp
   icer <- inc_costs / inc_qalys
 
+  # Run PSA if we have MA-derived SEs
+  psa_results <- NULL
+  if (!is.na(hr_progression$se_log) && !is.na(hr_death$se_log)) {
+    psa_results <- run_psa_from_ma(
+      params, base_prob_prog, base_prob_death,
+      hr_progression, hr_death,
+      n_sim = params$n_iterations
+    )
+  }
+
   list(
     qalys_treatment = qalys_trt,
     qalys_comparator = qalys_comp,
@@ -347,6 +357,118 @@ run_markov_model <- function(params, base_prob_prog, base_prob_death,
     hr_death = hr_death,
     base_prob_prog = base_prob_prog,
     base_prob_death = base_prob_death,
-    params = params
+    params = params,
+    psa_results = psa_results,
+    # Add SE for BCEA if PSA was run
+    inc_qalys_se = if (!is.null(psa_results)) sd(psa_results$inc_qalys_sim) else NULL,
+    inc_costs_se = if (!is.null(psa_results)) sd(psa_results$inc_costs_sim) else NULL
+  )
+}
+
+run_psa_from_ma <- function(params, base_prob_prog, base_prob_death,
+                             hr_progression, hr_death, n_sim = 1000) {
+  # Probabilistic sensitivity analysis using MA-derived standard errors
+  # HRs are sampled on log scale (lognormal distribution)
+
+  # Sample log(HR) from normal distribution, then exponentiate
+  log_hr_prog_samples <- rnorm(n_sim, log(hr_progression$hr), hr_progression$se_log)
+  log_hr_death_samples <- rnorm(n_sim, log(hr_death$hr), hr_death$se_log)
+
+  hr_prog_samples <- exp(log_hr_prog_samples)
+  hr_death_samples <- exp(log_hr_death_samples)
+
+  # Sample cost parameters (assuming gamma distributions with 20% CV)
+  cost_stable_samples <- rgamma(n_sim,
+                                 shape = (1/0.2)^2,
+                                 rate = (1/0.2)^2 / params$cost_stable)
+  cost_progressed_samples <- rgamma(n_sim,
+                                     shape = (1/0.2)^2,
+                                     rate = (1/0.2)^2 / params$cost_progressed)
+  cost_treatment_samples <- rgamma(n_sim,
+                                    shape = (1/0.2)^2,
+                                    rate = (1/0.2)^2 / params$cost_treatment)
+  cost_comparator_samples <- rgamma(n_sim,
+                                     shape = (1/0.2)^2,
+                                     rate = (1/0.2)^2 / params$cost_comparator)
+
+  # Sample utility parameters (beta distributions bounded 0-1)
+  utility_stable_samples <- rbeta(n_sim, 80, 20)  # Mean ~0.8
+  utility_progressed_samples <- rbeta(n_sim, 50, 50)  # Mean ~0.5
+
+  # Run model for each PSA iteration
+  inc_qalys_sim <- numeric(n_sim)
+  inc_costs_sim <- numeric(n_sim)
+
+  for (i in 1:n_sim) {
+    # Create temporary parameter sets
+    params_temp <- params
+    params_temp$cost_stable <- cost_stable_samples[i]
+    params_temp$cost_progressed <- cost_progressed_samples[i]
+    params_temp$cost_treatment <- cost_treatment_samples[i]
+    params_temp$cost_comparator <- cost_comparator_samples[i]
+    params_temp$utility_stable <- utility_stable_samples[i]
+    params_temp$utility_progressed <- utility_progressed_samples[i]
+
+    hr_prog_temp <- hr_progression
+    hr_prog_temp$hr <- hr_prog_samples[i]
+
+    hr_death_temp <- hr_death
+    hr_death_temp$hr <- hr_death_samples[i]
+
+    # Run model (without PSA recursion)
+    temp_params_temp <- params_temp
+    temp_params_temp$n_iterations <- 0  # Prevent PSA recursion
+
+    # Simplified model run for PSA
+    horizon <- params_temp$time_horizon
+    discount <- params_temp$discount_rate
+
+    # Apply HRs to baseline
+    p_stable_prog_comp <- base_prob_prog
+    p_prog_dead_comp <- base_prob_death
+    p_stable_dead <- 0.02
+
+    p_stable_prog_trt <- p_stable_prog_comp * hr_prog_temp$hr
+    p_prog_dead_trt <- p_prog_dead_comp * hr_death_temp$hr
+
+    # Quick trace calculation
+    trace_comp <- matrix(0, nrow = horizon + 1, ncol = 3)
+    trace_comp[1, ] <- c(1, 0, 0)
+    for (t in 1:horizon) {
+      trace_comp[t + 1, 1] <- trace_comp[t, 1] * (1 - p_stable_prog_comp - p_stable_dead)
+      trace_comp[t + 1, 2] <- trace_comp[t, 1] * p_stable_prog_comp + trace_comp[t, 2] * (1 - p_prog_dead_comp)
+      trace_comp[t + 1, 3] <- trace_comp[t, 1] * p_stable_dead + trace_comp[t, 2] * p_prog_dead_comp + trace_comp[t, 3]
+    }
+
+    trace_trt <- matrix(0, nrow = horizon + 1, ncol = 3)
+    trace_trt[1, ] <- c(1, 0, 0)
+    for (t in 1:horizon) {
+      trace_trt[t + 1, 1] <- trace_trt[t, 1] * (1 - p_stable_prog_trt - p_stable_dead)
+      trace_trt[t + 1, 2] <- trace_trt[t, 1] * p_stable_prog_trt + trace_trt[t, 2] * (1 - p_prog_dead_trt)
+      trace_trt[t + 1, 3] <- trace_trt[t, 1] * p_stable_dead + trace_trt[t, 2] * p_prog_dead_trt + trace_trt[t, 3]
+    }
+
+    discount_vec <- (1 / (1 + discount))^(0:horizon)
+
+    qalys_comp <- sum((trace_comp[, 1] * params_temp$utility_stable +
+                        trace_comp[, 2] * params_temp$utility_progressed) * discount_vec)
+    qalys_trt <- sum((trace_trt[, 1] * params_temp$utility_stable +
+                       trace_trt[, 2] * params_temp$utility_progressed) * discount_vec)
+
+    costs_comp <- sum((trace_comp[, 1] * params_temp$cost_stable +
+                        trace_comp[, 2] * params_temp$cost_progressed) * discount_vec) + params_temp$cost_comparator
+    costs_trt <- sum((trace_trt[, 1] * params_temp$cost_stable +
+                       trace_trt[, 2] * params_temp$cost_progressed) * discount_vec) + params_temp$cost_treatment
+
+    inc_qalys_sim[i] <- qalys_trt - qalys_comp
+    inc_costs_sim[i] <- costs_trt - costs_comp
+  }
+
+  list(
+    inc_qalys_sim = inc_qalys_sim,
+    inc_costs_sim = inc_costs_sim,
+    hr_prog_samples = hr_prog_samples,
+    hr_death_samples = hr_death_samples,
+    n_sim = n_sim
   )
 }

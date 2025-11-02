@@ -1,0 +1,79 @@
+# Germany Health Economic Parameters
+# Based on IQWiG and GBA methodological guidelines
+
+country: Germany
+currency: EUR
+currency_symbol: €
+
+# Willingness-to-pay thresholds
+# Note: Germany does not use explicit WTP thresholds
+# Decisions based on efficiency frontier and added benefit assessment
+wtp:
+  implicit_threshold: 50000  # €50,000 per QALY (estimated from decisions)
+  high_efficiency: 35000  # €35,000 per QALY
+
+# Discount rates (per year)
+discounting:
+  costs: 0.03  # 3% per year
+  benefits: 0.03  # 3% per year
+
+# Time horizon
+time_horizon:
+  default: 10
+  lifetime: 50
+
+# Cost parameters (annual, in EUR)
+costs:
+  drug_treatment:
+    default: 30000
+    range: [10000, 150000]
+
+  drug_comparator:
+    default: 8000
+    range: [3000, 40000]
+
+  health_state_stable:
+    default: 5000
+    range: [2000, 12000]
+
+  health_state_progressed:
+    default: 18000
+    range: [10000, 45000]
+
+  hospitalization_per_day: 500
+  outpatient_visit: 200
+  physician_consultation: 80
+
+# Utility values
+utilities:
+  general_population: 0.85
+  stable_disease: 0.80
+  progressed_disease: 0.50
+  severe_ae: 0.40
+
+# Population parameters
+population:
+  eligible_population: 150000
+  market_share_year1: 0.12
+  market_share_year5: 0.35
+
+# PSA parameters
+psa:
+  n_iterations: 1000
+  distributions:
+    costs: gamma
+    utilities: beta
+    probabilities: beta
+    relative_effects: lognormal
+
+# Special considerations
+iqwig_methods:
+  efficiency_frontier: true  # Use efficiency frontier analysis
+  added_benefit_required: true  # Requires demonstration of added benefit
+
+# Reference sources
+references:
+  methods: "IQWiG General Methods 6.1 (2022)"
+  discount_rate: "IQWiG General Methods"
+  costs: "German DRG System & SHI Fee Schedule"
+  utilities: "German EQ-5D-3L population norms"

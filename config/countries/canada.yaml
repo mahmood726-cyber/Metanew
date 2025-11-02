@@ -1,0 +1,81 @@
+# Canada Health Economic Parameters
+# Based on CADTH (Canadian Agency for Drugs and Technologies in Health) guidelines
+
+country: Canada
+currency: CAD
+currency_symbol: $
+
+# Willingness-to-pay thresholds
+# Note: CADTH does not endorse specific thresholds
+# Provincial payers have implicit thresholds
+wtp:
+  primary_threshold: 50000  # $50,000 per QALY (commonly referenced)
+  secondary_threshold: 100000  # $100,000 per QALY
+  rare_disease: 150000  # Higher for rare diseases
+
+# Discount rates (per year)
+discounting:
+  costs: 0.015  # 1.5% per year (CADTH 2017 guideline update)
+  benefits: 0.015  # 1.5% per year
+
+# Time horizon
+time_horizon:
+  default: 10
+  lifetime: 50
+
+# Cost parameters (annual, in CAD)
+costs:
+  drug_treatment:
+    default: 40000
+    range: [15000, 200000]
+
+  drug_comparator:
+    default: 10000
+    range: [4000, 50000]
+
+  health_state_stable:
+    default: 6000
+    range: [3000, 15000]
+
+  health_state_progressed:
+    default: 22000
+    range: [12000, 55000]
+
+  hospitalization_per_day: 1200
+  outpatient_visit: 300
+  physician_visit: 150
+
+# Utility values
+utilities:
+  general_population: 0.85
+  stable_disease: 0.80
+  progressed_disease: 0.50
+  severe_ae: 0.40
+
+# Population parameters
+population:
+  eligible_population: 80000
+  market_share_year1: 0.10
+  market_share_year5: 0.32
+
+# PSA parameters
+psa:
+  n_iterations: 1000
+  distributions:
+    costs: gamma
+    utilities: beta
+    probabilities: beta
+    relative_effects: lognormal
+
+# Special considerations
+cadth_requirements:
+  reference_case_required: true
+  public_payer_perspective: true  # Must include public payer perspective
+  societal_perspective_optional: true
+
+# Reference sources
+references:
+  methods: "CADTH Guidelines for the Economic Evaluation of Health Technologies (2017)"
+  discount_rate: "CADTH 2017 guideline update"
+  costs: "Provincial fee schedules & CIHI data"
+  utilities: "Canadian EQ-5D-3L population norms"

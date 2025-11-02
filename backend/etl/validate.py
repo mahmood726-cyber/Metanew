@@ -67,16 +67,25 @@ def validate_table(df: pd.DataFrame, data_type: str = "binary") -> ValidationRes
     elif data_type == "tte":
         problems.extend(validate_tte_data(df))
 
-    # Check for duplicate study_id + treatment combinations
+    # Enhanced duplicate detection
     if "study_id" in df.columns and "treatment" in df.columns:
         duplicates = df.groupby(["study_id", "treatment"]).size()
         if (duplicates > 1).any():
             dup_pairs = duplicates[duplicates > 1]
-            problems.append(ValidationProblem(
-                severity="warning",
-                field="study_id",
-                message=f"Duplicate study-treatment combinations found: {len(dup_pairs)}"
-            ))
+            # List specific duplicates
+            for (study, treatment), count in dup_pairs.items():
+                problems.append(ValidationProblem(
+                    severity="error",
+                    field="study_id",
+                    message=f"Duplicate entry: study '{study}', treatment '{treatment}' appears {count} times",
+                    study_id=str(study)
+                ))
+
+    # Check for implausible values
+    problems.extend(check_implausible_values(df, data_type))
+
+    # Check for outliers
+    problems.extend(detect_outliers(df, data_type))
 
     # Summary statistics
     summary = {
@@ -264,3 +273,199 @@ def normalize_column_names(df: pd.DataFrame) -> pd.DataFrame:
     df_normalized.columns = [column_mapping.get(col.lower(), col) for col in df.columns]
 
     return df_normalized
+
+
+def check_implausible_values(df: pd.DataFrame, data_type: str) -> List[ValidationProblem]:
+    """
+    Check for implausible values that may indicate data entry errors
+    """
+    problems = []
+
+    for idx, row in df.iterrows():
+        study_id = row.get("study_id", f"row_{idx}")
+
+        # Check effect sizes (log scale) - unlikely to be > |10|
+        if "yi" in df.columns and pd.notna(row.get("yi")):
+            if abs(row["yi"]) > 10:
+                problems.append(ValidationProblem(
+                    severity="warning",
+                    field="yi",
+                    message=f"Extreme effect size: {row['yi']:.2f} (possibly data entry error?)",
+                    study_id=str(study_id)
+                ))
+
+        # Check standard errors - should be positive and reasonable
+        if "sei" in df.columns and pd.notna(row.get("sei")):
+            if row["sei"] > 10:
+                problems.append(ValidationProblem(
+                    severity="warning",
+                    field="sei",
+                    message=f"Very large standard error: {row['sei']:.2f}",
+                    study_id=str(study_id)
+                ))
+            if row["sei"] < 0.001:
+                problems.append(ValidationProblem(
+                    severity="warning",
+                    field="sei",
+                    message=f"Very small standard error: {row['sei']:.4f} (possibly too precise?)",
+                    study_id=str(study_id)
+                ))
+
+        # Check hazard ratios - should be positive and typically < 100
+        if "hr" in df.columns and pd.notna(row.get("hr")):
+            if row["hr"] > 100:
+                problems.append(ValidationProblem(
+                    severity="warning",
+                    field="hr",
+                    message=f"Extreme hazard ratio: {row['hr']:.2f}",
+                    study_id=str(study_id)
+                ))
+
+        # Check sample sizes - warn if very small (< 10 per arm)
+        if "n" in df.columns and pd.notna(row.get("n")):
+            if row["n"] < 10:
+                problems.append(ValidationProblem(
+                    severity="warning",
+                    field="n",
+                    message=f"Small sample size: n={row['n']} (may have low precision)",
+                    study_id=str(study_id)
+                ))
+
+        # Check event rates for binary data
+        if data_type == "binary" and "events" in df.columns and "n" in df.columns:
+            if pd.notna(row.get("events")) and pd.notna(row.get("n")):
+                event_rate = row["events"] / row["n"]
+                if event_rate > 0.95:
+                    problems.append(ValidationProblem(
+                        severity="info",
+                        field="events",
+                        message=f"Very high event rate: {event_rate*100:.1f}%",
+                        study_id=str(study_id)
+                    ))
+
+        # Check for negative values where they shouldn't be
+        numeric_cols = df.select_dtypes(include=[np.number]).columns
+        for col in ["n", "events", "sd", "sei", "vi", "hr"]:
+            if col in numeric_cols and pd.notna(row.get(col)):
+                if row[col] < 0:
+                    problems.append(ValidationProblem(
+                        severity="error",
+                        field=col,
+                        message=f"Negative value not allowed for {col}: {row[col]}",
+                        study_id=str(study_id)
+                    ))
+
+        # Check utilities if present (should be 0-1)
+        for col in df.columns:
+            if "utility" in col.lower() or "qol" in col.lower():
+                if pd.notna(row.get(col)):
+                    if row[col] < 0 or row[col] > 1:
+                        problems.append(ValidationProblem(
+                            severity="error",
+                            field=col,
+                            message=f"Utility value out of range [0,1]: {row[col]}",
+                            study_id=str(study_id)
+                        ))
+
+    return problems
+
+
+def detect_outliers(df: pd.DataFrame, data_type: str) -> List[ValidationProblem]:
+    """
+    Detect potential outliers using IQR method
+    """
+    problems = []
+
+    # Only check if we have enough data points
+    if len(df) < 5:
+        return problems
+
+    # Check effect sizes for outliers
+    if "yi" in df.columns:
+        yi_values = df["yi"].dropna()
+        if len(yi_values) >= 5:
+            Q1 = yi_values.quantile(0.25)
+            Q3 = yi_values.quantile(0.75)
+            IQR = Q3 - Q1
+            lower_bound = Q1 - 3 * IQR  # Using 3*IQR for extreme outliers
+            upper_bound = Q3 + 3 * IQR
+
+            for idx, row in df.iterrows():
+                if pd.notna(row.get("yi")):
+                    study_id = row.get("study_id", f"row_{idx}")
+                    if row["yi"] < lower_bound or row["yi"] > upper_bound:
+                        problems.append(ValidationProblem(
+                            severity="warning",
+                            field="yi",
+                            message=f"Potential outlier: effect size = {row['yi']:.3f} (outside 3×IQR bounds)",
+                            study_id=str(study_id)
+                        ))
+
+    # Check sample sizes for outliers
+    if "n" in df.columns:
+        n_values = df["n"].dropna()
+        if len(n_values) >= 5:
+            median_n = n_values.median()
+            for idx, row in df.iterrows():
+                if pd.notna(row.get("n")):
+                    study_id = row.get("study_id", f"row_{idx}")
+                    # Flag if sample size is > 10x or < 0.1x median
+                    if row["n"] > median_n * 10:
+                        problems.append(ValidationProblem(
+                            severity="info",
+                            field="n",
+                            message=f"Unusually large sample size: n={row['n']} (median={median_n:.0f})",
+                            study_id=str(study_id)
+                        ))
+                    elif row["n"] < median_n * 0.1 and row["n"] > 0:
+                        problems.append(ValidationProblem(
+                            severity="info",
+                            field="n",
+                            message=f"Unusually small sample size: n={row['n']} (median={median_n:.0f})",
+                            study_id=str(study_id)
+                        ))
+
+    return problems
+
+
+def validate_multi_arm_trial(df: pd.DataFrame) -> List[ValidationProblem]:
+    """
+    Validate multi-arm trials for consistency
+    """
+    problems = []
+
+    if "study_id" not in df.columns or "treatment" not in df.columns:
+        return problems
+
+    # Identify multi-arm trials
+    study_arm_counts = df.groupby("study_id").size()
+    multi_arm_studies = study_arm_counts[study_arm_counts > 2].index.tolist()
+
+    for study_id in multi_arm_studies:
+        study_data = df[df["study_id"] == study_id]
+
+        # Check if all arms have same outcome variable
+        if "outcome" in df.columns:
+            outcomes = study_data["outcome"].unique()
+            if len(outcomes) > 1:
+                problems.append(ValidationProblem(
+                    severity="warning",
+                    field="outcome",
+                    message=f"Multi-arm trial has different outcomes: {', '.join(outcomes)}",
+                    study_id=str(study_id)
+                ))
+
+        # Check for reasonable variance homogeneity
+        if "sei" in df.columns:
+            seis = study_data["sei"].dropna()
+            if len(seis) > 1:
+                sei_ratio = seis.max() / seis.min()
+                if sei_ratio > 5:
+                    problems.append(ValidationProblem(
+                        severity="info",
+                        field="sei",
+                        message=f"Large variance heterogeneity across arms (ratio={sei_ratio:.1f})",
+                        study_id=str(study_id)
+                    ))
+
+    return problems

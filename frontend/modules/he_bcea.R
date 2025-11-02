@@ -69,15 +69,43 @@ he_bcea_server <- function(id, rv) {
 }
 
 run_bcea_analysis <- function(model_results, params) {
-  # Simplified BCEA analysis
-  # In production, would use BCEA package with PSA samples
+  # BCEA analysis with PSA using MA confidence intervals
+  # If MA results were used, we have proper SE from meta-analysis
 
   icer <- model_results$icer
 
-  # Simulate PSA (simplified)
+  # Simulate PSA
   n_sim <- params$n_iterations
-  inc_costs_sim <- rnorm(n_sim, model_results$inc_costs, model_results$inc_costs * 0.2)
-  inc_qalys_sim <- rnorm(n_sim, model_results$inc_qalys, model_results$inc_qalys * 0.15)
+
+  # For costs: use coefficient of variation approach
+  # If we have specific cost SE from model, use it; otherwise assume 20% CV
+  cost_se <- if (!is.null(model_results$inc_costs_se)) {
+    model_results$inc_costs_se
+  } else {
+    abs(model_results$inc_costs * 0.2)
+  }
+
+  # For QALYs: extract SE from MA if available
+  # The model results may contain se_qalys from MA-derived HRs
+  qaly_se <- if (!is.null(model_results$inc_qalys_se)) {
+    model_results$inc_qalys_se
+  } else {
+    # Fallback: use approximate SE from QALY estimate
+    abs(model_results$inc_qalys * 0.15)
+  }
+
+  # Use PSA results from model if available (preferred - uses MA SEs properly)
+  # Otherwise, sample costs and QALYs using approximate SEs
+  if (!is.null(model_results$psa_results)) {
+    # Use pre-computed PSA from Markov model (includes MA uncertainty)
+    inc_costs_sim <- model_results$psa_results$inc_costs_sim
+    inc_qalys_sim <- model_results$psa_results$inc_qalys_sim
+    n_sim <- model_results$psa_results$n_sim
+  } else {
+    # Fallback: sample independently
+    inc_costs_sim <- rnorm(n_sim, model_results$inc_costs, cost_se)
+    inc_qalys_sim <- rnorm(n_sim, model_results$inc_qalys, qaly_se)
+  }
 
   # CEAC calculation
   wtp_range <- seq(0, 50000, by = 1000)

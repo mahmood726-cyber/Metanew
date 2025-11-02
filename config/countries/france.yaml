@@ -1,0 +1,78 @@
+# France Health Economic Parameters
+# Based on HAS (Haute Autorité de Santé) guidelines
+
+country: France
+currency: EUR
+currency_symbol: €
+
+# Willingness-to-pay thresholds
+# Note: France does not use explicit thresholds but has implicit ranges
+wtp:
+  implicit_threshold: 50000  # €50,000 per QALY (estimated)
+  innovative_therapy: 80000  # Higher threshold for innovative therapies
+
+# Discount rates (per year)
+discounting:
+  costs: 0.025  # 2.5% per year
+  benefits: 0.025  # 2.5% per year
+
+# Time horizon
+time_horizon:
+  default: 10
+  lifetime: 50
+
+# Cost parameters (annual, in EUR)
+costs:
+  drug_treatment:
+    default: 28000
+    range: [10000, 140000]
+
+  drug_comparator:
+    default: 7000
+    range: [2500, 35000]
+
+  health_state_stable:
+    default: 4500
+    range: [2000, 11000]
+
+  health_state_progressed:
+    default: 16000
+    range: [8000, 40000]
+
+  hospitalization_per_day: 450
+  outpatient_visit: 180
+  physician_consultation: 75
+
+# Utility values
+utilities:
+  general_population: 0.85
+  stable_disease: 0.80
+  progressed_disease: 0.50
+  severe_ae: 0.40
+
+# Population parameters
+population:
+  eligible_population: 120000
+  market_share_year1: 0.10
+  market_share_year5: 0.30
+
+# PSA parameters
+psa:
+  n_iterations: 1000
+  distributions:
+    costs: gamma
+    utilities: beta
+    probabilities: beta
+    relative_effects: lognormal
+
+# Special considerations
+has_assessment:
+  smr_required: true  # Service Médical Rendu (medical benefit)
+  asmr_required: true  # Amélioration du Service Médical Rendu (improvement)
+
+# Reference sources
+references:
+  methods: "HAS Guide méthodologique (2020)"
+  discount_rate: "HAS methodological guidance"
+  costs: "French National Health Insurance tariffs"
+  utilities: "French EQ-5D-3L population norms"

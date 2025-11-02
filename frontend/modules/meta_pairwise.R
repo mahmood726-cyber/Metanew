@@ -299,6 +299,99 @@ meta_pairwise_server <- function(id, rv) {
       } else {
         cat("Egger's test not available (insufficient studies)\n")
       }
+
+      cat("\n")
+
+      if (!is.null(result$trim_fill)) {
+        tf <- result$trim_fill
+        cat("Trim-and-Fill Analysis:\n")
+        cat(sprintf("  Number of imputed studies (k0): %d\n", tf$k0))
+
+        if (tf$k0 > 0) {
+          cat(sprintf("  Side of imputation: %s\n", tf$side))
+          cat("\n")
+          cat("Adjusted pooled effect (after imputation):\n")
+          cat(sprintf("  Estimate: %.3f (%.3f to %.3f)\n",
+                      tf$pooled_effect, tf$ci_lower, tf$ci_upper))
+          cat(sprintf("  p = %.4f\n", tf$p_value))
+          cat("\n")
+          cat("Comparison:\n")
+          cat(sprintf("  Original pooled effect: %.3f (%.3f to %.3f)\n",
+                      result$pooled_effect, result$ci_lower, result$ci_upper))
+          cat(sprintf("  Adjusted pooled effect: %.3f (%.3f to %.3f)\n",
+                      tf$pooled_effect, tf$ci_lower, tf$ci_upper))
+          cat(sprintf("  Change: %.3f\n", tf$pooled_effect - result$pooled_effect))
+
+          if (abs(tf$pooled_effect - result$pooled_effect) > 0.1) {
+            cat("\n⚠ Substantial change in pooled estimate after correction\n")
+            cat("  Consider sensitivity of results to publication bias\n")
+          } else {
+            cat("\n✓ Pooled estimate appears robust to publication bias\n")
+          }
+        } else {
+          cat("  No studies imputed - no evidence of asymmetry\n")
+          cat("  ✓ No adjustment needed\n")
+        }
+      } else {
+        cat("Trim-and-fill not available (insufficient studies, need k≥5)\n")
+      }
+    })
+
+    # Trim-and-fill plot
+    output$trim_fill_plot <- renderPlot({
+      req(ma_result())
+
+      result <- ma_result()
+
+      if (is.null(result$trim_fill)) {
+        plot.new()
+        text(0.5, 0.5, "Trim-and-fill analysis not available\n(need at least 5 studies)",
+             cex = 1.2, col = "gray50")
+        return()
+      }
+
+      tf <- result$trim_fill
+
+      # Create funnel plot with imputed studies
+      par(mar = c(5, 4, 4, 2) + 0.1)
+
+      # Calculate plot limits
+      yi_all <- tf$data_filled$yi
+      sei_all <- tf$data_filled$sei
+      xlim <- range(yi_all) + c(-1, 1) * diff(range(yi_all)) * 0.1
+      ylim <- c(max(sei_all) * 1.1, 0)
+
+      # Create base funnel plot
+      plot(yi_all, sei_all, pch = ifelse(tf$data_filled$imputed, 1, 16),
+           col = ifelse(tf$data_filled$imputed, "red", "black"),
+           xlim = xlim, ylim = ylim,
+           xlab = "Effect Size", ylab = "Standard Error",
+           main = paste("Trim-and-Fill Funnel Plot\n",
+                       if (tf$k0 > 0) sprintf("(%d studies imputed)", tf$k0) else "No imputation"))
+
+      # Add funnel
+      funnel_x <- c(result$pooled_effect, result$pooled_effect - 1.96 * max(sei_all),
+                    result$pooled_effect + 1.96 * max(sei_all))
+      funnel_y <- c(0, max(sei_all), max(sei_all))
+      polygon(funnel_x, funnel_y, col = rgb(0, 0, 1, 0.1), border = "blue", lty = 2)
+
+      # Add pooled effect lines
+      abline(v = result$pooled_effect, col = "black", lwd = 2, lty = 1)
+      if (tf$k0 > 0) {
+        abline(v = tf$pooled_effect, col = "red", lwd = 2, lty = 2)
+      }
+
+      # Legend
+      legend("topright",
+             legend = c("Observed studies",
+                       if (tf$k0 > 0) "Imputed studies" else NULL,
+                       "Original pooled effect",
+                       if (tf$k0 > 0) "Adjusted pooled effect" else NULL),
+             pch = c(16, if (tf$k0 > 0) 1 else NULL, NA, if (tf$k0 > 0) NA else NULL),
+             col = c("black", if (tf$k0 > 0) "red" else NULL, "black", if (tf$k0 > 0) "red" else NULL),
+             lty = c(NA, if (tf$k0 > 0) NA else NULL, 1, if (tf$k0 > 0) 2 else NULL),
+             lwd = c(NA, if (tf$k0 > 0) NA else NULL, 2, if (tf$k0 > 0) 2 else NULL),
+             bg = "white")
     })
 
     # Return results
@@ -395,6 +488,30 @@ run_pairwise_ma <- function(data, outcome = NULL, method = "REML", model = "rand
     }, error = function(e) NULL)
 
     result$egger_test <- egger
+  }
+
+  # Trim-and-fill analysis (if ≥5 studies)
+  if (ma$k >= 5) {
+    tf <- tryCatch({
+      tf_ma <- trimfill(ma)
+      list(
+        k0 = tf_ma$k0,  # Number of studies imputed
+        side = tf_ma$side,  # Side where studies were imputed ("left" or "right")
+        pooled_effect = as.numeric(tf_ma$beta),
+        ci_lower = as.numeric(tf_ma$ci.lb),
+        ci_upper = as.numeric(tf_ma$ci.ub),
+        se = as.numeric(tf_ma$se),
+        p_value = as.numeric(tf_ma$pval),
+        model_object = tf_ma,
+        data_filled = data.frame(
+          yi = c(data$yi, tf_ma$yi.fill),
+          sei = c(data$sei, tf_ma$sei.fill),
+          imputed = c(rep(FALSE, nrow(data)), rep(TRUE, tf_ma$k0))
+        )
+      )
+    }, error = function(e) NULL)
+
+    result$trim_fill <- tf
   }
 
   return(result)

@@ -1,0 +1,74 @@
+# US Health Economic Parameters
+# Based on ICER and common US payer perspectives
+
+country: United States
+currency: USD
+currency_symbol: $
+
+# Willingness-to-pay thresholds (per QALY)
+wtp:
+  primary_threshold: 100000  # $100,000 per QALY (common US threshold)
+  secondary_threshold: 150000  # $150,000 per QALY (ICER value-based threshold)
+  high_value: 50000  # $50,000 per QALY (high value)
+
+# Discount rates (per year)
+discounting:
+  costs: 0.03  # 3% per year for costs
+  benefits: 0.03  # 3% per year for health outcomes
+
+# Time horizon
+time_horizon:
+  default: 10  # years
+  lifetime: 50  # years
+
+# Cost parameters (annual, in USD)
+costs:
+  drug_treatment:
+    default: 80000  # US drug costs typically higher
+    range: [30000, 300000]
+
+  drug_comparator:
+    default: 20000
+    range: [5000, 100000]
+
+  health_state_stable:
+    default: 10000  # Includes monitoring, office visits
+    range: [5000, 25000]
+
+  health_state_progressed:
+    default: 40000  # US healthcare costs higher
+    range: [20000, 100000]
+
+  hospitalization_per_day: 2500
+  outpatient_visit: 500
+  physician_visit: 200
+  er_visit: 1500
+
+# Utility values
+utilities:
+  general_population: 0.85
+  stable_disease: 0.80
+  progressed_disease: 0.50
+  severe_ae: 0.40
+
+# Population parameters
+population:
+  eligible_population: 500000  # Larger US population
+  market_share_year1: 0.15
+  market_share_year5: 0.40
+
+# PSA parameters
+psa:
+  n_iterations: 1000
+  distributions:
+    costs: gamma
+    utilities: beta
+    probabilities: beta
+    relative_effects: lognormal
+
+# Reference sources
+references:
+  wtp: "ICER Value Assessment Framework (2020-2023)"
+  discount_rate: "Second Panel on Cost-Effectiveness in Health and Medicine"
+  costs: "Medicare Fee Schedule & Commercial Claims Data"
+  utilities: "US EQ-5D-3L population norms"

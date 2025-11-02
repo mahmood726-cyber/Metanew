@@ -1,0 +1,74 @@
+# UK Health Economic Parameters
+# Based on NICE guidance and NHS reference costs
+
+country: United Kingdom
+currency: GBP
+currency_symbol: £
+
+# Willingness-to-pay thresholds (per QALY)
+wtp:
+  primary_threshold: 20000  # £20,000 per QALY (NICE lower threshold)
+  secondary_threshold: 30000  # £30,000 per QALY (NICE upper threshold)
+  end_of_life: 50000  # £50,000 per QALY (for end-of-life treatments)
+
+# Discount rates (per year)
+discounting:
+  costs: 0.035  # 3.5% per year for costs
+  benefits: 0.035  # 3.5% per year for health outcomes (QALYs)
+
+# Time horizon
+time_horizon:
+  default: 10  # years
+  lifetime: 50  # years (for lifetime models)
+
+# Cost parameters (annual, in GBP)
+# Note: These are illustrative defaults - should be updated per indication
+costs:
+  drug_treatment:
+    default: 12000
+    range: [5000, 50000]
+
+  drug_comparator:
+    default: 3000
+    range: [1000, 15000]
+
+  health_state_stable:
+    default: 2000  # Annual monitoring/management costs
+    range: [1000, 5000]
+
+  health_state_progressed:
+    default: 8000  # Includes additional care, interventions
+    range: [5000, 20000]
+
+  hospitalization_per_day: 400
+  outpatient_visit: 150
+  gp_consultation: 39
+
+# Utility values (health state preferences)
+utilities:
+  general_population: 0.85
+  stable_disease: 0.80
+  progressed_disease: 0.50
+  severe_ae: 0.40
+
+# Population parameters
+population:
+  eligible_population: 100000  # For budget impact analysis
+  market_share_year1: 0.10
+  market_share_year5: 0.30
+
+# PSA parameters
+psa:
+  n_iterations: 1000
+  distributions:
+    costs: gamma  # Gamma distribution for costs (non-negative)
+    utilities: beta  # Beta distribution for utilities (0-1)
+    probabilities: beta
+    relative_effects: lognormal  # For HRs, RRs, ORs
+
+# Reference sources
+references:
+  wtp: "NICE Guide to the Methods of Technology Appraisal (2013)"
+  discount_rate: "NICE Guide to the Methods of Technology Appraisal (2013)"
+  costs: "NHS Reference Costs 2022/23"
+  utilities: "EQ-5D-3L UK population norms"
