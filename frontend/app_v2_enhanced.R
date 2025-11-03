@@ -36,10 +36,10 @@ source("modules/rob_tools.R")                  # Risk of Bias (ROB 2.0, ROBINS-I
 source("modules/bayesian_ma.R")                # Bayesian Meta-Analysis with brms/Stan
 source("modules/publication_bias_advanced.R")  # PET-PEESE, selection models, p-curve
 source("modules/partitioned_survival.R")       # Partitioned Survival for oncology HTA
-# source("modules/multivariate_ma.R")          # TODO: Multivariate MA
-# source("modules/evppi.R")                    # TODO: Value of Information (EVPPI)
-# source("modules/collaboration.R")            # TODO: Real-time collaboration
-# source("modules/onboarding.R")               # TODO: Interactive tutorials
+source("modules/multivariate_ma.R")            # Multivariate MA - NEW!
+source("modules/evppi.R")                      # Value of Information (EVPPI) - NEW!
+source("modules/onboarding.R")                 # Interactive tutorials - NEW!
+# source("modules/collaboration.R")            # TODO: Real-time collaboration (future)
 
 # Source utilities
 source("utils/python_bridge.R")
@@ -385,10 +385,10 @@ ui <- page_navbar(
       "Bayesian MA",
       bayesian_ma_ui("bayesian")  # NEW!
     ),
-    # nav_panel(
-    #   "Multivariate MA",
-    #   multivariate_ma_ui("multivariate")  # TODO
-    # ),
+    nav_panel(
+      "Multivariate MA",
+      multivariate_ma_ui("multivariate")  # NEW!
+    ),
     nav_panel(
       "Dose-Response",
       dose_response_ui("dose_response")
@@ -439,11 +439,11 @@ ui <- page_navbar(
     nav_panel(
       "Results (BCEA)",
       he_bcea_ui("he_bcea")
+    ),
+    nav_panel(
+      "Value of Information",
+      evppi_ui("evppi")  # NEW - EVPPI!
     )
-    # nav_panel(
-    #   "Value of Information",
-    #   evppi_ui("evppi")  # TODO - EVPPI!
-    # )
   ),
 
   # Tab 10: AI Copilot
@@ -627,10 +627,11 @@ server <- function(input, output, session) {
     pairwise_results = list(),
     nma_results = list(),
     bayesian_results = list(),  # NEW - Bayesian MA results
-    # multivariate_results = list(),  # TODO
+    multivariate_results = list(),  # NEW - Multivariate MA results
     dr_results = list(),
     he_results = NULL,
     survival_ps_results = NULL,  # NEW - Partitioned survival results
+    evppi_results = NULL,  # NEW - EVPPI results
     rob_assessments = list(),  # NEW - Risk of bias assessments
     grade_ratings = list(),  # NEW - GRADE ratings
     pub_bias_results = list(),  # NEW - Advanced publication bias results
@@ -854,7 +855,7 @@ server <- function(input, output, session) {
   pairwise_results <- meta_pairwise_server("pairwise", rv)
   nma_results <- nma_server("nma", rv)
   bayesian_results <- bayesian_ma_server("bayesian", rv)  # NEW - Bayesian MA with brms/Stan
-  # multivariate_results <- multivariate_ma_server("multivariate", rv)  # TODO
+  multivariate_results <- multivariate_ma_server("multivariate", rv)  # NEW - Multivariate MA
   dr_results <- dose_response_server("dose_response", rv)
 
   # Publication Bias (Enhanced)
@@ -871,7 +872,7 @@ server <- function(input, output, session) {
   he_model_results <- he_model_server("he_model", rv)
   survival_ps_results <- partitioned_survival_server("survival_ps", rv)  # NEW - Partitioned survival for HTA
   he_bcea_results <- he_bcea_server("he_bcea", rv)
-  # evppi_results <- evppi_server("evppi", rv)  # TODO
+  evppi_results <- evppi_server("evppi", rv)  # NEW - EVPPI
 
   # AI Copilot
   ai_copilot_results <- ai_copilot_server("ai_copilot", rv)
@@ -1099,12 +1100,13 @@ create_evidence_object <- function(rv) {
     pairwise_results = rv$pairwise_results,
     nma_results = rv$nma_results,
     bayesian_results = rv$bayesian_results,  # NEW - Bayesian MA
+    multivariate_results = rv$multivariate_results,  # NEW - Multivariate MA
     pub_bias_results = rv$pub_bias_results,  # NEW - Advanced publication bias
     dose_response_results = rv$dr_results,
     economic_results = rv$he_results,
     survival_ps_results = rv$survival_ps_results,  # NEW - Partitioned survival
+    evppi_results = rv$evppi_results,  # NEW - EVPPI
     audit_trail = rv$audit_log
-    # multivariate_results = rv$multivariate_results,  # TODO
     # collaborators = rv$collaborators  # TODO
   )
 }
