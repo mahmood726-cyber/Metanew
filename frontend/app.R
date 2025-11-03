@@ -22,6 +22,7 @@ source("modules/sensitivity.R")
 source("modules/he_params.R")
 source("modules/he_model.R")
 source("modules/he_bcea.R")
+source("modules/prisma.R")  # PRISMA flow diagram
 source("modules/reporting.R")
 source("modules/audit.R")
 source("modules/ai_copilot.R")
@@ -117,6 +118,10 @@ ui <- page_navbar(
     title = "Reports",
     icon = icon("file-pdf"),
     navset_card_tab(
+      nav_panel(
+        "PRISMA Diagram",
+        prisma_ui("prisma")
+      ),
       nav_panel(
         "Generate Reports",
         reporting_ui("reporting")
@@ -224,6 +229,7 @@ server <- function(input, output, session) {
   he_model_results <- he_model_server("he_model", rv)
   he_bcea_results <- he_bcea_server("he_bcea", rv)
   ai_copilot_results <- ai_copilot_server("ai_copilot", rv)
+  prisma_results <- prisma_server("prisma", rv)  # PRISMA flow diagram
   reporting_results <- reporting_server("reporting", rv)
   audit_results <- audit_server("audit", rv)
   v2_results <- v2_features_server("v2_features", rv)
