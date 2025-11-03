@@ -68,6 +68,12 @@ source("modules/auto_tables.R")                # Automated table generation ✅ 
 source("modules/decision_curve.R")             # Decision curve analysis ✅ STANDARD
 source("modules/robust_variance.R")            # Robust variance estimation ✅ STANDARD
 
+# V3.3 WORKFLOW EXCELLENCE & REPORTING (Publication-Ready Output)
+source("modules/html_reports.R")               # Interactive HTML reports ✅ STANDARD
+source("modules/figure_editor.R")              # Publication-ready figure editor ✅ STANDARD
+source("modules/citation_manager.R")           # Citation manager integration ✅ STANDARD
+source("modules/submission_package.R")         # Journal submission package ✅ STANDARD
+
 # source("modules/collaboration.R")            # TODO: Real-time collaboration (future)
 
 # Source utilities
@@ -613,7 +619,41 @@ ui <- page_navbar(
     decision_curve_ui("decision_curve")
   ),
 
-  # Tab 26: AI Copilot
+  # V3.3 WORKFLOW EXCELLENCE & REPORTING
+
+  # Tab 26: HTML Reports (NEW V3.3!)
+  nav_panel(
+    title = "HTML Reports",
+    icon = icon("file-code"),
+    value = "html_reports",
+    html_reports_ui("html_reports")
+  ),
+
+  # Tab 27: Figure Editor (NEW V3.3!)
+  nav_panel(
+    title = "Figure Editor",
+    icon = icon("paint-brush"),
+    value = "figure_editor",
+    figure_editor_ui("figure_editor")
+  ),
+
+  # Tab 28: Citation Manager (NEW V3.3!)
+  nav_panel(
+    title = "Citation Manager",
+    icon = icon("book"),
+    value = "citation_manager",
+    citation_manager_ui("citation_manager")
+  ),
+
+  # Tab 29: Submission Package (NEW V3.3!)
+  nav_panel(
+    title = "Submission Package",
+    icon = icon("box"),
+    value = "submission_package",
+    submission_package_ui("submission_package")
+  ),
+
+  # Tab 30: AI Copilot
   nav_panel(
     title = "AI Copilot",
     icon = icon("robot"),
@@ -1075,6 +1115,12 @@ server <- function(input, output, session) {
   auto_tables_results <- auto_tables_server("auto_tables", rv)  # NEW V3.2 - Auto table generation
   decision_curve_results <- decision_curve_server("decision_curve", rv)  # NEW V3.2 - Decision curve analysis
   # Note: robust_variance is a utility enhancement, not a standalone server module
+
+  # V3.3 Workflow Excellence & Reporting
+  html_reports_results <- html_reports_server("html_reports", rv)  # NEW V3.3 - Interactive HTML reports
+  figure_editor_results <- figure_editor_server("figure_editor", rv)  # NEW V3.3 - Publication-ready figure editor
+  citation_manager_results <- citation_manager_server("citation_manager", rv)  # NEW V3.3 - Citation manager
+  submission_package_results <- submission_package_server("submission_package", rv)  # NEW V3.3 - Journal submission package
 
   # AI Copilot
   ai_copilot_results <- ai_copilot_server("ai_copilot", rv)
