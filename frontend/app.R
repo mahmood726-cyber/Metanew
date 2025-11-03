@@ -37,6 +37,9 @@ source("modules/publication_bias_advanced.R")  # Phase 3.4: Advanced Publication
 source("modules/report_templates.R")  # Phase 3.5: Customizable Report Templates
 source("modules/study_annotations.R")  # Phase 3.6: Study-Level Annotations
 source("modules/grade_assessment.R")  # Phase 4.1: GRADE Assessment Module
+source("modules/nma_bayesian.R")  # Phase 4.2: Bayesian Network Meta-Analysis
+source("modules/ipd_meta_analysis.R")  # Phase 4.3: IPD Meta-Analysis
+source("modules/partition_survival.R")  # Phase 4.4: Partitioned Survival Models
 source("modules/radial_plot.R")  # Phase 3.2: Radial/Galbraith plots
 source("modules/gosh_plot.R")  # Phase 3.3: GOSH outlier detection
 
@@ -117,6 +120,14 @@ ui <- page_navbar(
         nma_ui("nma")
       ),
       nav_panel(
+        "Bayesian NMA",
+        nma_bayesian_ui("nma_bayesian")
+      ),
+      nav_panel(
+        "IPD Meta-Analysis",
+        ipd_meta_analysis_ui("ipd_ma")
+      ),
+      nav_panel(
         "Dose-Response",
         dose_response_ui("dose_response")
       ),
@@ -175,6 +186,10 @@ ui <- page_navbar(
       nav_panel(
         "Budget Impact",
         budget_impact_ui("budget_impact")
+      ),
+      nav_panel(
+        "Partitioned Survival",
+        partition_survival_ui("partition_survival")
       )
     )
   ),
@@ -307,6 +322,8 @@ server <- function(input, output, session) {
   qa_results <- qa_dashboard_server("qa", rv)  # QA Dashboard & Method Guardrails
   pairwise_results <- meta_pairwise_server("pairwise", rv)
   nma_results <- nma_server("nma", rv)
+  nma_bayesian_results <- nma_bayesian_server("nma_bayesian", rv)  # Phase 4.2
+  ipd_ma_results <- ipd_meta_analysis_server("ipd_ma", rv)  # Phase 4.3
   dr_results <- dose_response_server("dose_response", rv)
   metareg_results <- metareg_bubble_server("metareg", rv)
   radial_results <- radial_plot_server("radial", rv)
@@ -318,6 +335,7 @@ server <- function(input, output, session) {
   he_model_results <- he_model_server("he_model", rv)
   he_bcea_results <- he_bcea_server("he_bcea", rv)
   budget_impact_results <- budget_impact_server("budget_impact", rv)
+  partition_survival_results <- partition_survival_server("partition_survival", rv)  # Phase 4.4
   ai_copilot_results <- ai_copilot_server("ai_copilot", rv)
   grade_results <- grade_assessment_server("grade", rv)  # GRADE Assessment
   prisma_results <- prisma_server("prisma", rv)  # PRISMA flow diagram
