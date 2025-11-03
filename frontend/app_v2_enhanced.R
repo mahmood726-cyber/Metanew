@@ -47,6 +47,12 @@ source("modules/export_enhanced.R")            # Excel/CSV export options - NEW!
 source("modules/power_analysis.R")             # Sample size & power analysis - NEW!
 source("modules/diagnostic_plots_enhanced.R")  # Enhanced diagnostic plots - NEW!
 
+# V3.0 CBAMMR/powerNMA INTEGRATION (Cutting-Edge 2024-2025 Methods)
+source("modules/clinical_interpretation.R")    # NNT & E-values ✅ STANDARD
+source("modules/voi_enhanced.R")               # EVPI calculator ✅ STANDARD
+source("modules/quality_weighted_ma.R")        # Quality-weighted MA ✅ BEST PRACTICE
+source("modules/transportability.R")           # Population adjustment ⚠️ NOVEL
+
 # source("modules/collaboration.R")            # TODO: Real-time collaboration (future)
 
 # Source utilities
@@ -449,8 +455,12 @@ ui <- page_navbar(
       he_bcea_ui("he_bcea")
     ),
     nav_panel(
-      "Value of Information",
+      "Value of Information (EVPPI)",
       evppi_ui("evppi")  # NEW - EVPPI!
+    ),
+    nav_panel(
+      "EVPI Calculator",
+      voi_tools_ui("voi_enhanced")  # NEW V3.0 - EVPI!
     )
   ),
 
@@ -478,7 +488,33 @@ ui <- page_navbar(
     examples_templates_ui("examples")
   ),
 
-  # Tab 13: AI Copilot
+  # V3.0 CUTTING-EDGE FEATURES (CBAMMR/powerNMA Integration)
+
+  # Tab 13: Clinical Interpretation (NEW V3.0!)
+  nav_panel(
+    title = "Clinical Tools",
+    icon = icon("user-md"),
+    value = "clinical",
+    clinical_interp_ui("clinical_interp")
+  ),
+
+  # Tab 14: Quality-Weighted MA (NEW V3.0!)
+  nav_panel(
+    title = "Quality-Weighted MA",
+    icon = icon("balance-scale"),
+    value = "quality_weighted",
+    quality_weighted_ma_ui("quality_weighted")
+  ),
+
+  # Tab 15: Transportability (NEW V3.0 - NOVEL!)
+  nav_panel(
+    title = "Transportability",
+    icon = icon("globe-americas"),
+    value = "transportability",
+    transportability_ui("transportability")
+  ),
+
+  # Tab 16: AI Copilot
   nav_panel(
     title = "AI Copilot",
     icon = icon("robot"),
@@ -919,6 +955,12 @@ server <- function(input, output, session) {
   examples_results <- examples_templates_server("examples", rv)  # NEW - Examples & templates
   export_enhanced_results <- export_enhanced_server("export_enhanced", rv)  # NEW - Excel/CSV export
   keyboard_shortcuts_results <- keyboard_shortcuts_server("keyboard_shortcuts", rv)  # NEW - Keyboard shortcuts
+
+  # V3.0 CBAMMR/powerNMA Integration (Cutting-Edge 2024-2025 Methods)
+  clinical_interp_results <- clinical_interp_server("clinical_interp", rv)  # NEW V3.0 - NNT & E-values
+  voi_enhanced_results <- voi_tools_server("voi_enhanced", rv)  # NEW V3.0 - EVPI calculator
+  quality_weighted_results <- quality_weighted_ma_server("quality_weighted", rv)  # NEW V3.0 - Quality weighting
+  transportability_results <- transportability_server("transportability", rv)  # NEW V3.0 - Population adjustment
 
   # AI Copilot
   ai_copilot_results <- ai_copilot_server("ai_copilot", rv)
