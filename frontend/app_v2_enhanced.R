@@ -53,6 +53,13 @@ source("modules/voi_enhanced.R")               # EVPI calculator ✅ STANDARD
 source("modules/quality_weighted_ma.R")        # Quality-weighted MA ✅ BEST PRACTICE
 source("modules/transportability.R")           # Population adjustment ⚠️ NOVEL
 
+# V3.1 CBAMMR/powerNMA COMPLETION (Advanced Methods)
+source("modules/loto_sensitivity.R")           # LOTO sensitivity for NMA ✅ STANDARD
+source("modules/bootstrap_ci.R")               # Bootstrap BCa intervals ✅ STANDARD
+source("modules/sucra_rankings.R")             # SUCRA rankings for NMA ✅ STANDARD
+source("modules/quantile_metaanalysis.R")      # Quantile MA - personalized medicine ⚠️ NOVEL
+source("modules/individual_prediction.R")      # Individual effect prediction ⚠️ NOVEL
+
 # source("modules/collaboration.R")            # TODO: Real-time collaboration (future)
 
 # Source utilities
@@ -514,7 +521,49 @@ ui <- page_navbar(
     transportability_ui("transportability")
   ),
 
-  # Tab 16: AI Copilot
+  # V3.1 ADVANCED FEATURES (CBAMMR/powerNMA Completion)
+
+  # Tab 16: LOTO Sensitivity (NEW V3.1!)
+  nav_panel(
+    title = "LOTO Sensitivity",
+    icon = icon("sync"),
+    value = "loto",
+    loto_sensitivity_ui("loto_sensitivity")
+  ),
+
+  # Tab 17: Bootstrap CI (NEW V3.1!)
+  nav_panel(
+    title = "Bootstrap CI",
+    icon = icon("random"),
+    value = "bootstrap_ci",
+    bootstrap_ci_ui("bootstrap_ci")
+  ),
+
+  # Tab 18: SUCRA Rankings (NEW V3.1!)
+  nav_panel(
+    title = "SUCRA Rankings",
+    icon = icon("chart-bar"),
+    value = "sucra",
+    sucra_rankings_ui("sucra_rankings")
+  ),
+
+  # Tab 19: Quantile Meta-Analysis (NEW V3.1 - NOVEL!)
+  nav_panel(
+    title = "Quantile MA",
+    icon = icon("chart-line"),
+    value = "quantile_ma",
+    quantile_metaanalysis_ui("quantile_ma")
+  ),
+
+  # Tab 20: Individual Prediction (NEW V3.1 - NOVEL!)
+  nav_panel(
+    title = "Individual Prediction",
+    icon = icon("user"),
+    value = "individual_pred",
+    individual_prediction_ui("individual_pred")
+  ),
+
+  # Tab 21: AI Copilot
   nav_panel(
     title = "AI Copilot",
     icon = icon("robot"),
@@ -961,6 +1010,13 @@ server <- function(input, output, session) {
   voi_enhanced_results <- voi_tools_server("voi_enhanced", rv)  # NEW V3.0 - EVPI calculator
   quality_weighted_results <- quality_weighted_ma_server("quality_weighted", rv)  # NEW V3.0 - Quality weighting
   transportability_results <- transportability_server("transportability", rv)  # NEW V3.0 - Population adjustment
+
+  # V3.1 CBAMMR/powerNMA Completion (Advanced Methods)
+  loto_results <- loto_sensitivity_server("loto_sensitivity", rv)  # NEW V3.1 - LOTO sensitivity
+  bootstrap_ci_results <- bootstrap_ci_server("bootstrap_ci", rv)  # NEW V3.1 - Bootstrap BCa
+  sucra_results <- sucra_rankings_server("sucra_rankings", rv)  # NEW V3.1 - SUCRA rankings
+  quantile_ma_results <- quantile_metaanalysis_server("quantile_ma", rv)  # NEW V3.1 - Quantile MA
+  individual_pred_results <- individual_prediction_server("individual_pred", rv)  # NEW V3.1 - Individual prediction
 
   # AI Copilot
   ai_copilot_results <- ai_copilot_server("ai_copilot", rv)
