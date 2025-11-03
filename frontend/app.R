@@ -14,6 +14,7 @@ library(dosresmeta)
 # Source modules
 source("modules/data_import.R")
 source("modules/protocol.R")
+source("modules/protocol_snapshots.R")  # Protocol version control
 source("modules/meta_pairwise.R")
 source("modules/nma.R")
 source("modules/dose_response.R")
@@ -58,7 +59,16 @@ ui <- page_navbar(
   nav_panel(
     title = "Protocol",
     icon = icon("file-text"),
-    protocol_ui("protocol")
+    navset_card_tab(
+      nav_panel(
+        "Protocol",
+        protocol_ui("protocol")
+      ),
+      nav_panel(
+        "Snapshots & Versions",
+        protocol_snapshots_ui("protocol_snapshots")
+      )
+    )
   ),
 
   # Tab: Risk of Bias (RoB 2.0)
@@ -238,6 +248,7 @@ server <- function(input, output, session) {
   # Module servers
   data_results <- data_import_server("data_import", rv)
   protocol_results <- protocol_server("protocol", rv)
+  protocol_snapshots_results <- protocol_snapshots_server("protocol_snapshots", rv)
   rob_results <- risk_of_bias_server("rob", rv)  # RoB 2.0 module
   qa_results <- qa_dashboard_server("qa", rv)  # QA Dashboard & Method Guardrails
   pairwise_results <- meta_pairwise_server("pairwise", rv)
