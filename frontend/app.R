@@ -33,6 +33,12 @@ source("modules/reporting.R")
 source("modules/audit.R")
 source("modules/ai_copilot.R")
 source("modules/v2_features.R")
+source("modules/publication_bias_advanced.R")  # Phase 3.4: Advanced Publication Bias
+source("modules/report_templates.R")  # Phase 3.5: Customizable Report Templates
+source("modules/study_annotations.R")  # Phase 3.6: Study-Level Annotations
+source("modules/grade_assessment.R")  # Phase 4.1: GRADE Assessment Module
+source("modules/radial_plot.R")  # Phase 3.2: Radial/Galbraith plots
+source("modules/gosh_plot.R")  # Phase 3.3: GOSH outlier detection
 
 # Source utilities
 source("utils/python_bridge.R")
@@ -117,6 +123,18 @@ ui <- page_navbar(
       nav_panel(
         "Meta-Regression",
         metareg_bubble_ui("metareg")
+      ),
+      nav_panel(
+        "Radial/Galbraith Plot",
+        radial_plot_ui("radial")
+      ),
+      nav_panel(
+        "GOSH Plot",
+        gosh_plot_ui("gosh")
+      ),
+      nav_panel(
+        "Publication Bias",
+        publication_bias_advanced_ui("pub_bias")
       )
     )
   ),
@@ -161,6 +179,13 @@ ui <- page_navbar(
     )
   ),
 
+  # Tab: Quality Assessment
+  nav_panel(
+    title = "GRADE",
+    icon = icon("graduation-cap"),
+    grade_assessment_ui("grade")
+  ),
+
   # Tab: Reports & Export
   nav_panel(
     title = "Reports",
@@ -173,6 +198,14 @@ ui <- page_navbar(
       nav_panel(
         "Generate Reports",
         reporting_ui("reporting")
+      ),
+      nav_panel(
+        "Report Templates",
+        report_templates_ui("report_templates")
+      ),
+      nav_panel(
+        "Study Annotations",
+        study_annotations_ui("study_annotations")
       ),
       nav_panel(
         "Audit Trail",
@@ -276,6 +309,9 @@ server <- function(input, output, session) {
   nma_results <- nma_server("nma", rv)
   dr_results <- dose_response_server("dose_response", rv)
   metareg_results <- metareg_bubble_server("metareg", rv)
+  radial_results <- radial_plot_server("radial", rv)
+  gosh_results <- gosh_plot_server("gosh", rv)
+  pub_bias_results <- publication_bias_advanced_server("pub_bias", rv)
   sensitivity_results <- sensitivity_server("sensitivity", rv)
   scenario_compare_results <- scenario_compare_server("scenario_compare", rv)
   he_params_results <- he_params_server("he_params", rv)
@@ -283,8 +319,11 @@ server <- function(input, output, session) {
   he_bcea_results <- he_bcea_server("he_bcea", rv)
   budget_impact_results <- budget_impact_server("budget_impact", rv)
   ai_copilot_results <- ai_copilot_server("ai_copilot", rv)
+  grade_results <- grade_assessment_server("grade", rv)  # GRADE Assessment
   prisma_results <- prisma_server("prisma", rv)  # PRISMA flow diagram
   reporting_results <- reporting_server("reporting", rv)
+  report_templates_results <- report_templates_server("report_templates", rv)
+  study_annotations_results <- study_annotations_server("study_annotations", rv)
   audit_results <- audit_server("audit", rv)
   v2_results <- v2_features_server("v2_features", rv)
 
