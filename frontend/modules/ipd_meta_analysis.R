@@ -21,6 +21,24 @@ ipd_meta_analysis_ui <- function(id) {
     h3("👥 Individual Patient Data Meta-Analysis"),
     p("Advanced meta-analysis using patient-level data from multiple studies"),
 
+    # ⚠️ CRITICAL WARNING - FRAMEWORK ONLY
+    card(
+      card_body(
+        class = "bg-warning text-dark border-danger",
+        style = "border-width: 3px;",
+        h4(class = "text-danger", "⚠️ FRAMEWORK ONLY - NOT PRODUCTION READY"),
+        p(class = "mb-0",
+          strong("WARNING:"), " This module is a ",
+          strong("framework/prototype with simulated results."),
+          " It does NOT perform actual IPD meta-analysis with mixed effects models. ",
+          "Results shown are placeholders and ",
+          strong("MUST NOT be used for real analysis, publications, or decision-making."),
+          br(), br(),
+          "Full implementation requires lme4/glmer backend integration for one-stage models (see source code for details)."
+        )
+      )
+    ),
+
     # Info card
     card(
       card_header("About IPD Meta-Analysis"),

@@ -21,6 +21,24 @@ partition_survival_ui <- function(id) {
     h3("⏱️ Partitioned Survival Analysis"),
     p("Economic modeling with partitioned survival for multiple health states"),
 
+    # ⚠️ CRITICAL WARNING - FRAMEWORK ONLY
+    card(
+      card_body(
+        class = "bg-warning text-dark border-danger",
+        style = "border-width: 3px;",
+        h4(class = "text-danger", "⚠️ FRAMEWORK ONLY - NOT PRODUCTION READY"),
+        p(class = "mb-0",
+          strong("WARNING:"), " This module is a ",
+          strong("framework/prototype with simulated curve fits."),
+          " It does NOT perform actual parametric survival modeling with flexsurv. ",
+          "Results shown are placeholders and ",
+          strong("MUST NOT be used for real analysis, HTA submissions, or decision-making."),
+          br(), br(),
+          "Full implementation requires flexsurv backend integration for parametric curve fitting (see source code for details)."
+        )
+      )
+    ),
+
     # Info card
     card(
       card_header("About Partitioned Survival Models"),

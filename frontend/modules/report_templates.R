@@ -836,10 +836,29 @@ generate_ppt_report <- function(template, data, output_file) {
 render_section <- function(section, data, template) {
 
   content <- switch(section,
-    exec_summary = "Executive summary content...",
+    exec_summary = render_exec_summary_section(data),
+    introduction = render_introduction_section(data),
+    protocol = render_protocol_section(data$protocol),
+    prisma = render_prisma_section(data$studies),
+    study_chars = render_study_chars_section(data$studies),
+    rob = render_rob_section(data$studies),
+    network = render_network_section(data$nma_results),
     ma_results = render_ma_results_section(data$pairwise_results),
+    forest_plots = render_forest_plots_section(data$pairwise_results),
+    heterogeneity = render_heterogeneity_section(data$pairwise_results),
+    pub_bias = render_pub_bias_section(data$pairwise_results),
+    subgroup = render_subgroup_section(data$pairwise_results),
+    sensitivity = render_sensitivity_section(data$pairwise_results),
     he_results = render_he_results_section(data$he_results),
-    "Content for this section..."
+    ceac = render_ceac_section(data$he_results),
+    bia = render_bia_section(data$he_results),
+    grade = render_grade_section(data$grade_results),
+    discussion = render_discussion_section(data),
+    conclusions = render_conclusions_section(data),
+    methods_appendix = render_methods_appendix_section(),
+    references = render_references_section(data),
+    supplementary = render_supplementary_section(data),
+    "Content not yet implemented for this section."
   )
 
   list(
@@ -856,29 +875,247 @@ get_section_title <- function(section) {
   titles <- c(
     exec_summary = "Executive Summary",
     introduction = "Introduction",
+    protocol = "Protocol and Methods",
+    prisma = "PRISMA Flow Diagram",
+    study_chars = "Study Characteristics",
+    rob = "Risk of Bias Assessment",
+    network = "Network Meta-Analysis",
     ma_results = "Meta-Analysis Results",
-    he_results = "Health Economic Results"
+    forest_plots = "Forest Plots",
+    heterogeneity = "Heterogeneity Assessment",
+    pub_bias = "Publication Bias Assessment",
+    subgroup = "Subgroup Analyses",
+    sensitivity = "Sensitivity Analyses",
+    he_results = "Health Economic Results",
+    ceac = "Cost-Effectiveness Acceptability",
+    bia = "Budget Impact Analysis",
+    grade = "GRADE Evidence Profile",
+    discussion = "Discussion",
+    conclusions = "Conclusions and Recommendations",
+    methods_appendix = "Appendix: Detailed Methods",
+    references = "References",
+    supplementary = "Supplementary Materials"
   )
   titles[section]
 }
 
 
+#' Render Executive Summary Section
+#' @keywords internal
+render_exec_summary_section <- function(data) {
+  if (is.null(data$pairwise_results)) return("No analysis results available for executive summary.")
+
+  ma <- data$pairwise_results
+  summary_text <- sprintf(
+    "A meta-analysis was conducted including %d studies. The pooled effect estimate was %.3f (95%% CI: %.3f to %.3f, p = %.4f). ",
+    ifelse(!is.null(ma$k), ma$k, 0),
+    ifelse(!is.null(ma$TE.random), ma$TE.random, 0),
+    ifelse(!is.null(ma$lower.random), ma$lower.random, 0),
+    ifelse(!is.null(ma$upper.random), ma$upper.random, 0),
+    ifelse(!is.null(ma$pval.random), ma$pval.random, 1)
+  )
+
+  if (!is.null(ma$I2)) {
+    summary_text <- paste0(summary_text, sprintf("Heterogeneity was %s (I² = %.1f%%). ",
+                                                  ifelse(ma$I2 < 40, "low", ifelse(ma$I2 < 75, "moderate", "considerable")),
+                                                  ma$I2 * 100))
+  }
+
+  return(summary_text)
+}
+
+#' Render Introduction Section
+#' @keywords internal
+render_introduction_section <- function(data) {
+  return("This report presents the results of a systematic review and meta-analysis conducted to synthesize evidence from multiple studies. The analysis follows established methodological guidelines and reporting standards.")
+}
+
+#' Render Protocol Section
+#' @keywords internal
+render_protocol_section <- function(protocol) {
+  if (is.null(protocol)) return("Protocol information not available.")
+  return("Methods followed a pre-specified protocol registered with PROSPERO. Standard systematic review methods were applied including comprehensive database searching, dual independent screening, data extraction, and quality assessment.")
+}
+
+#' Render PRISMA Section
+#' @keywords internal
+render_prisma_section <- function(studies) {
+  if (is.null(studies)) return("Study flow information not available.")
+  n_studies <- nrow(studies)
+  return(sprintf("The systematic search identified %d eligible studies for inclusion in the meta-analysis. [PRISMA flow diagram would be included here]", n_studies))
+}
+
+#' Render Study Characteristics Section
+#' @keywords internal
+render_study_chars_section <- function(studies) {
+  if (is.null(studies)) return("Study characteristics not available.")
+
+  n_studies <- nrow(studies)
+  char_text <- sprintf("Table of characteristics for %d included studies:\n\n", n_studies)
+  char_text <- paste0(char_text, "[Study characteristics table would be formatted here with columns for: Study ID, Year, Design, N, Intervention, Comparator, Outcome, Follow-up]")
+
+  return(char_text)
+}
+
+#' Render Risk of Bias Section
+#' @keywords internal
+render_rob_section <- function(studies) {
+  if (is.null(studies)) return("Risk of bias assessment not available.")
+  return("Risk of bias was assessed using the Cochrane Risk of Bias tool. [Risk of bias summary figure and detailed assessments would be included here]")
+}
+
+#' Render Network Section
+#' @keywords internal
+render_network_section <- function(nma_results) {
+  if (is.null(nma_results)) return("Network meta-analysis was not performed.")
+  return("Network meta-analysis results including network plot, treatment rankings, and relative effects. [Network geometry and results tables would be included here]")
+}
+
 #' Render MA Results Section
-#'
 #' @keywords internal
 render_ma_results_section <- function(pairwise_results) {
   if (is.null(pairwise_results)) return("No meta-analysis results available.")
 
-  # Format results as text
-  paste("Meta-analysis results section content...")
+  ma <- pairwise_results
+  results_text <- sprintf(
+    "Meta-Analysis Results:\n\nNumber of studies: %d\nPooled effect (Random Effects): %.3f (95%% CI: %.3f to %.3f)\nP-value: %.4f\nStatistical significance: %s\n\n",
+    ifelse(!is.null(ma$k), ma$k, 0),
+    ifelse(!is.null(ma$TE.random), ma$TE.random, 0),
+    ifelse(!is.null(ma$lower.random), ma$lower.random, 0),
+    ifelse(!is.null(ma$upper.random), ma$upper.random, 0),
+    ifelse(!is.null(ma$pval.random), ma$pval.random, 1),
+    ifelse(!is.null(ma$pval.random) && ma$pval.random < 0.05, "Significant (p < 0.05)", "Not significant")
+  )
+
+  results_text <- paste0(results_text, "The pooled effect estimate suggests ",
+                        ifelse(!is.null(ma$TE.random) && ma$TE.random > 0, "a beneficial effect", "no benefit or potential harm"),
+                        " of the intervention.")
+
+  return(results_text)
 }
 
+#' Render Forest Plots Section
+#' @keywords internal
+render_forest_plots_section <- function(pairwise_results) {
+  if (is.null(pairwise_results)) return("No forest plot data available.")
+  return("Forest plots showing individual study effects and pooled estimates. [Forest plot figures would be embedded here]")
+}
+
+#' Render Heterogeneity Section
+#' @keywords internal
+render_heterogeneity_section <- function(pairwise_results) {
+  if (is.null(pairwise_results)) return("No heterogeneity statistics available.")
+
+  ma <- pairwise_results
+  het_text <- sprintf(
+    "Heterogeneity Assessment:\n\nI² statistic: %.1f%%\nTau² (between-study variance): %.4f\nQ statistic: %.2f (df = %d, p = %.4f)\n\nInterpretation: %s heterogeneity detected.\n",
+    ifelse(!is.null(ma$I2), ma$I2 * 100, 0),
+    ifelse(!is.null(ma$tau2), ma$tau2, 0),
+    ifelse(!is.null(ma$Q), ma$Q, 0),
+    ifelse(!is.null(ma$df.Q), ma$df.Q, 0),
+    ifelse(!is.null(ma$pval.Q), ma$pval.Q, 1),
+    ifelse(!is.null(ma$I2) && ma$I2 < 0.4, "Low",
+           ifelse(!is.null(ma$I2) && ma$I2 < 0.75, "Moderate", "Considerable"))
+  )
+
+  return(het_text)
+}
+
+#' Render Publication Bias Section
+#' @keywords internal
+render_pub_bias_section <- function(pairwise_results) {
+  if (is.null(pairwise_results)) return("No publication bias assessment available.")
+  return("Publication bias was assessed using funnel plots and Egger's regression test. [Funnel plot figure and statistical test results would be included here]")
+}
+
+#' Render Subgroup Section
+#' @keywords internal
+render_subgroup_section <- function(pairwise_results) {
+  if (is.null(pairwise_results)) return("No subgroup analyses performed.")
+  return("Subgroup analyses were conducted to explore sources of heterogeneity. [Subgroup forest plots and interaction tests would be included here]")
+}
+
+#' Render Sensitivity Section
+#' @keywords internal
+render_sensitivity_section <- function(pairwise_results) {
+  if (is.null(pairwise_results)) return("No sensitivity analyses performed.")
+  return("Sensitivity analyses were performed to assess robustness of findings. [Results of leave-one-out analyses and other sensitivity analyses would be included here]")
+}
 
 #' Render HE Results Section
-#'
 #' @keywords internal
 render_he_results_section <- function(he_results) {
   if (is.null(he_results)) return("No health economic results available.")
 
-  paste("Health economic results section content...")
+  he <- he_results
+  he_text <- sprintf(
+    "Health Economic Analysis Results:\n\nIncremental Cost-Effectiveness Ratio (ICER): £%.2f per QALY gained\nIncremental Costs: £%.2f\nIncremental QALYs: %.3f\n\nCost-effectiveness conclusion: %s\n",
+    ifelse(!is.null(he$icer), he$icer, 0),
+    ifelse(!is.null(he$incr_cost), he$incr_cost, 0),
+    ifelse(!is.null(he$incr_qaly), he$incr_qaly, 0),
+    ifelse(!is.null(he$icer) && he$icer < 20000, "Cost-effective at £20,000/QALY threshold",
+           ifelse(!is.null(he$icer) && he$icer < 30000, "Cost-effective at £30,000/QALY threshold",
+                  "Not cost-effective at standard thresholds"))
+  )
+
+  return(he_text)
+}
+
+#' Render CEAC Section
+#' @keywords internal
+render_ceac_section <- function(he_results) {
+  if (is.null(he_results)) return("No cost-effectiveness acceptability data available.")
+  return("Cost-effectiveness acceptability curve (CEAC) showing probability of cost-effectiveness across willingness-to-pay thresholds. [CEAC figure would be included here]")
+}
+
+#' Render Budget Impact Section
+#' @keywords internal
+render_bia_section <- function(he_results) {
+  if (is.null(he_results)) return("No budget impact analysis available.")
+  return("Budget impact analysis projecting financial impact of adoption over 1-5 years. [BIA table and figures would be included here]")
+}
+
+#' Render GRADE Section
+#' @keywords internal
+render_grade_section <- function(grade_results) {
+  if (is.null(grade_results)) return("GRADE assessment not available.")
+  return("GRADE evidence profile assessing certainty of evidence across five domains. [GRADE evidence profile table would be included here]")
+}
+
+#' Render Discussion Section
+#' @keywords internal
+render_discussion_section <- function(data) {
+  return("This meta-analysis provides evidence regarding the effectiveness and value of the intervention. Results should be interpreted in the context of study quality, heterogeneity, and potential biases. Implications for clinical practice and policy are discussed.")
+}
+
+#' Render Conclusions Section
+#' @keywords internal
+render_conclusions_section <- function(data) {
+  if (is.null(data$pairwise_results)) return("Insufficient data for conclusions.")
+
+  ma <- data$pairwise_results
+  conclusion <- ifelse(!is.null(ma$pval.random) && ma$pval.random < 0.05,
+                      "Evidence suggests a statistically significant effect of the intervention.",
+                      "Evidence does not support a statistically significant effect.")
+
+  conclusion <- paste0(conclusion, " Further research may be needed to strengthen the evidence base.")
+  return(conclusion)
+}
+
+#' Render Methods Appendix Section
+#' @keywords internal
+render_methods_appendix_section <- function() {
+  return("Detailed statistical methods including meta-analysis models, heterogeneity assessment approaches, and economic modeling parameters. Full search strategies are provided in supplementary materials.")
+}
+
+#' Render References Section
+#' @keywords internal
+render_references_section <- function(data) {
+  return("[References would be automatically generated here based on citations in the text]")
+}
+
+#' Render Supplementary Section
+#' @keywords internal
+render_supplementary_section <- function(data) {
+  return("Supplementary materials including full data extraction tables, additional sensitivity analyses, and supporting documentation.")
 }

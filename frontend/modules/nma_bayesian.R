@@ -21,6 +21,24 @@ nma_bayesian_ui <- function(id) {
     h3("🔬 Bayesian Network Meta-Analysis"),
     p("Advanced Bayesian inference for network meta-analysis with full uncertainty quantification"),
 
+    # ⚠️ CRITICAL WARNING - DEMO MODE
+    card(
+      card_body(
+        class = "bg-warning text-dark border-danger",
+        style = "border-width: 3px;",
+        h4(class = "text-danger", "⚠️ DEMO MODE - SIMULATION ONLY"),
+        p(class = "mb-0",
+          strong("WARNING:"), " This module currently generates ",
+          strong("simulated data for demonstration purposes only."),
+          " It does NOT perform actual Bayesian MCMC inference. ",
+          "Results shown are randomly generated and ",
+          strong("MUST NOT be used for real analysis, publications, or decision-making."),
+          br(), br(),
+          "Full implementation requires brms/PyMC backend integration (see source code for details)."
+        )
+      )
+    ),
+
     # Info banner
     card(
       card_header("About Bayesian NMA"),
