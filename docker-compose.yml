@@ -1,0 +1,93 @@
+# Docker Compose for EvidenceOS PRIME
+# Orchestrates Shiny frontend + FastAPI AI Copilot backend
+# Usage: docker-compose up -d
+
+version: '3.8'
+
+services:
+  # AI Copilot Backend (FastAPI)
+  ai-backend:
+    build:
+      context: ./backend/api
+      dockerfile: Dockerfile
+    container_name: evidenceos-ai-backend
+    restart: unless-stopped
+    ports:
+      - "8001:8001"
+    environment:
+      - PYTHONUNBUFFERED=1
+      - LOG_LEVEL=info
+    healthcheck:
+      test: ["CMD", "python", "-c", "import requests; requests.get('http://localhost:8001/health')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    networks:
+      - evidenceos-network
+    labels:
+      - "com.evidenceos.service=ai-backend"
+      - "com.evidenceos.version=4.0.0"
+
+  # Shiny Frontend
+  shiny-frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: evidenceos-shiny-frontend
+    restart: unless-stopped
+    ports:
+      - "3838:3838"
+    environment:
+      - SHINY_LOG_LEVEL=INFO
+      - AI_BACKEND_URL=http://ai-backend:8001
+    volumes:
+      # Mount outputs directory for persistent storage
+      - ./frontend/outputs:/srv/shiny-server/evidenceos/outputs
+      - ./frontend/data/uploads:/srv/shiny-server/evidenceos/data/uploads
+    depends_on:
+      ai-backend:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3838/evidenceos/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+    networks:
+      - evidenceos-network
+    labels:
+      - "com.evidenceos.service=shiny-frontend"
+      - "com.evidenceos.version=1.0.0"
+
+  # Nginx Reverse Proxy (optional - for production)
+  nginx:
+    image: nginx:alpine
+    container_name: evidenceos-nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/ssl:/etc/nginx/ssl:ro
+    depends_on:
+      - shiny-frontend
+      - ai-backend
+    networks:
+      - evidenceos-network
+    labels:
+      - "com.evidenceos.service=nginx-proxy"
+    profiles:
+      - production
+
+networks:
+  evidenceos-network:
+    driver: bridge
+    name: evidenceos-network
+
+volumes:
+  outputs:
+    driver: local
+  uploads:
+    driver: local

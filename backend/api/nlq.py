@@ -4,13 +4,34 @@ Interprets user questions about meta-analysis and generates responses
 Uses local LLM (llama.cpp) to ensure no data leaves container
 """
 
-from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel
+from fastapi import FastAPI, HTTPException, Request
+from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel, field_validator
 from typing import Optional, Dict, Any, List
 import json
 import re
+from slowapi import Limiter, _rate_limit_exceeded_handler
+from slowapi.util import get_remote_address
+from slowapi.errors import RateLimitExceeded
 
+# Initialize rate limiter
+limiter = Limiter(key_func=get_remote_address)
+
+# Initialize FastAPI app
 app = FastAPI(title="EvidenceOS AI Copilot", version="4.0.0")
+
+# Add rate limiting
+app.state.limiter = limiter
+app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
+
+# CORS middleware - allow requests from Shiny frontend
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # In production, restrict to specific origins
+    allow_credentials=True,
+    allow_methods=["GET", "POST", "OPTIONS"],
+    allow_headers=["*"],
+)
 
 
 # ============================================================================
@@ -18,11 +39,24 @@ app = FastAPI(title="EvidenceOS AI Copilot", version="4.0.0")
 # ============================================================================
 
 class NLQRequest(BaseModel):
-    """Natural language query request"""
+    """Natural language query request with input validation"""
     query: str
     context: Optional[Dict[str, Any]] = None  # Current analysis context
     user_id: Optional[str] = None
     session_id: Optional[str] = None
+
+    @field_validator('query')
+    @classmethod
+    def validate_query(cls, v: str) -> str:
+        """Validate query input"""
+        if not v or not v.strip():
+            raise ValueError("Query cannot be empty")
+        if len(v) > 1000:
+            raise ValueError("Query too long (max 1000 characters)")
+        # Remove potentially dangerous characters
+        if any(char in v for char in ['<', '>', '{', '}']):
+            raise ValueError("Query contains invalid characters")
+        return v.strip()
 
 
 class NLQResponse(BaseModel):
@@ -52,11 +86,11 @@ class RuleBasedNLQParser:
                 "action": "run_meta",
                 "explanation": "Running meta-analysis with current data"
             },
-            r"(show|display|plot|generate)\s+(forest\s+plot|forest)": {
+            r"(show|display|plot|generate).*?(forest\s+plot|forest)": {
                 "action": "show_forest",
                 "explanation": "Generating forest plot"
             },
-            r"(show|display|plot|generate)\s+(funnel\s+plot|funnel)": {
+            r"(show|display|plot|generate).*?(funnel\s+plot|funnel)": {
                 "action": "show_funnel",
                 "explanation": "Generating funnel plot for publication bias assessment"
             },
@@ -80,13 +114,17 @@ class RuleBasedNLQParser:
                 "action": "show_ceac",
                 "explanation": "Showing Cost-Effectiveness Acceptability Curve"
             },
+            r"cost[\s-]?effective.*at\s+£?(\d+[,\d]*k?)": {
+                "action": "check_cost_effective_at_threshold",
+                "explanation": "Checking cost-effectiveness at specified threshold"
+            },
             r"at\s+£?(\d+[,\d]*k?).*cost[\s-]?effective": {
                 "action": "check_cost_effective_at_threshold",
                 "explanation": "Checking cost-effectiveness at specified threshold"
             },
 
             # Scenario comparison patterns
-            r"compare\s+(scenarios?|analyses?)": {
+            r"compare.*?(scenarios?|analyses?)": {
                 "action": "compare_scenarios",
                 "explanation": "Comparing saved scenarios"
             },
@@ -193,8 +231,13 @@ class StatisticalInterpreter:
         """Interpret ICER result"""
         if icer < 0:
             return (
-                f"ICER = £{icer:,.0f}/QALY (negative). The intervention is DOMINANT "
+                f"ICER = £{icer:,.0f}/QALY (negative ICER). The intervention is DOMINANT "
                 f"(cheaper and more effective than comparator)."
+            )
+        elif icer == 0:
+            return (
+                f"ICER = £0/QALY. The intervention is DOMINANT "
+                f"(equal cost with better outcomes, or better outcomes at no additional cost)."
             )
         elif icer < wtp:
             pct_below = ((wtp - icer) / wtp) * 100
@@ -351,7 +394,8 @@ llm_handler = LLMHandler(model_path=LLM_MODEL_PATH)
 
 
 @app.post("/nlq", response_model=NLQResponse)
-async def natural_language_query(request: NLQRequest):
+@limiter.limit("10/minute")  # Max 10 queries per minute per IP
+async def natural_language_query(request: Request, nlq_request: NLQRequest):
     """
     Process natural language query about meta-analysis
 
@@ -364,12 +408,12 @@ async def natural_language_query(request: NLQRequest):
 
     # Try LLM first if available
     if llm_handler.use_llm:
-        prompt = llm_handler.build_meta_analysis_prompt(request.query, request.context)
+        prompt = llm_handler.build_meta_analysis_prompt(nlq_request.query, nlq_request.context)
         llm_response = llm_handler.query_llm(prompt)
 
         if llm_response:
             try:
-                # Parse LLM JSON response
+                # BUG FIX #5: Better LLM JSON parsing with error logging
                 llm_data = json.loads(llm_response)
                 return NLQResponse(
                     action=llm_data.get("action", "unknown"),
@@ -378,15 +422,19 @@ async def natural_language_query(request: NLQRequest):
                     confidence=llm_data.get("confidence", 0.7),
                     reasoning="LLM-generated response"
                 )
-            except json.JSONDecodeError:
-                pass  # Fall through to rule-based
+            except json.JSONDecodeError as e:
+                # Log the error and fall back to rule-based
+                print(f"⚠ LLM JSON parsing failed: {e}")
+                print(f"  Raw LLM response: {llm_response[:200]}...")
+                # Continue to rule-based parser
 
     # Fallback to rule-based parser
-    return rule_parser.parse(request.query, request.context)
+    return rule_parser.parse(nlq_request.query, nlq_request.context)
 
 
 @app.post("/interpret/heterogeneity")
-async def interpret_heterogeneity(i2: float, tau2: float, q_stat: float, q_pval: float, n_studies: int):
+@limiter.limit("30/minute")  # More lenient for interpretation endpoints
+async def interpret_heterogeneity(request: Request, i2: float, tau2: float, q_stat: float, q_pval: float, n_studies: int):
     """Interpret heterogeneity statistics"""
     interpretation = stat_interpreter.interpret_i2(i2)
 
@@ -417,7 +465,8 @@ async def interpret_heterogeneity(i2: float, tau2: float, q_stat: float, q_pval:
 
 
 @app.post("/interpret/icer")
-async def interpret_icer(icer: float, ci_lower: float, ci_upper: float, wtp: float = 30000):
+@limiter.limit("30/minute")  # More lenient for interpretation endpoints
+async def interpret_icer(request: Request, icer: float, ci_lower: float, ci_upper: float, wtp: float = 30000):
     """Interpret ICER result"""
     interpretation = stat_interpreter.interpret_icer(icer, wtp)
 
@@ -439,7 +488,8 @@ async def interpret_icer(icer: float, ci_lower: float, ci_upper: float, wtp: flo
 
 
 @app.get("/health")
-async def health_check():
+@limiter.limit("60/minute")  # Very lenient for health checks
+async def health_check(request: Request):
     """Health check endpoint"""
     return {
         "status": "healthy",
@@ -450,7 +500,8 @@ async def health_check():
 
 
 @app.get("/")
-async def root():
+@limiter.limit("60/minute")  # Very lenient for root endpoint
+async def root(request: Request):
     """API root"""
     return {
         "message": "EvidenceOS AI Copilot",

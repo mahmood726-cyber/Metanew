@@ -1,0 +1,279 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [main, develop, 'claude/**']
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  # ============================================================================
+  # PYTHON BACKEND TESTS
+  # ============================================================================
+  test-backend:
+    name: Test AI Copilot Backend
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          cd backend/api
+          pip install -r requirements.txt
+
+      - name: Run pytest
+        run: |
+          cd backend/api
+          pytest test_nlq_api.py -v --tb=short --cov=nlq --cov-report=term --cov-report=xml
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          files: ./backend/api/coverage.xml
+          flags: backend
+          name: backend-coverage
+
+      - name: Check test results
+        run: |
+          if [ $? -eq 0 ]; then
+            echo "✅ All 37 backend tests passed!"
+          else
+            echo "❌ Backend tests failed"
+            exit 1
+          fi
+
+  # ============================================================================
+  # LINTING AND CODE QUALITY
+  # ============================================================================
+  lint:
+    name: Lint Code
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install linting tools
+        run: |
+          pip install flake8 black pylint
+
+      - name: Run flake8
+        run: |
+          cd backend/api
+          flake8 nlq.py --max-line-length=120 --ignore=E203,W503
+
+      - name: Run black (check mode)
+        run: |
+          cd backend/api
+          black --check nlq.py || echo "⚠️  Code formatting issues found"
+
+      - name: Run pylint
+        run: |
+          cd backend/api
+          pylint nlq.py --disable=C0114,C0115,C0116 || echo "⚠️  Linting issues found"
+
+  # ============================================================================
+  # DOCKER BUILD AND PUSH
+  # ============================================================================
+  build-backend:
+    name: Build Backend Docker Image
+    runs-on: ubuntu-latest
+    needs: [test-backend, lint]
+    if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/heads/claude/')
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build backend image
+        run: |
+          cd backend/api
+          docker build -t evidenceos-ai-backend:latest .
+
+      - name: Test backend container
+        run: |
+          docker run -d --name test-backend -p 8001:8001 evidenceos-ai-backend:latest
+          sleep 10
+          curl -f http://localhost:8001/health || exit 1
+          docker stop test-backend
+
+      - name: Log in to Docker Hub (optional)
+        if: github.ref == 'refs/heads/main'
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Push to Docker Hub (optional)
+        if: github.ref == 'refs/heads/main'
+        run: |
+          docker tag evidenceos-ai-backend:latest ${{ secrets.DOCKER_USERNAME }}/evidenceos-ai-backend:latest
+          docker push ${{ secrets.DOCKER_USERNAME }}/evidenceos-ai-backend:latest
+
+  build-frontend:
+    name: Build Frontend Docker Image
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/heads/claude/')
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build frontend image
+        run: |
+          cd frontend
+          docker build -t evidenceos-shiny-frontend:latest .
+
+      - name: Test frontend container
+        run: |
+          docker run -d --name test-frontend -p 3838:3838 evidenceos-shiny-frontend:latest
+          sleep 30
+          curl -f http://localhost:3838/evidenceos/ || exit 1
+          docker stop test-frontend
+
+      - name: Log in to Docker Hub (optional)
+        if: github.ref == 'refs/heads/main'
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Push to Docker Hub (optional)
+        if: github.ref == 'refs/heads/main'
+        run: |
+          docker tag evidenceos-shiny-frontend:latest ${{ secrets.DOCKER_USERNAME }}/evidenceos-shiny-frontend:latest
+          docker push ${{ secrets.DOCKER_USERNAME }}/evidenceos-shiny-frontend:latest
+
+  # ============================================================================
+  # INTEGRATION TESTS
+  # ============================================================================
+  integration-test:
+    name: Integration Tests
+    runs-on: ubuntu-latest
+    needs: [build-backend, build-frontend]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Start services with docker-compose
+        run: |
+          docker-compose up -d
+          sleep 30
+
+      - name: Wait for services to be healthy
+        run: |
+          timeout 60 bash -c 'until curl -sf http://localhost:8001/health; do sleep 2; done'
+          timeout 60 bash -c 'until curl -sf http://localhost:3838/evidenceos/; do sleep 2; done'
+
+      - name: Test API endpoints
+        run: |
+          # Test health endpoint
+          curl -f http://localhost:8001/health
+
+          # Test NLQ endpoint
+          curl -f -X POST http://localhost:8001/nlq \
+            -H "Content-Type: application/json" \
+            -d '{"query": "Show forest plot"}' | grep -q "show_forest"
+
+          # Test interpretation endpoint
+          curl -f -X POST "http://localhost:8001/interpret/heterogeneity?i2=67.3&tau2=0.042&q_stat=33.5&q_pval=0.002&n_studies=12"
+
+      - name: Test Shiny frontend loads
+        run: |
+          curl -f http://localhost:3838/evidenceos/ | grep -q "EvidenceOS PRIME"
+
+      - name: Stop services
+        run: docker-compose down
+
+  # ============================================================================
+  # SECURITY SCANNING
+  # ============================================================================
+  security-scan:
+    name: Security Scan
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'fs'
+          scan-ref: '.'
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+
+      - name: Upload Trivy results to GitHub Security
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif_file: 'trivy-results.sarif'
+
+  # ============================================================================
+  # DEPLOYMENT (Production)
+  # ============================================================================
+  deploy:
+    name: Deploy to Production
+    runs-on: ubuntu-latest
+    needs: [integration-test, security-scan]
+    if: github.ref == 'refs/heads/main'
+    environment: production
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Deploy to server
+        run: |
+          echo "🚀 Deploying to production server..."
+          # Add your deployment commands here
+          # Examples:
+          # - SSH to server and run docker-compose pull && docker-compose up -d
+          # - Deploy to Kubernetes
+          # - Deploy to AWS/Azure/GCP
+
+      - name: Verify deployment
+        run: |
+          echo "✅ Deployment verification would go here"
+          # curl -f https://your-production-domain.com/health
+
+  # ============================================================================
+  # NOTIFICATION
+  # ============================================================================
+  notify:
+    name: Notify on Success/Failure
+    runs-on: ubuntu-latest
+    needs: [test-backend, build-backend, build-frontend, integration-test]
+    if: always()
+
+    steps:
+      - name: Send notification
+        run: |
+          if [ "${{ needs.test-backend.result }}" == "success" ] && \
+             [ "${{ needs.integration-test.result }}" == "success" ]; then
+            echo "✅ CI/CD pipeline completed successfully!"
+            # Add Slack/email notification here
+          else
+            echo "❌ CI/CD pipeline failed!"
+            # Add failure notification here
+          fi

@@ -193,6 +193,26 @@ sensitivity_server <- function(id, rv) {
         if ("yi" %in% names(filtered) && "sei" %in% names(filtered)) {
           library(metafor)
 
+          # BUG FIX #7: Better error handling for meta-analysis
+          if (nrow(filtered) < 2) {
+            showNotification(
+              "⚠ Need at least 2 studies for meta-analysis. Current filters result in only 1 study.",
+              type = "warning",
+              duration = 5
+            )
+            return()
+          }
+
+          # Check for zero variance (all studies have same effect)
+          if (sd(filtered$yi, na.rm = TRUE) < 1e-10) {
+            showNotification(
+              "⚠ All studies have identical effects. Meta-analysis not meaningful.",
+              type = "warning",
+              duration = 5
+            )
+            return()
+          }
+
           ma_result <- rma(
             yi = filtered$yi,
             sei = filtered$sei,
@@ -239,8 +259,20 @@ sensitivity_server <- function(id, rv) {
         }
 
       }, error = function(e) {
-        showNotification(paste("Error:", e$message),
-                         type = "error", duration = 5)
+        # BUG FIX #7 (continued): User-friendly error messages
+        error_msg <- conditionMessage(e)
+
+        if (grepl("singularity", error_msg, ignore.case = TRUE)) {
+          user_msg <- "⚠ Meta-analysis failed: Studies have too little variation. Try fixed-effects model or different estimator."
+        } else if (grepl("convergence", error_msg, ignore.case = TRUE)) {
+          user_msg <- "⚠ Meta-analysis didn't converge. Try a different estimator (REML/DL/FE) or check your data."
+        } else if (grepl("insufficient", error_msg, ignore.case = TRUE)) {
+          user_msg <- "⚠ Insufficient data for meta-analysis. Need at least 2 studies with valid effect sizes."
+        } else {
+          user_msg <- paste("⚠ Meta-analysis error:", error_msg)
+        }
+
+        showNotification(user_msg, type = "error", duration = 7)
       })
     })
 
@@ -453,8 +485,25 @@ sensitivity_server <- function(id, rv) {
     output$saved_scenarios_table <- renderDT({
       scenarios <- saved_scenarios()
 
+      # BUG FIX #2: Proper empty state handling
       if (length(scenarios) == 0) {
-        return(data.frame(Message = "No saved scenarios"))
+        df <- data.frame(
+          Name = character(),
+          Studies = integer(),
+          Effect = character(),
+          I2 = character(),
+          Created = character(),
+          stringsAsFactors = FALSE
+        )
+        return(datatable(
+          df,
+          options = list(
+            pageLength = 10,
+            dom = 'tp',
+            language = list(emptyTable = "No saved scenarios. Run an analysis and click 'Save Scenario' to add one.")
+          ),
+          rownames = FALSE
+        ))
       }
 
       df <- do.call(rbind, lapply(scenarios, function(s) {

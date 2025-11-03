@@ -134,6 +134,7 @@ ai_copilot_server <- function(id, rv) {
     chat_history <- reactiveVal(list())
     llm_available <- reactiveVal(FALSE)
     last_action <- reactiveVal("None")
+    last_send_time <- reactiveVal(Sys.time() - 10)  # Initialize to 10s ago
 
     # Check LLM availability on start
     observe({
@@ -253,6 +254,19 @@ ai_copilot_server <- function(id, rv) {
         showNotification("Please enter a query", type = "warning", duration = 2)
         return()
       }
+
+      # BUG FIX #1: Add cooldown to prevent spam on API failure
+      time_since_last <- as.numeric(difftime(Sys.time(), last_send_time(), units = "secs"))
+      if (time_since_last < 3) {
+        showNotification(
+          sprintf("Please wait %.0f seconds before sending another query",
+                  3 - time_since_last),
+          type = "warning",
+          duration = 2
+        )
+        return()
+      }
+      last_send_time(Sys.time())
 
       # Add user message to chat
       history <- chat_history()

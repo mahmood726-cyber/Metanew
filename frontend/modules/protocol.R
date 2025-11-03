@@ -388,6 +388,27 @@ protocol_server <- function(id, rv) {
     observeEvent(input$btn_generate_flow, {
       req(input$flow_included)
 
+      # BUG FIX #4: Validate inputs before generating diagram
+      total_identified <- input$flow_databases + input$flow_registers + input$flow_other
+
+      if (total_identified == 0) {
+        showNotification(
+          "⚠ Please enter at least one record in the identification phase",
+          type = "warning",
+          duration = 5
+        )
+        return()
+      }
+
+      if (input$flow_included == 0) {
+        showNotification(
+          "⚠ Please enter the number of studies included in the review",
+          type = "warning",
+          duration = 5
+        )
+        return()
+      }
+
       plot_obj <- create_prisma_flow_diagram(
         databases = input$flow_databases,
         registers = input$flow_registers,

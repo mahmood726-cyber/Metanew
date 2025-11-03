@@ -526,6 +526,15 @@ add_methods_appendix <- function(doc, rv) {
     body_add_par("APPENDIX A: DETAILED METHODS", style = "heading 1") %>%
     body_add_par("This appendix provides detailed methodology for the systematic review and meta-analysis, formatted for HTA submission requirements.")
 
+  # BUG FIX #6: Check if any data exists before attempting to generate appendix
+  if (is.null(rv$protocol) && is.null(rv$pairwise_results) &&
+      is.null(rv$nma_results) && is.null(rv$he_results)) {
+    doc <- doc %>%
+      body_add_par("No analysis data available. Please run analyses before generating the methods appendix.",
+                   style = "Normal")
+    return(doc)
+  }
+
   # 1. Search Strategy
   doc <- doc %>%
     body_add_par("A.1 Search Strategy", style = "heading 2")
@@ -813,9 +822,11 @@ get_branding_settings <- function(input) {
   if (!is.null(input$brand_logo)) {
     logo_info <- input$brand_logo
     if (!is.null(logo_info$datapath) && file.exists(logo_info$datapath)) {
-      # Copy logo to outputs directory
+      # BUG FIX #3: Add unique user prefix to prevent collision
       logo_ext <- tools::file_ext(logo_info$name)
-      logo_filename <- paste0("logo_", format(Sys.time(), "%Y%m%d_%H%M%S"), ".", logo_ext)
+      user_prefix <- gsub("[^[:alnum:]]", "_", Sys.getenv("USER"))  # Sanitize username
+      unique_id <- format(Sys.time(), "%Y%m%d_%H%M%S_%OS3")  # Add milliseconds
+      logo_filename <- paste0("logo_", user_prefix, "_", unique_id, ".", logo_ext)
       logo_path <- file.path("outputs", logo_filename)
 
       # Create outputs directory if it doesn't exist
@@ -823,7 +834,7 @@ get_branding_settings <- function(input) {
         dir.create("outputs", recursive = TRUE)
       }
 
-      file.copy(logo_info$datapath, logo_path, overwrite = TRUE)
+      file.copy(logo_info$datapath, logo_path, overwrite = FALSE)  # Don't overwrite
     }
   }
 
