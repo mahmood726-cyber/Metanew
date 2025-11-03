@@ -25,6 +25,7 @@ source("modules/scenario_compare.R")  # Scenario comparison
 source("modules/he_params.R")
 source("modules/he_model.R")
 source("modules/he_bcea.R")
+source("modules/budget_impact.R")  # Budget Impact Analysis
 source("modules/prisma.R")  # PRISMA flow diagram
 source("modules/reporting.R")
 source("modules/audit.R")
@@ -137,6 +138,10 @@ ui <- page_navbar(
       nav_panel(
         "Results (BCEA)",
         he_bcea_ui("he_bcea")
+      ),
+      nav_panel(
+        "Budget Impact",
+        budget_impact_ui("budget_impact")
       )
     )
   ),
@@ -259,6 +264,7 @@ server <- function(input, output, session) {
   he_params_results <- he_params_server("he_params", rv)
   he_model_results <- he_model_server("he_model", rv)
   he_bcea_results <- he_bcea_server("he_bcea", rv)
+  budget_impact_results <- budget_impact_server("budget_impact", rv)
   ai_copilot_results <- ai_copilot_server("ai_copilot", rv)
   prisma_results <- prisma_server("prisma", rv)  # PRISMA flow diagram
   reporting_results <- reporting_server("reporting", rv)
