@@ -18,6 +18,7 @@ library(shinyjs) # JavaScript utilities
 source("modules/data_import.R")
 source("modules/protocol.R")
 source("modules/meta_pairwise.R")
+source("modules/meta_pairwise_enhanced.R")  # Enhanced version with methodologist suggestions
 source("modules/nma.R")
 source("modules/dose_response.R")
 source("modules/sensitivity.R")
@@ -29,16 +30,16 @@ source("modules/audit.R")
 source("modules/ai_copilot.R")
 source("modules/v2_features.R")
 
-# NEW BEST-IN-CLASS MODULES
-source("modules/grade.R")               # GRADE Summary of Findings
-source("modules/rob_tools.R")          # Risk of Bias (ROB 2.0, ROBINS-I, QUADAS-2)
-source("modules/bayesian_ma.R")        # Bayesian Meta-Analysis
-source("modules/multivariate_ma.R")    # Multivariate MA
-source("modules/advanced_publi_bias.R") # PET-PEESE, selection models
-source("modules/survival_ps.R")        # Partitioned Survival
-source("modules/evppi.R")              # Value of Information (EVPPI)
-source("modules/collaboration.R")       # Real-time collaboration
-source("modules/onboarding.R")         # Interactive tutorials
+# NEW BEST-IN-CLASS MODULES (SURPASS REVMAN, STATA, CMA)
+source("modules/grade.R")                      # GRADE Summary of Findings
+source("modules/rob_tools.R")                  # Risk of Bias (ROB 2.0, ROBINS-I, QUADAS-2)
+source("modules/bayesian_ma.R")                # Bayesian Meta-Analysis with brms/Stan
+source("modules/publication_bias_advanced.R")  # PET-PEESE, selection models, p-curve
+source("modules/partitioned_survival.R")       # Partitioned Survival for oncology HTA
+# source("modules/multivariate_ma.R")          # TODO: Multivariate MA
+# source("modules/evppi.R")                    # TODO: Value of Information (EVPPI)
+# source("modules/collaboration.R")            # TODO: Real-time collaboration
+# source("modules/onboarding.R")               # TODO: Interactive tutorials
 
 # Source utilities
 source("utils/python_bridge.R")
@@ -384,10 +385,10 @@ ui <- page_navbar(
       "Bayesian MA",
       bayesian_ma_ui("bayesian")  # NEW!
     ),
-    nav_panel(
-      "Multivariate MA",
-      multivariate_ma_ui("multivariate")  # NEW!
-    ),
+    # nav_panel(
+    #   "Multivariate MA",
+    #   multivariate_ma_ui("multivariate")  # TODO
+    # ),
     nav_panel(
       "Dose-Response",
       dose_response_ui("dose_response")
@@ -399,7 +400,7 @@ ui <- page_navbar(
     title = "Publication Bias",
     icon = icon("filter"),
     value = "pub_bias",
-    advanced_pubias_ui("pub_bias")  # NEW - PET-PEESE, selection models
+    pub_bias_advanced_ui("pub_bias")  # NEW - PET-PEESE, selection models, p-curve
   ),
 
   # Tab 7: Sensitivity & Scenarios
@@ -433,16 +434,16 @@ ui <- page_navbar(
     ),
     nav_panel(
       "Partitioned Survival",
-      survival_ps_ui("survival_ps")  # NEW!
+      partitioned_survival_ui("survival_ps")  # NEW - For oncology HTA!
     ),
     nav_panel(
       "Results (BCEA)",
       he_bcea_ui("he_bcea")
-    ),
-    nav_panel(
-      "Value of Information",
-      evppi_ui("evppi")  # NEW - EVPPI!
     )
+    # nav_panel(
+    #   "Value of Information",
+    #   evppi_ui("evppi")  # TODO - EVPPI!
+    # )
   ),
 
   # Tab 10: AI Copilot
@@ -453,13 +454,13 @@ ui <- page_navbar(
     ai_copilot_ui("ai_copilot")
   ),
 
-  # Tab 11: Collaboration (NEW!)
-  nav_panel(
-    title = "Collaborate",
-    icon = icon("users"),
-    value = "collab",
-    collaboration_ui("collaboration")
-  ),
+  # Tab 11: Collaboration (NEW!) - TODO
+  # nav_panel(
+  #   title = "Collaborate",
+  #   icon = icon("users"),
+  #   value = "collab",
+  #   collaboration_ui("collaboration")
+  # ),
 
   # Tab 12: Reports
   nav_panel(
@@ -625,14 +626,16 @@ server <- function(input, output, session) {
     protocol = NULL,
     pairwise_results = list(),
     nma_results = list(),
-    bayesian_results = list(),  # NEW
-    multivariate_results = list(),  # NEW
+    bayesian_results = list(),  # NEW - Bayesian MA results
+    # multivariate_results = list(),  # TODO
     dr_results = list(),
     he_results = NULL,
-    rob_assessments = list(),  # NEW
-    grade_ratings = list(),  # NEW
+    survival_ps_results = NULL,  # NEW - Partitioned survival results
+    rob_assessments = list(),  # NEW - Risk of bias assessments
+    grade_ratings = list(),  # NEW - GRADE ratings
+    pub_bias_results = list(),  # NEW - Advanced publication bias results
     audit_log = list(),
-    collaborators = list(),  # NEW
+    # collaborators = list(),  # TODO
     project_name = "Untitled Project",
     last_saved = NULL
   )
@@ -850,12 +853,12 @@ server <- function(input, output, session) {
   # Analysis Modules
   pairwise_results <- meta_pairwise_server("pairwise", rv)
   nma_results <- nma_server("nma", rv)
-  bayesian_results <- bayesian_ma_server("bayesian", rv)  # NEW
-  multivariate_results <- multivariate_ma_server("multivariate", rv)  # NEW
+  bayesian_results <- bayesian_ma_server("bayesian", rv)  # NEW - Bayesian MA with brms/Stan
+  # multivariate_results <- multivariate_ma_server("multivariate", rv)  # TODO
   dr_results <- dose_response_server("dose_response", rv)
 
   # Publication Bias (Enhanced)
-  pub_bias_results <- advanced_pubbias_server("pub_bias", rv)  # NEW
+  pub_bias_results <- pub_bias_advanced_server("pub_bias", rv)  # NEW - PET-PEESE, selection models
 
   # Sensitivity
   sensitivity_results <- sensitivity_server("sensitivity", rv)
@@ -866,15 +869,15 @@ server <- function(input, output, session) {
   # Health Economics
   he_params_results <- he_params_server("he_params", rv)
   he_model_results <- he_model_server("he_model", rv)
-  survival_ps_results <- survival_ps_server("survival_ps", rv)  # NEW
+  survival_ps_results <- partitioned_survival_server("survival_ps", rv)  # NEW - Partitioned survival for HTA
   he_bcea_results <- he_bcea_server("he_bcea", rv)
-  evppi_results <- evppi_server("evppi", rv)  # NEW
+  # evppi_results <- evppi_server("evppi", rv)  # TODO
 
   # AI Copilot
   ai_copilot_results <- ai_copilot_server("ai_copilot", rv)
 
-  # Collaboration (NEW!)
-  collaboration_results <- collaboration_server("collaboration", rv)
+  # Collaboration (NEW!) - TODO
+  # collaboration_results <- collaboration_server("collaboration", rv)
 
   # Reporting & Audit
   reporting_results <- reporting_server("reporting", rv)
@@ -1091,16 +1094,18 @@ create_evidence_object <- function(rv) {
     protocol = rv$protocol,
     studies = if (!is.null(rv$data)) unique(rv$data$study_id) else list(),
     observations = if (!is.null(rv$data)) nrow(rv$data) else 0,
-    rob_assessments = rv$rob_assessments,  # NEW
-    grade_ratings = rv$grade_ratings,  # NEW
+    rob_assessments = rv$rob_assessments,  # NEW - Risk of bias
+    grade_ratings = rv$grade_ratings,  # NEW - GRADE
     pairwise_results = rv$pairwise_results,
     nma_results = rv$nma_results,
-    bayesian_results = rv$bayesian_results,  # NEW
-    multivariate_results = rv$multivariate_results,  # NEW
+    bayesian_results = rv$bayesian_results,  # NEW - Bayesian MA
+    pub_bias_results = rv$pub_bias_results,  # NEW - Advanced publication bias
     dose_response_results = rv$dr_results,
     economic_results = rv$he_results,
-    audit_trail = rv$audit_log,
-    collaborators = rv$collaborators  # NEW
+    survival_ps_results = rv$survival_ps_results,  # NEW - Partitioned survival
+    audit_trail = rv$audit_log
+    # multivariate_results = rv$multivariate_results,  # TODO
+    # collaborators = rv$collaborators  # TODO
   )
 }
 
