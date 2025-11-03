@@ -1,0 +1,65 @@
+# EvidenceOS PRIME - Configuration File
+# Copy this file to config.local.yaml and customize for your environment
+
+environment: development
+
+api:
+  host: "0.0.0.0"
+  port: 8000
+  workers: 1
+  reload: true
+  log_level: "info"
+  cors_origins:
+    - "http://localhost:3838"
+    - "http://127.0.0.1:3838"
+    - "http://localhost:8000"
+  rate_limit: "100/minute"
+  enable_docs: true
+
+cache:
+  enabled: true
+  cache_dir: "cache"
+  ttl_seconds: 3600
+  max_size_mb: 1000
+  compression: true
+
+database:
+  enabled: false
+  type: "sqlite"
+  host: null
+  port: null
+  name: "evidenceos.db"
+  user: null
+  password: null
+  pool_size: 5
+
+security:
+  enable_auth: false
+  secret_key: "change-me-in-production-use-strong-random-key"
+  token_expire_minutes: 60
+  enable_https: false
+  allowed_hosts:
+    - "*"
+  max_request_size_mb: 100
+
+analysis:
+  max_studies: 1000
+  min_studies_meta_analysis: 2
+  default_confidence_level: 0.95
+  heterogeneity_threshold: 50.0
+  publication_bias_min_studies: 10
+
+health_economics:
+  default_currency: "USD"
+  default_wtp_threshold: 50000
+  default_discount_rate: 0.03
+  default_time_horizon: 10
+  n_simulations: 1000
+
+logging:
+  level: "INFO"
+  log_dir: "logs"
+  log_to_file: true
+  structured: false
+  max_file_size_mb: 100
+  backup_count: 5
