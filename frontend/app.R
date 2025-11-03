@@ -19,6 +19,7 @@ source("modules/protocol_snapshots.R")  # Protocol version control
 source("modules/meta_pairwise.R")
 source("modules/nma.R")
 source("modules/dose_response.R")
+source("modules/metareg_bubble.R")  # Meta-regression bubble plots
 source("modules/risk_of_bias.R")  # RoB 2.0 tool
 source("modules/qa_dashboard.R")  # QA Dashboard & Method Guardrails
 source("modules/sensitivity.R")
@@ -112,6 +113,10 @@ ui <- page_navbar(
       nav_panel(
         "Dose-Response",
         dose_response_ui("dose_response")
+      ),
+      nav_panel(
+        "Meta-Regression",
+        metareg_bubble_ui("metareg")
       )
     )
   ),
@@ -270,6 +275,7 @@ server <- function(input, output, session) {
   pairwise_results <- meta_pairwise_server("pairwise", rv)
   nma_results <- nma_server("nma", rv)
   dr_results <- dose_response_server("dose_response", rv)
+  metareg_results <- metareg_bubble_server("metareg", rv)
   sensitivity_results <- sensitivity_server("sensitivity", rv)
   scenario_compare_results <- scenario_compare_server("scenario_compare", rv)
   he_params_results <- he_params_server("he_params", rv)
