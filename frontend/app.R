@@ -18,6 +18,7 @@ source("modules/meta_pairwise.R")
 source("modules/nma.R")
 source("modules/dose_response.R")
 source("modules/risk_of_bias.R")  # RoB 2.0 tool
+source("modules/qa_dashboard.R")  # QA Dashboard & Method Guardrails
 source("modules/sensitivity.R")
 source("modules/he_params.R")
 source("modules/he_model.R")
@@ -64,6 +65,13 @@ ui <- page_navbar(
     title = "Quality",
     icon = icon("clipboard-check"),
     risk_of_bias_ui("rob")
+  ),
+
+  # Tab: QA Dashboard & Method Guardrails
+  nav_panel(
+    title = "QA Dashboard",
+    icon = icon("shield-halved"),
+    qa_dashboard_ui("qa")
   ),
 
   # Tab: Analysis
@@ -221,6 +229,7 @@ server <- function(input, output, session) {
   data_results <- data_import_server("data_import", rv)
   protocol_results <- protocol_server("protocol", rv)
   rob_results <- risk_of_bias_server("rob", rv)  # RoB 2.0 module
+  qa_results <- qa_dashboard_server("qa", rv)  # QA Dashboard & Method Guardrails
   pairwise_results <- meta_pairwise_server("pairwise", rv)
   nma_results <- nma_server("nma", rv)
   dr_results <- dose_response_server("dose_response", rv)
