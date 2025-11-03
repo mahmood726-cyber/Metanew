@@ -216,7 +216,7 @@ ui <- page_navbar(
     hr(),
     tags$small(
       class = "text-muted",
-      "EvidenceOS PRIME v2.1.0",
+      "EvidenceOS PRIME v2.2.0",
       br(),
       "© 2025"
     )
