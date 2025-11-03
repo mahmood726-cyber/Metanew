@@ -6,6 +6,7 @@ library(bslib)
 library(DT)
 library(plotly)
 library(shinyvalidate)
+library(shinyjs)  # For delayed welcome modal
 library(metafor)
 library(netmeta)
 library(dosresmeta)
@@ -152,12 +153,22 @@ ui <- page_navbar(
     actionButton("btn_load_session", "Load Session", class = "btn-secondary w-100 mb-2"),
     actionButton("btn_export_json", "Export JSON", class = "btn-info w-100 mb-2"),
     hr(),
+    h5("Help"),
+    actionButton("btn_show_welcome",
+                 tags$span(icon("circle-question"), " Quick Start"),
+                 class = "btn-info w-100 mb-2"),
+    actionLink("link_docs",
+               tags$span(icon("book"), " Documentation"),
+               href = "docs/QUICK_START_GUIDE.md",
+               target = "_blank",
+               class = "btn btn-link w-100 mb-2"),
+    hr(),
     h5("API Status"),
     textOutput("api_status"),
     hr(),
     tags$small(
       class = "text-muted",
-      "EvidenceOS PRIME v2.0.0",
+      "EvidenceOS PRIME v2.1.0",
       br(),
       "© 2025"
     )
@@ -282,6 +293,88 @@ server <- function(input, output, session) {
       )
     })
   })
+
+  # Welcome modal handler
+  observeEvent(input$btn_show_welcome, {
+    showModal(modalDialog(
+      title = tags$h3(icon("rocket"), " Welcome to EvidenceOS PRIME"),
+      size = "l",
+
+      tags$div(
+        style = "font-size: 1.1em;",
+
+        tags$h4(icon("chart-line"), " Your Complete Meta-Analysis Platform"),
+        tags$p("Conduct systematic reviews, meta-analyses, network meta-analyses, and health economic evaluations - all in one integrated platform."),
+
+        tags$hr(),
+
+        tags$h5(icon("shoe-prints"), " Quick Start Workflow"),
+        tags$ol(
+          tags$li(tags$strong("Data:"), " Upload your study data (CSV/Excel)"),
+          tags$li(tags$strong("Protocol:"), " Document your research question (PICO)"),
+          tags$li(tags$strong("Quality:"), " Assess risk of bias (RoB 2.0)"),
+          tags$li(tags$strong("Analysis:"), " Run meta-analysis (Pairwise, NMA, Dose-Response)"),
+          tags$li(tags$strong("Sensitivity:"), " Check robustness (leave-one-out, subgroups)"),
+          tags$li(tags$strong("Economics:"), " Cost-effectiveness analysis (optional)"),
+          tags$li(tags$strong("Reports:"), " Generate publication-ready documents")
+        ),
+
+        tags$hr(),
+
+        tags$h5(icon("lightbulb"), " Pro Tips"),
+        tags$ul(
+          tags$li(tags$strong("Example Datasets:"), " Go to Data tab → Load one of 3 example datasets to explore features"),
+          tags$li(tags$strong("Tooltips:"), " Hover over ", icon("circle-question"), " icons for explanations of statistical terms"),
+          tags$li(tags$strong("REML Method:"), " Default REML is recommended for most meta-analyses"),
+          tags$li(tags$strong("Random Effects:"), " Default Random Effects is appropriate for most cases"),
+          tags$li(tags$strong("Save Often:"), " Click 'Save Session' regularly to preserve your work"),
+          tags$li(tags$strong("Documentation:"), " See sidebar Help → Documentation for detailed guide")
+        ),
+
+        tags$hr(),
+
+        tags$h5(icon("star"), " What's New in v2.1.0"),
+        tags$ul(
+          tags$li(tags$strong("NEW:"), " Risk of Bias (RoB 2.0) tool with automated sensitivity analysis"),
+          tags$li(tags$strong("NEW:"), " Comprehensive Quick Start Guide with FAQs"),
+          tags$li(tags$strong("NEW:"), " Example datasets for learning"),
+          tags$li(tags$strong("IMPROVED:"), " Simplified navigation (7 tabs instead of 10)"),
+          tags$li(tags$strong("IMPROVED:"), " Enhanced tooltips for statistical terms")
+        ),
+
+        tags$hr(),
+
+        tags$div(
+          class = "alert alert-info",
+          tags$h6(icon("book-reader"), " First Time Here?"),
+          tags$p("Read the", tags$strong("Quick Start Guide"), "in the Help menu for a 15-minute walkthrough of your first meta-analysis.")
+        )
+      ),
+
+      footer = tagList(
+        checkboxInput("dont_show_welcome_again", "Don't show this again", FALSE),
+        modalButton("Close"),
+        actionButton("btn_goto_docs", "Open Quick Start Guide", class = "btn-primary")
+      )
+    ))
+  })
+
+  # Show welcome modal on first load (optional - can be disabled)
+  # Uncomment to enable automatic welcome screen:
+  # observe({
+  #   if (is.null(rv$welcome_shown)) {
+  #     rv$welcome_shown <- TRUE
+  #     showModal(modalDialog(
+  #       title = tags$h3(icon("rocket"), " Welcome to EvidenceOS PRIME"),
+  #       size = "l",
+  #       tags$div(
+  #         style = "font-size: 1.1em;",
+  #         tags$p("First time here? Click the 'Quick Start' button in the Help section for a walkthrough.")
+  #       ),
+  #       footer = modalButton("Let's Get Started!")
+  #     ))
+  #   }
+  # })
 }
 
 # Helper function to create EvidenceObject

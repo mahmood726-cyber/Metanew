@@ -23,9 +23,15 @@ meta_pairwise_ui <- function(id) {
         ),
         selectInput(
           ns("method"),
-          "Method",
+          tags$span(
+            "Method for τ² Estimation",
+            bslib::tooltip(
+              icon("circle-question"),
+              "REML (Restricted Maximum Likelihood) is recommended for most meta-analyses. Less biased than DL, works well with small samples."
+            )
+          ),
           choices = c(
-            "REML" = "REML",
+            "REML (Recommended)" = "REML",
             "DerSimonian-Laird" = "DL",
             "Maximum Likelihood" = "ML",
             "Empirical Bayes" = "EB",
@@ -35,9 +41,15 @@ meta_pairwise_ui <- function(id) {
         ),
         selectInput(
           ns("model"),
-          "Model",
+          tags$span(
+            "Model Type",
+            bslib::tooltip(
+              icon("circle-question"),
+              "Random Effects assumes studies differ and is recommended for most meta-analyses. Fixed Effect assumes one true effect size (rarely appropriate)."
+            )
+          ),
           choices = c(
-            "Random Effects" = "random",
+            "Random Effects (Recommended)" = "random",
             "Fixed Effect" = "fixed"
           ),
           selected = "random"
