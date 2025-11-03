@@ -35,15 +35,30 @@ class CacheManager:
         """Load cache index or create new one"""
         if self.index_file.exists():
             self.index = pd.read_parquet(self.index_file)
+            # Ensure proper dtypes after loading
+            if 'access_count' in self.index.columns:
+                self.index['access_count'] = self.index['access_count'].astype('int64')
+            if 'size_bytes' in self.index.columns:
+                self.index['size_bytes'] = self.index['size_bytes'].astype('int64')
         else:
-            self.index = pd.DataFrame(columns=[
-                'cache_key', 'file_path', 'created_at', 'last_accessed',
-                'access_count', 'size_bytes', 'analysis_type', 'metadata'
-            ])
+            self.index = pd.DataFrame({
+                'cache_key': pd.Series(dtype='str'),
+                'file_path': pd.Series(dtype='str'),
+                'created_at': pd.Series(dtype='datetime64[ns]'),
+                'last_accessed': pd.Series(dtype='datetime64[ns]'),
+                'access_count': pd.Series(dtype='int64'),
+                'size_bytes': pd.Series(dtype='int64'),
+                'analysis_type': pd.Series(dtype='str'),
+                'metadata': pd.Series(dtype='str')
+            })
             self._save_index()
 
     def _save_index(self):
         """Save cache index to disk"""
+        # Ensure dtypes before saving
+        if len(self.index) > 0:
+            self.index['access_count'] = self.index['access_count'].astype('int64')
+            self.index['size_bytes'] = self.index['size_bytes'].astype('int64')
         self.index.to_parquet(self.index_file, compression='snappy')
 
     def _generate_cache_key(self, analysis_type: str, parameters: Dict[str, Any]) -> str:

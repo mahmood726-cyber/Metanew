@@ -385,14 +385,30 @@ format_bim_display <- function(bim_result) {
 
     # Yearly breakdown table
     h6("Yearly Breakdown"),
-    renderTable({
-      df %>%
-        mutate(
-          market_share = sprintf("%.1f%%", market_share * 100),
-          incremental_cost = sprintf("£%s", format(round(incremental_cost / 1e6, 2), nsmall = 2))
-        ) %>%
-        select(Year = year, Patients = n_patients, `Market Share` = market_share,
-               `Incremental Impact (£M)` = incremental_cost)
-    })
+    tags$div(
+      class = "table-responsive",
+      tags$table(
+        class = "table table-striped table-sm",
+        tags$thead(
+          tags$tr(
+            tags$th("Year"),
+            tags$th("Patients"),
+            tags$th("Market Share"),
+            tags$th("Incremental Impact (£M)")
+          )
+        ),
+        tags$tbody(
+          lapply(1:nrow(df), function(i) {
+            row <- df[i, ]
+            tags$tr(
+              tags$td(row$year),
+              tags$td(format(row$n_patients, big.mark = ",")),
+              tags$td(sprintf("%.1f%%", row$market_share * 100)),
+              tags$td(sprintf("£%.2f", row$incremental_cost / 1e6))
+            )
+          })
+        )
+      )
+    )
   )
 }

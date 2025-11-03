@@ -23,6 +23,7 @@ source("modules/he_bcea.R")
 source("modules/reporting.R")
 source("modules/audit.R")
 source("modules/ai_copilot.R")
+source("modules/v2_features.R")
 
 # Source utilities
 source("utils/python_bridge.R")
@@ -122,6 +123,13 @@ ui <- page_navbar(
     audit_ui("audit")
   ),
 
+  # Tab: V2 Features
+  nav_panel(
+    title = "V2 Features",
+    icon = icon("rocket"),
+    v2_features_ui("v2_features")
+  ),
+
   # Sidebar for global controls
   sidebar = sidebar(
     width = 250,
@@ -138,9 +146,9 @@ ui <- page_navbar(
     hr(),
     tags$small(
       class = "text-muted",
-      "EvidenceOS PRIME v1.0.0",
+      "EvidenceOS PRIME v2.0.0",
       br(),
-      "© 2024"
+      "© 2025"
     )
   )
 )
@@ -195,6 +203,7 @@ server <- function(input, output, session) {
   ai_copilot_results <- ai_copilot_server("ai_copilot", rv)
   reporting_results <- reporting_server("reporting", rv)
   audit_results <- audit_server("audit", rv)
+  v2_results <- v2_features_server("v2_features", rv)
 
   # Save session handler
   observeEvent(input$btn_save_session, {
@@ -267,7 +276,7 @@ server <- function(input, output, session) {
 create_evidence_object <- function(rv) {
   list(
     evidence_id = paste0("EVO_", format(Sys.time(), "%Y%m%d_%H%M%S")),
-    version = "1.0.0",
+    version = "2.0.0",
     created_at = Sys.time(),
     updated_at = Sys.time(),
     protocol = rv$protocol,

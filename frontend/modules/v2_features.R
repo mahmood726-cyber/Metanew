@@ -274,10 +274,17 @@ v2_features_server <- function(id, rv) {
     observeEvent(input$save_custom_preset, {
       req(input$custom_preset_name)
 
+      # Handle null/empty description
+      desc <- if (is.null(input$custom_preset_desc) || input$custom_preset_desc == "") {
+        ""
+      } else {
+        input$custom_preset_desc
+      }
+
       success <- save_custom_preset(
         rv = rv,
         preset_name = input$custom_preset_name,
-        preset_description = input$custom_preset_desc %||% ""
+        preset_description = desc
       )
 
       if (success) {
