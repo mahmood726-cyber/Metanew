@@ -20,6 +20,7 @@ source("modules/dose_response.R")
 source("modules/risk_of_bias.R")  # RoB 2.0 tool
 source("modules/qa_dashboard.R")  # QA Dashboard & Method Guardrails
 source("modules/sensitivity.R")
+source("modules/scenario_compare.R")  # Scenario comparison
 source("modules/he_params.R")
 source("modules/he_model.R")
 source("modules/he_bcea.R")
@@ -98,7 +99,16 @@ ui <- page_navbar(
   nav_panel(
     title = "Sensitivity",
     icon = icon("sliders"),
-    sensitivity_ui("sensitivity")
+    navset_card_tab(
+      nav_panel(
+        "Sensitivity Analysis",
+        sensitivity_ui("sensitivity")
+      ),
+      nav_panel(
+        "Scenario Compare",
+        scenario_compare_ui("scenario_compare")
+      )
+    )
   ),
 
   # Tab: Economics
@@ -234,6 +244,7 @@ server <- function(input, output, session) {
   nma_results <- nma_server("nma", rv)
   dr_results <- dose_response_server("dose_response", rv)
   sensitivity_results <- sensitivity_server("sensitivity", rv)
+  scenario_compare_results <- scenario_compare_server("scenario_compare", rv)
   he_params_results <- he_params_server("he_params", rv)
   he_model_results <- he_model_server("he_model", rv)
   he_bcea_results <- he_bcea_server("he_bcea", rv)
