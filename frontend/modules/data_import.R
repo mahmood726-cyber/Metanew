@@ -291,8 +291,80 @@ data_import_server <- function(id, rv) {
 
       cat("\nDetected/Selected Type:", data_type, "\n")
 
+      # Smart recommendations based on data
+      cat("\n")
+      cat("═══════════════════════════════════════\n")
+      cat("SMART RECOMMENDATIONS\n")
+      cat("═══════════════════════════════════════\n\n")
+
+      # Recommend data type if auto-detect
+      if (input$data_type == "auto") {
+        cat(sprintf("✓ Auto-detected data type: %s\n", data_type))
+        if (data_type == "binary") {
+          cat("  Recommended effect measure: OR or RR\n")
+          cat("  Tip: Use OR for case-control, RR for cohort/RCTs\n")
+        } else if (data_type == "continuous") {
+          cat("  Recommended effect measure: MD or SMD\n")
+          cat("  Tip: Use MD if same scale, SMD if different scales\n")
+        } else if (data_type == "tte") {
+          cat("  Recommended effect measure: HR\n")
+          cat("  Tip: Ensure HR is on natural scale (not log-transformed)\n")
+        }
+      }
+
+      # Check sample size adequacy
+      if ("n" %in% names(data)) {
+        median_n <- median(data$n, na.rm = TRUE)
+        min_n <- min(data$n, na.rm = TRUE)
+        if (median_n < 50) {
+          cat("\n⚠ Small sample sizes detected (median n =", round(median_n), ")\n")
+          cat("  Recommendation: Use REML for τ² estimation (more robust)\n")
+        }
+        if (min_n < 10) {
+          cat("\n⚠ Very small sample in some studies (min n =", min_n, ")\n")
+          cat("  Recommendation: Consider excluding very small studies in sensitivity analysis\n")
+        }
+      }
+
+      # Check number of studies
+      n_studies <- if ("study_id" %in% names(data)) {
+        length(unique(data$study_id))
+      } else {
+        nrow(data)
+      }
+
+      if (n_studies < 5) {
+        cat("\n⚠ Small number of studies (n =", n_studies, ")\n")
+        cat("  Recommendation: Random-effects may be unstable\n")
+        cat("  Consider: Report both fixed and random-effects\n")
+      } else if (n_studies >= 10) {
+        cat("\n✓ Adequate number of studies (n =", n_studies, ")\n")
+        cat("  Recommendation: Random-effects model appropriate\n")
+        cat("  Consider: Publication bias assessment (Egger's test, trim-and-fill)\n")
+      }
+
+      # Check for year column (for cumulative MA)
+      if ("year" %in% names(data)) {
+        year_range <- range(data$year, na.rm = TRUE)
+        cat("\n✓ Publication years available:", year_range[1], "-", year_range[2], "\n")
+        cat("  Tip: Enable 'Cumulative Meta-Analysis' to assess temporal trends\n")
+      } else {
+        cat("\n⭗ No 'year' column found\n")
+        cat("  Tip: Add publication years to enable cumulative meta-analysis\n")
+      }
+
+      # Check for potential moderators
+      potential_moderators <- names(data)[!names(data) %in%
+        c("study_id", "treatment", "yi", "sei", "vi", "events", "n", "mean", "sd")]
+      if (length(potential_moderators) > 0 && n_studies >= 10) {
+        cat("\n✓ Potential moderators detected:", paste(head(potential_moderators, 3), collapse = ", "), "\n")
+        cat("  Tip: Consider meta-regression if expecting heterogeneity\n")
+      }
+
+      cat("\n")
+
       # Missing data summary
-      cat("\nMissing Data:\n")
+      cat("Missing Data:\n")
       missing_counts <- colSums(is.na(data))
       missing_counts <- missing_counts[missing_counts > 0]
       if (length(missing_counts) > 0) {
@@ -348,18 +420,108 @@ data_import_server <- function(id, rv) {
 
       result <- validation_result()
 
+      # Calculate data quality score
+      data <- uploaded_data()
+      quality_score <- 100
+
+      # Deduct points for issues
+      quality_score <- quality_score - (result$summary$errors * 15)
+      quality_score <- quality_score - (result$summary$warnings * 5)
+      quality_score <- max(0, quality_score)  # Don't go below 0
+
+      # Add quality indicators
+      quality_indicators <- list()
+
+      if ("year" %in% names(data)) {
+        quality_indicators <- c(quality_indicators, "Publication years available")
+      }
+
+      if ("n" %in% names(data)) {
+        median_n <- median(data$n, na.rm = TRUE)
+        if (median_n >= 50) {
+          quality_indicators <- c(quality_indicators, "Adequate sample sizes")
+        }
+      }
+
+      n_studies <- if ("study_id" %in% names(data)) {
+        length(unique(data$study_id))
+      } else {
+        nrow(data)
+      }
+
+      if (n_studies >= 5) {
+        quality_indicators <- c(quality_indicators, "Sufficient number of studies")
+      }
+
+      # Check missing data
+      missing_pct <- mean(is.na(data)) * 100
+      if (missing_pct < 5) {
+        quality_indicators <- c(quality_indicators, "Minimal missing data")
+      }
+
+      # Determine quality badge color
+      badge_color <- if (quality_score >= 85) {
+        "success"
+      } else if (quality_score >= 70) {
+        "warning"
+      } else {
+        "danger"
+      }
+
       if (result$is_valid) {
         div(
           class = "alert alert-success",
           icon("check-circle"),
           " Data validation passed!",
           hr(),
-          h5("Summary:"),
+          div(
+            class = "d-flex justify-content-between align-items-center mb-3",
+            h5(class = "mb-0", "Data Quality Score:"),
+            tags$span(
+              class = paste0("badge bg-", badge_color, " fs-4"),
+              paste0(quality_score, "/100")
+            )
+          ),
+          if (length(quality_indicators) > 0) {
+            div(
+              h6("Quality Indicators:"),
+              tags$ul(
+                class = "mb-3",
+                lapply(quality_indicators, function(ind) {
+                  tags$li(icon("check"), " ", ind)
+                })
+              )
+            )
+          },
+          hr(),
+          h6("Summary:"),
           tags$ul(
             tags$li(paste("Rows:", nrow(uploaded_data()))),
             tags$li(paste("Studies:", length(unique(uploaded_data()$study_id)))),
-            tags$li(paste("Warnings:", result$summary$warnings))
-          )
+            tags$li(paste("Warnings:", result$summary$warnings)),
+            tags$li(paste("Info messages:", result$summary$info))
+          ),
+          if (result$summary$warnings > 0 || result$summary$info > 0) {
+            div(
+              hr(),
+              h6("Issues:"),
+              tagList(
+                lapply(result$problems, function(p) {
+                  if (p$severity %in% c("warning", "info")) {
+                    class_name <- if (p$severity == "warning") "alert-warning" else "alert-info"
+                    div(
+                      class = paste("alert", class_name, "py-2 px-3 mb-2"),
+                      tags$strong(toupper(p$severity), ": "),
+                      p$message,
+                      if (!is.null(p$study_id)) {
+                        tags$small(paste(" (Study:", p$study_id, ")"))
+                      }
+                    )
+                  }
+                })
+              )
+            )
+          }
         )
       } else {
         div(

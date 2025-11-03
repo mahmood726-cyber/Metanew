@@ -10,22 +10,86 @@ nma_ui <- function(id) {
       card(
         card_header("NMA Settings"),
         selectInput(ns("outcome"), "Outcome", choices = NULL),
-        selectInput(ns("reference"), "Reference Treatment", choices = NULL),
-        selectInput(ns("method"), "Method",
-                    choices = c("Random Effects" = "random", "Fixed Effect" = "fixed")),
-        checkboxInput(ns("check_inconsistency"), "Check Inconsistency", TRUE),
+        selectInput(
+          ns("reference"),
+          tags$span(
+            "Reference Treatment",
+            bslib::tooltip(
+              icon("circle-question"),
+              "The reference treatment serves as the comparator. All other treatments will be compared to this. Typically use placebo or standard care."
+            )
+          ),
+          choices = NULL
+        ),
+        selectInput(
+          ns("method"),
+          tags$span(
+            "Method",
+            bslib::tooltip(
+              icon("circle-question"),
+              "Random Effects accounts for between-study heterogeneity (recommended for most NMA). Fixed Effect assumes all studies estimate the same treatment effects."
+            )
+          ),
+          choices = c("Random Effects (Recommended)" = "random", "Fixed Effect" = "fixed"),
+          selected = "random"
+        ),
+        checkboxInput(
+          ns("check_inconsistency"),
+          tags$span(
+            "Check Inconsistency",
+            bslib::tooltip(
+              icon("circle-question"),
+              "Inconsistency occurs when direct and indirect evidence disagree. This tests whether the network assumption holds (design-by-treatment interaction test)."
+            )
+          ),
+          TRUE
+        ),
         hr(),
-        helpText("Note: For NMA, data should have multiple treatments per study."),
-        actionButton(ns("btn_run"), "Run NMA", class = "btn-primary w-100")
+        div(
+          class = "alert alert-info p-2",
+          icon("info-circle"),
+          tags$small(" NMA requires studies with multiple treatment arms. Each study should compare ≥2 treatments.")
+        ),
+        actionButton(ns("btn_run"), "Run NMA", class = "btn-primary w-100", icon = icon("play-circle"))
       ),
       card(
         card_header("NMA Results"),
         navset_card_tab(
-          nav_panel("Network Plot", plotOutput(ns("network_plot"), height = "500px")),
-          nav_panel("League Table", DTOutput(ns("league_table"))),
-          nav_panel("Rankings", DTOutput(ns("rankings"))),
-          nav_panel("Inconsistency", verbatimTextOutput(ns("inconsistency"))),
-          nav_panel("Summary", verbatimTextOutput(ns("summary")))
+          nav_panel(
+            "Network Plot",
+            p(class = "text-muted",
+              icon("info-circle"),
+              " Visual representation of the evidence network. Node size = number of studies, line thickness = number of direct comparisons."),
+            plotOutput(ns("network_plot"), height = "500px")
+          ),
+          nav_panel(
+            "League Table",
+            p(class = "text-muted",
+              icon("info-circle"),
+              " All pairwise treatment comparisons with effect estimates and 95% confidence intervals. Upper triangle shows effect sizes, lower triangle shows opposite direction."),
+            DTOutput(ns("league_table"))
+          ),
+          nav_panel(
+            "Rankings",
+            p(class = "text-muted",
+              icon("info-circle"),
+              " Treatment rankings based on P-scores (0-1 scale). Higher P-score = better treatment. P-score ≈ probability that treatment is best."),
+            DTOutput(ns("rankings"))
+          ),
+          nav_panel(
+            "Inconsistency",
+            p(class = "text-muted",
+              icon("info-circle"),
+              " Tests whether direct and indirect evidence agree. p > 0.05 suggests consistency (good). p < 0.05 suggests inconsistency (investigate sources)."),
+            verbatimTextOutput(ns("inconsistency"))
+          ),
+          nav_panel(
+            "Summary",
+            p(class = "text-muted",
+              icon("info-circle"),
+              " Overall model statistics including number of studies, treatments, heterogeneity (τ², I²), and model fit."),
+            verbatimTextOutput(ns("summary"))
+          )
         )
       )
     )

@@ -66,10 +66,22 @@ meta_pairwise_ui <- function(id) {
           ns = ns,
           selectInput(ns("moderator_vars"), "Moderators", choices = NULL, multiple = TRUE)
         ),
+        checkboxInput(
+          ns("cumulative"),
+          tags$span(
+            "Cumulative Meta-Analysis",
+            bslib::tooltip(
+              icon("circle-question"),
+              "Shows how pooled effect changes as studies are added chronologically. Requires 'year' column in data. Useful for assessing temporal trends and stability of findings."
+            )
+          ),
+          FALSE
+        ),
         actionButton(
           ns("btn_run"),
           "Run Analysis",
-          class = "btn-primary w-100 mt-3"
+          class = "btn-primary w-100 mt-3",
+          icon = icon("play-circle")
         )
       ),
 
@@ -115,6 +127,16 @@ meta_pairwise_ui <- function(id) {
             "Publication Bias",
             verbatimTextOutput(ns("egger_test")),
             plotOutput(ns("trim_fill_plot"))
+          ),
+          nav_panel(
+            "Cumulative MA",
+            p(class = "text-muted",
+              icon("info-circle"),
+              " Shows how the pooled effect estimate evolves as studies are added chronologically. Helps assess temporal trends and stability of findings over time."),
+            uiOutput(ns("cumulative_status")),
+            plotOutput(ns("cumulative_plot"), height = "600px"),
+            hr(),
+            DTOutput(ns("cumulative_table"))
           )
         )
       )
@@ -422,6 +444,169 @@ meta_pairwise_server <- function(id, rv) {
              lty = c(NA, if (tf$k0 > 0) NA else NULL, 1, if (tf$k0 > 0) 2 else NULL),
              lwd = c(NA, if (tf$k0 > 0) NA else NULL, 2, if (tf$k0 > 0) 2 else NULL),
              bg = "white")
+    })
+
+    # Cumulative meta-analysis outputs
+    output$cumulative_status <- renderUI({
+      req(ma_result())
+
+      if (!input$cumulative) {
+        return(div(
+          class = "alert alert-info",
+          icon("info-circle"),
+          " Enable 'Cumulative Meta-Analysis' in settings to see temporal trends."
+        ))
+      }
+
+      result <- ma_result()
+      if (!"year" %in% names(result$data)) {
+        return(div(
+          class = "alert alert-warning",
+          icon("exclamation-triangle"),
+          " Cumulative meta-analysis requires a 'year' column in your data."
+        ))
+      }
+
+      return(div(
+        class = "alert alert-success",
+        icon("check-circle"),
+        sprintf(" Cumulative analysis ready (%d studies sorted by year)", nrow(result$data))
+      ))
+    })
+
+    output$cumulative_plot <- renderPlot({
+      req(ma_result())
+      req(input$cumulative)
+
+      result <- ma_result()
+
+      if (!"year" %in% names(result$data)) {
+        plot.new()
+        text(0.5, 0.5, "Cumulative meta-analysis requires 'year' column\nPlease include publication year in your data",
+             cex = 1.2, col = "gray50")
+        return()
+      }
+
+      tryCatch({
+        # Sort data by year
+        data <- result$data[order(result$data$year), ]
+
+        if (nrow(data) < 2) {
+          plot.new()
+          text(0.5, 0.5, "Need at least 2 studies for cumulative meta-analysis", cex = 1.2, col = "gray50")
+          return()
+        }
+
+        # Run cumulative meta-analysis
+        library(metafor)
+        ma_base <- rma(yi = data$yi, sei = data$sei, method = input$method, data = data)
+        cum_ma <- cumul(ma_base, order = order(data$year))
+
+        # Extract results
+        years <- data$year
+        estimates <- cum_ma$estimate
+        ci_lb <- cum_ma$ci.lb
+        ci_ub <- cum_ma$ci.ub
+
+        # Create plot
+        par(mar = c(5, 4, 4, 2) + 0.1)
+
+        # Calculate y-axis limits
+        ylim <- range(c(ci_lb, ci_ub))
+        ylim <- ylim + c(-1, 1) * diff(ylim) * 0.1
+
+        # Plot cumulative estimates
+        plot(years, estimates, type = "n",
+             xlim = range(years) + c(-1, 1),
+             ylim = ylim,
+             xlab = "Publication Year",
+             ylab = "Cumulative Pooled Effect",
+             main = "Cumulative Meta-Analysis\nHow pooled effect changes as studies accumulate",
+             las = 1)
+
+        # Add confidence interval ribbon
+        polygon(c(years, rev(years)), c(ci_lb, rev(ci_ub)),
+                col = rgb(0, 0, 1, 0.2), border = NA)
+
+        # Add cumulative estimate line
+        lines(years, estimates, col = "blue", lwd = 2)
+        points(years, estimates, pch = 19, col = "blue", cex = 1.2)
+
+        # Add final pooled estimate line
+        abline(h = result$pooled_effect, col = "red", lty = 2, lwd = 2)
+
+        # Add zero line
+        abline(h = 0, col = "gray", lty = 3)
+
+        # Add grid
+        grid(col = "gray90", lty = 1)
+
+        # Legend
+        legend("topright",
+               legend = c("Cumulative pooled effect", "95% CI", "Final pooled estimate"),
+               col = c("blue", rgb(0, 0, 1, 0.2), "red"),
+               lty = c(1, NA, 2),
+               lwd = c(2, NA, 2),
+               pch = c(19, 15, NA),
+               pt.cex = c(1.2, 2, NA),
+               bg = "white")
+
+      }, error = function(e) {
+        plot.new()
+        text(0.5, 0.5, paste("Error in cumulative analysis:", e$message),
+             cex = 1, col = "red")
+      })
+    })
+
+    output$cumulative_table <- renderDT({
+      req(ma_result())
+      req(input$cumulative)
+
+      result <- ma_result()
+
+      if (!"year" %in% names(result$data)) {
+        return(NULL)
+      }
+
+      tryCatch({
+        # Sort data by year
+        data <- result$data[order(result$data$year), ]
+
+        if (nrow(data) < 2) {
+          return(NULL)
+        }
+
+        # Run cumulative meta-analysis
+        library(metafor)
+        ma_base <- rma(yi = data$yi, sei = data$sei, method = input$method, data = data)
+        cum_ma <- cumul(ma_base, order = order(data$year))
+
+        # Create results table
+        cum_table <- data.frame(
+          Year = data$year,
+          Studies_Added = 1:nrow(data),
+          Cumulative_Effect = sprintf("%.3f", cum_ma$estimate),
+          CI_95 = sprintf("[%.3f, %.3f]", cum_ma$ci.lb, cum_ma$ci.ub),
+          p_value = sprintf("%.4f", cum_ma$pval),
+          I2 = sprintf("%.1f%%", cum_ma$I2),
+          tau2 = sprintf("%.4f", cum_ma$tau2),
+          stringsAsFactors = FALSE
+        )
+
+        datatable(
+          cum_table,
+          options = list(
+            pageLength = 15,
+            dom = 'Bfrtip',
+            buttons = c('copy', 'csv', 'excel')
+          ),
+          rownames = FALSE,
+          caption = "Cumulative meta-analysis results: Effect estimate after adding each study chronologically"
+        )
+
+      }, error = function(e) {
+        return(NULL)
+      })
     })
 
     # Download handlers for forest plot
