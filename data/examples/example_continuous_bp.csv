@@ -1,0 +1,13 @@
+study_id,mean_exp,sd_exp,n_exp,mean_ctrl,sd_ctrl,n_ctrl,year,drug_class
+Collins2021,-12.5,8.2,142,-3.2,7.8,138,2021,ACE Inhibitor
+Patel2020,-10.8,9.1,98,-2.8,8.5,95,2020,ACE Inhibitor
+Stevens2021,-15.2,10.3,156,-4.1,9.8,151,2021,ACE Inhibitor
+Thompson2019,-9.5,7.5,78,-2.1,7.2,75,2019,ACE Inhibitor
+Martinez2020,-11.3,8.8,125,-3.5,8.3,122,2020,ARB
+Anderson2021,-13.1,9.5,167,-4.3,9.1,165,2021,ARB
+Wilson2020,-10.2,8.4,89,-2.9,8.0,86,2020,ARB
+Lee2019,-12.8,9.2,134,-3.8,8.9,130,2019,CCB
+Kumar2021,-14.5,10.1,178,-4.6,9.7,175,2021,CCB
+Brown2020,-11.7,8.6,112,-3.2,8.2,108,2020,CCB
+Garcia2021,-13.9,9.8,145,-4.2,9.3,142,2021,Beta-blocker
+Chen2020,-10.9,8.3,95,-3.1,7.9,92,2020,Beta-blocker

@@ -62,6 +62,8 @@ A comprehensive, end-to-end platform for systematic reviews, meta-analysis, netw
 
 ## 🚀 Quick Start
 
+**NEW**: See [Quick Start Guide](docs/QUICK_START_GUIDE.md) for detailed walkthrough with screenshots!
+
 ### Prerequisites
 - Docker & Docker Compose (recommended)
 - OR: R 4.0+, Python 3.9+

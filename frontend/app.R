@@ -16,6 +16,7 @@ source("modules/protocol.R")
 source("modules/meta_pairwise.R")
 source("modules/nma.R")
 source("modules/dose_response.R")
+source("modules/risk_of_bias.R")  # RoB 2.0 tool
 source("modules/sensitivity.R")
 source("modules/he_params.R")
 source("modules/he_model.R")
@@ -29,6 +30,7 @@ source("modules/v2_features.R")
 source("utils/python_bridge.R")
 source("utils/plotting.R")
 source("utils/validators.R")
+source("utils/rob2_tool.R")  # RoB 2.0 utility functions
 
 # Define UI
 ui <- page_navbar(
@@ -53,6 +55,13 @@ ui <- page_navbar(
     title = "Protocol",
     icon = icon("file-text"),
     protocol_ui("protocol")
+  ),
+
+  # Tab: Risk of Bias (RoB 2.0)
+  nav_panel(
+    title = "Quality",
+    icon = icon("clipboard-check"),
+    risk_of_bias_ui("rob")
   ),
 
   # Tab: Analysis
@@ -102,32 +111,34 @@ ui <- page_navbar(
     )
   ),
 
-  # Tab: AI Copilot
-  nav_panel(
-    title = "AI Copilot",
-    icon = icon("robot"),
-    ai_copilot_ui("ai_copilot")
-  ),
-
-  # Tab: Reports
+  # Tab: Reports & Export
   nav_panel(
     title = "Reports",
     icon = icon("file-pdf"),
-    reporting_ui("reporting")
+    navset_card_tab(
+      nav_panel(
+        "Generate Reports",
+        reporting_ui("reporting")
+      ),
+      nav_panel(
+        "Audit Trail",
+        audit_ui("audit")
+      )
+    )
   ),
 
-  # Tab: Audit
-  nav_panel(
-    title = "Audit",
-    icon = icon("history"),
-    audit_ui("audit")
-  ),
-
-  # Tab: V2 Features
-  nav_panel(
-    title = "V2 Features",
-    icon = icon("rocket"),
-    v2_features_ui("v2_features")
+  # Tab: Advanced (collapsed features)
+  nav_menu(
+    title = "Advanced",
+    icon = icon("cog"),
+    nav_panel(
+      "AI Copilot",
+      ai_copilot_ui("ai_copilot")
+    ),
+    nav_panel(
+      "Beta Features",
+      v2_features_ui("v2_features")
+    )
   ),
 
   # Sidebar for global controls
@@ -193,6 +204,7 @@ server <- function(input, output, session) {
   # Module servers
   data_results <- data_import_server("data_import", rv)
   protocol_results <- protocol_server("protocol", rv)
+  rob_results <- risk_of_bias_server("rob", rv)  # RoB 2.0 module
   pairwise_results <- meta_pairwise_server("pairwise", rv)
   nma_results <- nma_server("nma", rv)
   dr_results <- dose_response_server("dose_response", rv)
