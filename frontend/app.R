@@ -13,6 +13,7 @@ library(dosresmeta)
 
 # Source modules
 source("modules/data_import.R")
+source("modules/column_mapper.R")  # Column mapping wizard
 source("modules/protocol.R")
 source("modules/protocol_snapshots.R")  # Protocol version control
 source("modules/meta_pairwise.R")
@@ -53,7 +54,16 @@ ui <- page_navbar(
   nav_panel(
     title = "Data",
     icon = icon("database"),
-    data_import_ui("data_import")
+    navset_card_tab(
+      nav_panel(
+        "Import Data",
+        data_import_ui("data_import")
+      ),
+      nav_panel(
+        "Column Mapper",
+        column_mapper_ui("column_mapper")
+      )
+    )
   ),
 
   # Tab: Protocol
@@ -252,6 +262,7 @@ server <- function(input, output, session) {
 
   # Module servers
   data_results <- data_import_server("data_import", rv)
+  column_mapper_results <- column_mapper_server("column_mapper", rv)
   protocol_results <- protocol_server("protocol", rv)
   protocol_snapshots_results <- protocol_snapshots_server("protocol_snapshots", rv)
   rob_results <- risk_of_bias_server("rob", rv)  # RoB 2.0 module
