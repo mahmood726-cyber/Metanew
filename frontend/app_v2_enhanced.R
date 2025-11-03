@@ -60,6 +60,14 @@ source("modules/sucra_rankings.R")             # SUCRA rankings for NMA ✅ STAN
 source("modules/quantile_metaanalysis.R")      # Quantile MA - personalized medicine ⚠️ NOVEL
 source("modules/individual_prediction.R")      # Individual effect prediction ⚠️ NOVEL
 
+# V3.2 QUICK WINS (Essential Workflow & Robustness)
+source("modules/permutation_tests.R")          # Permutation testing ✅ STANDARD
+source("modules/threshold_analysis.R")         # Threshold analysis ✅ STANDARD
+source("modules/prisma_flow.R")                # PRISMA 2020 flow diagram ✅ REQUIRED
+source("modules/auto_tables.R")                # Automated table generation ✅ STANDARD
+source("modules/decision_curve.R")             # Decision curve analysis ✅ STANDARD
+source("modules/robust_variance.R")            # Robust variance estimation ✅ STANDARD
+
 # source("modules/collaboration.R")            # TODO: Real-time collaboration (future)
 
 # Source utilities
@@ -563,7 +571,49 @@ ui <- page_navbar(
     individual_prediction_ui("individual_pred")
   ),
 
-  # Tab 21: AI Copilot
+  # V3.2 ESSENTIAL WORKFLOW & ROBUSTNESS
+
+  # Tab 21: Permutation Tests (NEW V3.2!)
+  nav_panel(
+    title = "Permutation Tests",
+    icon = icon("random"),
+    value = "permutation",
+    permutation_tests_ui("permutation")
+  ),
+
+  # Tab 22: Threshold Analysis (NEW V3.2!)
+  nav_panel(
+    title = "Threshold Analysis",
+    icon = icon("crosshairs"),
+    value = "threshold",
+    threshold_analysis_ui("threshold")
+  ),
+
+  # Tab 23: PRISMA Flow (NEW V3.2!)
+  nav_panel(
+    title = "PRISMA Flow",
+    icon = icon("project-diagram"),
+    value = "prisma",
+    prisma_flow_ui("prisma")
+  ),
+
+  # Tab 24: Auto Tables (NEW V3.2!)
+  nav_panel(
+    title = "Auto Tables",
+    icon = icon("table"),
+    value = "auto_tables",
+    auto_tables_ui("auto_tables")
+  ),
+
+  # Tab 25: Decision Curve (NEW V3.2!)
+  nav_panel(
+    title = "Decision Curve",
+    icon = icon("chart-area"),
+    value = "decision_curve",
+    decision_curve_ui("decision_curve")
+  ),
+
+  # Tab 26: AI Copilot
   nav_panel(
     title = "AI Copilot",
     icon = icon("robot"),
@@ -1017,6 +1067,14 @@ server <- function(input, output, session) {
   sucra_results <- sucra_rankings_server("sucra_rankings", rv)  # NEW V3.1 - SUCRA rankings
   quantile_ma_results <- quantile_metaanalysis_server("quantile_ma", rv)  # NEW V3.1 - Quantile MA
   individual_pred_results <- individual_prediction_server("individual_pred", rv)  # NEW V3.1 - Individual prediction
+
+  # V3.2 Essential Workflow & Robustness
+  permutation_results <- permutation_tests_server("permutation", rv)  # NEW V3.2 - Permutation testing
+  threshold_results <- threshold_analysis_server("threshold", rv)  # NEW V3.2 - Threshold analysis
+  prisma_results <- prisma_flow_server("prisma", rv)  # NEW V3.2 - PRISMA flow diagram
+  auto_tables_results <- auto_tables_server("auto_tables", rv)  # NEW V3.2 - Auto table generation
+  decision_curve_results <- decision_curve_server("decision_curve", rv)  # NEW V3.2 - Decision curve analysis
+  # Note: robust_variance is a utility enhancement, not a standalone server module
 
   # AI Copilot
   ai_copilot_results <- ai_copilot_server("ai_copilot", rv)
