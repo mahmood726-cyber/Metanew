@@ -568,6 +568,232 @@ study_annotations_server <- function(id, rv) {
     })
 
 
+    # Bulk tag selected studies
+    observeEvent(input$bulk_tag, {
+      req(rv$studies)
+
+      # Get selected rows from DT
+      selected_rows <- input$study_table_rows_selected
+
+      if (is.null(selected_rows) || length(selected_rows) == 0) {
+        showNotification("No studies selected. Please select studies from the table first.", type = "warning")
+        return()
+      }
+
+      # Show modal dialog to collect tags
+      showModal(modalDialog(
+        title = "Bulk Tag Studies",
+        size = "m",
+        selectizeInput(
+          session$ns("bulk_tag_input"),
+          "Add Tags:",
+          choices = NULL,
+          multiple = TRUE,
+          options = list(
+            create = TRUE,
+            placeholder = "Type tags and press Enter"
+          )
+        ),
+        helpText(sprintf("This will add tags to %d selected studies", length(selected_rows))),
+        footer = tagList(
+          modalButton("Cancel"),
+          actionButton(session$ns("bulk_tag_confirm"), "Apply Tags", class = "btn-primary")
+        )
+      ))
+    })
+
+    # Confirm bulk tagging
+    observeEvent(input$bulk_tag_confirm, {
+      req(input$bulk_tag_input)
+      req(rv$studies)
+
+      selected_rows <- input$study_table_rows_selected
+      new_tags <- input$bulk_tag_input
+
+      if (length(new_tags) == 0) {
+        showNotification("No tags entered", type = "warning")
+        return()
+      }
+
+      # Apply tags to all selected studies
+      annot <- annotations()
+      n_updated <- 0
+
+      for (row_idx in selected_rows) {
+        study_id <- rv$studies$study_id[row_idx]
+
+        # Initialize if doesn't exist
+        if (is.null(annot[[study_id]])) {
+          annot[[study_id]] <- list(
+            study_id = study_id,
+            notes = "",
+            tags = character(0),
+            flags = character(0),
+            quality_rating = NULL,
+            confidence = "moderate"
+          )
+        }
+
+        # Add new tags (avoid duplicates)
+        existing_tags <- annot[[study_id]]$tags %||% character(0)
+        combined_tags <- unique(c(existing_tags, new_tags))
+        annot[[study_id]]$tags <- combined_tags
+        annot[[study_id]]$last_modified <- Sys.time()
+
+        n_updated <- n_updated + 1
+      }
+
+      # Update reactive and save
+      annotations(annot)
+      save_annotations_to_disk(annot)
+
+      removeModal()
+      showNotification(sprintf("✓ Added tags to %d studies", n_updated), type = "message")
+    })
+
+
+    # Bulk flag selected studies
+    observeEvent(input$bulk_flag, {
+      req(rv$studies)
+
+      selected_rows <- input$study_table_rows_selected
+
+      if (is.null(selected_rows) || length(selected_rows) == 0) {
+        showNotification("No studies selected. Please select studies from the table first.", type = "warning")
+        return()
+      }
+
+      # Show modal dialog to collect flags
+      showModal(modalDialog(
+        title = "Bulk Flag Studies",
+        size = "m",
+        checkboxGroupInput(
+          session$ns("bulk_flag_input"),
+          "Add Flags:",
+          choices = c(
+            "key_study" = "🔑 Key Study",
+            "review" = "👁 For Review",
+            "excluded" = "❌ Excluded",
+            "high_rob" = "⚠️ High Risk of Bias",
+            "duplicate" = "📋 Duplicate/Related",
+            "missing_data" = "❓ Missing Data",
+            "outlier" = "📊 Statistical Outlier"
+          ),
+          selected = character(0)
+        ),
+        helpText(sprintf("This will add flags to %d selected studies", length(selected_rows))),
+        footer = tagList(
+          modalButton("Cancel"),
+          actionButton(session$ns("bulk_flag_confirm"), "Apply Flags", class = "btn-primary")
+        )
+      ))
+    })
+
+    # Confirm bulk flagging
+    observeEvent(input$bulk_flag_confirm, {
+      req(input$bulk_flag_input)
+      req(rv$studies)
+
+      selected_rows <- input$study_table_rows_selected
+      new_flags <- input$bulk_flag_input
+
+      if (length(new_flags) == 0) {
+        showNotification("No flags selected", type = "warning")
+        return()
+      }
+
+      # Apply flags to all selected studies
+      annot <- annotations()
+      n_updated <- 0
+
+      for (row_idx in selected_rows) {
+        study_id <- rv$studies$study_id[row_idx]
+
+        # Initialize if doesn't exist
+        if (is.null(annot[[study_id]])) {
+          annot[[study_id]] <- list(
+            study_id = study_id,
+            notes = "",
+            tags = character(0),
+            flags = character(0),
+            quality_rating = NULL,
+            confidence = "moderate"
+          )
+        }
+
+        # Add new flags (avoid duplicates)
+        existing_flags <- annot[[study_id]]$flags %||% character(0)
+        combined_flags <- unique(c(existing_flags, new_flags))
+        annot[[study_id]]$flags <- combined_flags
+        annot[[study_id]]$last_modified <- Sys.time()
+
+        n_updated <- n_updated + 1
+      }
+
+      # Update reactive and save
+      annotations(annot)
+      save_annotations_to_disk(annot)
+
+      removeModal()
+      showNotification(sprintf("✓ Added flags to %d studies", n_updated), type = "message")
+    })
+
+
+    # Bulk delete/clear annotations for selected studies
+    observeEvent(input$bulk_delete, {
+      req(rv$studies)
+
+      selected_rows <- input$study_table_rows_selected
+
+      if (is.null(selected_rows) || length(selected_rows) == 0) {
+        showNotification("No studies selected. Please select studies from the table first.", type = "warning")
+        return()
+      }
+
+      # Show confirmation modal
+      showModal(modalDialog(
+        title = "Clear Annotations",
+        size = "m",
+        div(
+          class = "alert alert-warning",
+          icon("exclamation-triangle"),
+          " This will permanently delete all annotations (notes, tags, flags, ratings) for the selected studies."
+        ),
+        p(sprintf("You are about to clear annotations for %d studies. This action cannot be undone.", length(selected_rows))),
+        footer = tagList(
+          modalButton("Cancel"),
+          actionButton(session$ns("bulk_delete_confirm"), "Yes, Clear Annotations",
+                      class = "btn-danger")
+        )
+      ))
+    })
+
+    # Confirm bulk deletion
+    observeEvent(input$bulk_delete_confirm, {
+      req(rv$studies)
+
+      selected_rows <- input$study_table_rows_selected
+      annot <- annotations()
+      n_deleted <- 0
+
+      for (row_idx in selected_rows) {
+        study_id <- rv$studies$study_id[row_idx]
+
+        if (!is.null(annot[[study_id]])) {
+          annot[[study_id]] <- NULL
+          n_deleted <- n_deleted + 1
+        }
+      }
+
+      # Update reactive and save
+      annotations(annot)
+      save_annotations_to_disk(annot)
+
+      removeModal()
+      showNotification(sprintf("✓ Cleared annotations for %d studies", n_deleted), type = "message")
+    })
+
+
     # Bulk export
     observeEvent(input$bulk_export, {
       annot <- annotations()
