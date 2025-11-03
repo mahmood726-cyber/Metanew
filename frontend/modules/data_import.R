@@ -21,6 +21,38 @@ data_import_ui <- function(id) {
           "Choose CSV or Excel file",
           accept = c(".csv", ".xlsx", ".xls")
         ),
+
+        # Example datasets section
+        div(
+          class = "mb-3 p-3 border rounded bg-light",
+          h6(
+            icon("lightbulb"),
+            " Or try an example dataset",
+            class = "mb-2"
+          ),
+          selectInput(
+            ns("example_dataset"),
+            "Example Dataset",
+            choices = c(
+              "Choose an example..." = "",
+              "Binary - Mortality (RCTs of beta-blockers)" = "binary",
+              "Continuous - Blood Pressure (Antihypertensives)" = "continuous",
+              "Network MA - Smoking Cessation (4 treatments)" = "nma"
+            ),
+            width = "100%"
+          ),
+          actionButton(
+            ns("btn_load_example"),
+            "Load Example",
+            icon = icon("download"),
+            class = "btn-outline-primary w-100"
+          ),
+          tags$small(
+            class = "text-muted mt-2 d-block",
+            "Example datasets help you explore features quickly"
+          )
+        ),
+
         selectInput(
           ns("data_type"),
           "Data Type",
@@ -110,6 +142,94 @@ data_import_server <- function(id, rv) {
       }, error = function(e) {
         showNotification(
           paste("Error loading file:", e$message),
+          type = "error",
+          duration = 10
+        )
+      })
+    })
+
+    # Load example dataset
+    observeEvent(input$btn_load_example, {
+      req(input$example_dataset)
+
+      if (input$example_dataset == "") {
+        showNotification(
+          "Please select an example dataset first",
+          type = "warning"
+        )
+        return()
+      }
+
+      tryCatch({
+        # Map selection to file path
+        example_file <- switch(
+          input$example_dataset,
+          "binary" = "data/examples/example_binary_mortality.csv",
+          "continuous" = "data/examples/example_continuous_bp.csv",
+          "nma" = "data/examples/example_nma_smoking.csv"
+        )
+
+        # Get full path (adjust based on working directory)
+        # Try multiple potential paths
+        possible_paths <- c(
+          file.path("..", example_file),  # From frontend/
+          file.path("../..", example_file),  # From frontend/modules/
+          example_file  # Direct path
+        )
+
+        file_path <- NULL
+        for (path in possible_paths) {
+          if (file.exists(path)) {
+            file_path <- path
+            break
+          }
+        }
+
+        if (is.null(file_path)) {
+          stop("Example file not found. Please ensure example datasets are in data/examples/")
+        }
+
+        # Load the CSV
+        data <- read.csv(file_path, stringsAsFactors = FALSE)
+
+        uploaded_data(data)
+        rv$data <- data
+
+        # Set appropriate data type based on example
+        if (input$example_dataset == "binary") {
+          updateSelectInput(session, "data_type", selected = "binary")
+          updateSelectInput(session, "measure", selected = "OR")
+        } else if (input$example_dataset == "continuous") {
+          updateSelectInput(session, "data_type", selected = "continuous")
+          updateSelectInput(session, "measure", selected = "MD")
+        } else if (input$example_dataset == "nma") {
+          updateSelectInput(session, "data_type", selected = "effect_size")
+          updateSelectInput(session, "measure", selected = "OR")
+        }
+
+        # Show success message with dataset description
+        example_description <- switch(
+          input$example_dataset,
+          "binary" = "12 RCTs of beta-blockers for heart failure (mortality outcome)",
+          "continuous" = "12 trials of antihypertensives (systolic BP reduction)",
+          "nma" = "25 trials, 4 treatments for smoking cessation"
+        )
+
+        showNotification(
+          div(
+            tags$strong("Example dataset loaded!"),
+            br(),
+            example_description,
+            br(),
+            paste(nrow(data), "rows,", ncol(data), "columns")
+          ),
+          type = "message",
+          duration = 8
+        )
+
+      }, error = function(e) {
+        showNotification(
+          paste("Error loading example:", e$message),
           type = "error",
           duration = 10
         )

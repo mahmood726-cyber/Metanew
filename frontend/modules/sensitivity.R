@@ -92,7 +92,44 @@ sensitivity_ui <- function(id) {
           )
         ),
 
-        # Tab 3: Scenario Comparison
+        # Tab 3: Leave-One-Out Analysis
+        nav_panel(
+          title = "Leave-One-Out",
+          icon = icon("ban"),
+          card(
+            card_header(
+              div(
+                icon("ban", class = "me-2"),
+                "Leave-One-Out Sensitivity Analysis"
+              )
+            ),
+            p(class = "text-muted",
+              "Assess the influence of individual studies by removing each one at a time. ",
+              "Helps identify studies that disproportionately affect the pooled estimate."
+            ),
+            actionButton(
+              ns("btn_run_loo"),
+              "Run Leave-One-Out Analysis",
+              icon = icon("play-circle"),
+              class = "btn-primary btn-lg mb-3"
+            ),
+            uiOutput(ns("loo_summary")),
+            hr(),
+            h5("Influence Analysis Table"),
+            p(class = "text-muted",
+              "Shows the pooled effect estimate when each study is excluded."
+            ),
+            DTOutput(ns("loo_table")),
+            hr(),
+            h5("Influence Plot"),
+            p(class = "text-muted",
+              "Visualize how the pooled effect changes when excluding each study."
+            ),
+            plotOutput(ns("loo_plot"), height = "500px")
+          )
+        ),
+
+        # Tab 4: Scenario Comparison
         nav_panel(
           title = "Compare",
           icon = icon("columns"),
@@ -717,6 +754,184 @@ sensitivity_server <- function(id, rv) {
         theme(axis.text.y = element_text(size = 8))
 
       grid.arrange(p1, p2, ncol = 2)
+    })
+
+    # Leave-One-Out Analysis
+    loo_results <- reactiveVal(NULL)
+
+    observeEvent(input$btn_run_loo, {
+      req(rv$data)
+
+      # Check if data has yi and sei columns
+      if (!all(c("yi", "sei") %in% names(rv$data))) {
+        showNotification(
+          "⚠ Data must have 'yi' and 'sei' columns for leave-one-out analysis. Please compute effect sizes first.",
+          type = "warning",
+          duration = 5
+        )
+        return()
+      }
+
+      withProgress(message = "Running leave-one-out analysis...", {
+
+        tryCatch({
+          library(metafor)
+
+          data <- rv$data
+          if (nrow(data) < 3) {
+            showNotification(
+              "⚠ Need at least 3 studies for meaningful leave-one-out analysis",
+              type = "warning",
+              duration = 4
+            )
+            return()
+          }
+
+          # Run base meta-analysis
+          ma_base <- rma(yi = data$yi, sei = data$sei, method = "REML", data = data)
+
+          # Run leave-one-out analysis
+          loo_ma <- leave1out(ma_base, digits = 4)
+
+          # Create results table
+          if (!"study_id" %in% names(data)) {
+            data$study_id <- paste0("Study_", seq_len(nrow(data)))
+          }
+
+          loo_table <- data.frame(
+            Study_Omitted = data$study_id,
+            Estimate = loo_ma$estimate,
+            SE = loo_ma$se,
+            CI_Lower = loo_ma$ci.lb,
+            CI_Upper = loo_ma$ci.ub,
+            p_value = loo_ma$pval,
+            I2 = loo_ma$I2,
+            tau2 = loo_ma$tau2,
+            stringsAsFactors = FALSE
+          )
+
+          # Calculate influence metrics
+          loo_table$Diff_from_Base <- loo_table$Estimate - ma_base$beta[1]
+          loo_table$Pct_Change <- 100 * loo_table$Diff_from_Base / ma_base$beta[1]
+
+          results <- list(
+            base_effect = ma_base$beta[1],
+            base_ci_lower = ma_base$ci.lb,
+            base_ci_upper = ma_base$ci.ub,
+            base_i2 = ma_base$I2,
+            loo_table = loo_table,
+            n_studies = nrow(data),
+            max_influence_study = loo_table$Study_Omitted[which.max(abs(loo_table$Diff_from_Base))],
+            max_influence_pct = max(abs(loo_table$Pct_Change))
+          )
+
+          loo_results(results)
+
+          showNotification(
+            sprintf("✓ Leave-one-out analysis complete. Most influential study: %s (%.1f%% change)",
+                    results$max_influence_study, results$max_influence_pct),
+            type = "message",
+            duration = 6
+          )
+
+        }, error = function(e) {
+          showNotification(
+            paste("⚠ Error running leave-one-out analysis:", e$message),
+            type = "error",
+            duration = 7
+          )
+        })
+      })
+    })
+
+    # Leave-one-out summary
+    output$loo_summary <- renderUI({
+      req(loo_results())
+      res <- loo_results()
+
+      div(
+        class = "alert alert-info",
+        h5(class = "mb-3", "Summary"),
+        tags$ul(
+          tags$li(tags$strong("Base model (all studies):"),
+                  sprintf("Effect = %.3f [%.3f, %.3f], I² = %.1f%%",
+                          res$base_effect, res$base_ci_lower, res$base_ci_upper, res$base_i2)),
+          tags$li(tags$strong("Number of studies:"), res$n_studies),
+          tags$li(tags$strong("Most influential study:"),
+                  sprintf("%s (%.1f%% change in pooled effect)",
+                          res$max_influence_study, res$max_influence_pct))
+        ),
+        tags$hr(),
+        tags$p(class = "mb-0",
+               tags$small("Studies with large influence (>10% change) should be investigated. ",
+                          "Check for outliers, data errors, or genuine differences."))
+      )
+    })
+
+    # Leave-one-out table
+    output$loo_table <- renderDT({
+      req(loo_results())
+      res <- loo_results()
+
+      display_table <- res$loo_table
+      display_table$Estimate <- sprintf("%.3f", display_table$Estimate)
+      display_table$SE <- sprintf("%.3f", display_table$SE)
+      display_table$CI_95 <- sprintf("[%.3f, %.3f]",
+                                      res$loo_table$CI_Lower,
+                                      res$loo_table$CI_Upper)
+      display_table$p_value <- sprintf("%.4f", display_table$p_value)
+      display_table$I2 <- sprintf("%.1f%%", display_table$I2)
+      display_table$tau2 <- sprintf("%.4f", display_table$tau2)
+      display_table$Diff <- sprintf("%.3f", display_table$Diff_from_Base)
+      display_table$Change <- sprintf("%.1f%%", display_table$Pct_Change)
+
+      display_table <- display_table[, c("Study_Omitted", "Estimate", "CI_95",
+                                          "p_value", "I2", "Diff", "Change")]
+      colnames(display_table) <- c("Study Omitted", "Pooled Effect", "95% CI",
+                                     "p-value", "I²", "Difference", "% Change")
+
+      datatable(
+        display_table,
+        options = list(
+          pageLength = 15,
+          dom = 'Bfrtip',
+          buttons = c('copy', 'csv', 'excel')
+        ),
+        rownames = FALSE
+      ) %>%
+        formatStyle(
+          "% Change",
+          backgroundColor = styleInterval(c(-10, 10), c("#ffe6e6", "white", "white", "#ffe6e6"))
+        )
+    })
+
+    # Leave-one-out plot
+    output$loo_plot <- renderPlot({
+      req(loo_results())
+      res <- loo_results()
+
+      loo_table <- res$loo_table
+      loo_table$Study_Omitted <- factor(loo_table$Study_Omitted,
+                                          levels = loo_table$Study_Omitted)
+
+      ggplot(loo_table, aes(x = Estimate, y = Study_Omitted)) +
+        geom_vline(xintercept = res$base_effect, linetype = "dashed",
+                   color = "blue", size = 1.2, alpha = 0.7) +
+        geom_point(size = 3, color = "darkred") +
+        geom_errorbarh(aes(xmin = CI_Lower, xmax = CI_Upper),
+                       height = 0.2, color = "darkred", alpha = 0.7) +
+        labs(
+          title = "Leave-One-Out Influence Analysis",
+          subtitle = sprintf("Blue dashed line = base model effect (%.3f)", res$base_effect),
+          x = "Pooled Effect Estimate (with 95% CI)",
+          y = "Study Omitted"
+        ) +
+        theme_minimal() +
+        theme(
+          axis.text.y = element_text(size = 10),
+          plot.title = element_text(face = "bold"),
+          panel.grid.major.y = element_line(color = "grey90")
+        )
     })
 
     # Delete scenario

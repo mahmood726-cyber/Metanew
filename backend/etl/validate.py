@@ -126,6 +126,7 @@ def validate_binary_data(df: pd.DataFrame) -> List[ValidationProblem]:
     if has_raw:
         for idx, row in df.iterrows():
             study_id = row.get("study_id", f"row_{idx}")
+            row_num = idx + 2  # +2 because Excel is 1-indexed and has header row
 
             # Check events <= n
             if pd.notna(row.get("events")) and pd.notna(row.get("n")):
@@ -133,7 +134,24 @@ def validate_binary_data(df: pd.DataFrame) -> List[ValidationProblem]:
                     problems.append(ValidationProblem(
                         severity="error",
                         field="events",
-                        message=f"Events ({row['events']}) > n ({row['n']})",
+                        message=f"Row {row_num}, Study '{study_id}': Events ({row['events']}) exceeds sample size n ({row['n']}). Check your data entry.",
+                        study_id=str(study_id)
+                    ))
+
+                # Check for negative values
+                if row["events"] < 0:
+                    problems.append(ValidationProblem(
+                        severity="error",
+                        field="events",
+                        message=f"Row {row_num}, Study '{study_id}': Events cannot be negative (got {row['events']}). Use non-negative integers only.",
+                        study_id=str(study_id)
+                    ))
+
+                if row["n"] < 0:
+                    problems.append(ValidationProblem(
+                        severity="error",
+                        field="n",
+                        message=f"Row {row_num}, Study '{study_id}': Sample size n cannot be negative (got {row['n']}). Use positive integers only.",
                         study_id=str(study_id)
                     ))
 
@@ -142,7 +160,7 @@ def validate_binary_data(df: pd.DataFrame) -> List[ValidationProblem]:
                     problems.append(ValidationProblem(
                         severity="info",
                         field="events",
-                        message="Zero cell detected - continuity correction may be applied",
+                        message=f"Row {row_num}, Study '{study_id}': Zero cell detected (events={row['events']}, n={row['n']}). Continuity correction (+0.5) will be applied automatically.",
                         study_id=str(study_id)
                     ))
 
@@ -150,13 +168,14 @@ def validate_binary_data(df: pd.DataFrame) -> List[ValidationProblem]:
     if has_yi:
         for idx, row in df.iterrows():
             study_id = row.get("study_id", f"row_{idx}")
+            row_num = idx + 2
 
             if pd.notna(row.get("sei")):
                 if row["sei"] <= 0:
                     problems.append(ValidationProblem(
                         severity="error",
                         field="sei",
-                        message=f"Standard error must be positive, got {row['sei']}",
+                        message=f"Row {row_num}, Study '{study_id}': Standard error (sei) must be positive (got {row['sei']}). Check your calculations.",
                         study_id=str(study_id)
                     ))
 
@@ -174,31 +193,61 @@ def validate_continuous_data(df: pd.DataFrame) -> List[ValidationProblem]:
         problems.append(ValidationProblem(
             severity="error",
             field="data",
-            message="Continuous data requires either (mean, sd, n) or (yi, sei) columns"
+            message="Continuous data requires either (mean, sd, n) or (yi, sei) columns. Please include columns: mean, sd, n OR yi, sei."
         ))
         return problems
 
     if has_raw:
         for idx, row in df.iterrows():
             study_id = row.get("study_id", f"row_{idx}")
+            row_num = idx + 2  # +2 because Excel is 1-indexed and has header row
 
             # Check SD is positive
             if pd.notna(row.get("sd")):
-                if row["sd"] <= 0:
+                if row["sd"] < 0:
                     problems.append(ValidationProblem(
                         severity="error",
                         field="sd",
-                        message=f"Standard deviation must be positive, got {row['sd']}",
+                        message=f"Row {row_num}, Study '{study_id}': Standard deviation (sd) cannot be negative (got {row['sd']}). Check your data entry.",
+                        study_id=str(study_id)
+                    ))
+                elif row["sd"] == 0:
+                    problems.append(ValidationProblem(
+                        severity="error",
+                        field="sd",
+                        message=f"Row {row_num}, Study '{study_id}': Standard deviation (sd) cannot be zero (got {row['sd']}). SD must be positive.",
                         study_id=str(study_id)
                     ))
 
             # Check n is positive integer
             if pd.notna(row.get("n")):
-                if row["n"] <= 0:
+                if row["n"] < 0:
                     problems.append(ValidationProblem(
                         severity="error",
                         field="n",
-                        message=f"Sample size must be positive, got {row['n']}",
+                        message=f"Row {row_num}, Study '{study_id}': Sample size (n) cannot be negative (got {row['n']}). Use positive integers only.",
+                        study_id=str(study_id)
+                    ))
+                elif row["n"] == 0:
+                    problems.append(ValidationProblem(
+                        severity="error",
+                        field="n",
+                        message=f"Row {row_num}, Study '{study_id}': Sample size (n) cannot be zero (got {row['n']}). N must be at least 1.",
+                        study_id=str(study_id)
+                    ))
+
+    # Validate effect size data if present
+    if has_yi:
+        for idx, row in df.iterrows():
+            study_id = row.get("study_id", f"row_{idx}")
+            row_num = idx + 2
+
+            if pd.notna(row.get("sei")):
+                if row["sei"] <= 0:
+                    problems.append(ValidationProblem(
+                        severity="error",
+                        field="sei",
+                        message=f"Row {row_num}, Study '{study_id}': Standard error (sei) must be positive (got {row['sei']}). Check your calculations.",
                         study_id=str(study_id)
                     ))
 
@@ -217,31 +266,68 @@ def validate_tte_data(df: pd.DataFrame) -> List[ValidationProblem]:
         problems.append(ValidationProblem(
             severity="error",
             field="data",
-            message="Time-to-event data requires hr or yi column"
+            message="Time-to-event data requires either 'hr' (hazard ratio) or 'yi' (log hazard ratio) column. Please include hr column OR yi and sei columns."
         ))
         return problems
 
     if has_hr:
         for idx, row in df.iterrows():
             study_id = row.get("study_id", f"row_{idx}")
+            row_num = idx + 2  # +2 because Excel is 1-indexed and has header row
 
             # Check HR is positive
             if pd.notna(row.get("hr")):
-                if row["hr"] <= 0:
+                if row["hr"] < 0:
                     problems.append(ValidationProblem(
                         severity="error",
                         field="hr",
-                        message=f"Hazard ratio must be positive, got {row['hr']}",
+                        message=f"Row {row_num}, Study '{study_id}': Hazard ratio (hr) cannot be negative (got {row['hr']}). HR must be positive.",
+                        study_id=str(study_id)
+                    ))
+                elif row["hr"] == 0:
+                    problems.append(ValidationProblem(
+                        severity="error",
+                        field="hr",
+                        message=f"Row {row_num}, Study '{study_id}': Hazard ratio (hr) cannot be zero (got {row['hr']}). HR must be positive.",
                         study_id=str(study_id)
                     ))
 
             # Check CI bounds if present
             if has_ci and pd.notna(row.get("ci_lower")) and pd.notna(row.get("ci_upper")):
+                if row["ci_lower"] < 0:
+                    problems.append(ValidationProblem(
+                        severity="error",
+                        field="ci_lower",
+                        message=f"Row {row_num}, Study '{study_id}': Confidence interval lower bound cannot be negative (got {row['ci_lower']}).",
+                        study_id=str(study_id)
+                    ))
+                if row["ci_upper"] < 0:
+                    problems.append(ValidationProblem(
+                        severity="error",
+                        field="ci_upper",
+                        message=f"Row {row_num}, Study '{study_id}': Confidence interval upper bound cannot be negative (got {row['ci_upper']}).",
+                        study_id=str(study_id)
+                    ))
                 if row["ci_lower"] >= row["ci_upper"]:
                     problems.append(ValidationProblem(
                         severity="error",
                         field="ci",
-                        message=f"CI lower ({row['ci_lower']}) >= upper ({row['ci_upper']})",
+                        message=f"Row {row_num}, Study '{study_id}': Confidence interval lower bound ({row['ci_lower']}) >= upper bound ({row['ci_upper']}). CI bounds are reversed or equal.",
+                        study_id=str(study_id)
+                    ))
+
+    # Validate effect size data if present
+    if has_yi:
+        for idx, row in df.iterrows():
+            study_id = row.get("study_id", f"row_{idx}")
+            row_num = idx + 2
+
+            if pd.notna(row.get("sei")):
+                if row["sei"] <= 0:
+                    problems.append(ValidationProblem(
+                        severity="error",
+                        field="sei",
+                        message=f"Row {row_num}, Study '{study_id}': Standard error (sei) must be positive (got {row['sei']}). Check your calculations.",
                         study_id=str(study_id)
                     ))
 
@@ -286,6 +372,7 @@ def check_implausible_values(df: pd.DataFrame, data_type: str) -> List[Validatio
 
     for idx, row in df.iterrows():
         study_id = row.get("study_id", f"row_{idx}")
+        row_num = idx + 2  # +2 because Excel is 1-indexed and has header row
 
         # Check effect sizes (log scale) - unlikely to be > |10|
         if "yi" in df.columns and pd.notna(row.get("yi")):
@@ -293,7 +380,7 @@ def check_implausible_values(df: pd.DataFrame, data_type: str) -> List[Validatio
                 problems.append(ValidationProblem(
                     severity="warning",
                     field="yi",
-                    message=f"Extreme effect size: {row['yi']:.2f} (possibly data entry error?)",
+                    message=f"Row {row_num}, Study '{study_id}': Extreme effect size ({row['yi']:.2f}). This may indicate a data entry error. Typical values are between -10 and 10.",
                     study_id=str(study_id)
                 ))
 
@@ -303,14 +390,14 @@ def check_implausible_values(df: pd.DataFrame, data_type: str) -> List[Validatio
                 problems.append(ValidationProblem(
                     severity="warning",
                     field="sei",
-                    message=f"Very large standard error: {row['sei']:.2f}",
+                    message=f"Row {row_num}, Study '{study_id}': Very large standard error ({row['sei']:.2f}). This suggests very high uncertainty or possible error.",
                     study_id=str(study_id)
                 ))
             if row["sei"] < 0.001:
                 problems.append(ValidationProblem(
                     severity="warning",
                     field="sei",
-                    message=f"Very small standard error: {row['sei']:.4f} (possibly too precise?)",
+                    message=f"Row {row_num}, Study '{study_id}': Very small standard error ({row['sei']:.4f}). This suggests unusually high precision or possible error.",
                     study_id=str(study_id)
                 ))
 
@@ -320,7 +407,7 @@ def check_implausible_values(df: pd.DataFrame, data_type: str) -> List[Validatio
                 problems.append(ValidationProblem(
                     severity="warning",
                     field="hr",
-                    message=f"Extreme hazard ratio: {row['hr']:.2f}",
+                    message=f"Row {row_num}, Study '{study_id}': Extreme hazard ratio ({row['hr']:.2f}). This may indicate a data entry error.",
                     study_id=str(study_id)
                 ))
 
@@ -330,19 +417,19 @@ def check_implausible_values(df: pd.DataFrame, data_type: str) -> List[Validatio
                 problems.append(ValidationProblem(
                     severity="warning",
                     field="n",
-                    message=f"Small sample size: n={row['n']} (may have low precision)",
+                    message=f"Row {row_num}, Study '{study_id}': Small sample size (n={row['n']}). Results may have low precision.",
                     study_id=str(study_id)
                 ))
 
         # Check event rates for binary data
         if data_type == "binary" and "events" in df.columns and "n" in df.columns:
-            if pd.notna(row.get("events")) and pd.notna(row.get("n")):
+            if pd.notna(row.get("events")) and pd.notna(row.get("n")) and row.get("n") > 0:
                 event_rate = row["events"] / row["n"]
                 if event_rate > 0.95:
                     problems.append(ValidationProblem(
                         severity="info",
                         field="events",
-                        message=f"Very high event rate: {event_rate*100:.1f}%",
+                        message=f"Row {row_num}, Study '{study_id}': Very high event rate ({event_rate*100:.1f}%). This is informational only.",
                         study_id=str(study_id)
                     ))
 
@@ -354,7 +441,7 @@ def check_implausible_values(df: pd.DataFrame, data_type: str) -> List[Validatio
                     problems.append(ValidationProblem(
                         severity="error",
                         field=col,
-                        message=f"Negative value not allowed for {col}: {row[col]}",
+                        message=f"Row {row_num}, Study '{study_id}': Column '{col}' cannot be negative (got {row[col]}). Please check your data.",
                         study_id=str(study_id)
                     ))
 
@@ -366,7 +453,7 @@ def check_implausible_values(df: pd.DataFrame, data_type: str) -> List[Validatio
                         problems.append(ValidationProblem(
                             severity="error",
                             field=col,
-                            message=f"Utility value out of range [0,1]: {row[col]}",
+                            message=f"Row {row_num}, Study '{study_id}': Utility/QOL value must be between 0 and 1 (got {row[col]}). Please use values on 0-1 scale.",
                             study_id=str(study_id)
                         ))
 
@@ -396,11 +483,12 @@ def detect_outliers(df: pd.DataFrame, data_type: str) -> List[ValidationProblem]
             for idx, row in df.iterrows():
                 if pd.notna(row.get("yi")):
                     study_id = row.get("study_id", f"row_{idx}")
+                    row_num = idx + 2
                     if row["yi"] < lower_bound or row["yi"] > upper_bound:
                         problems.append(ValidationProblem(
                             severity="warning",
                             field="yi",
-                            message=f"Potential outlier: effect size = {row['yi']:.3f} (outside 3×IQR bounds)",
+                            message=f"Row {row_num}, Study '{study_id}': Potential outlier detected. Effect size = {row['yi']:.3f} (outside 3×IQR bounds). Consider sensitivity analysis excluding this study.",
                             study_id=str(study_id)
                         ))
 
@@ -412,19 +500,20 @@ def detect_outliers(df: pd.DataFrame, data_type: str) -> List[ValidationProblem]
             for idx, row in df.iterrows():
                 if pd.notna(row.get("n")):
                     study_id = row.get("study_id", f"row_{idx}")
+                    row_num = idx + 2
                     # Flag if sample size is > 10x or < 0.1x median
                     if row["n"] > median_n * 10:
                         problems.append(ValidationProblem(
                             severity="info",
                             field="n",
-                            message=f"Unusually large sample size: n={row['n']} (median={median_n:.0f})",
+                            message=f"Row {row_num}, Study '{study_id}': Unusually large sample size (n={row['n']}, median={median_n:.0f}). This study may dominate the meta-analysis.",
                             study_id=str(study_id)
                         ))
                     elif row["n"] < median_n * 0.1 and row["n"] > 0:
                         problems.append(ValidationProblem(
                             severity="info",
                             field="n",
-                            message=f"Unusually small sample size: n={row['n']} (median={median_n:.0f})",
+                            message=f"Row {row_num}, Study '{study_id}': Unusually small sample size (n={row['n']}, median={median_n:.0f}). This study will have low weight.",
                             study_id=str(study_id)
                         ))
 

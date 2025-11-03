@@ -83,10 +83,28 @@ meta_pairwise_ui <- function(id) {
           ),
           nav_panel(
             "Forest Plot",
+            div(
+              class = "d-flex justify-content-end mb-2",
+              div(
+                class = "btn-group btn-group-sm",
+                downloadButton(ns("download_forest_pdf"), "PDF", class = "btn-outline-primary"),
+                downloadButton(ns("download_forest_svg"), "SVG", class = "btn-outline-primary"),
+                downloadButton(ns("download_forest_png"), "PNG (High-res)", class = "btn-outline-primary")
+              )
+            ),
             plotlyOutput(ns("forest_plot"), height = "600px")
           ),
           nav_panel(
             "Funnel Plot",
+            div(
+              class = "d-flex justify-content-end mb-2",
+              div(
+                class = "btn-group btn-group-sm",
+                downloadButton(ns("download_funnel_pdf"), "PDF", class = "btn-outline-primary"),
+                downloadButton(ns("download_funnel_svg"), "SVG", class = "btn-outline-primary"),
+                downloadButton(ns("download_funnel_png"), "PNG (High-res)", class = "btn-outline-primary")
+              )
+            ),
             plotlyOutput(ns("funnel_plot"), height = "500px")
           ),
           nav_panel(
@@ -405,6 +423,134 @@ meta_pairwise_server <- function(id, rv) {
              lwd = c(NA, if (tf$k0 > 0) NA else NULL, 2, if (tf$k0 > 0) 2 else NULL),
              bg = "white")
     })
+
+    # Download handlers for forest plot
+    output$download_forest_pdf <- downloadHandler(
+      filename = function() {
+        paste0("forest_plot_", format(Sys.time(), "%Y%m%d_%H%M%S"), ".pdf")
+      },
+      content = function(file) {
+        req(ma_result())
+        pdf(file, width = 10, height = 8)
+        tryCatch({
+          result <- ma_result()
+          metafor::forest(result$model_object,
+                          main = "Forest Plot",
+                          xlab = "Effect Size",
+                          slab = if ("study_id" %in% names(result$data)) result$data$study_id else NULL)
+        }, error = function(e) {
+          plot.new()
+          text(0.5, 0.5, paste("Error:", e$message))
+        })
+        dev.off()
+      }
+    )
+
+    output$download_forest_svg <- downloadHandler(
+      filename = function() {
+        paste0("forest_plot_", format(Sys.time(), "%Y%m%d_%H%M%S"), ".svg")
+      },
+      content = function(file) {
+        req(ma_result())
+        svg(file, width = 10, height = 8)
+        tryCatch({
+          result <- ma_result()
+          metafor::forest(result$model_object,
+                          main = "Forest Plot",
+                          xlab = "Effect Size",
+                          slab = if ("study_id" %in% names(result$data)) result$data$study_id else NULL)
+        }, error = function(e) {
+          plot.new()
+          text(0.5, 0.5, paste("Error:", e$message))
+        })
+        dev.off()
+      }
+    )
+
+    output$download_forest_png <- downloadHandler(
+      filename = function() {
+        paste0("forest_plot_", format(Sys.time(), "%Y%m%d_%H%M%S"), ".png")
+      },
+      content = function(file) {
+        req(ma_result())
+        png(file, width = 3000, height = 2400, res = 300)  # High resolution
+        tryCatch({
+          result <- ma_result()
+          metafor::forest(result$model_object,
+                          main = "Forest Plot",
+                          xlab = "Effect Size",
+                          slab = if ("study_id" %in% names(result$data)) result$data$study_id else NULL)
+        }, error = function(e) {
+          plot.new()
+          text(0.5, 0.5, paste("Error:", e$message))
+        })
+        dev.off()
+      }
+    )
+
+    # Download handlers for funnel plot
+    output$download_funnel_pdf <- downloadHandler(
+      filename = function() {
+        paste0("funnel_plot_", format(Sys.time(), "%Y%m%d_%H%M%S"), ".pdf")
+      },
+      content = function(file) {
+        req(ma_result())
+        pdf(file, width = 8, height = 8)
+        tryCatch({
+          result <- ma_result()
+          metafor::funnel(result$model_object,
+                          main = "Funnel Plot",
+                          xlab = "Effect Size",
+                          ylab = "Standard Error")
+        }, error = function(e) {
+          plot.new()
+          text(0.5, 0.5, paste("Error:", e$message))
+        })
+        dev.off()
+      }
+    )
+
+    output$download_funnel_svg <- downloadHandler(
+      filename = function() {
+        paste0("funnel_plot_", format(Sys.time(), "%Y%m%d_%H%M%S"), ".svg")
+      },
+      content = function(file) {
+        req(ma_result())
+        svg(file, width = 8, height = 8)
+        tryCatch({
+          result <- ma_result()
+          metafor::funnel(result$model_object,
+                          main = "Funnel Plot",
+                          xlab = "Effect Size",
+                          ylab = "Standard Error")
+        }, error = function(e) {
+          plot.new()
+          text(0.5, 0.5, paste("Error:", e$message))
+        })
+        dev.off()
+      }
+    )
+
+    output$download_funnel_png <- downloadHandler(
+      filename = function() {
+        paste0("funnel_plot_", format(Sys.time(), "%Y%m%d_%H%M%S"), ".png")
+      },
+      content = function(file) {
+        req(ma_result())
+        png(file, width = 2400, height = 2400, res = 300)  # High resolution
+        tryCatch({
+          result <- ma_result()
+          metafor::funnel(result$model_object,
+                          main = "Funnel Plot",
+                          xlab = "Effect Size",
+                          ylab = "Standard Error")
+        }, error = function(e) {
+          plot.new()
+          text(0.5, 0.5, paste("Error:", e$message))
+        })
+        dev.off()
+      }
+    )
 
     # Return results
     return(reactive({
