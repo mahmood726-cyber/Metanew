@@ -548,9 +548,9 @@ Metanew has undergone a remarkable 6-month transformation from a promising proto
 
 **Medium Priority (6-12 Months):**
 5. Real-time collaboration features
-6. Mobile companion app
-7. Additional export formats
-8. Enhanced NMA (Bayesian integration)
+6. Additional export formats (Excel, CSV data export)
+7. Enhanced NMA (Bayesian integration)
+8. Keyboard shortcuts and power user features
 
 **Low Priority (12+ Months):**
 9. IPD meta-analysis

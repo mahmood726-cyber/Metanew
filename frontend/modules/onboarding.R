@@ -9,7 +9,7 @@
 # - Step-by-step guided tours
 # - Interactive walkthroughs for common workflows
 # - Contextual help and tooltips
-# - Video tutorial library
+# - Interactive tutorial library
 # - Quick start wizard
 # - Best practices guidance
 # =============================================================================
@@ -131,7 +131,7 @@ show_welcome_modal <- function(session) {
         )
       ),
 
-      # Video library
+      # Example datasets
       div(
         class = "tour-option",
         style = "border: 2px solid #E5E7EB;
@@ -139,7 +139,7 @@ show_welcome_modal <- function(session) {
                  padding: 20px;
                  margin-bottom: 15px;
                  cursor: pointer;",
-        onclick = "Shiny.setInputValue('tour_selected', 'videos', {priority: 'event'});",
+        onclick = "Shiny.setInputValue('tour_selected', 'examples', {priority: 'event'});",
 
         fluidRow(
           column(
@@ -147,14 +147,14 @@ show_welcome_modal <- function(session) {
             div(
               style = "background: #FEF3C7; width: 60px; height: 60px; border-radius: 50%;
                        display: flex; align-items: center; justify-content: center;",
-              icon("video", class = "fa-2x", style = "color: #FFB800;")
+              icon("database", class = "fa-2x", style = "color: #FFB800;")
             )
           ),
           column(
             width = 10,
-            h5("🎥 Video Tutorial Library", style = "margin: 0 0 8px 0; color: #FFB800;"),
+            h5("📊 Example Datasets & Templates", style = "margin: 0 0 8px 0; color: #FFB800;"),
             p(
-              "Browse 20+ video tutorials covering every feature. Learn at your own pace with step-by-step demonstrations.",
+              "Explore real-world example analyses and templates for common review types. Learn by seeing complete workflows.",
               style = "margin: 0; color: #6B7280;"
             )
           )
@@ -534,10 +534,10 @@ show_reporting_tour <- function(session) {
   ))
 }
 
-#' Video tutorial library
+#' Example datasets library
 #'
-#' @return List of video tutorials
-get_video_library <- function() {
+#' @return List of example datasets and templates
+get_example_library <- function() {
   list(
     list(
       title = "Quick Start: Your First Meta-Analysis",

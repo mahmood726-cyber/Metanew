@@ -447,7 +447,7 @@ A: Excellent clinical explanation
 
 **Comparison:**
 - RevMan: PDF manual (boring, hard to follow)
-- CMA: Video tutorials (good but scattered)
+- CMA: Mix of PDFs and help files (scattered)
 - Metanew: Interactive in-app tutorials (BEST)
 
 **Time to Proficiency:**
@@ -587,8 +587,8 @@ A: Excellent clinical explanation
 
 **Weaknesses:**
 - Full user manual could be more comprehensive ⚠️
-- Video library could be expanded ⚠️
 - Some advanced features lack detailed guides ⚠️
+- Could benefit from more example datasets ⚠️
 
 **Rating: 4.6/5** - Good, but could be more comprehensive for advanced features.
 
@@ -619,10 +619,6 @@ A: Excellent clinical explanation
 - Can't invite co-authors to review online
 - **Impact:** Medium (would be nice to have)
 
-**5. Mobile Access (N/A)**
-- Desktop only, no mobile app
-- **Impact:** Low (meta-analysis is desktop work)
-
 ---
 
 ### What's Still Missing (Wishlist)
@@ -651,10 +647,10 @@ A: Excellent clinical explanation
    - Example analyses
    - **Priority:** MEDIUM
 
-5. **Mobile Companion App** ⭐⭐
-   - View results on phone/tablet
-   - Quick updates
-   - **Priority:** LOW
+5. **Keyboard Shortcuts** ⭐⭐⭐
+   - Speed up common operations
+   - Power user efficiency
+   - **Priority:** MEDIUM
 
 ---
 

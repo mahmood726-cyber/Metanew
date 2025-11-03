@@ -39,6 +39,14 @@ source("modules/partitioned_survival.R")       # Partitioned Survival for oncolo
 source("modules/multivariate_ma.R")            # Multivariate MA - NEW!
 source("modules/evppi.R")                      # Value of Information (EVPPI) - NEW!
 source("modules/onboarding.R")                 # Interactive tutorials - NEW!
+
+# V2.1 ENHANCEMENT MODULES (User & Methodologist Feedback)
+source("modules/keyboard_shortcuts.R")         # Power user keyboard shortcuts - NEW!
+source("modules/examples_templates.R")         # Example datasets & templates - NEW!
+source("modules/export_enhanced.R")            # Excel/CSV export options - NEW!
+source("modules/power_analysis.R")             # Sample size & power analysis - NEW!
+source("modules/diagnostic_plots_enhanced.R")  # Enhanced diagnostic plots - NEW!
+
 # source("modules/collaboration.R")            # TODO: Real-time collaboration (future)
 
 # Source utilities
@@ -446,7 +454,31 @@ ui <- page_navbar(
     )
   ),
 
-  # Tab 10: AI Copilot
+  # Tab 10: Diagnostic Plots (NEW - Enhanced!)
+  nav_panel(
+    title = "Diagnostics",
+    icon = icon("chart-area"),
+    value = "diagnostics",
+    diagnostic_plots_ui("diagnostics")
+  ),
+
+  # Tab 11: Power Analysis (NEW!)
+  nav_panel(
+    title = "Power Analysis",
+    icon = icon("calculator"),
+    value = "power",
+    power_analysis_ui("power_analysis")
+  ),
+
+  # Tab 12: Examples & Templates (NEW!)
+  nav_panel(
+    title = "Examples",
+    icon = icon("lightbulb"),
+    value = "examples",
+    examples_templates_ui("examples")
+  ),
+
+  # Tab 13: AI Copilot
   nav_panel(
     title = "AI Copilot",
     icon = icon("robot"),
@@ -454,7 +486,7 @@ ui <- page_navbar(
     ai_copilot_ui("ai_copilot")
   ),
 
-  # Tab 11: Collaboration (NEW!) - TODO
+  # Tab 14: Collaboration (TODO - Future)
   # nav_panel(
   #   title = "Collaborate",
   #   icon = icon("users"),
@@ -462,12 +494,19 @@ ui <- page_navbar(
   #   collaboration_ui("collaboration")
   # ),
 
-  # Tab 12: Reports
-  nav_panel(
-    title = "Reports",
-    icon = icon("file-pdf"),
-    value = "reports",
-    reporting_ui("reporting")
+  # Tab 15: Reports & Export (Enhanced!)
+  nav_menu(
+    title = "Export",
+    icon = icon("file-export"),
+
+    nav_panel(
+      "Word/PDF Reports",
+      reporting_ui("reporting")
+    ),
+    nav_panel(
+      "Excel/CSV Export",
+      export_enhanced_ui("export_enhanced")
+    )
   ),
 
   # Tab 13: Audit Trail
@@ -873,6 +912,13 @@ server <- function(input, output, session) {
   survival_ps_results <- partitioned_survival_server("survival_ps", rv)  # NEW - Partitioned survival for HTA
   he_bcea_results <- he_bcea_server("he_bcea", rv)
   evppi_results <- evppi_server("evppi", rv)  # NEW - EVPPI
+
+  # V2.1 Enhancement Modules (User & Methodologist Feedback)
+  diagnostic_plots_results <- diagnostic_plots_server("diagnostics", rv)  # NEW - Enhanced diagnostic plots
+  power_analysis_results <- power_analysis_server("power_analysis", rv)  # NEW - Power & sample size
+  examples_results <- examples_templates_server("examples", rv)  # NEW - Examples & templates
+  export_enhanced_results <- export_enhanced_server("export_enhanced", rv)  # NEW - Excel/CSV export
+  keyboard_shortcuts_results <- keyboard_shortcuts_server("keyboard_shortcuts", rv)  # NEW - Keyboard shortcuts
 
   # AI Copilot
   ai_copilot_results <- ai_copilot_server("ai_copilot", rv)
