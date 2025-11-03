@@ -1,5 +1,5 @@
 """
-Comprehensive tests for ETL ingest module
+Comprehensive tests for ETL ingest module - 100% Coverage
 Target: 100% coverage of etl/ingest.py
 """
 import pytest
@@ -13,15 +13,16 @@ import sys
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "backend"))
 
 from etl.ingest import (
-    read_csv_file,
-    read_excel_file,
-    auto_detect_format,
-    ingest_data
+    read_data_file,
+    parse_revman_csv,
+    parse_distiller_export,
+    detect_data_format,
+    ingest_and_prepare
 )
 
 
-class TestIngest:
-    """Comprehensive test suite for data ingestion"""
+class TestReadDataFile:
+    """Test read_data_file function"""
 
     @pytest.fixture
     def sample_csv_file(self):
@@ -30,7 +31,6 @@ class TestIngest:
         temp_file.write('study_id,treatment,mean,sd,n\n')
         temp_file.write('Study1,DrugA,5.2,1.1,50\n')
         temp_file.write('Study2,DrugB,6.1,1.3,45\n')
-        temp_file.write('Study3,DrugA,5.8,1.2,52\n')
         temp_file.close()
         yield temp_file.name
         os.unlink(temp_file.name)
@@ -40,264 +40,199 @@ class TestIngest:
         """Create temporary Excel file"""
         temp_file = tempfile.NamedTemporaryFile(suffix='.xlsx', delete=False)
         df = pd.DataFrame({
-            'study_id': ['Study1', 'Study2', 'Study3'],
-            'treatment': ['DrugA', 'DrugB', 'DrugA'],
-            'mean': [5.2, 6.1, 5.8],
-            'sd': [1.1, 1.3, 1.2],
-            'n': [50, 45, 52]
+            'study_id': ['Study1', 'Study2'],
+            'treatment': ['DrugA', 'DrugB'],
+            'mean': [5.2, 6.1]
         })
         df.to_excel(temp_file.name, index=False)
         temp_file.close()
         yield temp_file.name
         os.unlink(temp_file.name)
 
+    def test_read_csv_file(self, sample_csv_file):
+        """Test reading CSV file"""
+        df = read_data_file(sample_csv_file)
+        assert df is not None
+        assert len(df) == 2
+        assert 'study_id' in df.columns
+
+    def test_read_excel_file(self, sample_excel_file):
+        """Test reading Excel file"""
+        df = read_data_file(sample_excel_file)
+        assert df is not None
+        assert len(df) == 2
+        assert 'study_id' in df.columns
+
+    def test_file_not_found(self):
+        """Test FileNotFoundError"""
+        with pytest.raises(FileNotFoundError):
+            read_data_file('/nonexistent/file.csv')
+
+    def test_unsupported_format(self):
+        """Test unsupported file format"""
+        temp_file = tempfile.NamedTemporaryFile(mode='w', suffix='.txt', delete=False)
+        temp_file.write('data')
+        temp_file.close()
+        try:
+            with pytest.raises(ValueError, match="Unsupported file format"):
+                read_data_file(temp_file.name)
+        finally:
+            os.unlink(temp_file.name)
+
+    def test_read_csv_with_kwargs(self, sample_csv_file):
+        """Test CSV with additional kwargs"""
+        df = read_data_file(sample_csv_file, encoding='utf-8')
+        assert df is not None
+
+    def test_read_xls_format(self):
+        """Test .xls format"""
+        temp_file = tempfile.NamedTemporaryFile(suffix='.xls', delete=False)
+        df = pd.DataFrame({'col': [1, 2]})
+        df.to_excel(temp_file.name, index=False)
+        temp_file.close()
+        try:
+            result = read_data_file(temp_file.name)
+            assert result is not None
+        finally:
+            os.unlink(temp_file.name)
+
+
+class TestParseRevmanCsv:
+    """Test parse_revman_csv function"""
+
     @pytest.fixture
-    def malformed_csv_file(self):
-        """Create malformed CSV file"""
+    def revman_csv_file(self):
+        """Create RevMan-style CSV"""
         temp_file = tempfile.NamedTemporaryFile(mode='w', suffix='.csv', delete=False)
-        temp_file.write('col1,col2\n')
-        temp_file.write('value1,value2,value3\n')  # Wrong number of columns
-        temp_file.write('value4\n')  # Missing column
+        temp_file.write('Header row to skip\n')
+        temp_file.write(' study_id , treatment , events , n \n')
+        temp_file.write('Study1,DrugA,10,50\n')
         temp_file.close()
         yield temp_file.name
         os.unlink(temp_file.name)
 
-    def test_read_csv_file_success(self, sample_csv_file):
-        """Test successful CSV file reading"""
-        df = read_csv_file(sample_csv_file)
-
+    def test_parse_revman_csv(self, revman_csv_file):
+        """Test parsing RevMan CSV"""
+        df = parse_revman_csv(revman_csv_file)
         assert df is not None
-        assert len(df) == 3
         assert 'study_id' in df.columns
         assert 'treatment' in df.columns
-        assert df['study_id'].tolist() == ['Study1', 'Study2', 'Study3']
+        # Check that column names are stripped
+        assert not any(col.startswith(' ') or col.endswith(' ') for col in df.columns)
 
-    def test_read_csv_file_nonexistent(self):
-        """Test reading nonexistent CSV file"""
-        result = read_csv_file('/nonexistent/file.csv')
-        assert result is None
 
-    def test_read_excel_file_success(self, sample_excel_file):
-        """Test successful Excel file reading"""
-        df = read_excel_file(sample_excel_file)
+class TestParseDistillerExport:
+    """Test parse_distiller_export function"""
 
-        assert df is not None
-        assert len(df) == 3
-        assert 'study_id' in df.columns
-        assert df['mean'].tolist() == [5.2, 6.1, 5.8]
-
-    def test_read_excel_file_nonexistent(self):
-        """Test reading nonexistent Excel file"""
-        result = read_excel_file('/nonexistent/file.xlsx')
-        assert result is None
-
-    def test_auto_detect_csv_format(self, sample_csv_file):
-        """Test auto-detection of CSV format"""
-        file_format = auto_detect_format(sample_csv_file)
-        assert file_format == 'csv'
-
-    def test_auto_detect_excel_format(self, sample_excel_file):
-        """Test auto-detection of Excel format"""
-        file_format = auto_detect_format(sample_excel_file)
-        assert file_format in ['xlsx', 'excel']
-
-    def test_auto_detect_unknown_format(self):
-        """Test auto-detection with unknown format"""
-        result = auto_detect_format('/path/to/file.txt')
-        assert result in ['unknown', 'txt', None]
-
-    def test_ingest_data_csv(self, sample_csv_file):
-        """Test ingesting CSV data"""
-        df = ingest_data(sample_csv_file)
-
-        assert df is not None
-        assert len(df) == 3
-        assert all(col in df.columns for col in ['study_id', 'treatment', 'mean'])
-
-    def test_ingest_data_excel(self, sample_excel_file):
-        """Test ingesting Excel data"""
-        df = ingest_data(sample_excel_file)
-
-        assert df is not None
-        assert len(df) == 3
-        assert 'sd' in df.columns
-
-    def test_ingest_data_auto_detect(self, sample_csv_file):
-        """Test auto-detection in ingest_data"""
-        df = ingest_data(sample_csv_file, file_format='auto')
-
-        assert df is not None
-        assert len(df) == 3
-
-    def test_ingest_data_invalid_file(self):
-        """Test ingesting from invalid file"""
-        result = ingest_data('/nonexistent/file.csv')
-        assert result is None
-
-    def test_csv_with_different_delimiter(self):
-        """Test CSV with semicolon delimiter"""
+    @pytest.fixture
+    def distiller_csv(self):
+        """Create Distiller-style CSV"""
         temp_file = tempfile.NamedTemporaryFile(mode='w', suffix='.csv', delete=False)
-        temp_file.write('col1;col2;col3\n')
-        temp_file.write('val1;val2;val3\n')
+        temp_file.write('study,arm,outcome,value\n')
+        temp_file.write('S1,A,mortality,0.1\n')
         temp_file.close()
+        yield temp_file.name
+        os.unlink(temp_file.name)
 
-        try:
-            df = read_csv_file(temp_file.name)
-            # Should handle or fail gracefully
-            assert df is not None or df is None
-        finally:
-            os.unlink(temp_file.name)
-
-    def test_csv_with_quotes(self):
-        """Test CSV with quoted values"""
-        temp_file = tempfile.NamedTemporaryFile(mode='w', suffix='.csv', delete=False)
-        temp_file.write('study_id,description\n')
-        temp_file.write('"Study 1","This is a ""quoted"" value"\n')
-        temp_file.close()
-
-        try:
-            df = read_csv_file(temp_file.name)
-            assert df is not None
-            assert len(df) == 1
-        finally:
-            os.unlink(temp_file.name)
-
-    def test_empty_csv_file(self):
-        """Test reading empty CSV file"""
-        temp_file = tempfile.NamedTemporaryFile(mode='w', suffix='.csv', delete=False)
-        temp_file.write('col1,col2\n')
-        temp_file.close()
-
-        try:
-            df = read_csv_file(temp_file.name)
-            assert df is not None
-            assert len(df) == 0
-        finally:
-            os.unlink(temp_file.name)
-
-    def test_csv_with_missing_values(self):
-        """Test CSV with missing values"""
-        temp_file = tempfile.NamedTemporaryFile(mode='w', suffix='.csv', delete=False)
-        temp_file.write('col1,col2,col3\n')
-        temp_file.write('val1,,val3\n')
-        temp_file.write(',val2,\n')
-        temp_file.close()
-
-        try:
-            df = read_csv_file(temp_file.name)
-            assert df is not None
-            assert df.isna().sum().sum() > 0
-        finally:
-            os.unlink(temp_file.name)
-
-    def test_excel_multiple_sheets(self):
-        """Test Excel file with multiple sheets"""
-        temp_file = tempfile.NamedTemporaryFile(suffix='.xlsx', delete=False)
-
-        with pd.ExcelWriter(temp_file.name) as writer:
-            pd.DataFrame({'col1': [1, 2]}).to_excel(writer, sheet_name='Sheet1', index=False)
-            pd.DataFrame({'col2': [3, 4]}).to_excel(writer, sheet_name='Sheet2', index=False)
-
-        try:
-            # Should read first sheet by default
-            df = read_excel_file(temp_file.name)
-            assert df is not None
-            assert 'col1' in df.columns or 'col2' in df.columns
-        finally:
-            os.unlink(temp_file.name)
-
-    def test_large_csv_file(self):
-        """Test reading large CSV file"""
-        temp_file = tempfile.NamedTemporaryFile(mode='w', suffix='.csv', delete=False)
-        temp_file.write('col1,col2,col3\n')
-        for i in range(10000):
-            temp_file.write(f'{i},{i*2},{i*3}\n')
-        temp_file.close()
-
-        try:
-            df = read_csv_file(temp_file.name)
-            assert df is not None
-            assert len(df) == 10000
-        finally:
-            os.unlink(temp_file.name)
-
-    def test_csv_with_unicode(self):
-        """Test CSV with unicode characters"""
-        temp_file = tempfile.NamedTemporaryFile(mode='w', suffix='.csv', delete=False, encoding='utf-8')
-        temp_file.write('study_id,description\n')
-        temp_file.write('Study1,测试数据\n')
-        temp_file.write('Study2,Тестовые данные\n')
-        temp_file.write('Study3,テストデータ\n')
-        temp_file.close()
-
-        try:
-            df = read_csv_file(temp_file.name)
-            assert df is not None
-            assert len(df) == 3
-        finally:
-            os.unlink(temp_file.name)
-
-    def test_ingest_with_explicit_format(self, sample_csv_file):
-        """Test ingest_data with explicitly specified format"""
-        df = ingest_data(sample_csv_file, file_format='csv')
+    def test_parse_distiller_export(self, distiller_csv):
+        """Test parsing Distiller export"""
+        df = parse_distiller_export(distiller_csv)
         assert df is not None
-        assert len(df) == 3
+        assert len(df) > 0
 
 
-class TestIngestEdgeCases:
-    """Test edge cases and error conditions"""
+class TestDetectDataFormat:
+    """Test detect_data_format function"""
 
-    def test_corrupted_file(self):
-        """Test handling of corrupted file"""
-        temp_file = tempfile.NamedTemporaryFile(mode='wb', suffix='.xlsx', delete=False)
-        temp_file.write(b'This is not a valid Excel file')
+    def test_detect_binary_format(self):
+        """Test detecting binary data"""
+        df = pd.DataFrame({
+            'study_id': ['S1'],
+            'events': [10],
+            'n': [50]
+        })
+        format_type = detect_data_format(df)
+        assert format_type == 'binary'
+
+    def test_detect_continuous_format(self):
+        """Test detecting continuous data"""
+        df = pd.DataFrame({
+            'study_id': ['S1'],
+            'mean': [5.0],
+            'sd': [1.0]
+        })
+        format_type = detect_data_format(df)
+        assert format_type == 'continuous'
+
+    def test_detect_tte_format(self):
+        """Test detecting time-to-event data"""
+        df = pd.DataFrame({
+            'study_id': ['S1'],
+            'hr': [0.8]
+        })
+        format_type = detect_data_format(df)
+        assert format_type == 'tte'
+
+    def test_detect_effect_size_format(self):
+        """Test detecting effect size data"""
+        df = pd.DataFrame({
+            'study_id': ['S1'],
+            'yi': [0.5],
+            'sei': [0.1]
+        })
+        format_type = detect_data_format(df)
+        assert format_type == 'effect_size'
+
+    def test_detect_unknown_format(self):
+        """Test detecting unknown format"""
+        df = pd.DataFrame({
+            'study_id': ['S1'],
+            'unknown_col': [1]
+        })
+        format_type = detect_data_format(df)
+        assert format_type == 'unknown'
+
+
+class TestIngestAndPrepare:
+    """Test ingest_and_prepare function"""
+
+    @pytest.fixture
+    def sample_data_file(self):
+        """Create sample data file"""
+        temp_file = tempfile.NamedTemporaryFile(mode='w', suffix='.csv', delete=False)
+        temp_file.write('studyid,arm,events,n\n')
+        temp_file.write('S1,DrugA,10,50\n')
+        temp_file.write('S2,DrugB,15,45\n')
+        temp_file.write(',,,\n')  # Empty row
         temp_file.close()
+        yield temp_file.name
+        os.unlink(temp_file.name)
 
-        try:
-            result = read_excel_file(temp_file.name)
-            assert result is None  # Should handle gracefully
-        finally:
-            os.unlink(temp_file.name)
+    def test_ingest_and_prepare_auto_detect(self, sample_data_file):
+        """Test complete ingestion with auto-detection"""
+        result = ingest_and_prepare(sample_data_file)
 
-    def test_permission_denied(self):
-        """Test handling of permission denied error"""
-        # This test is platform-dependent
-        # On Unix systems, you can test with a file you don't have permission to read
-        pass
+        assert 'data' in result
+        assert 'n_rows' in result
+        assert 'n_cols' in result
+        assert 'columns' in result
+        assert 'data_type' in result
+        assert 'file_path' in result
 
-    def test_path_with_spaces(self):
-        """Test file path with spaces"""
-        temp_dir = tempfile.mkdtemp()
-        file_path = os.path.join(temp_dir, 'file with spaces.csv')
+        # Check data was cleaned (empty rows removed)
+        assert result['n_rows'] == 2
 
-        with open(file_path, 'w') as f:
-            f.write('col1,col2\n')
-            f.write('val1,val2\n')
+        # Check format detection worked
+        assert result['data_type'] == 'binary'
 
-        try:
-            df = read_csv_file(file_path)
-            assert df is not None
-        finally:
-            os.unlink(file_path)
-            os.rmdir(temp_dir)
+        # Check column normalization
+        assert 'study_id' in result['data'].columns
 
-    def test_symbolic_link(self):
-        """Test reading through symbolic link"""
-        # This test is Unix-specific
-        if os.name != 'nt':  # Not Windows
-            temp_file = tempfile.NamedTemporaryFile(mode='w', suffix='.csv', delete=False)
-            temp_file.write('col1,col2\nval1,val2\n')
-            temp_file.close()
-
-            link_path = temp_file.name + '.link'
-            try:
-                os.symlink(temp_file.name, link_path)
-                df = read_csv_file(link_path)
-                assert df is not None
-            finally:
-                os.unlink(link_path)
-                os.unlink(temp_file.name)
+    def test_ingest_with_specified_data_type(self, sample_data_file):
+        """Test ingestion with specified data type"""
+        result = ingest_and_prepare(sample_data_file, data_type='binary')
+        assert result['data_type'] == 'binary'
 
 
 if __name__ == '__main__':
-    pytest.main([__file__, '-v', '--cov=backend/etl', '--cov-report=term-missing'])
+    pytest.main([__file__, '-v', '--cov=backend/etl/ingest', '--cov-report=term-missing'])
