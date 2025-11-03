@@ -74,6 +74,11 @@ source("modules/figure_editor.R")              # Publication-ready figure editor
 source("modules/citation_manager.R")           # Citation manager integration ✅ STANDARD
 source("modules/submission_package.R")         # Journal submission package ✅ STANDARD
 
+# V3.4 ADVANCED HTA & DECISION SUPPORT (HTA Excellence)
+source("modules/budget_impact.R")              # Budget Impact Analysis (BIA) 💰 HTA
+source("modules/mcda.R")                       # Multi-Criteria Decision Analysis 💰 HTA
+source("modules/psa_dashboard.R")              # PSA Dashboard Enhancement 💰 HTA
+
 # source("modules/collaboration.R")            # TODO: Real-time collaboration (future)
 
 # Source utilities
@@ -653,7 +658,33 @@ ui <- page_navbar(
     submission_package_ui("submission_package")
   ),
 
-  # Tab 30: AI Copilot
+  # V3.4 ADVANCED HTA & DECISION SUPPORT
+
+  # Tab 30: Budget Impact Analysis (NEW V3.4!)
+  nav_panel(
+    title = "Budget Impact",
+    icon = icon("dollar-sign"),
+    value = "budget_impact",
+    budget_impact_ui("budget_impact")
+  ),
+
+  # Tab 31: MCDA (NEW V3.4!)
+  nav_panel(
+    title = "MCDA",
+    icon = icon("balance-scale"),
+    value = "mcda",
+    mcda_ui("mcda")
+  ),
+
+  # Tab 32: PSA Dashboard (NEW V3.4!)
+  nav_panel(
+    title = "PSA Dashboard",
+    icon = icon("chart-pie"),
+    value = "psa_dashboard",
+    psa_dashboard_ui("psa_dashboard")
+  ),
+
+  # Tab 33: AI Copilot
   nav_panel(
     title = "AI Copilot",
     icon = icon("robot"),
@@ -1121,6 +1152,11 @@ server <- function(input, output, session) {
   figure_editor_results <- figure_editor_server("figure_editor", rv)  # NEW V3.3 - Publication-ready figure editor
   citation_manager_results <- citation_manager_server("citation_manager", rv)  # NEW V3.3 - Citation manager
   submission_package_results <- submission_package_server("submission_package", rv)  # NEW V3.3 - Journal submission package
+
+  # V3.4 Advanced HTA & Decision Support
+  budget_impact_results <- budget_impact_server("budget_impact", rv)  # NEW V3.4 - Budget Impact Analysis
+  mcda_results <- mcda_server("mcda", rv)  # NEW V3.4 - Multi-Criteria Decision Analysis
+  psa_dashboard_results <- psa_dashboard_server("psa_dashboard", rv)  # NEW V3.4 - PSA Dashboard Enhancement
 
   # AI Copilot
   ai_copilot_results <- ai_copilot_server("ai_copilot", rv)
