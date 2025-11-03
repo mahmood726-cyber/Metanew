@@ -1,0 +1,242 @@
+# Scenario Presets Library
+# Pre-configured analysis scenarios for common use cases
+
+presets:
+  # ==========================================================================
+  # BASE CASE SCENARIOS
+  # ==========================================================================
+  - id: base_case_standard
+    name: "Base Case (Standard Quality)"
+    description: "Include all studies with standard quality criteria"
+    category: "Base Case"
+    filters:
+      min_quality: "medium"
+      exclude_high_rob: false
+      min_sample_size: 30
+    estimator: "REML"
+    model_type: "random"
+    sensitivity_analyses:
+      - "Fixed-effects model"
+      - "DerSimonian-Laird estimator"
+
+  - id: base_case_conservative
+    name: "Base Case (Conservative)"
+    description: "High-quality studies only, larger sample sizes"
+    category: "Base Case"
+    filters:
+      min_quality: "high"
+      exclude_high_rob: true
+      min_sample_size: 100
+    estimator: "REML"
+    model_type: "random"
+    sensitivity_analyses:
+      - "Fixed-effects model"
+      - "Hartung-Knapp adjustment"
+
+  # ==========================================================================
+  # SENSITIVITY ANALYSES
+  # ==========================================================================
+  - id: sens_exclude_high_rob
+    name: "Exclude High Risk of Bias"
+    description: "Remove studies with high overall risk of bias"
+    category: "Sensitivity"
+    filters:
+      exclude_high_rob: true
+      min_quality: "medium"
+    estimator: "REML"
+    model_type: "random"
+    sensitivity_analyses:
+      - "Publication bias (trim-and-fill)"
+      - "Leave-one-out analysis"
+
+  - id: sens_large_studies_only
+    name: "Large Studies Only (n≥200)"
+    description: "Restrict to well-powered studies"
+    category: "Sensitivity"
+    filters:
+      min_sample_size: 200
+      exclude_high_rob: false
+    estimator: "REML"
+    model_type: "random"
+    sensitivity_analyses:
+      - "Small-study effects (Egger's test)"
+
+  - id: sens_fixed_effect
+    name: "Fixed-Effect Model"
+    description: "Assume homogeneous treatment effects"
+    category: "Sensitivity"
+    filters:
+      min_quality: "medium"
+    estimator: "FE"
+    model_type: "fixed"
+    sensitivity_analyses:
+      - "Compare with random-effects"
+
+  - id: sens_trim_fill
+    name: "Trim-and-Fill for Publication Bias"
+    description: "Adjust for potential publication bias"
+    category: "Sensitivity"
+    filters:
+      min_quality: "medium"
+    estimator: "REML"
+    model_type: "random"
+    use_trim_fill: true
+    sensitivity_analyses:
+      - "Funnel plot asymmetry"
+      - "Contour-enhanced funnel plot"
+
+  # ==========================================================================
+  # SUBGROUP ANALYSES
+  # ==========================================================================
+  - id: subgroup_study_design
+    name: "Subgroup by Study Design"
+    description: "Separate analysis for RCTs vs observational studies"
+    category: "Subgroup"
+    subgroup_variable: "study_design"
+    filters:
+      min_quality: "medium"
+    estimator: "REML"
+    model_type: "random"
+
+  - id: subgroup_intervention_dose
+    name: "Subgroup by Intervention Dose"
+    description: "Compare low, medium, and high dose"
+    category: "Subgroup"
+    subgroup_variable: "dose_category"
+    filters:
+      min_quality: "medium"
+    estimator: "REML"
+    model_type: "random"
+
+  - id: subgroup_population_age
+    name: "Subgroup by Age Group"
+    description: "Pediatric, adult, elderly populations"
+    category: "Subgroup"
+    subgroup_variable: "age_group"
+    filters:
+      min_quality: "medium"
+    estimator: "REML"
+    model_type: "random"
+
+  # ==========================================================================
+  # HEALTH ECONOMICS
+  # ==========================================================================
+  - id: he_base_case_nhs
+    name: "HE Base Case (NHS Perspective)"
+    description: "UK NHS perspective with standard WTP £30k/QALY"
+    category: "Health Economics"
+    he_parameters:
+      perspective: "NHS"
+      time_horizon_years: 10
+      discount_rate_costs: 0.035
+      discount_rate_qalys: 0.035
+      wtp_threshold: 30000
+      cycle_length_months: 1
+      n_psa_iterations: 1000
+
+  - id: he_societal_perspective
+    name: "HE Societal Perspective"
+    description: "Include productivity losses and caregiver costs"
+    category: "Health Economics"
+    he_parameters:
+      perspective: "Societal"
+      time_horizon_years: 20
+      discount_rate_costs: 0.035
+      discount_rate_qalys: 0.035
+      wtp_threshold: 50000
+      cycle_length_months: 3
+      n_psa_iterations: 5000
+      include_productivity: true
+      include_caregiver: true
+
+  - id: he_lifetime_horizon
+    name: "HE Lifetime Horizon"
+    description: "Lifetime horizon for chronic conditions"
+    category: "Health Economics"
+    he_parameters:
+      perspective: "NHS"
+      time_horizon_years: 50
+      discount_rate_costs: 0.035
+      discount_rate_qalys: 0.035
+      wtp_threshold: 30000
+      cycle_length_months: 6
+      n_psa_iterations: 10000
+
+  # ==========================================================================
+  # REGULATORY SCENARIOS
+  # ==========================================================================
+  - id: reg_ema_submission
+    name: "EMA Submission Package"
+    description: "European Medicines Agency requirements"
+    category: "Regulatory"
+    filters:
+      min_quality: "high"
+      exclude_high_rob: true
+      min_sample_size: 100
+    estimator: "REML"
+    model_type: "random"
+    sensitivity_analyses:
+      - "Fixed-effects model"
+      - "Exclude industry-funded"
+      - "Trim-and-fill"
+      - "Leave-one-out"
+    required_outcomes:
+      - "efficacy_primary"
+      - "safety_serious_ae"
+    subgroup_analyses:
+      - "study_design"
+      - "age_group"
+
+  - id: reg_fda_submission
+    name: "FDA Submission Package"
+    description: "US FDA regulatory submission"
+    category: "Regulatory"
+    filters:
+      min_quality: "high"
+      exclude_high_rob: true
+      min_sample_size: 50
+    estimator: "REML"
+    model_type: "random"
+    sensitivity_analyses:
+      - "Fixed-effects model"
+      - "Hartung-Knapp adjustment"
+      - "Leave-one-out"
+    required_outcomes:
+      - "efficacy_primary"
+      - "safety_any_ae"
+      - "safety_discontinuation"
+
+  - id: reg_nice_hta
+    name: "NICE HTA Submission"
+    description: "UK NICE Health Technology Assessment"
+    category: "Regulatory"
+    filters:
+      min_quality: "high"
+      exclude_high_rob: true
+    estimator: "REML"
+    model_type: "random"
+    he_parameters:
+      perspective: "NHS"
+      time_horizon_years: 10
+      discount_rate_costs: 0.035
+      discount_rate_qalys: 0.035
+      wtp_threshold: 30000
+      n_psa_iterations: 10000
+    sensitivity_analyses:
+      - "Deterministic sensitivity analysis (DSA)"
+      - "Scenario analysis (optimistic/pessimistic)"
+      - "Threshold analysis"
+
+# ==========================================================================
+# PRESET METADATA
+# ==========================================================================
+metadata:
+  version: "2.0.0"
+  last_updated: "2025-01-03"
+  total_presets: 17
+  categories:
+    - "Base Case"
+    - "Sensitivity"
+    - "Subgroup"
+    - "Health Economics"
+    - "Regulatory"
