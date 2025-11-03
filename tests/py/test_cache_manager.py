@@ -1,24 +1,24 @@
 """
-Comprehensive tests for CacheManager
-Target: 100% coverage of cache_manager.py
+Comprehensive tests for cache_manager - 100% Coverage
+Target: 100% coverage of backend/cache/cache_manager.py
 """
 import pytest
 import pandas as pd
 import tempfile
 import shutil
-import time
 from pathlib import Path
 import sys
-import os
+import time
+from datetime import datetime, timedelta
 
 # Add backend to path
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "backend"))
 
-from cache.cache_manager import CacheManager
+from cache.cache_manager import CacheManager, MetaAnalysisCacheWrapper
 
 
 class TestCacheManager:
-    """Comprehensive test suite for CacheManager"""
+    """Test CacheManager class"""
 
     @pytest.fixture
     def temp_cache_dir(self):
@@ -29,276 +29,383 @@ class TestCacheManager:
 
     @pytest.fixture
     def cache_manager(self, temp_cache_dir):
-        """Cache manager instance"""
+        """Create cache manager instance"""
         return CacheManager(cache_dir=temp_cache_dir)
 
     @pytest.fixture
     def sample_data(self):
-        """Sample test data"""
+        """Create sample DataFrame for caching"""
         return pd.DataFrame({
             'study_id': ['S1', 'S2', 'S3'],
-            'mean': [5.2, 6.1, 5.8],
-            'sd': [1.1, 1.3, 1.2],
-            'n': [50, 45, 52]
+            'effect_size': [0.5, 0.6, 0.4],
+            'se': [0.1, 0.12, 0.09]
         })
 
-    def test_cache_initialization(self, temp_cache_dir):
-        """Test cache manager initialization"""
+    def test_init_creates_cache_dir(self, temp_cache_dir):
+        """Test that initialization creates cache directory"""
         cache = CacheManager(cache_dir=temp_cache_dir)
+        assert Path(temp_cache_dir).exists()
         assert cache.cache_dir == Path(temp_cache_dir)
-        assert cache.cache_dir.exists()
 
-    def test_cache_dir_creation(self):
-        """Test automatic cache directory creation"""
-        temp_dir = Path(tempfile.mkdtemp()) / "new_cache_dir"
-        cache = CacheManager(cache_dir=str(temp_dir))
-        assert cache.cache_dir.exists()
-        shutil.rmtree(temp_dir.parent, ignore_errors=True)
+    def test_init_creates_index(self, cache_manager):
+        """Test that initialization creates cache index"""
+        assert cache_manager.index is not None
+        assert isinstance(cache_manager.index, pd.DataFrame)
+        assert 'cache_key' in cache_manager.index.columns
+        assert 'file_path' in cache_manager.index.columns
 
-    def test_save_results(self, cache_manager, sample_data):
-        """Test saving results to cache"""
-        query_params = {'test': 'save'}
-        metadata = {'version': '1.0'}
+    def test_load_index_existing(self, temp_cache_dir):
+        """Test loading existing index"""
+        # Create cache and add entry
+        cache1 = CacheManager(cache_dir=temp_cache_dir)
+        data = pd.DataFrame({'col': [1, 2]})
+        cache1.put('test', {'param': 1}, data)
 
-        cache_id = cache_manager.save_results(sample_data, query_params, metadata)
+        # Create new instance - should load existing index
+        cache2 = CacheManager(cache_dir=temp_cache_dir)
+        assert len(cache2.index) == 1
 
-        assert cache_id is not None
-        assert isinstance(cache_id, str)
-        assert len(cache_id) > 0
+    def test_generate_cache_key(self, cache_manager):
+        """Test cache key generation"""
+        key1 = cache_manager._generate_cache_key('meta_analysis', {'method': 'REML', 'outcome': 'mortality'})
+        key2 = cache_manager._generate_cache_key('meta_analysis', {'method': 'REML', 'outcome': 'mortality'})
+        key3 = cache_manager._generate_cache_key('meta_analysis', {'method': 'DL', 'outcome': 'mortality'})
 
-    def test_get_cached_results(self, cache_manager, sample_data):
-        """Test retrieving cached results"""
-        query_params = {'test': 'retrieve'}
-        metadata = {'version': '1.0'}
+        # Same parameters should produce same key
+        assert key1 == key2
+        # Different parameters should produce different key
+        assert key1 != key3
+        # Keys should be SHA256 hashes (64 hex characters)
+        assert len(key1) == 64
+        assert all(c in '0123456789abcdef' for c in key1)
 
-        # Save data
-        cache_manager.save_results(sample_data, query_params, metadata)
+    def test_put_and_get(self, cache_manager, sample_data):
+        """Test caching and retrieving data"""
+        analysis_type = 'meta_analysis'
+        parameters = {'method': 'REML', 'outcome': 'mortality'}
+
+        # Cache data
+        cache_key = cache_manager.put(analysis_type, parameters, sample_data)
+        assert cache_key is not None
+        assert len(cache_key) == 64
 
         # Retrieve data
-        cached_data, cached_meta = cache_manager.get_cached_results(query_params)
+        retrieved = cache_manager.get(analysis_type, parameters)
+        assert retrieved is not None
+        assert len(retrieved) == len(sample_data)
+        assert list(retrieved.columns) == list(sample_data.columns)
+        pd.testing.assert_frame_equal(retrieved, sample_data)
 
-        assert cached_data is not None
-        assert cached_meta is not None
-        pd.testing.assert_frame_equal(cached_data, sample_data)
-        assert cached_meta['version'] == '1.0'
+    def test_get_nonexistent(self, cache_manager):
+        """Test getting non-existent cache entry"""
+        result = cache_manager.get('nonexistent', {'param': 'value'})
+        assert result is None
 
-    def test_cache_miss(self, cache_manager):
-        """Test cache miss returns None"""
-        query_params = {'test': 'nonexistent'}
-        cached_data, cached_meta = cache_manager.get_cached_results(query_params)
+    def test_put_with_metadata(self, cache_manager, sample_data):
+        """Test caching with metadata"""
+        metadata = {'user': 'test_user', 'version': '1.0'}
+        cache_key = cache_manager.put('test', {'param': 1}, sample_data, metadata)
 
-        assert cached_data is None
-        assert cached_meta is None
+        # Check metadata was stored
+        entry = cache_manager.index[cache_manager.index['cache_key'] == cache_key]
+        assert len(entry) == 1
+        assert '"user": "test_user"' in entry.iloc[0]['metadata']
 
-    def test_cache_key_generation(self, cache_manager):
-        """Test cache key generation is consistent"""
-        params1 = {'a': 1, 'b': 2}
-        params2 = {'b': 2, 'a': 1}  # Different order, same content
+    def test_put_updates_existing(self, cache_manager, sample_data):
+        """Test that put overwrites existing cache entry"""
+        params = {'test': 'value'}
 
-        key1 = cache_manager._generate_cache_key(params1)
-        key2 = cache_manager._generate_cache_key(params2)
+        # Cache data twice with same parameters
+        key1 = cache_manager.put('test', params, sample_data)
+        key2 = cache_manager.put('test', params, sample_data)
 
-        assert key1 == key2  # Should be same regardless of order
+        # Should have same key
+        assert key1 == key2
+        # Should have only one entry in index
+        assert len(cache_manager.index) == 1
 
-    def test_cache_key_uniqueness(self, cache_manager):
-        """Test different params generate different keys"""
-        params1 = {'a': 1, 'b': 2}
-        params2 = {'a': 1, 'b': 3}
+    def test_get_updates_access_stats(self, cache_manager, sample_data):
+        """Test that get updates access statistics"""
+        params = {'test': 'value'}
+        cache_manager.put('test', params, sample_data)
 
-        key1 = cache_manager._generate_cache_key(params1)
-        key2 = cache_manager._generate_cache_key(params2)
+        # Get initial stats
+        entry = cache_manager.index[cache_manager.index['analysis_type'] == 'test']
+        initial_count = entry.iloc[0]['access_count']
 
-        assert key1 != key2
+        # Access cache
+        cache_manager.get('test', params)
 
-    def test_clear_cache(self, cache_manager, sample_data):
-        """Test clearing cache"""
-        query_params = {'test': 'clear'}
+        # Check stats updated
+        entry = cache_manager.index[cache_manager.index['analysis_type'] == 'test']
+        new_count = entry.iloc[0]['access_count']
+        assert new_count == initial_count + 1
 
-        # Save data
-        cache_manager.save_results(sample_data, query_params)
+    def test_get_missing_file(self, cache_manager, sample_data, temp_cache_dir):
+        """Test get when file is deleted but index entry exists"""
+        params = {'test': 'value'}
+        cache_key = cache_manager.put('test', params, sample_data)
 
-        # Verify it's cached
-        cached_data, _ = cache_manager.get_cached_results(query_params)
-        assert cached_data is not None
+        # Delete the file manually
+        file_path = Path(temp_cache_dir) / f"{cache_key}.parquet"
+        file_path.unlink()
 
-        # Clear cache
-        cache_manager.clear_cache()
+        # Get should return None and clean up index
+        result = cache_manager.get('test', params)
+        assert result is None
+        assert len(cache_manager.index) == 0
 
-        # Verify it's gone
-        cached_data, _ = cache_manager.get_cached_results(query_params)
-        assert cached_data is None
+    def test_invalidate(self, cache_manager, sample_data):
+        """Test cache invalidation"""
+        params = {'test': 'value'}
+        cache_key = cache_manager.put('test', params, sample_data)
 
-    def test_cache_expiry(self, temp_cache_dir):
-        """Test cache expiration functionality"""
-        # Create cache with 1 second TTL
-        cache = CacheManager(cache_dir=temp_cache_dir, ttl_seconds=1)
+        # Verify cached
+        assert cache_manager.get('test', params) is not None
 
-        data = pd.DataFrame({'col': [1, 2, 3]})
-        query_params = {'test': 'expiry'}
+        # Invalidate
+        result = cache_manager.invalidate('test', params)
+        assert result is True
 
-        # Save data
-        cache.save_results(data, query_params)
+        # Verify removed
+        assert cache_manager.get('test', params) is None
+        assert len(cache_manager.index) == 0
 
-        # Should be available immediately
-        cached_data, _ = cache.get_cached_results(query_params)
-        assert cached_data is not None
+    def test_invalidate_nonexistent(self, cache_manager):
+        """Test invalidating non-existent cache entry"""
+        result = cache_manager.invalidate('nonexistent', {'param': 'value'})
+        assert result is False
 
-        # Wait for expiry
-        time.sleep(2)
+    def test_clear_old(self, cache_manager, sample_data):
+        """Test clearing old cache entries"""
+        # Add entry
+        cache_manager.put('test', {'param': 1}, sample_data)
 
-        # Should be expired (if expiry is implemented)
-        # Note: Implementation may or may not have expiry
-        cached_data, _ = cache.get_cached_results(query_params)
-        # Result depends on implementation
+        # Manually set last_accessed to old date
+        old_date = datetime.now() - timedelta(days=60)
+        cache_manager.index.loc[0, 'last_accessed'] = old_date
+        cache_manager._save_index()
 
-    def test_multiple_cache_entries(self, cache_manager, sample_data):
-        """Test multiple independent cache entries"""
-        entries = [
-            ({'key': 'entry1'}, {'meta': 'data1'}),
-            ({'key': 'entry2'}, {'meta': 'data2'}),
-            ({'key': 'entry3'}, {'meta': 'data3'}),
-        ]
+        # Clear entries older than 30 days
+        count = cache_manager.clear_old(days=30)
+        assert count == 1
+        assert len(cache_manager.index) == 0
 
-        # Save all entries
-        for params, meta in entries:
-            cache_manager.save_results(sample_data, params, meta)
+    def test_clear_old_keeps_recent(self, cache_manager, sample_data):
+        """Test that clear_old keeps recent entries"""
+        # Add entry
+        cache_manager.put('test', {'param': 1}, sample_data)
 
-        # Retrieve and verify all entries
-        for params, meta in entries:
-            cached_data, cached_meta = cache_manager.get_cached_results(params)
-            assert cached_data is not None
-            assert cached_meta['meta'] == meta['meta']
-            pd.testing.assert_frame_equal(cached_data, sample_data)
+        # Clear entries older than 30 days
+        count = cache_manager.clear_old(days=30)
+        assert count == 0
+        assert len(cache_manager.index) == 1
 
-    def test_cache_overwrite(self, cache_manager):
-        """Test overwriting existing cache entry"""
-        query_params = {'test': 'overwrite'}
+    def test_get_stats_empty(self, cache_manager):
+        """Test statistics on empty cache"""
+        stats = cache_manager.get_stats()
+        assert stats['total_entries'] == 0
+        assert stats['total_size_mb'] == 0
+        assert stats['analysis_types'] == {}
 
-        data1 = pd.DataFrame({'value': [1, 2, 3]})
-        data2 = pd.DataFrame({'value': [4, 5, 6]})
+    def test_get_stats_with_data(self, cache_manager, sample_data):
+        """Test statistics with cached data"""
+        cache_manager.put('meta_analysis', {'method': 'REML'}, sample_data)
+        cache_manager.put('nma', {'model': 'random'}, sample_data)
 
-        # Save first version
-        cache_manager.save_results(data1, query_params, {'version': 1})
+        stats = cache_manager.get_stats()
+        assert stats['total_entries'] == 2
+        assert stats['total_size_mb'] > 0
+        assert 'meta_analysis' in stats['analysis_types']
+        assert 'nma' in stats['analysis_types']
+        assert stats['oldest_entry'] is not None
+        assert stats['newest_entry'] is not None
 
-        # Save second version (overwrite)
-        cache_manager.save_results(data2, query_params, {'version': 2})
+    def test_get_stats_most_accessed(self, cache_manager, sample_data):
+        """Test most accessed statistics"""
+        params = {'test': 'value'}
+        cache_manager.put('test', params, sample_data)
 
-        # Should retrieve second version
-        cached_data, cached_meta = cache_manager.get_cached_results(query_params)
-        pd.testing.assert_frame_equal(cached_data, data2)
-        assert cached_meta['version'] == 2
+        # Access multiple times
+        for _ in range(5):
+            cache_manager.get('test', params)
 
-    def test_empty_dataframe(self, cache_manager):
-        """Test caching empty dataframe"""
-        empty_df = pd.DataFrame()
-        query_params = {'test': 'empty'}
+        stats = cache_manager.get_stats()
+        assert len(stats['most_accessed']) > 0
+        assert stats['most_accessed'][0]['access_count'] == 5
 
-        cache_id = cache_manager.save_results(empty_df, query_params)
-        assert cache_id is not None
+    def test_list_cached_analyses_all(self, cache_manager, sample_data):
+        """Test listing all cached analyses"""
+        cache_manager.put('meta_analysis', {'method': 'REML'}, sample_data)
+        cache_manager.put('nma', {'model': 'random'}, sample_data)
 
-        cached_data, _ = cache_manager.get_cached_results(query_params)
-        assert cached_data is not None
-        assert len(cached_data) == 0
+        analyses = cache_manager.list_cached_analyses()
+        assert len(analyses) == 2
 
-    def test_large_dataframe(self, cache_manager):
-        """Test caching large dataframe"""
-        large_df = pd.DataFrame({
-            'col1': range(10000),
-            'col2': range(10000, 20000),
-            'col3': [f'text_{i}' for i in range(10000)]
+    def test_list_cached_analyses_filtered(self, cache_manager, sample_data):
+        """Test listing filtered cached analyses"""
+        cache_manager.put('meta_analysis', {'method': 'REML'}, sample_data)
+        cache_manager.put('nma', {'model': 'random'}, sample_data)
+
+        analyses = cache_manager.list_cached_analyses(analysis_type='meta_analysis')
+        assert len(analyses) == 1
+        assert analyses[0]['analysis_type'] == 'meta_analysis'
+
+    def test_save_and_load_index_dtypes(self, cache_manager, sample_data):
+        """Test that dtypes are preserved when saving/loading index"""
+        cache_manager.put('test', {'param': 1}, sample_data)
+
+        # Save and reload
+        cache_manager._save_index()
+        cache_manager._load_index()
+
+        # Check dtypes
+        assert cache_manager.index['access_count'].dtype == 'int64'
+        assert cache_manager.index['size_bytes'].dtype == 'int64'
+
+    def test_parquet_compression(self, cache_manager, temp_cache_dir):
+        """Test that Parquet files use compression"""
+        large_data = pd.DataFrame({
+            'col': ['A' * 1000] * 100
         })
 
-        query_params = {'test': 'large'}
+        cache_key = cache_manager.put('test', {'param': 1}, large_data)
+        file_path = Path(temp_cache_dir) / f"{cache_key}.parquet"
 
-        cache_id = cache_manager.save_results(large_df, query_params)
-        assert cache_id is not None
+        # Compressed size should be much smaller than uncompressed
+        compressed_size = file_path.stat().st_size
+        # Rough estimate: 100 rows * 1000 chars * 1 byte = 100KB uncompressed
+        # With compression should be much less
+        assert compressed_size < 50000  # Less than 50KB
 
-        cached_data, _ = cache_manager.get_cached_results(query_params)
-        pd.testing.assert_frame_equal(cached_data, large_df)
+    def test_cache_key_determinism(self, cache_manager):
+        """Test that cache key generation is deterministic"""
+        params = {'b': 2, 'a': 1, 'c': 3}  # Unsorted dict
+        key1 = cache_manager._generate_cache_key('test', params)
 
-    def test_special_characters_in_params(self, cache_manager, sample_data):
-        """Test cache key generation with special characters"""
-        query_params = {
-            'key': 'value with spaces',
-            'special': 'chars!@#$%^&*()',
-            'unicode': 'テスト'
-        }
+        # Try with different dict order
+        params2 = {'c': 3, 'a': 1, 'b': 2}
+        key2 = cache_manager._generate_cache_key('test', params2)
 
-        cache_id = cache_manager.save_results(sample_data, query_params)
-        assert cache_id is not None
+        # Should be identical (json.dumps with sort_keys=True)
+        assert key1 == key2
 
-        cached_data, _ = cache_manager.get_cached_results(query_params)
-        assert cached_data is not None
 
-    def test_nested_params(self, cache_manager, sample_data):
-        """Test cache key generation with nested parameters"""
-        query_params = {
-            'level1': {
-                'level2': {
-                    'level3': 'value'
-                }
-            },
-            'array': [1, 2, 3]
-        }
+class TestMetaAnalysisCacheWrapper:
+    """Test MetaAnalysisCacheWrapper class"""
 
-        cache_id = cache_manager.save_results(sample_data, query_params)
-        assert cache_id is not None
+    @pytest.fixture
+    def temp_cache_dir(self):
+        """Create temporary cache directory"""
+        temp_dir = tempfile.mkdtemp()
+        yield temp_dir
+        shutil.rmtree(temp_dir, ignore_errors=True)
 
-        cached_data, _ = cache_manager.get_cached_results(query_params)
-        assert cached_data is not None
+    @pytest.fixture
+    def cache_wrapper(self, temp_cache_dir):
+        """Create cache wrapper instance"""
+        cache_manager = CacheManager(cache_dir=temp_cache_dir)
+        return MetaAnalysisCacheWrapper(cache_manager)
 
-    def test_cache_stats(self, cache_manager, sample_data):
-        """Test cache statistics if available"""
-        # Save multiple entries
-        for i in range(5):
-            cache_manager.save_results(
-                sample_data,
-                {'test': f'stats_{i}'}
-            )
+    def test_run_with_cache_first_time(self, cache_wrapper):
+        """Test running analysis for first time (cache miss)"""
+        call_count = 0
 
-        # Check cache directory has files
-        cache_files = list(cache_manager.cache_dir.glob('*.parquet'))
-        assert len(cache_files) > 0
+        def analysis_func():
+            nonlocal call_count
+            call_count += 1
+            return pd.DataFrame({'result': [1, 2, 3]})
 
-    def test_concurrent_cache_access(self, cache_manager, sample_data):
-        """Test concurrent cache access (basic thread safety check)"""
-        query_params = {'test': 'concurrent'}
+        result = cache_wrapper.run_with_cache(
+            analysis_func,
+            'test_analysis',
+            {'param': 'value'},
+            force_refresh=False
+        )
 
-        # Save
-        cache_manager.save_results(sample_data, query_params)
+        assert call_count == 1
+        assert len(result) == 3
 
-        # Multiple reads
-        results = []
-        for _ in range(10):
-            data, meta = cache_manager.get_cached_results(query_params)
-            results.append(data is not None)
+    def test_run_with_cache_hit(self, cache_wrapper):
+        """Test running analysis with cache hit"""
+        call_count = 0
 
-        # All reads should succeed
-        assert all(results)
+        def analysis_func():
+            nonlocal call_count
+            call_count += 1
+            return pd.DataFrame({'result': [1, 2, 3]})
 
-    def test_metadata_persistence(self, cache_manager, sample_data):
-        """Test metadata is properly persisted and retrieved"""
-        complex_metadata = {
-            'string': 'value',
-            'number': 42,
-            'float': 3.14,
-            'bool': True,
-            'list': [1, 2, 3],
-            'nested': {'key': 'value'}
-        }
+        params = {'param': 'value'}
 
-        query_params = {'test': 'metadata'}
-        cache_manager.save_results(sample_data, query_params, complex_metadata)
+        # First run - cache miss
+        result1 = cache_wrapper.run_with_cache(analysis_func, 'test', params)
+        assert call_count == 1
 
-        _, cached_meta = cache_manager.get_cached_results(query_params)
+        # Second run - cache hit
+        result2 = cache_wrapper.run_with_cache(analysis_func, 'test', params)
+        assert call_count == 1  # Should not call function again
 
-        assert cached_meta['string'] == 'value'
-        assert cached_meta['number'] == 42
-        assert cached_meta['float'] == 3.14
-        assert cached_meta['bool'] == True
-        assert cached_meta['list'] == [1, 2, 3]
-        assert cached_meta['nested']['key'] == 'value'
+        pd.testing.assert_frame_equal(result1, result2)
+
+    def test_run_with_cache_force_refresh(self, cache_wrapper):
+        """Test force refresh bypasses cache"""
+        call_count = 0
+
+        def analysis_func():
+            nonlocal call_count
+            call_count += 1
+            return pd.DataFrame({'result': [call_count]})
+
+        params = {'param': 'value'}
+
+        # First run
+        result1 = cache_wrapper.run_with_cache(analysis_func, 'test', params)
+        assert call_count == 1
+
+        # Force refresh
+        result2 = cache_wrapper.run_with_cache(
+            analysis_func, 'test', params, force_refresh=True
+        )
+        assert call_count == 2  # Should call function again
+
+        # Results should be different
+        assert result1.iloc[0, 0] != result2.iloc[0, 0]
+
+    def test_run_with_cache_stores_timing(self, cache_wrapper):
+        """Test that computation time is stored in metadata"""
+        def slow_analysis():
+            time.sleep(0.1)
+            return pd.DataFrame({'result': [1]})
+
+        cache_wrapper.run_with_cache(slow_analysis, 'test', {'param': 1})
+
+        # Check metadata
+        analyses = cache_wrapper.cache.list_cached_analyses()
+        assert len(analyses) == 1
+        import json
+        metadata = json.loads(analyses[0]['metadata'])
+        assert 'computation_time' in metadata
+        assert metadata['computation_time'] > 0.1
+
+    def test_run_with_cache_different_params(self, cache_wrapper):
+        """Test that different parameters create different cache entries"""
+        call_count = 0
+
+        def analysis_func():
+            nonlocal call_count
+            call_count += 1
+            return pd.DataFrame({'result': [call_count]})
+
+        # Run with different parameters
+        result1 = cache_wrapper.run_with_cache(analysis_func, 'test', {'param': 1})
+        result2 = cache_wrapper.run_with_cache(analysis_func, 'test', {'param': 2})
+
+        # Should call function twice
+        assert call_count == 2
+
+        # Should have 2 cache entries
+        assert len(cache_wrapper.cache.index) == 2
 
 
 if __name__ == '__main__':
-    pytest.main([__file__, '-v', '--cov=backend/cache', '--cov-report=term-missing'])
+    pytest.main([__file__, '-v', '--cov=backend/cache/cache_manager', '--cov-report=term-missing'])
