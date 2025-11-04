@@ -734,5 +734,293 @@ class TestConsistencyChecks:
         assert abs(s1_yi_1 - s1_yi_2) < 0.0001
 
 
+# ============================================================================
+# TEST 11: ADDITIONAL COVERAGE TESTS (SMD, HR, Errors, Wrappers)
+# ============================================================================
+
+class TestAdditionalCoverage:
+    """Additional tests to increase coverage to 80%+"""
+
+    def test_smd_computation_full(self):
+        """Test SMD (Standardized Mean Difference) computation"""
+        df = pd.DataFrame({
+            'study_id': ['S1'],
+            'mean1': [10.5],
+            'sd1': [2.0],
+            'n1': [50],
+            'mean2': [12.0],
+            'sd2': [2.2],
+            'n2': [55]
+        })
+        result = compute_effect_size(df, measure='SMD')
+
+        assert 'yi' in result.columns
+        assert 'sei' in result.columns
+        assert 'vi' in result.columns
+        assert result['yi'].iloc[0] < 0  # Negative because mean1 < mean2
+
+    def test_smd_hedges_correction(self):
+        """Test SMD includes Hedges' g correction"""
+        df = pd.DataFrame({
+            'study_id': ['S1'],
+            'mean1': [10.0],
+            'sd1': [2.0],
+            'n1': [30],
+            'mean2': [11.0],
+            'sd2': [2.0],
+            'n2': [30]
+        })
+        result = compute_effect_size(df, measure='SMD')
+
+        # SMD should be computed with Hedges' correction
+        assert result['yi'].iloc[0] is not None
+        assert np.isfinite(result['yi'].iloc[0])
+
+    def test_hr_with_confidence_intervals(self):
+        """Test HR computation from hazard ratio and CI"""
+        df = pd.DataFrame({
+            'study_id': ['S1', 'S2'],
+            'hr': [0.7, 0.8],
+            'ci_lower': [0.5, 0.6],
+            'ci_upper': [0.98, 1.0]
+        })
+        result = compute_effect_size(df, measure='HR')
+
+        assert 'yi' in result.columns
+        assert 'sei' in result.columns
+        assert 'vi' in result.columns
+        # yi should be log(HR)
+        assert abs(result['yi'].iloc[0] - np.log(0.7)) < 0.001
+
+    def test_hr_sei_from_ci(self):
+        """Test HR standard error computed from CI"""
+        df = pd.DataFrame({
+            'study_id': ['S1'],
+            'hr': [0.75],
+            'ci_lower': [0.6],
+            'ci_upper': [0.9]
+        })
+        result = compute_effect_size(df, measure='HR')
+
+        # SE should be (log(upper) - log(lower)) / 3.92
+        expected_sei = (np.log(0.9) - np.log(0.6)) / 3.92
+        assert abs(result['sei'].iloc[0] - expected_sei) < 0.01
+
+    def test_hr_with_existing_yi_sei(self):
+        """Test HR with pre-computed yi/sei (lines 195-197)"""
+        df = pd.DataFrame({
+            'study_id': ['S1'],
+            'yi': [-0.3],  # log(HR)
+            'sei': [0.15]
+        })
+        result = compute_effect_size(df, measure='HR')
+
+        assert result['yi'].iloc[0] == -0.3
+        assert result['sei'].iloc[0] == 0.15
+        assert 'vi' in result.columns
+        assert result['vi'].iloc[0] == 0.15 ** 2
+
+    def test_hr_missing_hr_column_error(self):
+        """Test HR without 'hr' column raises error (line 200)"""
+        df = pd.DataFrame({
+            'study_id': ['S1'],
+            'some_column': [0.7]
+        })
+        with pytest.raises(ValueError, match="Time-to-event data requires 'hr' column"):
+            compute_effect_size(df, measure='HR')
+
+    def test_hr_missing_sei_and_ci_error(self):
+        """Test HR without sei or CI raises error (lines 211-212)"""
+        df = pd.DataFrame({
+            'study_id': ['S1'],
+            'hr': [0.7]
+        })
+        with pytest.raises(ValueError, match="HR data requires either"):
+            compute_effect_size(df, measure='HR')
+
+    def test_continuous_with_existing_yi_sei(self):
+        """Test continuous data with pre-computed yi/sei (lines 142-147)"""
+        df = pd.DataFrame({
+            'study_id': ['S1'],
+            'yi': [1.5],  # Mean difference
+            'sei': [0.25]
+        })
+        result = compute_effect_size(df, measure='MD')
+
+        assert result['yi'].iloc[0] == 1.5
+        assert result['sei'].iloc[0] == 0.25
+        assert 'vi' in result.columns
+
+    def test_binary_with_existing_yi_sei(self):
+        """Test binary data with pre-computed yi/sei (lines 117-123)"""
+        df = pd.DataFrame({
+            'study_id': ['S1'],
+            'events': [10],  # Need events column to trigger arm-based path
+            'n': [100],
+            'yi': [0.5],  # log(OR)
+            'sei': [0.2]
+        })
+        result = compute_effect_size(df, measure='OR')
+
+        assert result['yi'].iloc[0] == 0.5
+        assert result['sei'].iloc[0] == 0.2
+
+    def test_arm_based_binary_not_supported_error(self):
+        """Test arm-based binary without yi/sei raises error (lines 123-127)"""
+        df = pd.DataFrame({
+            'study_id': ['S1', 'S1'],
+            'treatment': ['Drug', 'Placebo'],
+            'events': [10, 15],
+            'n': [100, 100]
+        })
+        with pytest.raises(ValueError, match="Arm-based binary data not yet fully supported"):
+            compute_effect_size(df, measure='OR')
+
+    def test_unknown_binary_measure_error(self):
+        """Test unknown binary measure raises error (line 100)"""
+        df = pd.DataFrame({
+            'study_id': ['S1'],
+            'events1': [10],
+            'n1': [100],
+            'events2': [20],
+            'n2': [100]
+        })
+        with pytest.raises(ValueError, match="Unknown binary measure"):
+            from backend.etl.transform import compute_binary_effect_size
+            compute_binary_effect_size(df, measure='INVALID')
+
+    def test_unknown_continuous_measure_error(self):
+        """Test unknown continuous measure raises error (line 176)"""
+        df = pd.DataFrame({
+            'study_id': ['S1'],
+            'mean1': [10.5],
+            'sd1': [2.0],
+            'n1': [50],
+            'mean2': [12.0],
+            'sd2': [2.0],
+            'n2': [50]
+        })
+        with pytest.raises(ValueError, match="Unknown continuous measure"):
+            from backend.etl.transform import compute_continuous_effect_size
+            compute_continuous_effect_size(df, measure='INVALID')
+
+    def test_escalc_wrapper(self):
+        """Test escalc_wrapper function (line 224)"""
+        from backend.etl.transform import escalc_wrapper
+
+        df = pd.DataFrame({
+            'study_id': ['S1'],
+            'events1': [10],
+            'n1': [100],
+            'events2': [20],
+            'n2': [100]
+        })
+        result = escalc_wrapper(df, measure='OR')
+
+        assert 'yi' in result.columns
+        assert 'sei' in result.columns
+
+    def test_apply_continuity_correction(self):
+        """Test apply_continuity_correction function (lines 239-243)"""
+        from backend.etl.transform import apply_continuity_correction
+
+        events = np.array([0, 10, 100])  # Zero, normal, all events
+        n = np.array([100, 100, 100])
+
+        events_corrected, n_corrected = apply_continuity_correction(events, n, correction=0.5)
+
+        # Zero cells should be corrected
+        assert events_corrected[0] == 0.5  # Was 0
+        assert n_corrected[0] == 101  # Was 100
+
+        # Normal cells unchanged
+        assert events_corrected[1] == 10
+        assert n_corrected[1] == 100
+
+        # All-event cells should be corrected
+        assert events_corrected[2] == 100.5  # Was 100
+        assert n_corrected[2] == 101  # Was 100
+
+    def test_continuity_correction_custom_value(self):
+        """Test continuity correction with custom value"""
+        from backend.etl.transform import apply_continuity_correction
+
+        events = np.array([0])
+        n = np.array([100])
+
+        events_corrected, n_corrected = apply_continuity_correction(events, n, correction=0.1)
+
+        assert events_corrected[0] == 0.1
+        assert n_corrected[0] == 100.2  # 100 + 2*0.1
+
+    def test_rd_computation(self):
+        """Test RD (Risk Difference) computation"""
+        df = pd.DataFrame({
+            'study_id': ['S1'],
+            'events1': [40],
+            'n1': [100],
+            'events2': [20],
+            'n2': [100]
+        })
+        result = compute_effect_size(df, measure='RD')
+
+        assert 'yi' in result.columns
+        # RD should be p1 - p2 = 0.4 - 0.2 = 0.2
+        assert abs(result['yi'].iloc[0] - 0.2) < 0.001
+
+    def test_binary_no_data_error(self):
+        """Test binary computation without proper columns raises error"""
+        df = pd.DataFrame({
+            'study_id': ['S1'],
+            'some_column': [10]
+        })
+        with pytest.raises(ValueError, match="Binary data requires"):
+            from backend.etl.transform import compute_binary_effect_size
+            compute_binary_effect_size(df, measure='OR')
+
+    def test_continuous_no_data_error(self):
+        """Test continuous computation without proper columns raises error"""
+        df = pd.DataFrame({
+            'study_id': ['S1'],
+            'some_column': [10.5]
+        })
+        with pytest.raises(ValueError, match="Continuous data requires"):
+            from backend.etl.transform import compute_continuous_effect_size
+            compute_continuous_effect_size(df, measure='MD')
+
+    def test_smd_small_sample(self):
+        """Test SMD with small sample sizes"""
+        df = pd.DataFrame({
+            'study_id': ['S1'],
+            'mean1': [10.0],
+            'sd1': [2.0],
+            'n1': [10],  # Small sample
+            'mean2': [12.0],
+            'sd2': [2.0],
+            'n2': [10]
+        })
+        result = compute_effect_size(df, measure='SMD')
+
+        # Should still compute successfully
+        assert 'yi' in result.columns
+        assert np.isfinite(result['yi'].iloc[0])
+
+    def test_smd_unequal_variances(self):
+        """Test SMD with unequal variances"""
+        df = pd.DataFrame({
+            'study_id': ['S1'],
+            'mean1': [10.0],
+            'sd1': [1.5],  # Different SD
+            'mean2': [12.0],
+            'sd2': [3.0],  # Different SD
+            'n1': [50],
+            'n2': [50]
+        })
+        result = compute_effect_size(df, measure='SMD')
+
+        assert 'yi' in result.columns
+        assert np.isfinite(result['yi'].iloc[0])
+
+
 if __name__ == '__main__':
     pytest.main([__file__, '-v', '--tb=short'])
