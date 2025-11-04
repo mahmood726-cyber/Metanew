@@ -1,0 +1,69 @@
+============================= test session starts ==============================
+platform linux -- Python 3.11.14, pytest-8.4.2, pluggy-1.6.0 -- /usr/local/bin/python
+cachedir: .pytest_cache
+rootdir: /home/user/Metanew
+plugins: anyio-4.11.0
+collecting ... collected 39 items
+
+tests/py/test_transform.py::test_compute_or_from_2x2 PASSED              [  2%]
+tests/py/test_transform.py::test_compute_md_from_continuous PASSED       [  5%]
+tests/py/test_transform.py::test_compute_hr_from_ci PASSED               [  7%]
+tests/py/test_transform.py::test_continuity_correction PASSED            [ 10%]
+tests/py/test_validate.py::test_validate_binary_data_valid PASSED        [ 12%]
+tests/py/test_validate.py::test_validate_binary_data_events_exceeds_n PASSED [ 15%]
+tests/py/test_validate.py::test_validate_missing_required_columns PASSED [ 17%]
+tests/py/test_validate.py::test_validate_effect_size_data PASSED         [ 20%]
+tests/py/test_validate.py::test_validate_negative_se PASSED              [ 23%]
+tests/test_api_endpoints.py::TestAPIHealth::test_health_endpoint SKIPPED [ 25%]
+tests/test_api_endpoints.py::TestAPIHealth::test_features_list_endpoint SKIPPED [ 28%]
+tests/test_api_endpoints.py::TestMAICEndpoints::test_maic_run_endpoint SKIPPED [ 30%]
+tests/test_api_endpoints.py::TestMAICEndpoints::test_maic_suggest_variables SKIPPED [ 33%]
+tests/test_api_endpoints.py::TestTargetTrialEndpoint::test_target_trial_endpoint SKIPPED [ 35%]
+tests/test_api_endpoints.py::TestMultiStateEndpoint::test_multistate_endpoint SKIPPED [ 38%]
+tests/test_api_endpoints.py::TestDossierEndpoint::test_dossier_generation SKIPPED [ 41%]
+tests/test_api_endpoints.py::TestPhase2Endpoints::test_living_review_setup SKIPPED [ 43%]
+tests/test_api_endpoints.py::TestPhase2Endpoints::test_prisma_validation SKIPPED [ 46%]
+tests/test_api_endpoints.py::TestPhase3Endpoints::test_propensity_score_analysis SKIPPED [ 48%]
+tests/test_maic_engine.py::TestMAICDataValidation::test_valid_data_passes PASSED [ 51%]
+tests/test_maic_engine.py::TestMAICDataValidation::test_missing_variable_fails PASSED [ 53%]
+tests/test_maic_engine.py::TestMAICDataValidation::test_missing_data_fails PASSED [ 56%]
+tests/test_maic_engine.py::TestMAICDataValidation::test_zero_rows_fails PASSED [ 58%]
+tests/test_maic_engine.py::TestMAICWeightCalculation::test_weights_sum_to_n PASSED [ 61%]
+tests/test_maic_engine.py::TestMAICWeightCalculation::test_weights_positive PASSED [ 64%]
+tests/test_maic_engine.py::TestMAICWeightCalculation::test_weights_achieve_balance PASSED [ 66%]
+tests/test_maic_engine.py::TestMAICESS::test_ess_without_weights_equals_n PASSED [ 69%]
+tests/test_maic_engine.py::TestMAICESS::test_ess_with_extreme_weights_is_low PASSED [ 71%]
+tests/test_maic_engine.py::TestMAICESS::test_ess_formula_correct PASSED  [ 74%]
+tests/test_maic_engine.py::TestMAICBalanceDiagnostics::test_balance_calculates_smd PASSED [ 76%]
+tests/test_maic_engine.py::TestMAICBalanceDiagnostics::test_balance_identifies_imbalance PASSED [ 79%]
+tests/test_maic_engine.py::TestMAICTreatmentEffect::test_treatment_effect_calculation PASSED [ 82%]
+tests/test_maic_engine.py::TestMAICTreatmentEffect::test_se_positive PASSED [ 84%]
+tests/test_maic_engine.py::TestMAICValidation::test_validation_with_good_data PASSED [ 87%]
+tests/test_maic_engine.py::TestMAICValidation::test_validation_flags_poor_overlap PASSED [ 89%]
+tests/test_maic_engine.py::TestMAICEndToEnd::test_complete_maic_workflow PASSED [ 92%]
+tests/test_maic_engine.py::TestMAICEndToEnd::test_maic_with_perfect_balance PASSED [ 94%]
+tests/test_maic_engine.py::TestMAICEdgeCases::test_small_sample_size PASSED [ 97%]
+tests/test_maic_engine.py::TestMAICEdgeCases::test_single_matching_variable PASSED [100%]
+
+=============================== warnings summary ===============================
+tests/test_maic_engine.py::TestMAICValidation::test_validation_flags_poor_overlap
+tests/test_maic_engine.py::TestMAICEdgeCases::test_small_sample_size
+  /home/user/Metanew/tests/../backend/stats/maic_engine.py:311: RuntimeWarning: overflow encountered in exp
+    exp_alpha_X = np.exp(X @ alpha)
+
+tests/test_maic_engine.py::TestMAICValidation::test_validation_flags_poor_overlap
+tests/test_maic_engine.py::TestMAICEdgeCases::test_small_sample_size
+  /home/user/Metanew/tests/../backend/stats/maic_engine.py:316: RuntimeWarning: overflow encountered in exp
+    exp_alpha_X = np.exp(X @ alpha)
+
+tests/test_maic_engine.py::TestMAICValidation::test_validation_flags_poor_overlap
+tests/test_maic_engine.py::TestMAICEdgeCases::test_small_sample_size
+  /home/user/Metanew/tests/../backend/stats/maic_engine.py:317: RuntimeWarning: invalid value encountered in divide
+    weights = exp_alpha_X / np.sum(exp_alpha_X) * n
+
+tests/test_maic_engine.py::TestMAICEdgeCases::test_small_sample_size
+  /home/user/Metanew/tests/../backend/stats/maic_engine.py:339: RuntimeWarning: invalid value encountered in divide
+    weights = exp_alpha_X / np.sum(exp_alpha_X) * n
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+================== 29 passed, 10 skipped, 7 warnings in 3.47s ==================
