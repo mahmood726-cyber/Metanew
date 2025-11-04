@@ -2,7 +2,7 @@
 
 ## Overview
 
-Metanew V4.5 introduces a dual-pathway system allowing users to choose between **Standard (Manual)** and **Novel Automated** statistical analysis approaches.
+Metanew V4.5 introduces a three-pathway system allowing users to choose between **Standard (Manual)**, **Novel Automated**, and **Custom/Advanced** statistical analysis approaches.
 
 **Date:** November 4, 2025
 **Version:** 4.5.0
@@ -10,7 +10,7 @@ Metanew V4.5 introduces a dual-pathway system allowing users to choose between *
 
 ---
 
-## 🛣️ TWO PATHWAYS EXPLAINED
+## 🛣️ THREE PATHWAYS EXPLAINED
 
 ### STANDARD PATHWAY: Traditional Manual Control
 
@@ -64,6 +64,32 @@ Metanew V4.5 introduces a dual-pathway system allowing users to choose between *
 - **Individual Effect Prediction** - Patient-specific treatment effect estimation ✓ NOVEL & VALIDATED
 - **Quantile Meta-Analysis** - Effects across outcome distribution (precision medicine) ✓ NOVEL & VALIDATED
 - All standard methods (automatically selected when appropriate)
+
+---
+
+### CUSTOM/ADVANCED PATHWAY: Full Control + All Methods
+
+**What It Is:**
+- Maximum flexibility with access to EVERYTHING
+- User manually selects from ALL methods (traditional + novel)
+- Mix and match standard and cutting-edge techniques
+- Full control over parameters like Standard, but with Novel methods unlocked
+- Choose which novel methods to use on a case-by-case basis
+
+**Who Should Use It:**
+- Advanced users wanting specific novel methods without full automation
+- Custom analyses requiring precise method combinations
+- Researchers exploring novel methods with manual control
+- When you want Component NMA but not other automated features
+- Complex projects needing both traditional and novel approaches
+- Methodologists testing specific combinations
+
+**Methods Available:**
+- **ALL traditional methods** from Standard Pathway
+- **ALL novel methods** from Novel Automated Pathway
+- **User decides** which methods to apply
+- **No automation** - full manual parameter configuration
+- **Complete flexibility** - any combination possible
 
 ---
 
@@ -170,18 +196,20 @@ THEN downgrade GRADE by 1 level for "serious inconsistency"
 
 ## 📊 PATHWAY COMPARISON TABLE
 
-| Feature | Standard Pathway | Novel Automated Pathway |
-|---------|------------------|-------------------------|
-| **Decision Making** | Manual (user chooses) | Automated (AI-optimized) |
-| **Statistical Methods** | Traditional (DL, REML, fixed/random) | Novel + Traditional (Component NMA, RMST, UME, Transportability) |
-| **Analysis Time** | Moderate (requires decisions) | Fast (automated) |
-| **Statistical Optimality** | Depends on user expertise | Guaranteed (1,500+ rules) |
-| **Audit Trail** | User-documented | Automatic (every decision logged) |
-| **Regulatory Compliance** | ✓ Accepted | ✓✓ Accepted + Enhanced traceability |
-| **Learning Curve** | Requires meta-analysis expertise | Minimal (automated) |
-| **Consistency** | Varies by analyst | 100% consistent (same data → same decisions) |
-| **Novel Methods** | Limited | Full access to validated 2020-2025 methods |
-| **Best Use Case** | Traditional projects, teaching, replication | Complex analyses, regulatory submissions, high-impact research |
+| Feature | Standard Pathway | Novel Automated Pathway | Custom/Advanced Pathway |
+|---------|------------------|-------------------------|-------------------------|
+| **Decision Making** | Manual (user chooses) | Automated (AI-optimized) | Manual (full control) |
+| **Statistical Methods** | Traditional only | Novel + Traditional (auto-selected) | ALL methods available (user-selected) |
+| **Method Access** | Traditional methods only | All methods (automated) | All methods (manual selection) |
+| **Analysis Time** | Moderate (requires decisions) | Fast (automated) | Moderate (requires decisions) |
+| **Statistical Optimality** | Depends on user expertise | Guaranteed (1,500+ rules) | Depends on user expertise |
+| **Audit Trail** | User-documented | Automatic (every decision logged) | User-documented |
+| **Regulatory Compliance** | ✓ Accepted | ✓✓ Accepted + Enhanced traceability | ✓ Accepted |
+| **Learning Curve** | Requires meta-analysis expertise | Minimal (automated) | Requires advanced expertise |
+| **Consistency** | Varies by analyst | 100% consistent (same data → same decisions) | Varies by analyst |
+| **Novel Methods** | Not available | Full access (automated) | Full access (manual) |
+| **Flexibility** | Limited to traditional | Limited to automated rules | Maximum flexibility |
+| **Best Use Case** | Traditional projects, teaching, replication | Complex analyses, regulatory submissions, high-impact research | Custom analyses, specific novel methods, method exploration |
 
 ---
 
@@ -230,7 +258,7 @@ User: researcher_id
 ✓ Teaching students about meta-analysis methodology
 ✓ You have strong preferences for specific methods
 ✓ Your field is conservative about novel approaches
-✓ You want full manual control at every step
+✓ You want full manual control with traditional methods only
 
 ### Use Novel Automated Pathway When:
 
@@ -242,6 +270,18 @@ User: researcher_id
 ✓ You want consistency across multiple projects
 ✓ Real-world evidence needs to be integrated with RCT data
 ✓ Precision medicine / personalized treatment questions
+✓ You trust the AI to make optimal decisions
+
+### Use Custom/Advanced Pathway When:
+
+✓ You want Component NMA but not other automated features
+✓ You need specific novel methods with manual parameter control
+✓ You're exploring new method combinations
+✓ You want to mix traditional and novel approaches selectively
+✓ Your analysis requires unique method combinations
+✓ You're an advanced methodologist testing specific configurations
+✓ You need RMST-NMA but want to manually set priors
+✓ You want maximum flexibility without automation
 
 ---
 
@@ -265,9 +305,14 @@ The first tab is now **"Pathway"** - choose your approach:
 - Traditional manual control
 
 **Novel Automated Pathway Button:**
-- Green button on the right
+- Green button in the middle
 - "Select Novel Automated Pathway"
 - AI-optimized automated decisions
+
+**Custom/Advanced Pathway Button:**
+- Orange button on the right
+- "Select Custom/Advanced Pathway"
+- Full access to ALL methods with manual control
 
 ### Step 3: Proceed with Analysis
 
@@ -275,9 +320,10 @@ After selecting your pathway:
 1. **Data** tab - Upload your study data
 2. **Protocol** tab - Define your research question (PICO)
 3. **Analysis** tab - Perform meta-analysis
-   - Standard: You configure parameters
+   - Standard: You configure traditional parameters
    - Novel: System auto-configures based on your data
-4. **Results** - View outcomes with automated interpretation (Novel pathway)
+   - Custom: You configure any parameters from ALL methods
+4. **Results** - View outcomes with automated interpretation (Novel pathway) or manual interpretation (Standard/Custom)
 5. **Reports** - Generate publication-ready documents
 
 ---
@@ -355,19 +401,22 @@ After selecting your pathway:
 
 ---
 
-## 🎯 KEY BENEFITS OF DUAL PATHWAY SYSTEM
+## 🎯 KEY BENEFITS OF THREE-PATHWAY SYSTEM
 
 ### For Users:
-- ✅ **Choice** - Pick approach that fits your needs
+- ✅ **Choice** - Pick approach that fits your needs (three options)
 - ✅ **Flexibility** - Switch between pathways for different projects
 - ✅ **Education** - Learn traditional methods (Standard) or leverage automation (Novel)
+- ✅ **Power Users** - Advanced control with Custom/Advanced pathway
 - ✅ **Confidence** - Know your pathway is validated and appropriate
+- ✅ **Method Access** - Novel methods available with (Novel) or without (Custom) automation
 
 ### For Metanew Platform:
-- ✅ **Market Expansion** - Appeal to both traditional and cutting-edge researchers
-- ✅ **Competitive Advantage** - Only platform with validated automated pathway
-- ✅ **Regulatory Acceptance** - Both pathways fully compliant
+- ✅ **Market Expansion** - Appeal to traditional, cutting-edge, and advanced researchers
+- ✅ **Competitive Advantage** - Only platform with validated automated pathway + full flexibility
+- ✅ **Regulatory Acceptance** - All three pathways fully compliant
 - ✅ **Future-Proof** - Novel pathway keeps platform at forefront of methodology
+- ✅ **Advanced Users** - Custom pathway attracts methodologists and power users
 
 ---
 
@@ -390,24 +439,25 @@ After selecting your pathway:
 
 ## 🏁 CONCLUSION
 
-Metanew's dual-pathway system provides **the best of both worlds**:
+Metanew's three-pathway system provides **maximum flexibility for all users**:
 
 1. **Standard Pathway** - Traditional, familiar, widely accepted
 2. **Novel Automated Pathway** - Cutting-edge, optimized, zero-hallucination
+3. **Custom/Advanced Pathway** - Full control, all methods, maximum flexibility
 
 **Choose based on your project needs, journal requirements, and personal preferences.**
 
-Both pathways are:
+All three pathways are:
 - ✅ Fully validated
 - ✅ Regulatory compliant
 - ✅ Publication-ready
 - ✅ Audit-trailed
 
-**The future of evidence synthesis is here - with a pathway for everyone.**
+**The future of evidence synthesis is here - with a pathway for everyone, from beginners to advanced methodologists.**
 
 ---
 
 **Document Prepared by:** Metanew Development Team
 **Date:** November 4, 2025
-**Version:** 4.5.0 - Dual Pathway System
+**Version:** 4.5.0 - Three-Pathway System
 **Status:** Production Ready ✅
