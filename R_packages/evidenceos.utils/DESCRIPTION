@@ -1,0 +1,30 @@
+Package: evidenceos.utils
+Title: Statistical Utilities for Evidence Synthesis and Meta-Analysis
+Version: 1.0.0
+Authors@R: c(
+    person("EvidenceOS", "Team", email = "team@evidenceos.com", role = c("aut", "cre")),
+    person("Mahmood", "Arai", email = "mahmood726@gmail.com", role = "ctb",
+           comment = "Original author of integrated code")
+)
+Description: Comprehensive utilities for meta-analysis including overfitting detection,
+    cross-validation methods, effect size conversions, risk of bias assessment, and
+    data validation. Integrates best-practice methods from Mahmood789 repositories
+    with evidence-based medicine workflows.
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.2.3
+Depends: R (>= 4.0.0)
+Imports:
+    metafor (>= 3.0.0),
+    esc (>= 0.5.1),
+    dplyr (>= 1.0.0),
+    ggplot2 (>= 3.3.0)
+Suggests:
+    testthat (>= 3.0.0),
+    knitr,
+    rmarkdown,
+    covr
+URL: https://github.com/evidenceos/evidenceos-utils
+BugReports: https://github.com/evidenceos/evidenceos-utils/issues
