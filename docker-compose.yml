@@ -60,6 +60,39 @@ services:
       - "com.evidenceos.service=shiny-frontend"
       - "com.evidenceos.version=1.0.0"
 
+  # Ollama AI (Local LLM Server)
+  ollama:
+    image: ollama/ollama:latest
+    container_name: evidenceos-ollama
+    restart: unless-stopped
+    ports:
+      - "11434:11434"
+    volumes:
+      # Persistent storage for models (can be large: 4-20GB per model)
+      - ollama-models:/root/.ollama
+    environment:
+      - OLLAMA_HOST=0.0.0.0:11434
+      - OLLAMA_ORIGINS=*  # Allow CORS from all origins
+    networks:
+      - evidenceos-network
+    labels:
+      - "com.evidenceos.service=ollama-ai"
+      - "com.evidenceos.version=1.0.0"
+    # Optional: GPU support (uncomment if you have NVIDIA GPU)
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - driver: nvidia
+    #           count: 1
+    #           capabilities: [gpu]
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:11434/api/tags"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+
   # Nginx Reverse Proxy (optional - for production)
   nginx:
     image: nginx:alpine
@@ -90,4 +123,6 @@ volumes:
   outputs:
     driver: local
   uploads:
+    driver: local
+  ollama-models:
     driver: local
