@@ -1,15 +1,17 @@
 # =============================================================================
 # Statistical Pathway Selection Module
 # =============================================================================
-# Allows users to choose between Standard and Novel (Automated) pathways
+# Allows users to choose between three analysis pathways:
 #
-# Standard Pathway: Traditional methods with manual parameter selection
+# Standard Pathway: Traditional methods only, manual parameter selection
 # Novel Automated Pathway: Rule-based decision engine makes statistically
-#                          optimal choices automatically
+#                          optimal choices automatically (1,500+ rules)
+# Custom/Advanced Pathway: Full access to ALL methods (standard + novel),
+#                          user manually selects what they want
 #
 # Author: Metanew Development Team
 # Date: 2025-11-04
-# Version: 4.5.0
+# Version: 4.5.1
 # =============================================================================
 
 library(shiny)
@@ -41,13 +43,13 @@ pathway_selection_ui <- function(id) {
         style = "margin: 0 0 15px 0; font-size: 36px; font-weight: 700;"
       ),
       p(
-        "Choose your analysis approach: Traditional manual control or novel automated optimization",
+        "Choose your analysis approach: Standard (traditional only), Novel Automated (AI-optimized), or Custom (pick any method)",
         style = "margin: 0; font-size: 18px; opacity: 0.95; font-weight: 300;"
       )
     ),
 
     layout_columns(
-      col_widths = c(6, 6),
+      col_widths = c(4, 4, 4),
 
       # Standard Pathway Card
       card(
@@ -181,6 +183,81 @@ pathway_selection_ui <- function(id) {
             )
           )
         )
+      ),
+
+      # Custom/Advanced Pathway Card
+      card(
+        height = "600px",
+        card_header(
+          class = "text-white",
+          style = "background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);",
+          div(
+            icon("sliders-h", style = "font-size: 24px; margin-right: 10px;"),
+            strong("CUSTOM/ADVANCED PATHWAY"),
+            tags$span(
+              "ALL METHODS",
+              style = "float: right; background: white; color: #D97706; padding: 4px 12px; border-radius: 12px; font-size: 12px; font-weight: 700;"
+            ),
+            style = "font-size: 20px;"
+          )
+        ),
+
+        card_body(
+          h4("Full Control + Access to Everything", style = "color: #4B5563; margin-bottom: 20px;"),
+
+          div(
+            style = "background: #FEF3C7; border-radius: 12px; padding: 20px; margin-bottom: 20px;",
+
+            h5(icon("toolbox", style = "color: #F59E0B;"), " What You Get:", style = "color: #1F2937; margin-bottom: 15px;"),
+
+            tags$ul(
+              style = "color: #4B5563; font-size: 15px; line-height: 1.8;",
+              tags$li(strong("Full manual control"), " over every parameter"),
+              tags$li(strong("Access to ALL methods:"), " Traditional + Novel (Component NMA, RMST, UME, Transportability, etc.)"),
+              tags$li(strong("Mix and match"), " standard and cutting-edge approaches"),
+              tags$li(strong("You decide"), " which novel methods to use and when"),
+              tags$li(strong("Maximum flexibility"), " for complex custom analyses"),
+              tags$li(strong("Expert mode"), " - all options unlocked")
+            )
+          ),
+
+          div(
+            style = "background: #E0E7FF; border-radius: 12px; padding: 20px; margin-bottom: 20px;",
+
+            h5(icon("star"), " Best For:", style = "color: #3730A3; margin-bottom: 15px;"),
+
+            tags$ul(
+              style = "color: #3730A3; font-size: 14px; line-height: 1.7;",
+              tags$li("Advanced users wanting specific novel methods"),
+              tags$li("Custom analyses requiring precise method combinations"),
+              tags$li("Exploring novel methods without full automation"),
+              tags$li("Research comparing traditional vs novel approaches"),
+              tags$li("When you want Component NMA but not other automated features"),
+              tags$li("Maximum control + cutting-edge methods")
+            )
+          ),
+
+          div(
+            style = "background: #FEF3C7; border-radius: 12px; padding: 15px; margin-bottom: 15px;",
+            p(
+              icon("info-circle", style = "color: #F59E0B; margin-right: 8px;"),
+              strong("How it works:"),
+              " You have access to every method in the platform (both traditional and novel). You manually choose which to use based on your expertise and research needs. Think of it as 'Standard Pathway + Novel Methods Unlocked'.",
+              style = "color: #92400E; margin: 0; font-size: 13px; line-height: 1.6;"
+            )
+          ),
+
+          div(
+            style = "margin-top: auto; padding-top: 20px;",
+            actionButton(
+              ns("select_custom"),
+              "Select Custom/Advanced Pathway",
+              icon = icon("cogs"),
+              class = "btn-warning w-100",
+              style = "padding: 15px; font-size: 18px; font-weight: 600; background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%); border: none; color: white;"
+            )
+          )
+        )
       )
     ),
 
@@ -202,53 +279,62 @@ pathway_selection_ui <- function(id) {
               tags$tr(
                 tags$th("Feature", style = "padding: 15px; font-weight: 600;"),
                 tags$th("Standard Pathway", style = "padding: 15px; font-weight: 600; text-align: center;"),
-                tags$th("Novel Automated Pathway", style = "padding: 15px; font-weight: 600; text-align: center;")
+                tags$th("Novel Automated Pathway", style = "padding: 15px; font-weight: 600; text-align: center;"),
+                tags$th("Custom/Advanced Pathway", style = "padding: 15px; font-weight: 600; text-align: center;")
               )
             ),
             tags$tbody(
               tags$tr(
                 tags$td("Decision Making", style = "padding: 12px;"),
                 tags$td("Manual (user chooses)", style = "padding: 12px; text-align: center;"),
-                tags$td(tags$strong("Automated (AI-optimized)"), style = "padding: 12px; text-align: center; color: #10B981;")
+                tags$td(tags$strong("Automated (AI-optimized)"), style = "padding: 12px; text-align: center; color: #10B981;"),
+                tags$td(tags$strong("Manual (full control)"), style = "padding: 12px; text-align: center; color: #F59E0B;")
               ),
               tags$tr(
                 style = "background: #F9FAFB;",
                 tags$td("Statistical Methods", style = "padding: 12px;"),
-                tags$td("Traditional (DL, REML, fixed/random)", style = "padding: 12px; text-align: center;"),
-                tags$td(tags$strong("Novel + Traditional (Component NMA, RMST, UME, Transportability)"), style = "padding: 12px; text-align: center; color: #10B981;")
+                tags$td("Traditional only", style = "padding: 12px; text-align: center;"),
+                tags$td(tags$strong("Novel + Traditional"), style = "padding: 12px; text-align: center; color: #10B981;"),
+                tags$td(tags$strong("ALL Methods Available"), style = "padding: 12px; text-align: center; color: #F59E0B;")
               ),
               tags$tr(
                 tags$td("Analysis Time", style = "padding: 12px;"),
-                tags$td("Moderate (requires decisions)", style = "padding: 12px; text-align: center;"),
-                tags$td(tags$strong("Fast (automated)"), style = "padding: 12px; text-align: center; color: #10B981;")
+                tags$td("Moderate", style = "padding: 12px; text-align: center;"),
+                tags$td(tags$strong("Fast (automated)"), style = "padding: 12px; text-align: center; color: #10B981;"),
+                tags$td("Moderate (requires decisions)", style = "padding: 12px; text-align: center;")
               ),
               tags$tr(
                 style = "background: #F9FAFB;",
                 tags$td("Statistical Optimality", style = "padding: 12px;"),
                 tags$td("Depends on user expertise", style = "padding: 12px; text-align: center;"),
-                tags$td(tags$strong("Guaranteed (1,500+ rules)"), style = "padding: 12px; text-align: center; color: #10B981;")
+                tags$td(tags$strong("Guaranteed (1,500+ rules)"), style = "padding: 12px; text-align: center; color: #10B981;"),
+                tags$td(tags$strong("Depends on user expertise"), style = "padding: 12px; text-align: center; color: #F59E0B;")
               ),
               tags$tr(
                 tags$td("Audit Trail", style = "padding: 12px;"),
                 tags$td("User-documented", style = "padding: 12px; text-align: center;"),
-                tags$td(tags$strong("Automatic (every decision logged)"), style = "padding: 12px; text-align: center; color: #10B981;")
+                tags$td(tags$strong("Automatic (every decision)"), style = "padding: 12px; text-align: center; color: #10B981;"),
+                tags$td("User-documented", style = "padding: 12px; text-align: center;")
               ),
               tags$tr(
                 style = "background: #F9FAFB;",
-                tags$td("Regulatory Compliance", style = "padding: 12px;"),
-                tags$td("✓ Accepted", style = "padding: 12px; text-align: center;"),
-                tags$td(tags$strong("✓✓ Accepted + Enhanced traceability"), style = "padding: 12px; text-align: center; color: #10B981;")
+                tags$td("Method Access", style = "padding: 12px;"),
+                tags$td("Traditional methods only", style = "padding: 12px; text-align: center;"),
+                tags$td("Novel methods (auto-selected)", style = "padding: 12px; text-align: center;"),
+                tags$td(tags$strong("ALL methods (user-selected)"), style = "padding: 12px; text-align: center; color: #F59E0B;")
               ),
               tags$tr(
                 tags$td("Learning Curve", style = "padding: 12px;"),
-                tags$td("Requires meta-analysis expertise", style = "padding: 12px; text-align: center;"),
-                tags$td(tags$strong("Minimal (automated)"), style = "padding: 12px; text-align: center; color: #10B981;")
+                tags$td("Requires MA expertise", style = "padding: 12px; text-align: center;"),
+                tags$td(tags$strong("Minimal (automated)"), style = "padding: 12px; text-align: center; color: #10B981;"),
+                tags$td("Requires advanced expertise", style = "padding: 12px; text-align: center;")
               ),
               tags$tr(
                 style = "background: #F9FAFB;",
                 tags$td("Best Use Case", style = "padding: 12px;"),
-                tags$td("Traditional projects, teaching, replication", style = "padding: 12px; text-align: center;"),
-                tags$td(tags$strong("Complex analyses, regulatory submissions, high-impact research"), style = "padding: 12px; text-align: center; color: #10B981;")
+                tags$td("Traditional projects, teaching", style = "padding: 12px; text-align: center;"),
+                tags$td(tags$strong("Complex analyses, regulatory submissions"), style = "padding: 12px; text-align: center; color: #10B981;"),
+                tags$td(tags$strong("Custom analyses, specific novel methods"), style = "padding: 12px; text-align: center; color: #F59E0B;")
               )
             )
           )
@@ -333,6 +419,41 @@ pathway_selection_server <- function(id, rv) {
             rule_engines = c("protocol", "methods", "results"),
             total_rules = 1500,
             total_scenarios = 30000
+          )
+        )
+      }
+    })
+
+    # Handle Custom/Advanced pathway selection
+    observeEvent(input$select_custom, {
+      selected_pathway("custom")
+
+      # Store in reactive values
+      rv$analysis_pathway <- "custom_advanced"
+      rv$use_automated_decisions <- FALSE  # Manual control
+      rv$enable_novel_methods <- TRUE      # But novel methods accessible
+
+      showNotification(
+        ui = div(
+          icon("cogs"),
+          strong(" Custom/Advanced Pathway Selected"),
+          br(),
+          "You have full access to ALL methods (traditional + novel). Manually select which methods to use based on your research needs."
+        ),
+        type = "warning",
+        duration = 5
+      )
+
+      # Log audit entry
+      if (!is.null(rv$audit_log)) {
+        rv$audit_log[[length(rv$audit_log) + 1]] <- list(
+          timestamp = Sys.time(),
+          action = "pathway_selected",
+          details = list(
+            pathway = "custom_advanced",
+            automated = FALSE,
+            novel_methods_enabled = TRUE,
+            description = "Full manual control with access to all methods"
           )
         )
       }

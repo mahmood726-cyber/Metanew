@@ -175,8 +175,9 @@ server <- function(input, output, session) {
     he_results = NULL,
     audit_log = list(),
     # Pathway selection
-    analysis_pathway = "none",          # "standard" or "novel_automated"
+    analysis_pathway = "none",          # "standard", "novel_automated", or "custom_advanced"
     use_automated_decisions = FALSE,    # TRUE for novel pathway
+    enable_novel_methods = FALSE,       # TRUE for custom pathway (enables novel methods in UI)
     protocol_rules = NULL,              # Rule engines (loaded when novel selected)
     methods_rules = NULL,
     results_rules = NULL
