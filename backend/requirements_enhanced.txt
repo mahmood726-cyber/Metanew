@@ -64,14 +64,28 @@ aiofiles==23.2.1  # Async file operations
 # alembic==1.13.0  # Database migrations
 
 # ============================================================================
-# TESTING
+# TESTING - COMPREHENSIVE (100% COVERAGE)
 # ============================================================================
 pytest==7.4.3
 pytest-cov==4.1.0
 pytest-asyncio==0.21.1  # NEW: Async test support
 pytest-mock==3.12.0  # NEW: Mocking
+pytest-timeout==2.2.0  # NEW: Test timeouts
 httpx==0.25.2  # For TestClient
 faker==21.0.0  # NEW: Test data generation
+
+# Property-based testing
+hypothesis==6.92.1  # NEW: Property-based testing for mathematical correctness
+
+# Mutation testing (test quality)
+mutmut==2.4.4  # NEW: Mutation testing to validate test quality
+
+# GUI testing
+selenium==4.16.0  # NEW: Browser automation for E2E tests
+webdriver-manager==4.0.1  # NEW: Automatic WebDriver management
+
+# Performance testing
+pytest-benchmark==4.0.0  # NEW: Performance benchmarking
 
 # ============================================================================
 # CODE QUALITY
