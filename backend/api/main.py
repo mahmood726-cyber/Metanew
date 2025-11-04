@@ -18,6 +18,7 @@ from schemas.evidence_object import (
     EvidenceObject, ValidationResult, ValidationProblem,
     Observation, Study
 )
+from api.dataset_catalog import router as dataset_router
 
 app = FastAPI(
     title="EvidenceOS PRIME API",
@@ -33,6 +34,9 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Include routers
+app.include_router(dataset_router)
 
 
 @app.get("/")

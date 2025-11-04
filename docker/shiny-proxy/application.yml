@@ -1,0 +1,268 @@
+proxy:
+  title: EvidenceOS PRIME - Meta-Analysis Suite
+  logo-url: https://www.example.com/logo.png
+  landing-page: /
+  heartbeat-rate: 10000
+  heartbeat-timeout: 60000
+  port: 8080
+  authentication: simple
+  admin-groups: admins
+  users:
+  - name: admin
+    password: changeme
+    groups: admins
+  - name: analyst
+    password: changeme
+    groups: analysts
+
+  docker:
+    cert-path: /home/none
+    url: http://localhost:2375
+    port-range-start: 20000
+
+  specs:
+    # ===== AI/LLM-POWERED APPS =====
+
+    - id: ai-bayesian
+      display-name: "AI-Powered Bayesian Analysis"
+      description: "Bayesian meta-analysis with AI interpretation using Google Gemini/OpenAI"
+      container-cmd: ["R", "-e", "shiny::runApp('/srv/shiny-server/786MIIIBayesianLLM', host='0.0.0.0', port=3838)"]
+      container-image: evidenceos/shiny-apps:latest
+      access-groups: [analysts, admins]
+      container-network: sp-net
+      container-env:
+        GOOGLE_API_KEY: "${GOOGLE_API_KEY}"
+        OPENAI_API_KEY: "${OPENAI_API_KEY}"
+      container-memory-limit: 2G
+      container-cpu-limit: 1.0
+
+    - id: ai-smd-results
+      display-name: "AI Results Interpretation (SMD)"
+      description: "GPT-powered interpretation of SMD meta-analysis results"
+      container-cmd: ["R", "-e", "shiny::runApp('/srv/shiny-server/786MIIILLMresultsSMD', host='0.0.0.0', port=3838)"]
+      container-image: evidenceos/shiny-apps:latest
+      access-groups: [analysts, admins]
+      container-network: sp-net
+      container-env:
+        GOOGLE_API_KEY: "${GOOGLE_API_KEY}"
+        OPENAI_API_KEY: "${OPENAI_API_KEY}"
+      container-memory-limit: 2G
+      container-cpu-limit: 1.0
+
+    - id: ai-or-rr-results
+      display-name: "AI Results Interpretation (OR/RR)"
+      description: "AI-powered interpretation of OR/RR meta-analysis results"
+      container-cmd: ["R", "-e", "shiny::runApp('/srv/shiny-server/786MIIIORRRLLM', host='0.0.0.0', port=3838)"]
+      container-image: evidenceos/shiny-apps:latest
+      access-groups: [analysts, admins]
+      container-network: sp-net
+      container-env:
+        GOOGLE_API_KEY: "${GOOGLE_API_KEY}"
+        OPENAI_API_KEY: "${OPENAI_API_KEY}"
+      container-memory-limit: 2G
+      container-cpu-limit: 1.0
+
+    - id: ai-nma-results
+      display-name: "AI NMA Interpretation"
+      description: "AI-powered network meta-analysis interpretation"
+      container-cmd: ["R", "-e", "shiny::runApp('/srv/shiny-server/786MIINMALLM', host='0.0.0.0', port=3838)"]
+      container-image: evidenceos/shiny-apps:latest
+      access-groups: [analysts, admins]
+      container-network: sp-net
+      container-env:
+        GOOGLE_API_KEY: "${GOOGLE_API_KEY}"
+        OPENAI_API_KEY: "${OPENAI_API_KEY}"
+      container-memory-limit: 2G
+      container-cpu-limit: 1.0
+
+    # ===== PAIRWISE META-ANALYSIS =====
+
+    - id: pairwise-or-rr
+      display-name: "Pairwise Meta-Analysis (OR/RR)"
+      description: "Comprehensive odds ratio and risk ratio meta-analysis with forest plots"
+      container-cmd: ["R", "-e", "shiny::runApp('/srv/shiny-server/MIII786MasroorPairwiseRROR', host='0.0.0.0', port=3838)"]
+      container-image: evidenceos/shiny-apps:latest
+      access-groups: [analysts, admins]
+      container-network: sp-net
+      container-memory-limit: 3G
+      container-cpu-limit: 1.5
+
+    - id: pairwise-smd
+      display-name: "Pairwise Meta-Analysis (SMD)"
+      description: "Standardized mean difference meta-analysis"
+      container-cmd: ["R", "-e", "shiny::runApp('/srv/shiny-server/PairwiseSMD', host='0.0.0.0', port=3838)"]
+      container-image: evidenceos/shiny-apps:latest
+      access-groups: [analysts, admins]
+      container-network: sp-net
+      container-memory-limit: 3G
+      container-cpu-limit: 1.5
+
+    - id: pairwise-hr
+      display-name: "Hazard Ratio Meta-Analysis"
+      description: "Time-to-event meta-analysis using hazard ratios"
+      container-cmd: ["R", "-e", "shiny::runApp('/srv/shiny-server/HazardRatioMeta', host='0.0.0.0', port=3838)"]
+      container-image: evidenceos/shiny-apps:latest
+      access-groups: [analysts, admins]
+      container-network: sp-net
+      container-memory-limit: 2G
+      container-cpu-limit: 1.0
+
+    - id: pairwise-prop
+      display-name: "Proportions Meta-Analysis"
+      description: "Meta-analysis of single proportions and rates"
+      container-cmd: ["R", "-e", "shiny::runApp('/srv/shiny-server/PropApp', host='0.0.0.0', port=3838)"]
+      container-image: evidenceos/shiny-apps:latest
+      access-groups: [analysts, admins]
+      container-network: sp-net
+      container-memory-limit: 2G
+      container-cpu-limit: 1.0
+
+    # ===== NETWORK META-ANALYSIS (NMA) =====
+
+    - id: nma-ror
+      display-name: "Network Meta-Analysis (ROR)"
+      description: "Network meta-analysis for ratio of odds ratios"
+      container-cmd: ["R", "-e", "shiny::runApp('/srv/shiny-server/786MIIIRRORNMA', host='0.0.0.0', port=3838)"]
+      container-image: evidenceos/shiny-apps:latest
+      access-groups: [analysts, admins]
+      container-network: sp-net
+      container-memory-limit: 3G
+      container-cpu-limit: 2.0
+
+    - id: nma-hr
+      display-name: "Network Meta-Analysis (HR)"
+      description: "Network meta-analysis for hazard ratios"
+      container-cmd: ["R", "-e", "shiny::runApp('/srv/shiny-server/786MIIIHRNMA', host='0.0.0.0', port=3838)"]
+      container-image: evidenceos/shiny-apps:latest
+      access-groups: [analysts, admins]
+      container-network: sp-net
+      container-memory-limit: 3G
+      container-cpu-limit: 2.0
+
+    - id: nma-metaregression
+      display-name: "NMA with Meta-Regression"
+      description: "Advanced network meta-analysis with covariate adjustment"
+      container-cmd: ["R", "-e", "shiny::runApp('/srv/shiny-server/786MIIINMAmetaregression', host='0.0.0.0', port=3838)"]
+      container-image: evidenceos/shiny-apps:latest
+      access-groups: [analysts, admins]
+      container-network: sp-net
+      container-memory-limit: 4G
+      container-cpu-limit: 2.0
+
+    - id: nma-bayesian-smd
+      display-name: "Bayesian NMA (SMD)"
+      description: "Bayesian network meta-analysis for continuous outcomes"
+      container-cmd: ["R", "-e", "shiny::runApp('/srv/shiny-server/NMABayesianSMD', host='0.0.0.0', port=3838)"]
+      container-image: evidenceos/shiny-apps:latest
+      access-groups: [analysts, admins]
+      container-network: sp-net
+      container-memory-limit: 4G
+      container-cpu-limit: 2.0
+
+    - id: nma-freq-smd
+      display-name: "Frequentist NMA (SMD/MD)"
+      description: "Advanced frequentist network meta-analysis"
+      container-cmd: ["R", "-e", "shiny::runApp('/srv/shiny-server/NMASMDMDFreqadvanced', host='0.0.0.0', port=3838)"]
+      container-image: evidenceos/shiny-apps:latest
+      access-groups: [analysts, admins]
+      container-network: sp-net
+      container-memory-limit: 3G
+      container-cpu-limit: 2.0
+
+    # ===== SPECIALIZED META-ANALYSIS =====
+
+    - id: dta-meta
+      display-name: "Diagnostic Test Accuracy (DTA)"
+      description: "Meta-analysis of diagnostic test accuracy studies"
+      container-cmd: ["R", "-e", "shiny::runApp('/srv/shiny-server/DTA', host='0.0.0.0', port=3838)"]
+      container-image: evidenceos/shiny-apps:latest
+      access-groups: [analysts, admins]
+      container-network: sp-net
+      container-memory-limit: 2G
+      container-cpu-limit: 1.0
+
+    - id: dose-response
+      display-name: "Dose-Response Meta-Analysis"
+      description: "Non-linear dose-response meta-analysis with restricted cubic splines"
+      container-cmd: ["R", "-e", "shiny::runApp('/srv/shiny-server/DoseResponseApp', host='0.0.0.0', port=3838)"]
+      container-image: evidenceos/shiny-apps:latest
+      access-groups: [analysts, admins]
+      container-network: sp-net
+      container-memory-limit: 3G
+      container-cpu-limit: 1.5
+
+    - id: km-curves
+      display-name: "Kaplan-Meier Curve Extraction"
+      description: "Extract and meta-analyze survival data from Kaplan-Meier curves"
+      container-cmd: ["R", "-e", "shiny::runApp('/srv/shiny-server/KMCurveProject', host='0.0.0.0', port=3838)"]
+      container-image: evidenceos/shiny-apps:latest
+      access-groups: [analysts, admins]
+      container-network: sp-net
+      container-memory-limit: 2G
+      container-cpu-limit: 1.0
+
+    - id: multilevel-meta
+      display-name: "Multilevel Meta-Analysis"
+      description: "Three-level and hierarchical meta-analysis models"
+      container-cmd: ["R", "-e", "shiny::runApp('/srv/shiny-server/MultilevelMetaAnalysis', host='0.0.0.0', port=3838)"]
+      container-image: evidenceos/shiny-apps:latest
+      access-groups: [analysts, admins]
+      container-network: sp-net
+      container-memory-limit: 3G
+      container-cpu-limit: 1.5
+
+    - id: annualised-plots
+      display-name: "Annualised Event Rate Plots"
+      description: "Create annualised event rate plots for time-to-event data"
+      container-cmd: ["R", "-e", "shiny::runApp('/srv/shiny-server/786MIIIAnnualisedPlot', host='0.0.0.0', port=3838)"]
+      container-image: evidenceos/shiny-apps:latest
+      access-groups: [analysts, admins]
+      container-network: sp-net
+      container-memory-limit: 2G
+      container-cpu-limit: 1.0
+
+    # ===== UTILITY APPS =====
+
+    - id: data-conversion-1
+      display-name: "Meta-Analysis Data Converter"
+      description: "Convert between meta-analysis data formats"
+      container-cmd: ["R", "-e", "shiny::runApp('/srv/shiny-server/786MIIIConversion', host='0.0.0.0', port=3838)"]
+      container-image: evidenceos/shiny-apps:latest
+      access-groups: [analysts, admins]
+      container-network: sp-net
+      container-memory-limit: 1G
+      container-cpu-limit: 0.5
+
+    - id: data-conversion-2
+      display-name: "Effect Size Converter"
+      description: "Convert between different effect size measures"
+      container-cmd: ["R", "-e", "shiny::runApp('/srv/shiny-server/DataConversionMeta', host='0.0.0.0', port=3838)"]
+      container-image: evidenceos/shiny-apps:latest
+      access-groups: [analysts, admins]
+      container-network: sp-net
+      container-memory-limit: 1G
+      container-cpu-limit: 0.5
+
+    - id: rob-assessment
+      display-name: "Risk of Bias Assessment"
+      description: "Systematic risk of bias assessment and visualization"
+      container-cmd: ["R", "-e", "shiny::runApp('/srv/shiny-server/786MIIIROB', host='0.0.0.0', port=3838)"]
+      container-image: evidenceos/shiny-apps:latest
+      access-groups: [analysts, admins]
+      container-network: sp-net
+      container-memory-limit: 1G
+      container-cpu-limit: 0.5
+
+    - id: median-iqr-conversion
+      display-name: "Median/IQR Converter"
+      description: "Convert median and IQR to mean and standard deviation"
+      container-cmd: ["R", "-e", "shiny::runApp('/srv/shiny-server/MedianIQRconversion', host='0.0.0.0', port=3838)"]
+      container-image: evidenceos/shiny-apps:latest
+      access-groups: [analysts, admins]
+      container-network: sp-net
+      container-memory-limit: 1G
+      container-cpu-limit: 0.5
+
+logging:
+  file:
+    shinyproxy.log
