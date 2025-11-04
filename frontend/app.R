@@ -14,6 +14,7 @@ library(dosresmeta)
 source("modules/pathway_selection.R")
 source("modules/data_import.R")
 source("modules/protocol.R")
+source("modules/protocol_enhanced.R")  # V4.6: PROSPERO compliance + length control
 source("modules/meta_pairwise.R")
 source("modules/nma.R")
 source("modules/dose_response.R")
@@ -25,6 +26,8 @@ source("modules/reporting.R")
 source("modules/audit.R")
 source("modules/ai_copilot.R")
 source("modules/v2_features.R")
+source("modules/living_ma_enhanced.R")  # V4.6: Living reviews with PubMed API
+source("modules/plain_language_summary_engine.R")  # V4.6: Plain language summaries
 
 # Source utilities
 source("utils/python_bridge.R")
@@ -124,6 +127,13 @@ ui <- page_navbar(
     reporting_ui("reporting")
   ),
 
+  # Tab: Living Review (V4.6)
+  nav_panel(
+    title = "Living Review",
+    icon = icon("heartbeat"),
+    living_ma_enhanced_ui("living_review")
+  ),
+
   # Tab: Audit
   nav_panel(
     title = "Audit",
@@ -218,6 +228,7 @@ server <- function(input, output, session) {
   he_bcea_results <- he_bcea_server("he_bcea", rv)
   ai_copilot_results <- ai_copilot_server("ai_copilot", rv)
   reporting_results <- reporting_server("reporting", rv)
+  living_review_results <- living_ma_enhanced_server("living_review", rv)  # V4.6
   audit_results <- audit_server("audit", rv)
   v2_results <- v2_features_server("v2_features", rv)
 
