@@ -76,16 +76,21 @@ calculate_evpi <- function(psa_results, wtp_threshold = 30000, n_patients = 1000
 #' Calculate Expected Value of Partial Perfect Information (EVPPI)
 #'
 #' @param psa_results PSA results
-#' @param parameter_name Parameter to assess
+#' @param parameter_name Parameter(s) to assess (single name or vector of names)
 #' @param wtp_threshold WTP threshold
 #' @param n_patients Number of patients
+#' @param method Method for multi-parameter EVPPI ("gam", "loess", "linear")
 #' @return List with EVPPI results
-calculate_evppi <- function(psa_results, parameter_name, wtp_threshold = 30000, n_patients = 10000) {
-  # Simplified EVPPI using nonparametric regression
+calculate_evppi <- function(psa_results, parameter_name, wtp_threshold = 30000,
+                            n_patients = 10000, method = "gam") {
+  # EVPPI using nonparametric regression
+  # Supports single or multiple parameters
+
   tryCatch({
-    # This requires parameter values in psa_results
-    if (!parameter_name %in% names(psa_results)) {
-      return(list(error = paste("Parameter not found:", parameter_name)))
+    # Check if parameters exist
+    missing_params <- parameter_name[!parameter_name %in% names(psa_results)]
+    if (length(missing_params) > 0) {
+      return(list(error = paste("Parameters not found:", paste(missing_params, collapse = ", "))))
     }
 
     # Calculate NMB
@@ -95,28 +100,113 @@ calculate_evppi <- function(psa_results, parameter_name, wtp_threshold = 30000, 
       max(nmb)
     })
 
-    # Get parameter values
-    param_values <- psa_results[[parameter_name]][psa_results$arm == arms[1]]
+    # Single parameter EVPPI
+    if (length(parameter_name) == 1) {
+      # Get parameter values
+      param_values <- psa_results[[parameter_name]][psa_results$arm == arms[1]]
 
-    # Nonparametric regression (loess)
-    fit <- loess(nmb_by_iteration ~ param_values, span = 0.75)
-    predicted_nmb <- predict(fit)
+      # Nonparametric regression (loess)
+      fit <- loess(nmb_by_iteration ~ param_values, span = 0.75)
+      predicted_nmb <- predict(fit)
 
-    # EVPPI
-    evppi_per_patient <- mean(predicted_nmb) - mean(nmb_by_iteration)
-    evppi_population <- evppi_per_patient * n_patients
+      # EVPPI
+      evppi_per_patient <- mean(predicted_nmb) - mean(nmb_by_iteration)
+      evppi_population <- evppi_per_patient * n_patients
 
-    return(list(
-      parameter = parameter_name,
-      evppi_per_patient = evppi_per_patient,
-      evppi_population = evppi_population,
-      n_patients = n_patients,
-      wtp_threshold = wtp_threshold
-    ))
+      return(list(
+        parameters = parameter_name,
+        n_parameters = 1,
+        evppi_per_patient = evppi_per_patient,
+        evppi_population = evppi_population,
+        n_patients = n_patients,
+        wtp_threshold = wtp_threshold,
+        method = "loess"
+      ))
+
+    } else {
+      # Multi-parameter EVPPI using GAM or other methods
+
+      # Extract parameter values for first arm
+      param_data <- psa_results[psa_results$arm == arms[1], parameter_name, drop = FALSE]
+
+      if (method == "gam") {
+        # Generalized Additive Model for multi-parameter smoothing
+        library(mgcv)
+
+        # Build formula
+        formula_str <- paste("nmb_by_iteration ~",
+                            paste0("s(", parameter_name, ")", collapse = " + "))
+        formula_obj <- as.formula(formula_str)
+
+        # Fit GAM
+        df_gam <- cbind(data.frame(nmb_by_iteration = nmb_by_iteration), param_data)
+        fit <- gam(formula_obj, data = df_gam)
+        predicted_nmb <- predict(fit)
+
+      } else if (method == "loess") {
+        # Multi-dimensional loess (limited to 2-3 parameters)
+        if (length(parameter_name) > 3) {
+          return(list(error = "LOESS limited to 3 parameters. Use method='gam' for more."))
+        }
+
+        formula_str <- paste("nmb_by_iteration ~", paste(parameter_name, collapse = " + "))
+        formula_obj <- as.formula(formula_str)
+
+        df_loess <- cbind(data.frame(nmb_by_iteration = nmb_by_iteration), param_data)
+        fit <- loess(formula_obj, data = df_loess, span = 0.75)
+        predicted_nmb <- predict(fit)
+
+      } else if (method == "linear") {
+        # Linear regression (fast but less accurate)
+        formula_str <- paste("nmb_by_iteration ~", paste(parameter_name, collapse = " + "))
+        formula_obj <- as.formula(formula_str)
+
+        df_lm <- cbind(data.frame(nmb_by_iteration = nmb_by_iteration), param_data)
+        fit <- lm(formula_obj, data = df_lm)
+        predicted_nmb <- predict(fit)
+      }
+
+      # EVPPI for parameter group
+      evppi_per_patient <- mean(predicted_nmb) - mean(nmb_by_iteration)
+      evppi_population <- evppi_per_patient * n_patients
+
+      return(list(
+        parameters = parameter_name,
+        n_parameters = length(parameter_name),
+        evppi_per_patient = evppi_per_patient,
+        evppi_population = evppi_population,
+        n_patients = n_patients,
+        wtp_threshold = wtp_threshold,
+        method = method,
+        interpretation = interpret_evppi(evppi_per_patient, length(parameter_name))
+      ))
+    }
 
   }, error = function(e) {
     return(list(error = paste("EVPPI calculation error:", e$message)))
   })
+}
+
+#' Interpret EVPPI value
+#' @param evppi_value EVPPI per patient
+#' @param n_params Number of parameters
+#' @return Interpretation string
+interpret_evppi <- function(evppi_value, n_params) {
+  if (evppi_value < 0) {
+    return("Negative EVPPI (likely numerical error - check model)")
+  }
+
+  threshold <- if (n_params == 1) 500 else 1000
+
+  if (evppi_value > threshold * 2) {
+    return("Very high EVPPI - further research on these parameters highly valuable")
+  } else if (evppi_value > threshold) {
+    return("High EVPPI - additional research on these parameters recommended")
+  } else if (evppi_value > threshold / 2) {
+    return("Moderate EVPPI - consider research if feasible")
+  } else {
+    return("Low EVPPI - current evidence likely sufficient for these parameters")
+  }
 }
 
 #' Run budget impact model
