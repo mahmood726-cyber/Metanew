@@ -304,11 +304,24 @@ class TestRiskDifferenceComputation:
 class TestMeanDifferenceComputation:
     """Comprehensive tests for MD computation"""
 
-    def test_md_basic_computation(self, continuous_df):
+    def test_md_basic_computation(self):
         """Test 4.1: Basic MD computation"""
-        result = compute_effect_size(continuous_df, measure='MD')
+        # Continuous data requires contrast format (mean1, sd1, n1, mean2, sd2, n2)
+        df = pd.DataFrame({
+            'study_id': ['S1'],
+            'mean1': [10.5],
+            'sd1': [2.1],
+            'n1': [50],
+            'mean2': [12.3],
+            'sd2': [2.5],
+            'n2': [60]
+        })
+        result = compute_effect_size(df, measure='MD')
         assert 'yi' in result.columns
         assert 'sei' in result.columns
+        # MD should equal mean1 - mean2
+        expected_md = 10.5 - 12.3
+        assert abs(result['yi'].iloc[0] - expected_md) < 0.01
 
     def test_md_mathematical_verification(self):
         """Test 4.2: Mathematical verification of MD"""

@@ -133,7 +133,11 @@ class TestValidation:
             ],
             "data_type": "binary"
         })
-        assert response.status_code in [400, 422]
+        assert response.status_code == 200
+        data = response.json()
+        assert data["is_valid"] is False
+        assert data["summary"]["errors"] > 0
+        assert len(data["problems"]) > 0
 
     def test_validate_continuous_data(self, client):
         """Test validation with continuous data"""

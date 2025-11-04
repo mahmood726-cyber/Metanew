@@ -14,7 +14,7 @@ Features:
 """
 from fastapi import FastAPI, HTTPException, Request, Depends, status
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.middleware.gzip import GZIPMiddleware
+from starlette.middleware.gzip import GZipMiddleware
 from fastapi.responses import JSONResponse
 from fastapi.exceptions import RequestValidationError
 from typing import Dict, List, Any, Optional
@@ -67,7 +67,7 @@ app = FastAPI(
 app.add_middleware(CorrelationIdMiddleware)
 
 # GZIP compression for responses
-app.add_middleware(GZIPMiddleware, minimum_size=1000)
+app.add_middleware(GZipMiddleware, minimum_size=1000)
 
 # CORS middleware with SECURE configuration
 app.add_middleware(
