@@ -255,7 +255,13 @@ class MAICEngine:
 
             # AgD mean and SD
             agd_mean = agd[var].iloc[0]  # Assuming single row with means
-            agd_sd = agd.get(f"{var}_sd", [ipd_sd]).iloc[0]  # Use IPD SD if AgD SD not available
+
+            # Try to get AgD SD, fallback to IPD SD
+            sd_col = f"{var}_sd"
+            if sd_col in agd.columns:
+                agd_sd = agd[sd_col].iloc[0]
+            else:
+                agd_sd = ipd_sd  # Use IPD SD if AgD SD not available
 
             # Standardized mean difference
             pooled_sd = np.sqrt((ipd_sd**2 + agd_sd**2) / 2)
