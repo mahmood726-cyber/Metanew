@@ -1,0 +1,390 @@
+# Kubernetes Deployment Manifests for EvidenceOS PRIME
+# Includes backend, frontend, Redis, and monitoring
+
+---
+# Redis Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis
+  labels:
+    app: evidenceos
+    component: cache
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: evidenceos
+      component: cache
+  template:
+    metadata:
+      labels:
+        app: evidenceos
+        component: cache
+    spec:
+      containers:
+      - name: redis
+        image: redis:7-alpine
+        ports:
+        - containerPort: 6379
+          name: redis
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "100m"
+          limits:
+            memory: "512Mi"
+            cpu: "200m"
+        livenessProbe:
+          exec:
+            command:
+            - redis-cli
+            - ping
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        readinessProbe:
+          exec:
+            command:
+            - redis-cli
+            - ping
+          initialDelaySeconds: 3
+          periodSeconds: 3
+
+---
+# Redis Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis
+  labels:
+    app: evidenceos
+    component: cache
+spec:
+  selector:
+    app: evidenceos
+    component: cache
+  ports:
+  - port: 6379
+    targetPort: 6379
+    name: redis
+  type: ClusterIP
+
+---
+# Backend Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: evidenceos-backend
+  labels:
+    app: evidenceos
+    component: backend
+spec:
+  replicas: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      app: evidenceos
+      component: backend
+  template:
+    metadata:
+      labels:
+        app: evidenceos
+        component: backend
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8000"
+        prometheus.io/path: "/metrics"
+    spec:
+      containers:
+      - name: backend
+        image: evidenceos-backend:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8000
+          name: http
+          protocol: TCP
+        env:
+        - name: HOST
+          value: "0.0.0.0"
+        - name: PORT
+          value: "8000"
+        - name: LOG_LEVEL
+          value: "INFO"
+        - name: LOG_FORMAT
+          value: "json"
+        - name: REDIS_HOST
+          value: "redis"
+        - name: REDIS_PORT
+          value: "6379"
+        - name: ENABLE_CACHE
+          value: "true"
+        - name: ENABLE_METRICS
+          value: "true"
+        - name: SECRET_KEY
+          valueFrom:
+            secretKeyRef:
+              name: evidenceos-secrets
+              key: secret-key
+        - name: ALLOWED_ORIGINS
+          value: "http://evidenceos-frontend:3838,https://evidenceos.example.com"
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "250m"
+          limits:
+            memory: "1Gi"
+            cpu: "500m"
+        livenessProbe:
+          httpGet:
+            path: /health/live
+            port: http
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /health/ready
+            port: http
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 3
+        startupProbe:
+          httpGet:
+            path: /health/live
+            port: http
+          initialDelaySeconds: 0
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 30
+
+---
+# Backend Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: evidenceos-backend
+  labels:
+    app: evidenceos
+    component: backend
+spec:
+  selector:
+    app: evidenceos
+    component: backend
+  ports:
+  - port: 8000
+    targetPort: 8000
+    protocol: TCP
+    name: http
+  type: ClusterIP
+
+---
+# Frontend Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: evidenceos-frontend
+  labels:
+    app: evidenceos
+    component: frontend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: evidenceos
+      component: frontend
+  template:
+    metadata:
+      labels:
+        app: evidenceos
+        component: frontend
+    spec:
+      containers:
+      - name: frontend
+        image: evidenceos-frontend:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 3838
+          name: http
+        env:
+        - name: SHINY_LOG_LEVEL
+          value: "INFO"
+        - name: AI_BACKEND_URL
+          value: "http://evidenceos-backend:8000"
+        resources:
+          requests:
+            memory: "1Gi"
+            cpu: "500m"
+          limits:
+            memory: "2Gi"
+            cpu: "1000m"
+        livenessProbe:
+          httpGet:
+            path: /
+            port: http
+          initialDelaySeconds: 60
+          periodSeconds: 30
+        readinessProbe:
+          httpGet:
+            path: /
+            port: http
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        volumeMounts:
+        - name: outputs
+          mountPath: /srv/shiny-server/evidenceos/outputs
+        - name: uploads
+          mountPath: /srv/shiny-server/evidenceos/data/uploads
+      volumes:
+      - name: outputs
+        persistentVolumeClaim:
+          claimName: evidenceos-outputs
+      - name: uploads
+        persistentVolumeClaim:
+          claimName: evidenceos-uploads
+
+---
+# Frontend Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: evidenceos-frontend
+  labels:
+    app: evidenceos
+    component: frontend
+spec:
+  selector:
+    app: evidenceos
+    component: frontend
+  ports:
+  - port: 3838
+    targetPort: 3838
+    protocol: TCP
+    name: http
+  type: LoadBalancer
+
+---
+# Horizontal Pod Autoscaler for Backend
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: evidenceos-backend-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: evidenceos-backend
+  minReplicas: 2
+  maxReplicas: 10
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 70
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: 80
+  behavior:
+    scaleDown:
+      stabilizationWindowSeconds: 300
+      policies:
+      - type: Percent
+        value: 50
+        periodSeconds: 60
+    scaleUp:
+      stabilizationWindowSeconds: 0
+      policies:
+      - type: Percent
+        value: 100
+        periodSeconds: 30
+      - type: Pods
+        value: 2
+        periodSeconds: 30
+      selectPolicy: Max
+
+---
+# PersistentVolumeClaim for outputs
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: evidenceos-outputs
+spec:
+  accessModes:
+  - ReadWriteMany
+  resources:
+    requests:
+      storage: 10Gi
+  storageClassName: standard
+
+---
+# PersistentVolumeClaim for uploads
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: evidenceos-uploads
+spec:
+  accessModes:
+  - ReadWriteMany
+  resources:
+    requests:
+      storage: 5Gi
+  storageClassName: standard
+
+---
+# Ingress
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: evidenceos-ingress
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/proxy-body-size: "50m"
+spec:
+  tls:
+  - hosts:
+    - evidenceos.example.com
+    - api.evidenceos.example.com
+    secretName: evidenceos-tls
+  rules:
+  - host: evidenceos.example.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: evidenceos-frontend
+            port:
+              number: 3838
+  - host: api.evidenceos.example.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: evidenceos-backend
+            port:
+              number: 8000
+
+---
+# Secret (create manually or via CI/CD)
+apiVersion: v1
+kind: Secret
+metadata:
+  name: evidenceos-secrets
+type: Opaque
+stringData:
+  secret-key: "CHANGE-ME-IN-PRODUCTION-use-kubectl-create-secret"

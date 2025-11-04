@@ -1,0 +1,217 @@
+# Enhanced Docker Compose for EvidenceOS PRIME
+# Includes Redis, monitoring, and production-ready configuration
+# Usage: docker-compose -f docker-compose-enhanced.yml up -d
+
+version: '3.8'
+
+services:
+  # ==========================================================================
+  # CACHE - Redis
+  # ==========================================================================
+  redis:
+    image: redis:7-alpine
+    container_name: evidenceos-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    command: redis-server --appendonly yes --maxmemory 256mb --maxmemory-policy allkeys-lru
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+      start_period: 10s
+    networks:
+      - evidenceos-network
+    labels:
+      - "com.evidenceos.service=cache"
+
+  # ==========================================================================
+  # BACKEND - FastAPI
+  # ==========================================================================
+  ai-backend:
+    build:
+      context: ./backend/api
+      dockerfile: Dockerfile
+    container_name: evidenceos-ai-backend
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      # Server
+      - HOST=0.0.0.0
+      - PORT=8000
+
+      # Security
+      - SECRET_KEY=${SECRET_KEY:-CHANGE-ME-IN-PRODUCTION}
+      - ALLOWED_ORIGINS=http://localhost:3838,http://shiny-frontend:3838
+
+      # Redis
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - ENABLE_CACHE=true
+      - CACHE_TTL=3600
+
+      # Logging
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
+      - LOG_FORMAT=json
+
+      # Monitoring
+      - ENABLE_METRICS=true
+
+      # Rate Limiting
+      - RATE_LIMIT_PER_MINUTE=60
+    depends_on:
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import requests; requests.get('http://localhost:8000/health/ready').raise_for_status()"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+    networks:
+      - evidenceos-network
+    labels:
+      - "com.evidenceos.service=backend"
+      - "com.evidenceos.version=1.0.0"
+
+  # ==========================================================================
+  # FRONTEND - Shiny
+  # ==========================================================================
+  shiny-frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: evidenceos-shiny-frontend
+    restart: unless-stopped
+    ports:
+      - "3838:3838"
+    environment:
+      - SHINY_LOG_LEVEL=${SHINY_LOG_LEVEL:-INFO}
+      - AI_BACKEND_URL=http://ai-backend:8000
+    volumes:
+      # Persistent storage for outputs and uploads
+      - ./outputs:/srv/shiny-server/evidenceos/outputs
+      - ./data/uploads:/srv/shiny-server/evidenceos/data/uploads
+    depends_on:
+      ai-backend:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3838/evidenceos/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - evidenceos-network
+    labels:
+      - "com.evidenceos.service=frontend"
+      - "com.evidenceos.version=1.0.0"
+
+  # ==========================================================================
+  # NGINX - Reverse Proxy
+  # ==========================================================================
+  nginx:
+    image: nginx:alpine
+    container_name: evidenceos-nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/ssl:/etc/nginx/ssl:ro
+    depends_on:
+      - shiny-frontend
+      - ai-backend
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    networks:
+      - evidenceos-network
+    labels:
+      - "com.evidenceos.service=nginx"
+    profiles:
+      - production
+
+  # ==========================================================================
+  # MONITORING - Prometheus (Optional)
+  # ==========================================================================
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: evidenceos-prometheus
+    restart: unless-stopped
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus-data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--storage.tsdb.retention.time=30d'
+      - '--web.enable-lifecycle'
+    networks:
+      - evidenceos-network
+    labels:
+      - "com.evidenceos.service=monitoring"
+    profiles:
+      - monitoring
+
+  # ==========================================================================
+  # VISUALIZATION - Grafana (Optional)
+  # ==========================================================================
+  grafana:
+    image: grafana/grafana:latest
+    container_name: evidenceos-grafana
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_USER=${GRAFANA_USER:-admin}
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD:-admin}
+      - GF_INSTALL_PLUGINS=redis-datasource
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ./monitoring/grafana-dashboards:/etc/grafana/provisioning/dashboards:ro
+      - ./monitoring/grafana-datasources:/etc/grafana/provisioning/datasources:ro
+    depends_on:
+      - prometheus
+    networks:
+      - evidenceos-network
+    labels:
+      - "com.evidenceos.service=visualization"
+    profiles:
+      - monitoring
+
+# =============================================================================
+# NETWORKS
+# =============================================================================
+networks:
+  evidenceos-network:
+    driver: bridge
+    name: evidenceos-network
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
+
+# =============================================================================
+# VOLUMES
+# =============================================================================
+volumes:
+  redis-data:
+    driver: local
+    name: evidenceos-redis-data
+
+  prometheus-data:
+    driver: local
+    name: evidenceos-prometheus-data
+
+  grafana-data:
+    driver: local
+    name: evidenceos-grafana-data
