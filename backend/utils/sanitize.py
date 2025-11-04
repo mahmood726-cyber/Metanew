@@ -150,7 +150,11 @@ def sanitize_dict(data: Dict[str, Any], sanitize_keys: bool = False) -> Dict[str
         clean_key = sanitize_string(str(key), max_length=100) if sanitize_keys else key
 
         # Sanitize value based on type
-        if isinstance(value, str):
+        # Check bool first since bool is subclass of int in Python
+        if isinstance(value, bool):
+            # Pass through booleans unchanged
+            sanitized[clean_key] = value
+        elif isinstance(value, str):
             sanitized[clean_key] = sanitize_string(value)
         elif isinstance(value, dict):
             sanitized[clean_key] = sanitize_dict(value, sanitize_keys)
@@ -159,7 +163,7 @@ def sanitize_dict(data: Dict[str, Any], sanitize_keys: bool = False) -> Dict[str
         elif isinstance(value, (int, float)):
             sanitized[clean_key] = sanitize_numeric(value)
         else:
-            # Pass through other types (bool, None, etc.)
+            # Pass through other types (None, etc.)
             sanitized[clean_key] = value
 
     return sanitized
