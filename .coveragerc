@@ -1,0 +1,65 @@
+# Coverage.py configuration for EvidenceOS PRIME
+
+[run]
+source = backend
+omit =
+    */tests/*
+    */test_*.py
+    */__pycache__/*
+    */venv/*
+    */.venv/*
+    */site-packages/*
+    */migrations/*
+    */conftest.py
+    */setup.py
+
+branch = True
+parallel = True
+
+[report]
+precision = 2
+skip_empty = True
+show_missing = True
+
+# Ignore lines
+exclude_lines =
+    # Standard pragmas
+    pragma: no cover
+
+    # Debugging code
+    def __repr__
+
+    # Defensive programming
+    raise AssertionError
+    raise NotImplementedError
+
+    # Type checking
+    if TYPE_CHECKING:
+    if typing.TYPE_CHECKING:
+
+    # Main execution
+    if __name__ == .__main__.:
+
+    # Abstract methods
+    @abstractmethod
+    @abc.abstractmethod
+
+    # Overloads
+    @overload
+
+    # Protocol methods
+    \.\.\.
+
+# Minimum coverage thresholds
+fail_under = 80
+
+[html]
+directory = htmlcov
+title = EvidenceOS PRIME Coverage Report
+
+[xml]
+output = coverage.xml
+
+[json]
+output = coverage.json
+pretty_print = True
