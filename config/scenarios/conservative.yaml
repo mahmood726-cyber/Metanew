@@ -1,0 +1,54 @@
+# CONSERVATIVE SCENARIO
+# Most restrictive assumptions to test robustness
+
+name: Conservative Analysis
+description: Most restrictive scenario combining high quality, large, recent RCTs
+category: sensitivity
+author: EvidenceOS Team
+version: 1.0
+created_date: 2025-11-04
+
+meta_analysis:
+  method: REML
+  model: random
+  measure: auto
+
+inclusion:
+  # Multiple restrictions - KEY DIFFERENCE
+  min_sample_size: 50
+  max_sample_size: null
+  exclude_high_rob: true
+  allowed_rob_levels: [low]
+  min_year: 2015
+  max_year: null
+  allowed_designs: [RCT, randomized, randomised]
+
+subgroup:
+  enabled: false
+  variable: null
+
+meta_regression:
+  enabled: false
+  moderators: []
+
+publication_bias:
+  egger_test: true
+  trim_and_fill: true
+  use_taf_estimate: true
+
+reporting:
+  forest_plot: true
+  funnel_plot: true
+  heterogeneity_stats: true
+  influence_analysis: true
+
+notes: |
+  This scenario applies the most restrictive inclusion criteria:
+  - Low risk of bias only
+  - Sample size >= 50
+  - Recent studies (2015+)
+  - RCTs only
+
+  If results remain robust under these restrictions, confidence
+  in findings is increased. If results differ substantially,
+  investigate which restriction drives the difference.

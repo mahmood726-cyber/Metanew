@@ -1,0 +1,48 @@
+# RECENT STUDIES ONLY
+# Restrict to studies published in last 10 years
+
+name: Recent Studies Only
+description: Meta-analysis restricted to studies published in the last 10 years
+category: sensitivity
+author: EvidenceOS Team
+version: 1.0
+created_date: 2025-11-04
+
+meta_analysis:
+  method: REML
+  model: random
+  measure: auto
+
+inclusion:
+  min_sample_size: null
+  max_sample_size: null
+  exclude_high_rob: false
+
+  # Publication year filter - KEY DIFFERENCE
+  min_year: 2015
+  max_year: null
+
+  allowed_designs: null
+
+subgroup:
+  enabled: false
+  variable: null
+
+meta_regression:
+  enabled: false
+  moderators: []
+
+publication_bias:
+  egger_test: true
+  trim_and_fill: true
+
+reporting:
+  forest_plot: true
+  funnel_plot: true
+  heterogeneity_stats: true
+  influence_analysis: false
+
+notes: |
+  This scenario assesses whether older studies, potentially with
+  different treatment practices or patient populations, are
+  influencing results.

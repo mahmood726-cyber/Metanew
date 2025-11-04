@@ -1,0 +1,47 @@
+# SUBGROUP ANALYSIS BY RISK OF BIAS
+# Compare pooled estimates across ROB levels
+
+name: Subgroup Analysis by Risk of Bias
+description: Subgroup analysis comparing studies by risk of bias level
+category: subgroup
+author: EvidenceOS Team
+version: 1.0
+created_date: 2025-11-04
+
+meta_analysis:
+  method: REML
+  model: random
+  measure: auto
+
+inclusion:
+  min_sample_size: null
+  max_sample_size: null
+  exclude_high_rob: false
+  min_year: null
+  max_year: null
+  allowed_designs: null
+
+# Subgroup analysis - KEY DIFFERENCE
+subgroup:
+  enabled: true
+  variable: risk_of_bias
+  test_interaction: true
+
+meta_regression:
+  enabled: false
+  moderators: []
+
+publication_bias:
+  egger_test: true
+  trim_and_fill: true
+
+reporting:
+  forest_plot: true
+  funnel_plot: true
+  heterogeneity_stats: true
+  subgroup_forest_plot: true
+
+notes: |
+  Subgroup analysis by ROB assesses whether effect estimates differ
+  between low and high quality studies. Significant subgroup
+  differences suggest potential bias in lower quality studies.

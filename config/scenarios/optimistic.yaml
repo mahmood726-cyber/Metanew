@@ -1,0 +1,49 @@
+# OPTIMISTIC SCENARIO
+# Most inclusive assumptions (include all available evidence)
+
+name: Optimistic Analysis
+description: Most inclusive scenario using all available evidence with fixed effect model
+category: sensitivity
+author: EvidenceOS Team
+version: 1.0
+created_date: 2025-11-04
+
+meta_analysis:
+  method: FE  # Fixed effect for narrower CIs
+  model: fixed
+  measure: auto
+
+inclusion:
+  # No restrictions - KEY DIFFERENCE
+  min_sample_size: null
+  max_sample_size: null
+  exclude_high_rob: false
+  min_year: null
+  max_year: null
+  allowed_designs: null
+
+subgroup:
+  enabled: false
+  variable: null
+
+meta_regression:
+  enabled: false
+  moderators: []
+
+publication_bias:
+  egger_test: true
+  trim_and_fill: false
+
+reporting:
+  forest_plot: true
+  funnel_plot: true
+  heterogeneity_stats: true
+  influence_analysis: false
+
+notes: |
+  This scenario includes all available evidence and uses fixed
+  effect model, which gives more weight to larger studies and
+  produces narrower confidence intervals.
+
+  Compare with base case to understand range of possible estimates.
+  Use with caution if heterogeneity is high.

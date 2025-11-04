@@ -1,0 +1,63 @@
+# BASE CASE SCENARIO
+# Standard analysis with default settings
+
+name: Base Case
+description: Standard meta-analysis with default REML method and no sensitivity adjustments
+category: standard
+author: EvidenceOS Team
+version: 1.0
+created_date: 2025-11-04
+
+# Meta-analysis settings
+meta_analysis:
+  method: REML  # Restricted Maximum Likelihood
+  model: random  # Random effects model
+  measure: auto  # Auto-detect from data
+
+  # Heterogeneity estimation
+  tau2_estimator: REML
+
+  # Study weights
+  weighting: inverse_variance
+
+  # Continuity correction
+  continuity_correction: 0.5
+  apply_cc_if_zero_cells: true
+
+# Inclusion criteria
+inclusion:
+  # Include all studies by default
+  min_sample_size: null
+  max_sample_size: null
+
+  # Risk of bias filter
+  exclude_high_rob: false
+
+  # Publication year filter
+  min_year: null
+  max_year: null
+
+  # Study design filter
+  allowed_designs: null  # null = all designs
+
+# Subgroup analysis
+subgroup:
+  enabled: false
+  variable: null
+
+# Meta-regression
+meta_regression:
+  enabled: false
+  moderators: []
+
+# Publication bias
+publication_bias:
+  egger_test: true
+  trim_and_fill: true
+
+# Reporting
+reporting:
+  forest_plot: true
+  funnel_plot: true
+  heterogeneity_stats: true
+  influence_analysis: false

@@ -1,0 +1,51 @@
+# TRIM-AND-FILL ADJUSTED ESTIMATE
+# Adjust for potential publication bias
+
+name: Trim-and-Fill Adjusted
+description: Meta-analysis with trim-and-fill adjustment for publication bias
+category: publication_bias
+author: EvidenceOS Team
+version: 1.0
+created_date: 2025-11-04
+
+meta_analysis:
+  method: REML
+  model: random
+  measure: auto
+
+inclusion:
+  min_sample_size: null
+  max_sample_size: null
+  exclude_high_rob: false
+  min_year: null
+  max_year: null
+  allowed_designs: null
+
+subgroup:
+  enabled: false
+  variable: null
+
+meta_regression:
+  enabled: false
+  moderators: []
+
+# Publication bias - KEY DIFFERENCE
+publication_bias:
+  egger_test: true
+
+  trim_and_fill: true
+  taf_method: L0  # Linear estimator
+  taf_side: right  # Assume small studies favor treatment
+  use_taf_estimate: true  # Use adjusted estimate
+
+reporting:
+  forest_plot: true
+  funnel_plot: true
+  funnel_plot_with_imputed: true
+  heterogeneity_stats: true
+
+notes: |
+  Trim-and-fill imputes missing studies to account for publication
+  bias. If adjusted estimate differs substantially from base case,
+  publication bias may be present. Interpret with caution as
+  trim-and-fill makes strong assumptions.

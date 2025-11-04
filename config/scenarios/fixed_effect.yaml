@@ -1,0 +1,51 @@
+# FIXED EFFECT MODEL
+# Use fixed effect instead of random effects
+
+name: Fixed Effect Model
+description: Meta-analysis using fixed effect model (assumes no heterogeneity)
+category: statistical
+author: EvidenceOS Team
+version: 1.0
+created_date: 2025-11-04
+
+meta_analysis:
+  method: FE  # Fixed Effect - KEY DIFFERENCE
+  model: fixed
+  measure: auto
+
+  tau2_estimator: null  # Not applicable for fixed effect
+  weighting: inverse_variance
+  continuity_correction: 0.5
+  apply_cc_if_zero_cells: true
+
+inclusion:
+  min_sample_size: null
+  max_sample_size: null
+  exclude_high_rob: false
+  min_year: null
+  max_year: null
+  allowed_designs: null
+
+subgroup:
+  enabled: false
+  variable: null
+
+meta_regression:
+  enabled: false
+  moderators: []
+
+publication_bias:
+  egger_test: true
+  trim_and_fill: true
+
+reporting:
+  forest_plot: true
+  funnel_plot: true
+  heterogeneity_stats: true
+  influence_analysis: false
+
+notes: |
+  Fixed effect model assumes all studies estimate the same
+  underlying effect. Use when heterogeneity is low (I² < 25%).
+  Compare with random effects (base case) to assess impact of
+  heterogeneity assumptions.

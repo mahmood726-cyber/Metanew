@@ -1,0 +1,51 @@
+# DERSIMONIAN-LAIRD METHOD
+# Use DL method instead of REML
+
+name: DerSimonian-Laird Method
+description: Random effects meta-analysis using DerSimonian-Laird tau² estimator
+category: statistical
+author: EvidenceOS Team
+version: 1.0
+created_date: 2025-11-04
+
+meta_analysis:
+  method: DL  # DerSimonian-Laird - KEY DIFFERENCE
+  model: random
+  measure: auto
+
+  tau2_estimator: DL
+  weighting: inverse_variance
+  continuity_correction: 0.5
+  apply_cc_if_zero_cells: true
+
+inclusion:
+  min_sample_size: null
+  max_sample_size: null
+  exclude_high_rob: false
+  min_year: null
+  max_year: null
+  allowed_designs: null
+
+subgroup:
+  enabled: false
+  variable: null
+
+meta_regression:
+  enabled: false
+  moderators: []
+
+publication_bias:
+  egger_test: true
+  trim_and_fill: true
+
+reporting:
+  forest_plot: true
+  funnel_plot: true
+  heterogeneity_stats: true
+  influence_analysis: false
+
+notes: |
+  DL method is the traditional approach, still widely used.
+  REML is generally preferred but DL may be more familiar to
+  reviewers. Compare with base case (REML) to assess sensitivity
+  to tau² estimation method.

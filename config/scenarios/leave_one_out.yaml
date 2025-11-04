@@ -1,0 +1,49 @@
+# LEAVE-ONE-OUT ANALYSIS
+# Iteratively exclude each study to assess influence
+
+name: Leave-One-Out Analysis
+description: Iteratively exclude each study to assess individual study influence
+category: sensitivity
+author: EvidenceOS Team
+version: 1.0
+created_date: 2025-11-04
+
+meta_analysis:
+  method: REML
+  model: random
+  measure: auto
+
+inclusion:
+  min_sample_size: null
+  max_sample_size: null
+  exclude_high_rob: false
+  min_year: null
+  max_year: null
+  allowed_designs: null
+
+subgroup:
+  enabled: false
+  variable: null
+
+meta_regression:
+  enabled: false
+  moderators: []
+
+publication_bias:
+  egger_test: false  # Not applicable for influence analysis
+  trim_and_fill: false
+
+reporting:
+  forest_plot: true
+  funnel_plot: false
+  heterogeneity_stats: true
+
+  # Influence analysis - KEY DIFFERENCE
+  influence_analysis: true
+  leave_one_out: true
+
+notes: |
+  Leave-one-out analysis identifies studies with high influence.
+  If excluding a single study substantially changes the pooled
+  estimate, interpret results with caution and investigate
+  potential reasons (outlier, different population, etc.).

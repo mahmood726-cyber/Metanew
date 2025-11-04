@@ -1,0 +1,49 @@
+# HIGH QUALITY STUDIES ONLY
+# Restrict analysis to low risk of bias studies
+
+name: High Quality Studies Only
+description: Meta-analysis restricted to studies with low risk of bias
+category: sensitivity
+author: EvidenceOS Team
+version: 1.0
+created_date: 2025-11-04
+
+meta_analysis:
+  method: REML
+  model: random
+  measure: auto
+
+inclusion:
+  min_sample_size: null
+  max_sample_size: null
+
+  # Risk of bias filter - KEY DIFFERENCE
+  exclude_high_rob: true
+  allowed_rob_levels: [low, unclear]  # Exclude high ROB studies
+
+  min_year: null
+  max_year: null
+  allowed_designs: null
+
+subgroup:
+  enabled: false
+  variable: null
+
+meta_regression:
+  enabled: false
+  moderators: []
+
+publication_bias:
+  egger_test: true
+  trim_and_fill: true
+
+reporting:
+  forest_plot: true
+  funnel_plot: true
+  heterogeneity_stats: true
+  influence_analysis: true
+
+notes: |
+  This scenario assesses whether results are robust when only
+  including studies with low risk of bias. If results differ
+  substantially from base case, interpret with caution.
