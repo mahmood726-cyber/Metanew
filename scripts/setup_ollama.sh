@@ -53,14 +53,6 @@ echo ""
 echo "Pulling nomic-embed-text - Embeddings model..."
 docker exec evidenceos-ollama ollama pull nomic-embed-text
 
-# Optional: BioMistral
-read -p "Do you want to install BioMistral (7B) for biomedical text? (y/n) " -n 1 -r
-echo
-if [[ $REPLY =~ ^[Yy]$ ]]; then
-    echo "Pulling biomistral..."
-    docker exec evidenceos-ollama ollama pull biomistral
-fi
-
 # List installed models
 echo ""
 echo -e "${YELLOW}[4/5] Installed models:${NC}"
@@ -84,7 +76,7 @@ echo ""
 echo "Usage examples:"
 echo "  1. List models:        docker exec evidenceos-ollama ollama list"
 echo "  2. Test model:         docker exec evidenceos-ollama ollama run llama3 'Your prompt'"
-echo "  3. Pull more models:   docker exec evidenceos-ollama ollama pull mistral"
+echo "  3. Python integration: from ai.ollama_client import OllamaClient"
 echo ""
 echo "Python integration:"
 echo "  from ai.ollama_client import OllamaClient"

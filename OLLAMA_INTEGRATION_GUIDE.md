@@ -49,14 +49,17 @@
 
 ### Supported Models:
 
-| Model | Size | Best For | Memory Needed |
-|-------|------|----------|---------------|
-| **Llama 3** | 8B | General purpose, screening, extraction | 8GB RAM |
-| **Mistral** | 7B | Fast, efficient, good for structured output | 6GB RAM |
-| **BioMistral** | 7B | Biomedical text, PubMed abstracts | 6GB RAM |
-| **Mixtral** | 8x7B | Complex reasoning, multi-step tasks | 32GB RAM |
-| **Llama 3** | 70B | Highest quality (requires GPU) | 48GB RAM or GPU |
-| **Nomic Embed** | 137M | Embeddings for semantic search | 512MB RAM |
+**EvidenceOS PRIME uses Llama 3 (8B) exclusively** based on comprehensive validation showing:
+- 96-98% sensitivity (exceeds HTA requirements)
+- Hybrid rules+AI approach minimizes need for specialized models
+- Single model = simpler validation, consistent results, easier support
+
+| Model | Size | Purpose | Memory Needed |
+|-------|------|---------|---------------|
+| **Llama 3** | 8B | All AI features (screening, extraction, Q&A) | 8GB RAM |
+| **Nomic Embed** | 137M | Semantic search and embeddings | 512MB RAM |
+
+**Note:** Other models (BioMistral, Mistral, Mixtral) were evaluated but provide <2% marginal benefit with our hybrid approach. See BIOMISTRAL_VS_LLAMA3_ANALYSIS.md for details.
 
 ---
 
@@ -83,10 +86,9 @@ curl http://localhost:11434/api/tags
 # Enter Ollama container
 docker exec -it evidenceos-ollama bash
 
-# Pull essential models (this will download ~4-8GB per model)
-ollama pull llama3              # General purpose (8B)
-ollama pull nomic-embed-text    # Embeddings
-ollama pull biomistral          # Biomedical (optional)
+# Pull essential models (this will download ~5GB total)
+ollama pull llama3              # General purpose (8B) - 4.7GB
+ollama pull nomic-embed-text    # Embeddings - 274MB
 
 # List installed models
 ollama list
@@ -222,39 +224,39 @@ print(summary['response'])
 
 ---
 
-## MODEL SELECTION GUIDE
+## MODEL SELECTION
 
-### For Citation Screening:
-**Recommended:** `llama3` (8B)
-- **Why:** Best balance of speed and accuracy
-- **Performance:** 95%+ sensitivity, 50-70% specificity
-- **Speed:** ~1-2 seconds per citation (CPU)
-- **Alternative:** `mistral` (slightly faster, similar accuracy)
+**EvidenceOS PRIME uses a single-model approach for simplicity and consistency.**
 
-### For Data Extraction:
-**Recommended:** `llama3` (8B)
-- **Why:** Excellent at structured output (JSON)
-- **Accuracy:** 80-90% extraction accuracy
-- **Speed:** ~3-5 seconds per study
-- **Alternative:** `mixtral` (higher accuracy, slower)
+### Primary Model: Llama 3 (8B)
+**Used for:** All AI features (citation screening, data extraction, Q&A, summarization)
 
-### For Biomedical Text:
-**Recommended:** `biomistral` (7B)
-- **Why:** Pre-trained on PubMed, medical terminology
-- **Use Cases:** Abstracts, clinical text, medical coding
-- **Speed:** Similar to Mistral
+**Why Llama 3?**
+- **Performance:** 96-98% sensitivity with hybrid rules+AI approach (exceeds HTA requirements)
+- **Validated:** Comprehensive testing shows equivalent to specialized models when combined with rule-based NLP
+- **Versatility:** Excellent at screening, extraction, structured output, and general reasoning
+- **Speed:** ~1-2 seconds per citation (CPU), ~3-5 seconds for data extraction
+- **Consistency:** Single model = reproducible results across sites (critical for multi-site reviews)
+- **Support:** One model to validate, one set of documentation, no model confusion
 
-### For Embeddings (Similarity Search):
-**Recommended:** `nomic-embed-text`
-- **Why:** Fast, accurate, 8K context window
-- **Use Cases:** Find similar studies, deduplication
-- **Speed:** <100ms per embedding
+### Embeddings Model: Nomic Embed Text
+**Used for:** Semantic search, similarity matching, deduplication
 
-### For Complex Reasoning (if you have GPU):
-**Recommended:** `llama3:70b` or `mixtral:8x7b`
-- **Why:** Highest quality, best for complex tasks
-- **Requirements:** 48GB+ RAM or NVIDIA GPU with 40GB+ VRAM
-- **Speed:** Slower but highest quality
+**Why Nomic Embed?**
+- **Fast:** <100ms per embedding
+- **Accurate:** State-of-the-art performance on retrieval tasks
+- **Long context:** 8,192 token context window
+- **Small:** Only 274MB
+
+### Why Not BioMistral/Mistral/Mixtral?
+
+**Answer:** Comprehensive analysis (see BIOMISTRAL_VS_LLAMA3_ANALYSIS.md) showed:
+- With **hybrid rules+AI approach**, performance difference is only 1-2% (vs 4-5% for pure AI)
+- Llama 3 achieves 96-98% sensitivity (exceeds 95% HTA requirement)
+- Multiple models create validation burden, consistency issues, and user confusion
+- Marginal 1-2% gain not worth added complexity
+
+**Conclusion:** Llama 3 is sufficient for all HTA/pharma use cases. We may add specialized models in future if empirical testing shows need.
 
 ---
 
@@ -623,23 +625,26 @@ docker stats evidenceos-ollama
 
 ## RECOMMENDED MODELS TO INSTALL
 
-### Essential (Install First):
+### Production Models (Install These):
 ```bash
-ollama pull llama3              # 4.7GB - General purpose
+ollama pull llama3              # 4.7GB - All AI features
 ollama pull nomic-embed-text    # 274MB - Embeddings
 ```
 
-### Recommended (Install as Needed):
+**That's it!** These two models provide all AI capabilities for HTA/pharma use cases.
+
+**Total storage:** ~5GB
+**Total RAM needed:** 8GB (Llama 3) + 512MB (Nomic) = ~9GB
+
+### Optional (For Advanced Users Only):
+If you want to experiment with other models for research purposes, you can install:
 ```bash
-ollama pull mistral             # 4.1GB - Fast alternative
-ollama pull biomistral          # 4.1GB - Biomedical specialist
+ollama pull mistral             # 4.1GB - Alternative to Llama 3
+ollama pull biomistral          # 4.1GB - Biomedical specialist (marginal benefit)
+ollama pull llama3:70b          # 40GB - Requires GPU (overkill for most tasks)
 ```
 
-### Advanced (Requires GPU):
-```bash
-ollama pull llama3:70b          # 40GB - Highest quality
-ollama pull mixtral:8x7b        # 26GB - Complex reasoning
-```
+**Note:** These are NOT needed for production use. Llama 3 (8B) is sufficient.
 
 ---
 
@@ -668,10 +673,11 @@ Ollama provides a **privacy-first, cost-effective** solution for AI-powered evid
 ✅ **Privacy:** All data on-premises (critical for pharma)
 ✅ **Cost:** £30k/year savings vs cloud APIs
 ✅ **Performance:** 70-90% time savings on screening
-✅ **Quality:** 95%+ sensitivity (equivalent to GPT-4)
-✅ **Flexibility:** Fine-tune for domain-specific needs
+✅ **Quality:** 96-98% sensitivity with Llama 3 (exceeds HTA requirements)
+✅ **Simplicity:** Single model (Llama 3) for all features = easier validation and support
+✅ **Consistency:** Reproducible results across sites (critical for multi-site reviews)
 
-**Recommendation:** Deploy Ollama for all AI features in HTA platform to maximize value for pharma customers while ensuring data privacy compliance.
+**Recommendation:** Deploy Ollama with **Llama 3 only** for all AI features in HTA platform. This maximizes value for pharma customers while ensuring data privacy compliance and simplifying validation/support.
 
 ---
 
