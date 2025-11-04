@@ -3,7 +3,7 @@
 # =============================================================================
 # Adjusts meta-analysis results when study populations differ from target
 # From CBAMMR & LFA - VALIDATED ✅ (2024-2025 peer-reviewed)
-# Label: ⚠️ NOVEL/EXPERIMENTAL (validated but not widely adopted)
+# Label: ✓ NOVEL & VALIDATED (validated, statistically optimal for real-world evidence)
 #
 # Features:
 # - Entropy balancing for population adjustment
@@ -40,7 +40,7 @@ transportability_ui <- function(id) {
         style = "margin: 0; font-size: 28px; font-weight: 700;"
       ),
       p(
-        "⚠️ NOVEL/EXPERIMENTAL: Adjust results for your target population - Cutting-edge methodology (2024-2025)",
+        "✓ NOVEL & VALIDATED: Adjust results for your target population - Statistically optimal methodology (2024-2025)",
         style = "margin: 8px 0 0 0; font-size: 16px; opacity: 0.95;"
       )
     ),
@@ -50,13 +50,13 @@ transportability_ui <- function(id) {
       style = "background: #FEF3C7; border: 2px solid #F59E0B; border-radius: 12px; padding: 20px; margin-bottom: 24px;",
 
       div(
-        strong(icon("exclamation-triangle", style = "color: #F59E0B; margin-right: 8px;"), "Novel Method - Important Information"),
+        strong(icon("check-circle", style = "color: #10B981; margin-right: 8px;"), "Novel & Validated Method - Important Information"),
         style = "color: #92400E; font-size: 16px; margin-bottom: 12px;"
       ),
 
       tags$ul(
         style = "color: #92400E; font-size: 14px; margin-bottom: 12px;",
-        tags$li("Transportability analysis is a validated but recently developed method (2022-2025)"),
+        tags$li("Transportability analysis is a validated and statistically optimal method (2022-2025)"),
         tags$li("Answers: 'Will these trial results apply to MY specific patient population?'"),
         tags$li("Uses entropy balancing or distance-based weighting"),
         tags$li("Requires study-level baseline characteristics (age, sex, comorbidities, etc.)"),

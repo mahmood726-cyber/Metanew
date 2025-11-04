@@ -11,6 +11,7 @@ library(netmeta)
 library(dosresmeta)
 
 # Source modules
+source("modules/pathway_selection.R")
 source("modules/data_import.R")
 source("modules/protocol.R")
 source("modules/meta_pairwise.R")
@@ -40,6 +41,13 @@ ui <- page_navbar(
     base_font = font_google("Inter")
   ),
   fillable = TRUE,
+
+  # Tab: Pathway Selection (NEW - First Step)
+  nav_panel(
+    title = "Pathway",
+    icon = icon("route"),
+    pathway_selection_ui("pathway")
+  ),
 
   # Tab: Data Import
   nav_panel(
@@ -165,7 +173,13 @@ server <- function(input, output, session) {
     nma_results = list(),
     dr_results = list(),
     he_results = NULL,
-    audit_log = list()
+    audit_log = list(),
+    # Pathway selection
+    analysis_pathway = "none",          # "standard" or "novel_automated"
+    use_automated_decisions = FALSE,    # TRUE for novel pathway
+    protocol_rules = NULL,              # Rule engines (loaded when novel selected)
+    methods_rules = NULL,
+    results_rules = NULL
   )
 
   # Session info
@@ -191,6 +205,7 @@ server <- function(input, output, session) {
   })
 
   # Module servers
+  pathway_results <- pathway_selection_server("pathway", rv)
   data_results <- data_import_server("data_import", rv)
   protocol_results <- protocol_server("protocol", rv)
   pairwise_results <- meta_pairwise_server("pairwise", rv)

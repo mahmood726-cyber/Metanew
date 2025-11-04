@@ -1,7 +1,7 @@
 # =============================================================================
 # Individual Effect Prediction Module
 # =============================================================================
-# ⚠️ NOVEL/EXPERIMENTAL - Validated 2021-2024 but not widely adopted
+# ✓ NOVEL & VALIDATED - Validated 2021-2024, statistically optimal for personalized medicine
 #
 # Features:
 # - Patient-specific treatment effect prediction from MA

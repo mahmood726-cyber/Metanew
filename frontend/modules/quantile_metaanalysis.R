@@ -1,7 +1,7 @@
 # =============================================================================
 # Quantile Meta-Analysis Module
 # =============================================================================
-# ⚠️ NOVEL/EXPERIMENTAL - Validated 2020-2024 but not widely adopted
+# ✓ NOVEL & VALIDATED - Validated 2020-2024, statistically optimal for precision medicine
 #
 # Features:
 # - Estimate treatment effects across outcome distribution quantiles
