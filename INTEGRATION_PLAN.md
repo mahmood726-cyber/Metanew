@@ -3,13 +3,15 @@
 ## Executive Summary
 
 This document outlines the integration of **Mahmood789's meta-analysis repositories** into EvidenceOS PRIME, adding:
-- **19+ production-ready Shiny apps** for comprehensive meta-analysis
+- **18 production-ready Shiny apps** (rules-based only, NO AI/LLM)
 - **501 Cochrane pairwise datasets** (Pairwise70)
 - **51+ NMA datasets** (NMA51)
 - **100+ NMA networks** (NMArepo)
 - **76 diagnostic test accuracy datasets** (DTA70)
 
-**Total Value**: ~650+ datasets + 19 specialized apps = Industry-leading meta-analysis platform
+**Total Value**: ~650+ datasets + 18 specialized apps = Industry-leading meta-analysis platform
+
+**IMPORTANT**: All AI/LLM/Gemini API code has been removed per user requirements. Rules-based statistical methods only.
 
 ---
 
@@ -25,39 +27,35 @@ This document outlines the integration of **Mahmood789's meta-analysis repositor
 | **NMArepo** | `external_integrations/NMArepo/` | Network meta-analysis datasets | ✓ Cloned |
 | **DTA70** | Inside 786-MIII | Diagnostic test accuracy datasets | ✓ Included |
 
-### 1.2 Shiny Apps Inventory (19 Apps)
+### 1.2 Shiny Apps Inventory (18 Apps - Rules-Based Only)
 
-#### AI-Powered Apps (3 apps)
-1. **786MIIIBayesianLLM** - Bayesian meta-analysis with AI interpretation
-2. **786MIIILLMresultsSMD** - GPT-powered SMD results interpretation
-3. **786MIIIORRRLLM** - AI interpretation for OR/RR meta-analysis
-4. **786MIINMALLM** - AI-powered NMA interpretation
+**NOTE**: 4 AI/LLM apps have been EXCLUDED per user requirements (786MIIIBayesianLLM, 786MIIILLMresultsSMD, 786MIIIORRRLLM, 786MIINMALLM)
 
 #### Pairwise Meta-Analysis (4 apps)
-5. **MIII786MasroorPairwiseRROR** - OR/RR pairwise meta-analysis (208KB - comprehensive)
-6. **PairwiseSMD** - SMD pairwise meta-analysis (160KB)
-7. **Hazard ratio meta app** - Time-to-event meta-analysis
-8. **Prop app** - Proportions meta-analysis
+1. **MIII786MasroorPairwiseRROR** - OR/RR pairwise meta-analysis (208KB - comprehensive)
+2. **PairwiseSMD** - SMD pairwise meta-analysis (160KB)
+3. **Hazard ratio meta app** - Time-to-event meta-analysis
+4. **Prop app** - Proportions meta-analysis
 
 #### Network Meta-Analysis (5 apps)
-9. **786-MIIIRRORNMA** - ROR network meta-analysis
-10. **786MIIIHRNMA** - Hazard ratio NMA
-11. **786MIIINMAmetaregression** - NMA with meta-regression (124KB - advanced)
-12. **NMA Bayseian SMD** - Bayesian NMA for SMD
-13. **NMASMDMDFreqadvanced** - Advanced frequentist NMA
+5. **786-MIIIRRORNMA** - ROR network meta-analysis
+6. **786MIIIHRNMA** - Hazard ratio NMA
+7. **786MIIINMAmetaregression** - NMA with meta-regression (124KB - advanced)
+8. **NMA Bayesian SMD** - Bayesian NMA for SMD (rules-based Bayesian, NO AI)
+9. **NMASMDMDFreqadvanced** - Advanced frequentist NMA
 
 #### Specialized Apps (5 apps)
-14. **DTA** - Diagnostic test accuracy meta-analysis
-15. **Dose response app** - Dose-response meta-analysis
-16. **KM curve project** - Kaplan-Meier curve extraction/meta-analysis
-17. **Multilevel meta-analysis** - Multilevel/hierarchical meta-analysis
-18. **786MIIIAnnualisedPlot** - Annualized event rate plots
+10. **DTA** - Diagnostic test accuracy meta-analysis
+11. **Dose response app** - Dose-response meta-analysis
+12. **KM curve project** - Kaplan-Meier curve extraction/meta-analysis
+13. **Multilevel meta-analysis** - Multilevel/hierarchical meta-analysis
+14. **786MIIIAnnualisedPlot** - Annualized event rate plots
 
-#### Utility Apps (2 apps)
-19. **786MIIIConversion** - Data format conversion tools
-20. **Dataconversionmeta** - Meta-analysis data converters
-21. **786MIIIROB** - Risk of bias assessment
-22. **MedianIQRconversion** - Median/IQR to mean/SD conversion
+#### Utility Apps (4 apps)
+15. **786MIIIConversion** - Data format conversion tools
+16. **Dataconversionmeta** - Meta-analysis data converters
+17. **786MIIIROB** - Risk of bias assessment (ROB 2.0, ROBINS-I, QUADAS-2, NOS)
+18. **MedianIQRconversion** - Median/IQR to mean/SD conversion
 
 ### 1.3 Dataset Inventory
 

@@ -21,61 +21,8 @@ proxy:
     port-range-start: 20000
 
   specs:
-    # ===== AI/LLM-POWERED APPS =====
-
-    - id: ai-bayesian
-      display-name: "AI-Powered Bayesian Analysis"
-      description: "Bayesian meta-analysis with AI interpretation using Google Gemini/OpenAI"
-      container-cmd: ["R", "-e", "shiny::runApp('/srv/shiny-server/786MIIIBayesianLLM', host='0.0.0.0', port=3838)"]
-      container-image: evidenceos/shiny-apps:latest
-      access-groups: [analysts, admins]
-      container-network: sp-net
-      container-env:
-        GOOGLE_API_KEY: "${GOOGLE_API_KEY}"
-        OPENAI_API_KEY: "${OPENAI_API_KEY}"
-      container-memory-limit: 2G
-      container-cpu-limit: 1.0
-
-    - id: ai-smd-results
-      display-name: "AI Results Interpretation (SMD)"
-      description: "GPT-powered interpretation of SMD meta-analysis results"
-      container-cmd: ["R", "-e", "shiny::runApp('/srv/shiny-server/786MIIILLMresultsSMD', host='0.0.0.0', port=3838)"]
-      container-image: evidenceos/shiny-apps:latest
-      access-groups: [analysts, admins]
-      container-network: sp-net
-      container-env:
-        GOOGLE_API_KEY: "${GOOGLE_API_KEY}"
-        OPENAI_API_KEY: "${OPENAI_API_KEY}"
-      container-memory-limit: 2G
-      container-cpu-limit: 1.0
-
-    - id: ai-or-rr-results
-      display-name: "AI Results Interpretation (OR/RR)"
-      description: "AI-powered interpretation of OR/RR meta-analysis results"
-      container-cmd: ["R", "-e", "shiny::runApp('/srv/shiny-server/786MIIIORRRLLM', host='0.0.0.0', port=3838)"]
-      container-image: evidenceos/shiny-apps:latest
-      access-groups: [analysts, admins]
-      container-network: sp-net
-      container-env:
-        GOOGLE_API_KEY: "${GOOGLE_API_KEY}"
-        OPENAI_API_KEY: "${OPENAI_API_KEY}"
-      container-memory-limit: 2G
-      container-cpu-limit: 1.0
-
-    - id: ai-nma-results
-      display-name: "AI NMA Interpretation"
-      description: "AI-powered network meta-analysis interpretation"
-      container-cmd: ["R", "-e", "shiny::runApp('/srv/shiny-server/786MIINMALLM', host='0.0.0.0', port=3838)"]
-      container-image: evidenceos/shiny-apps:latest
-      access-groups: [analysts, admins]
-      container-network: sp-net
-      container-env:
-        GOOGLE_API_KEY: "${GOOGLE_API_KEY}"
-        OPENAI_API_KEY: "${OPENAI_API_KEY}"
-      container-memory-limit: 2G
-      container-cpu-limit: 1.0
-
     # ===== PAIRWISE META-ANALYSIS =====
+    # NOTE: AI/LLM apps removed - using rules-based methods only
 
     - id: pairwise-or-rr
       display-name: "Pairwise Meta-Analysis (OR/RR)"

@@ -97,11 +97,7 @@ RUN R -e "install.packages(c( \
 RUN R -e "remotes::install_github('Mahmood789/Pairwise70', dependencies=FALSE)" || true
 RUN R -e "remotes::install_github('Mahmood789/NMA51', dependencies=FALSE)" || true
 
-# Create app directories
-RUN mkdir -p /srv/shiny-server/786MIIIBayesianLLM
-RUN mkdir -p /srv/shiny-server/786MIIILLMresultsSMD
-RUN mkdir -p /srv/shiny-server/786MIIIORRRLLM
-RUN mkdir -p /srv/shiny-server/786MIINMALLM
+# Create app directories (AI/LLM apps excluded - rules-based only)
 RUN mkdir -p /srv/shiny-server/MIII786MasroorPairwiseRROR
 RUN mkdir -p /srv/shiny-server/PairwiseSMD
 RUN mkdir -p /srv/shiny-server/HazardRatioMeta
@@ -121,11 +117,7 @@ RUN mkdir -p /srv/shiny-server/DataConversionMeta
 RUN mkdir -p /srv/shiny-server/786MIIIROB
 RUN mkdir -p /srv/shiny-server/MedianIQRconversion
 
-# Copy Shiny apps from 786-MIII repository
-COPY external_integrations/786-MIII-Meta-analysis/786MIIIBayesianLLM /srv/shiny-server/786MIIIBayesianLLM/app.R
-COPY external_integrations/786-MIII-Meta-analysis/786MIIILLMresultsSMD /srv/shiny-server/786MIIILLMresultsSMD/app.R
-COPY external_integrations/786-MIII-Meta-analysis/786MIIIORRRLLM /srv/shiny-server/786MIIIORRRLLM/app.R
-COPY external_integrations/786-MIII-Meta-analysis/786MIINMALLM /srv/shiny-server/786MIINMALLM/app.R
+# Copy Shiny apps from 786-MIII repository (AI/LLM apps excluded)
 COPY external_integrations/786-MIII-Meta-analysis/MIII786MasroorPairwiseRROR /srv/shiny-server/MIII786MasroorPairwiseRROR/app.R
 COPY external_integrations/786-MIII-Meta-analysis/PairwiseSMD /srv/shiny-server/PairwiseSMD/app.R
 COPY "external_integrations/786-MIII-Meta-analysis/Hazard ratio meta app" /srv/shiny-server/HazardRatioMeta/app.R
