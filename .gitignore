@@ -19,6 +19,13 @@ htmlcov/
 dist/
 build/
 
+# Testing artifacts
+.hypothesis/
+.mutmut-cache
+coverage.xml
+coverage.json
+.tox/
+
 # R
 .Rproj.user
 .Rhistory
