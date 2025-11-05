@@ -7,7 +7,7 @@ import os
 from datetime import datetime, timedelta
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, Session
-from sqlalchemy.pool import NullPool
+from sqlalchemy.pool import StaticPool  # StaticPool required for SQLite :memory:
 import uuid
 
 # Set test environment before imports
@@ -26,12 +26,26 @@ from database.models import (
 )
 
 
+@pytest.fixture(scope="session", autouse=True)
+def init_test_database():
+    """Initialize the global test database once for all tests"""
+    # Create all tables on the global engine (which uses DATABASE_URL from env)
+    init_db()
+    yield
+    # Cleanup after all tests
+    try:
+        drop_db()
+    except:
+        pass  # May already be dropped
+
+
 @pytest.fixture(scope="function")
 def test_engine():
     """Create a fresh test database engine for each test"""
     test_db_engine = create_engine(
         "sqlite:///:memory:",
-        poolclass=NullPool,
+        connect_args={"check_same_thread": False},  # Allow multi-threaded access
+        poolclass=StaticPool,  # StaticPool keeps single connection alive for :memory:
         echo=False
     )
     Base.metadata.create_all(bind=test_db_engine)

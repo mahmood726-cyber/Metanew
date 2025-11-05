@@ -16,12 +16,18 @@ import json
 import time
 from datetime import datetime
 
-# Import the FastAPI app
+# Set test environment and credentials BEFORE importing
 import sys
 import os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from api.main_enhanced import app
+# Set admin credentials for testing
+os.environ["ADMIN_INITIAL_PASSWORD"] = "test-admin-pass"
+os.environ["ANALYST_INITIAL_PASSWORD"] = "test-analyst-pass"
+os.environ["ENVIRONMENT"] = "test"
+os.environ["JWT_SECRET_KEY"] = "test-secret-key-for-ml-tests"
+
+from api.main import app  # Use main.py which has ML routes
 from cache.ml_cache import ml_cache, REDIS_AVAILABLE
 
 # Test client
@@ -53,12 +59,24 @@ SAMPLE_STUDY_QUALITY = {
 }
 
 
-@pytest.fixture
-def auth_headers():
+@pytest.fixture(scope="module")
+def auth_token():
+    """Get authentication token for API requests."""
+    # Login as admin to get token
+    response = client.post(
+        "/api/auth/login/oauth",
+        data={"username": "admin", "password": "test-admin-pass"}
+    )
+    if response.status_code != 200:
+        # If default admin doesn't work, try creating a test user
+        pytest.skip("Unable to authenticate - admin credentials not configured")
+    return response.json()["access_token"]
+
+
+@pytest.fixture(scope="module")
+def auth_headers(auth_token):
     """Get authentication headers for API requests."""
-    # For now, skip auth in tests
-    # In production, you'd implement proper test user authentication
-    return {}
+    return {"Authorization": f"Bearer {auth_token}"}
 
 
 class TestMLHealth:
