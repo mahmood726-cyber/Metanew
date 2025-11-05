@@ -25,13 +25,21 @@ app = FastAPI(
     version="1.0.0"
 )
 
+# SECURITY FIX: Configure CORS with environment-based allowed origins
+# Default to localhost for development, but require explicit configuration for production
+CORS_ORIGINS = os.getenv(
+    "CORS_ALLOWED_ORIGINS",
+    "http://localhost:3000,http://localhost:8000,http://localhost:8080,http://127.0.0.1:3000"
+)
+allowed_origins = [origin.strip() for origin in CORS_ORIGINS.split(",")]
+
 # CORS middleware for R Shiny
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=allowed_origins,  # Whitelist only - no wildcard
     allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_methods=["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],  # Specific methods
+    allow_headers=["Authorization", "Content-Type", "Accept", "Origin"],  # Specific headers
 )
 
 

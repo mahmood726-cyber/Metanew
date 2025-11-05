@@ -160,15 +160,23 @@ class RuleBasedNLQParser:
                 # Extract parameters from match groups
                 parameters = {}
 
-                # Extract threshold if present (e.g., "£30,000")
-                threshold_match = re.search(r'£?(\d+[,\d]*k?)', query)
-                if threshold_match and "threshold" in config.get("action", ""):
-                    threshold_str = threshold_match.group(1).replace(',', '')
-                    if 'k' in threshold_str.lower():
-                        threshold = float(threshold_str.lower().replace('k', '')) * 1000
-                    else:
-                        threshold = float(threshold_str)
-                    parameters["wtp_threshold"] = threshold
+                # SECURITY FIX: Extract threshold with validation (e.g., "£30,000")
+                try:
+                    threshold_match = re.search(r'£?(\d+[,\d]*k?)', query, timeout=1)
+                    if threshold_match and "threshold" in config.get("action", ""):
+                        threshold_str = threshold_match.group(1).replace(',', '')
+                        if 'k' in threshold_str.lower():
+                            threshold = float(threshold_str.lower().replace('k', '')) * 1000
+                        else:
+                            threshold = float(threshold_str)
+
+                        # Validate threshold range (0 to 10 million)
+                        if threshold < 0 or threshold > 10_000_000:
+                            threshold = 30_000  # Default safe value
+                        parameters["wtp_threshold"] = threshold
+                except (ValueError, AttributeError, TimeoutError) as e:
+                    # Use default threshold if parsing fails
+                    parameters["wtp_threshold"] = 30_000
 
                 # Extract outcome name if present
                 if context and "current_outcome" in context:

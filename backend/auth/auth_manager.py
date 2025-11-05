@@ -4,15 +4,25 @@ Handles JWT token generation, validation, user authentication, and RBAC
 """
 import os
 import secrets
+import logging
 from datetime import datetime, timedelta
 from typing import Optional, Dict, List
 from passlib.context import CryptContext
 from jose import JWTError, jwt
 from pydantic import BaseModel, EmailStr
 
+# Set up logging
+logger = logging.getLogger(__name__)
 
 # Configuration from environment variables
-SECRET_KEY = os.getenv("JWT_SECRET_KEY", secrets.token_urlsafe(32))
+# SECURITY FIX: Require JWT_SECRET_KEY in production
+SECRET_KEY = os.getenv("JWT_SECRET_KEY")
+if not SECRET_KEY:
+    if os.getenv("ENVIRONMENT") == "production":
+        raise ValueError("JWT_SECRET_KEY environment variable is required in production")
+    logger.warning("JWT_SECRET_KEY not set, using development key - NOT FOR PRODUCTION!")
+    SECRET_KEY = "dev-only-" + secrets.token_urlsafe(32)
+
 ALGORITHM = os.getenv("JWT_ALGORITHM", "HS256")
 ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", "30"))
 REFRESH_TOKEN_EXPIRE_DAYS = int(os.getenv("REFRESH_TOKEN_EXPIRE_DAYS", "7"))
@@ -199,8 +209,31 @@ class AuthenticationManager:
         self._initialize_default_users()
 
     def _initialize_default_users(self):
-        """Initialize default admin user"""
-        # Default admin user (should be changed in production)
+        """Initialize default admin user with secure password from environment"""
+        # SECURITY FIX: Get passwords from environment variables
+        admin_password = os.getenv("ADMIN_INITIAL_PASSWORD")
+        analyst_password = os.getenv("ANALYST_INITIAL_PASSWORD")
+
+        # Generate random passwords if not provided (development only)
+        if not admin_password:
+            admin_password = secrets.token_urlsafe(16)
+            logger.warning("=" * 80)
+            logger.warning("ADMIN PASSWORD NOT SET IN ENVIRONMENT!")
+            logger.warning(f"Generated random admin password: {admin_password}")
+            logger.warning("Store this securely and change it immediately!")
+            logger.warning("Set ADMIN_INITIAL_PASSWORD environment variable for production")
+            logger.warning("=" * 80)
+
+        if not analyst_password:
+            analyst_password = secrets.token_urlsafe(16)
+            logger.warning("=" * 80)
+            logger.warning("ANALYST PASSWORD NOT SET IN ENVIRONMENT!")
+            logger.warning(f"Generated random analyst password: {analyst_password}")
+            logger.warning("Store this securely and change it immediately!")
+            logger.warning("Set ANALYST_INITIAL_PASSWORD environment variable for production")
+            logger.warning("=" * 80)
+
+        # Create default admin user
         default_admin = UserInDB(
             user_id="admin",
             username="admin",
@@ -209,11 +242,11 @@ class AuthenticationManager:
             role=UserRole.ADMIN,
             is_active=True,
             created_at=datetime.utcnow(),
-            hashed_password=self.password_manager.hash_password("admin123")
+            hashed_password=self.password_manager.hash_password(admin_password)
         )
         self._users_db["admin"] = default_admin
 
-        # Default analyst user
+        # Create default analyst user
         default_analyst = UserInDB(
             user_id="analyst",
             username="analyst",
@@ -222,7 +255,7 @@ class AuthenticationManager:
             role=UserRole.ANALYST,
             is_active=True,
             created_at=datetime.utcnow(),
-            hashed_password=self.password_manager.hash_password("analyst123")
+            hashed_password=self.password_manager.hash_password(analyst_password)
         )
         self._users_db["analyst"] = default_analyst
 

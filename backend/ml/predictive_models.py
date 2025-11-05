@@ -74,8 +74,13 @@ class HeterogeneityPredictor:
             features.append(total_n)
             feature_names.append('total_sample_size')
 
-            # Sample size variability
-            cv_n = studies_df['n'].std() / studies_df['n'].mean() if studies_df['n'].mean() > 0 else 0
+            # SECURITY FIX: Sample size variability with comprehensive division-by-zero checks
+            mean_n = studies_df['n'].mean()
+            std_n = studies_df['n'].std()
+            if mean_n > 0 and std_n > 0 and not np.isnan(mean_n) and not np.isnan(std_n):
+                cv_n = std_n / mean_n
+            else:
+                cv_n = 0
             features.append(cv_n)
             feature_names.append('sample_size_cv')
 
@@ -228,9 +233,13 @@ class HeterogeneityPredictor:
                 high_het_factors.append("wide publication year range")
 
         if 'n' in studies_df.columns:
-            cv_n = studies_df['n'].std() / studies_df['n'].mean()
-            if cv_n > 0.5:
-                high_het_factors.append("high sample size variability")
+            # SECURITY FIX: Safe division with zero checks
+            mean_n = studies_df['n'].mean()
+            std_n = studies_df['n'].std()
+            if mean_n > 0 and std_n > 0:
+                cv_n = std_n / mean_n
+                if cv_n > 0.5:
+                    high_het_factors.append("high sample size variability")
 
         if 'risk_of_bias' in studies_df.columns:
             if studies_df['risk_of_bias'].nunique() >= 2:

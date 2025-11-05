@@ -58,6 +58,26 @@ temp/
 # Environment
 .env
 .env.local
+.env.production
+.env.staging
+.env.*.local
+
+# SECURITY FIX: Secrets and sensitive files
+**/secrets/
+**/secrets.yaml
+**/secrets.yml
+**/*_secret*.yaml
+**/*_secret*.yml
+**/*_secret*.json
+*.pem
+*.key
+*.crt
+*.p12
+*.pfx
+credentials.json
+service-account.json
+kubeconfig
+.kube/config
 
 # Data (exclude large datasets, keep samples)
 data/large_datasets/
