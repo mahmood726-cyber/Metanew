@@ -506,7 +506,7 @@ class TestPatientSpecificExplanations:
         explanation_text = explainer.generate_patient_specific_explanation(
             X=X[:1],
             instance_idx=0,
-            metadata=metadata
+            patient_context=metadata  # Fixed: parameter name is patient_context, not metadata
         )
 
         assert isinstance(explanation_text, str)

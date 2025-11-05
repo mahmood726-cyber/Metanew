@@ -473,6 +473,7 @@ Answer (be specific and cite sources when possible):"""
                 for doc, score in zip(retrieval_result.documents, retrieval_result.scores)
             ],
             'retrieval_method': retrieval_result.method,
+            'method': retrieval_result.method,  # Alias for backward compatibility
             'n_sources': len(retrieval_result.documents)
         }
 
