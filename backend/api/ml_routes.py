@@ -8,26 +8,31 @@ from typing import Dict, List, Optional, Any
 import pandas as pd
 import logging
 
-from backend.ml.predictive_models import (
+import sys
+import os
+# Add parent directory to path for imports
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+from ml.predictive_models import (
     heterogeneity_predictor,
     publication_bias_detector,
     study_quality_predictor,
     effect_size_predictor,
     PredictionResult
 )
-from backend.ml.rules_engine import (
+from ml.rules_engine import (
     analysis_recommender,
     sensitivity_engine,
     quality_engine,
     Recommendation
 )
-from backend.ml.knowledge_graph import (
+from ml.knowledge_graph import (
     study_deduplicator,
     evidence_kg,
     Study
 )
-from backend.ml.llm_integration import llm_manager
-from backend.auth.dependencies import get_current_user, User
+from ml.llm_integration import llm_manager
+from auth.dependencies import get_current_user, User
 
 logger = logging.getLogger(__name__)
 

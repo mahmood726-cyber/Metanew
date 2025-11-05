@@ -25,6 +25,12 @@ source("modules/audit.R")
 source("modules/ai_copilot.R")
 source("modules/v2_features.R")
 
+# Source ML/AI modules (World-Class Features)
+source("modules/ml_ensemble.R")
+source("modules/ml_explainability.R")
+source("modules/ml_rag.R")
+source("modules/ml_automl.R")
+
 # Source utilities
 source("utils/python_bridge.R")
 source("utils/plotting.R")
@@ -107,6 +113,34 @@ ui <- page_navbar(
     title = "AI Copilot",
     icon = icon("robot"),
     ai_copilot_ui("ai_copilot")
+  ),
+
+  # Tab: ML/AI (World-Class Features)
+  nav_panel(
+    title = "ML/AI",
+    icon = icon("brain"),
+    navset_card_tab(
+      nav_panel(
+        "Ensemble Models",
+        icon = icon("cubes"),
+        ml_ensemble_ui("ml_ensemble")
+      ),
+      nav_panel(
+        "Explainability",
+        icon = icon("lightbulb"),
+        ml_explainability_ui("ml_explainability")
+      ),
+      nav_panel(
+        "Literature Q&A",
+        icon = icon("books"),
+        ml_rag_ui("ml_rag")
+      ),
+      nav_panel(
+        "AutoML Wizard",
+        icon = icon("magic"),
+        ml_automl_ui("ml_automl")
+      )
+    )
   ),
 
   # Tab: Reports
@@ -204,6 +238,12 @@ server <- function(input, output, session) {
   reporting_results <- reporting_server("reporting", rv)
   audit_results <- audit_server("audit", rv)
   v2_results <- v2_features_server("v2_features", rv)
+
+  # ML/AI Module servers (World-Class Features)
+  ml_ensemble_results <- ml_ensemble_server("ml_ensemble")
+  ml_explainability_results <- ml_explainability_server("ml_explainability")
+  ml_rag_results <- ml_rag_server("ml_rag", shared_data = rv)
+  ml_automl_results <- ml_automl_server("ml_automl")
 
   # Save session handler
   observeEvent(input$btn_save_session, {

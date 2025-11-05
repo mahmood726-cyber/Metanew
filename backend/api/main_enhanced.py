@@ -182,6 +182,142 @@ async def health_check(request: Request):
     }
 
 
+@app.get("/health/ml")
+@limiter.limit("60/minute")
+async def ml_health_check(request: Request):
+    """ML/AI system health check"""
+    try:
+        # Check ML module availability
+        ml_status = {
+            "status": "healthy",
+            "timestamp": datetime.utcnow().isoformat(),
+            "components": {}
+        }
+
+        # Check advanced gradient boosting libraries
+        try:
+            import xgboost
+            ml_status["components"]["xgboost"] = {
+                "available": True,
+                "version": xgboost.__version__
+            }
+        except ImportError:
+            ml_status["components"]["xgboost"] = {"available": False}
+
+        try:
+            import lightgbm
+            ml_status["components"]["lightgbm"] = {
+                "available": True,
+                "version": lightgbm.__version__
+            }
+        except ImportError:
+            ml_status["components"]["lightgbm"] = {"available": False}
+
+        try:
+            import catboost
+            ml_status["components"]["catboost"] = {
+                "available": True,
+                "version": catboost.__version__
+            }
+        except ImportError:
+            ml_status["components"]["catboost"] = {"available": False}
+
+        # Check explainable AI
+        try:
+            import shap
+            ml_status["components"]["shap"] = {
+                "available": True,
+                "version": shap.__version__
+            }
+        except ImportError:
+            ml_status["components"]["shap"] = {"available": False}
+
+        try:
+            import lime
+            ml_status["components"]["lime"] = {"available": True}
+        except ImportError:
+            ml_status["components"]["lime"] = {"available": False}
+
+        # Check AutoML
+        try:
+            import optuna
+            ml_status["components"]["optuna"] = {
+                "available": True,
+                "version": optuna.__version__
+            }
+        except ImportError:
+            ml_status["components"]["optuna"] = {"available": False}
+
+        # Check MLOps
+        try:
+            import mlflow
+            ml_status["components"]["mlflow"] = {
+                "available": True,
+                "version": mlflow.__version__
+            }
+        except ImportError:
+            ml_status["components"]["mlflow"] = {"available": False}
+
+        try:
+            import evidently
+            ml_status["components"]["evidently"] = {
+                "available": True,
+                "version": evidently.__version__
+            }
+        except ImportError:
+            ml_status["components"]["evidently"] = {"available": False}
+
+        # Check RAG system
+        try:
+            import chromadb
+            ml_status["components"]["chromadb"] = {
+                "available": True,
+                "version": chromadb.__version__
+            }
+        except ImportError:
+            ml_status["components"]["chromadb"] = {"available": False}
+
+        try:
+            from sentence_transformers import SentenceTransformer
+            ml_status["components"]["sentence_transformers"] = {"available": True}
+        except ImportError:
+            ml_status["components"]["sentence_transformers"] = {"available": False}
+
+        # Check local LLM
+        try:
+            from llama_cpp import Llama
+            from ml.llm_integration import llm_manager
+            ml_status["components"]["llama_cpp"] = {"available": True}
+            ml_status["components"]["llm_loaded"] = llm_manager.is_loaded if hasattr(llm_manager, 'is_loaded') else False
+        except ImportError:
+            ml_status["components"]["llama_cpp"] = {"available": False}
+            ml_status["components"]["llm_loaded"] = False
+
+        # Overall ML health
+        critical_components = ["xgboost", "lightgbm", "catboost", "shap", "lime"]
+        critical_available = sum(1 for c in critical_components if ml_status["components"].get(c, {}).get("available", False))
+
+        ml_status["critical_components_available"] = f"{critical_available}/{len(critical_components)}"
+        ml_status["ml_ready"] = critical_available >= 3  # At least 3 out of 5
+
+        if ml_status["ml_ready"]:
+            ml_status["status"] = "healthy"
+        elif critical_available > 0:
+            ml_status["status"] = "degraded"
+        else:
+            ml_status["status"] = "unavailable"
+
+        return ml_status
+
+    except Exception as e:
+        logger.error(f"ML health check failed: {str(e)}")
+        return {
+            "status": "error",
+            "error": str(e),
+            "timestamp": datetime.utcnow().isoformat()
+        }
+
+
 # Data validation endpoints
 
 @app.post("/validate")
