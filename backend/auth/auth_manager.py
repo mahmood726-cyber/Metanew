@@ -127,7 +127,14 @@ class PasswordManager:
 
     @staticmethod
     def hash_password(password: str) -> str:
-        """Hash a password"""
+        """
+        Hash a password
+
+        Note: bcrypt has a 72-byte limit. We truncate to ensure compatibility.
+        """
+        # Bcrypt has a 72-byte password limit - truncate if necessary
+        if len(password.encode('utf-8')) > 72:
+            password = password.encode('utf-8')[:72].decode('utf-8', errors='ignore')
         return pwd_context.hash(password)
 
     @staticmethod
@@ -237,7 +244,7 @@ class AuthenticationManager:
         default_admin = UserInDB(
             user_id="admin",
             username="admin",
-            email="admin@evidenceos.local",
+            email="admin@example.com",
             full_name="System Administrator",
             role=UserRole.ADMIN,
             is_active=True,
@@ -250,7 +257,7 @@ class AuthenticationManager:
         default_analyst = UserInDB(
             user_id="analyst",
             username="analyst",
-            email="analyst@evidenceos.local",
+            email="analyst@example.com",
             full_name="Analyst User",
             role=UserRole.ANALYST,
             is_active=True,
