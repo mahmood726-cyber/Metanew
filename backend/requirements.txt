@@ -48,19 +48,38 @@ python-json-logger==2.0.7  # Structured logging
 # HTTP client
 httpx==0.25.2  # Async HTTP client
 
-# Machine Learning & AI
+# Machine Learning & AI - Core
 scikit-learn==1.3.2  # ML models (Random Forest, Gradient Boosting)
 scipy==1.11.4  # Scientific computing (stats, optimization)
 joblib==1.3.2  # Model persistence
 
-# Optional: Bayesian analysis (PyMC)
-# pymc==5.10.0
-# arviz==0.17.0
+# World-Class Gradient Boosting Frameworks
+xgboost==2.0.3  # XGBoost - best for regularization & missing values
+lightgbm==4.1.0  # LightGBM - fastest, best for large datasets
+catboost==1.2.2  # CatBoost - best for categorical features
 
-# Optional: Local LLM support (Llama 3)
-# llama-cpp-python==0.2.20  # Local Llama models (CPU/GPU)
-# transformers==4.36.0  # HuggingFace transformers (optional)
-# sentence-transformers==2.2.2  # Embeddings (optional)
+# Explainable AI (Critical for Healthcare ML)
+shap==0.44.0  # SHAP - theoretically grounded global/local explanations
+lime==0.2.0.1  # LIME - model-agnostic interpretability
+
+# AutoML & Hyperparameter Optimization
+optuna==3.5.0  # Optuna - state-of-the-art Bayesian optimization
+
+# MLOps Infrastructure (Production-Grade)
+mlflow==2.9.2  # Experiment tracking & model registry
+evidently==0.4.12  # Drift detection & model monitoring
+
+# RAG System (Retrieval-Augmented Generation)
+chromadb==0.4.22  # Vector database for semantic search
+sentence-transformers==2.3.1  # Neural embeddings for RAG
+
+# Local LLM Integration (NO external APIs)
+llama-cpp-python==0.2.20  # Local Llama 3 models (CPU/GPU)
+
+# Optional: Advanced features
+# transformers==4.36.0  # HuggingFace transformers (for advanced NLP)
+# pymc==5.10.0  # Bayesian analysis
+# arviz==0.17.0  # Bayesian visualization
 
 # Testing
 pytest==7.4.3
