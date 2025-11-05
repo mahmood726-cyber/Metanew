@@ -43,10 +43,10 @@ env/
 # Data (uncomment if files are very large)
 # data/*.csv
 
-# Generated outputs
-outputs/models/*.pkl
-outputs/figures/*.png
-outputs/results/*.json
+# Generated outputs (included for manuscript submission)
+# outputs/models/*.pkl
+# outputs/figures/*.png
+# outputs/results/*.json
 
 # OS
 .DS_Store
