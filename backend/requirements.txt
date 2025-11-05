@@ -10,6 +10,13 @@ scikit-learn>=1.0.0,<1.4.0
 # Statistical Models (REQUIRED for production IPD MA)
 statsmodels>=0.13.0,<0.15.0
 
+# Bayesian Analysis (REQUIRED for Bayesian NMA)
+pymc>=5.0.0,<5.11.0
+arviz>=0.15.0,<0.18.0
+
+# Reference Manager Integration
+pyzotero>=1.5.0,<1.6.0
+
 # API Framework
 fastapi>=0.100.0,<0.110.0
 uvicorn[standard]>=0.23.0,<0.27.0
@@ -22,3 +29,10 @@ pytest>=7.4.0
 pytest-cov>=4.1.0
 black>=23.0.0
 flake8>=6.0.0
+
+# Optional: Advanced NLP/ML (for future enhancements)
+# Uncomment if implementing BERT-based citation screening or spaCy NER data extraction
+# transformers>=4.30.0,<4.40.0
+# torch>=2.0.0,<2.2.0
+# spacy>=3.5.0,<3.8.0
+# en_core_web_sm @ https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.5.0/en_core_web_sm-3.5.0-py3-none-any.whl
