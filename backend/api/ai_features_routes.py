@@ -168,7 +168,7 @@ async def generate_report(
             meta_analysis_results=request.meta_analysis_results,
             study_data=study_df,
             analysis_config=request.analysis_config,
-            report_type=request.report_type
+            target_format=request.report_type.upper()
         )
 
         return report
