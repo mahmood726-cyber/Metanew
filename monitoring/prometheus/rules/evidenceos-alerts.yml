@@ -1,0 +1,215 @@
+# Alert Rules for EvidenceOS PRIME
+
+groups:
+  - name: evidenceos_application
+    interval: 30s
+    rules:
+      # High HTTP Error Rate
+      - alert: HighHTTPErrorRate
+        expr: |
+          (sum(rate(http_requests_total{status=~"5.."}[5m])) / sum(rate(http_requests_total[5m]))) * 100 > 5
+        for: 5m
+        labels:
+          severity: warning
+          component: api
+        annotations:
+          summary: "High HTTP error rate detected"
+          description: "HTTP 5xx error rate is {{ $value | humanizePercentage }} (threshold: 5%)"
+
+      # High HTTP Latency
+      - alert: HighHTTPLatency
+        expr: |
+          histogram_quantile(0.95, rate(http_request_duration_seconds_bucket[5m])) > 2
+        for: 5m
+        labels:
+          severity: warning
+          component: api
+        annotations:
+          summary: "High HTTP request latency"
+          description: "95th percentile latency is {{ $value }}s (threshold: 2s)"
+
+      # Service Down
+      - alert: ServiceDown
+        expr: up{job="evidenceos-backend"} == 0
+        for: 2m
+        labels:
+          severity: critical
+          component: backend
+        annotations:
+          summary: "EvidenceOS backend service is down"
+          description: "Backend service {{ $labels.instance }} has been down for more than 2 minutes"
+
+  - name: evidenceos_ml
+    interval: 30s
+    rules:
+      # High ML Prediction Failure Rate
+      - alert: HighMLPredictionFailureRate
+        expr: |
+          (sum(rate(ml_predictions_total{status="error"}[5m])) / sum(rate(ml_predictions_total[5m]))) * 100 > 10
+        for: 5m
+        labels:
+          severity: warning
+          component: ml
+        annotations:
+          summary: "High ML prediction failure rate"
+          description: "ML prediction failure rate is {{ $value | humanizePercentage }} (threshold: 10%)"
+
+      # Slow ML Predictions
+      - alert: SlowMLPredictions
+        expr: |
+          histogram_quantile(0.95, rate(ml_prediction_duration_seconds_bucket[5m])) > 5
+        for: 10m
+        labels:
+          severity: warning
+          component: ml
+        annotations:
+          summary: "ML predictions are slow"
+          description: "95th percentile prediction time is {{ $value }}s for {{ $labels.model_type }} (threshold: 5s)"
+
+      # High ML Training Failure Rate
+      - alert: HighMLTrainingFailureRate
+        expr: |
+          (sum(rate(ml_training_jobs_total{status="failure"}[1h])) / sum(rate(ml_training_jobs_total[1h]))) * 100 > 20
+        for: 30m
+        labels:
+          severity: warning
+          component: ml
+        annotations:
+          summary: "High ML training failure rate"
+          description: "ML training failure rate is {{ $value | humanizePercentage }} (threshold: 20%)"
+
+  - name: evidenceos_cache
+    interval: 30s
+    rules:
+      # Low Cache Hit Rate
+      - alert: LowCacheHitRate
+        expr: |
+          (sum(rate(cache_hits_total[5m])) / (sum(rate(cache_hits_total[5m])) + sum(rate(cache_misses_total[5m])))) * 100 < 50
+        for: 10m
+        labels:
+          severity: warning
+          component: cache
+        annotations:
+          summary: "Low cache hit rate detected"
+          description: "Cache hit rate is {{ $value | humanizePercentage }} (threshold: 50%)"
+
+      # Redis Connection Issues
+      - alert: RedisConnectionIssues
+        expr: redis_up == 0
+        for: 2m
+        labels:
+          severity: critical
+          component: redis
+        annotations:
+          summary: "Redis is down"
+          description: "Redis instance {{ $labels.instance }} is not responding"
+
+  - name: evidenceos_database
+    interval: 30s
+    rules:
+      # High Database Query Latency
+      - alert: HighDatabaseLatency
+        expr: |
+          rate(db_operation_duration_seconds_sum[5m]) / rate(db_operations_total[5m]) > 1
+        for: 5m
+        labels:
+          severity: warning
+          component: database
+        annotations:
+          summary: "High database query latency"
+          description: "Average database query time is {{ $value }}s for {{ $labels.operation }} (threshold: 1s)"
+
+      # Database Connection Issues
+      - alert: DatabaseConnectionIssues
+        expr: pg_up == 0
+        for: 2m
+        labels:
+          severity: critical
+          component: postgres
+        annotations:
+          summary: "PostgreSQL is down"
+          description: "PostgreSQL instance {{ $labels.instance }} is not responding"
+
+  - name: evidenceos_system
+    interval: 30s
+    rules:
+      # High CPU Usage
+      - alert: HighCPUUsage
+        expr: system_cpu_percent > 85
+        for: 5m
+        labels:
+          severity: warning
+          component: system
+        annotations:
+          summary: "High CPU usage detected"
+          description: "CPU usage is {{ $value }}% (threshold: 85%)"
+
+      # High Memory Usage
+      - alert: HighMemoryUsage
+        expr: system_memory_percent > 85
+        for: 5m
+        labels:
+          severity: warning
+          component: system
+        annotations:
+          summary: "High memory usage detected"
+          description: "Memory usage is {{ $value }}% (threshold: 85%)"
+
+      # High Disk Usage
+      - alert: HighDiskUsage
+        expr: system_disk_percent > 90
+        for: 5m
+        labels:
+          severity: critical
+          component: system
+        annotations:
+          summary: "High disk usage detected"
+          description: "Disk usage is {{ $value }}% (threshold: 90%)"
+
+      # Low Disk Space
+      - alert: LowDiskSpace
+        expr: system_disk_percent > 95
+        for: 2m
+        labels:
+          severity: critical
+          component: system
+        annotations:
+          summary: "Critical: Very low disk space"
+          description: "Disk usage is {{ $value }}% (threshold: 95%) - immediate action required"
+
+  - name: evidenceos_kubernetes
+    interval: 30s
+    rules:
+      # Pod Restart Loop
+      - alert: PodRestartLoop
+        expr: rate(kube_pod_container_status_restarts_total[15m]) > 0
+        for: 15m
+        labels:
+          severity: warning
+          component: kubernetes
+        annotations:
+          summary: "Pod is restarting frequently"
+          description: "Pod {{ $labels.pod }} in namespace {{ $labels.namespace }} has restarted {{ $value }} times in 15 minutes"
+
+      # Pod Not Ready
+      - alert: PodNotReady
+        expr: kube_pod_status_phase{phase!="Running"} == 1
+        for: 10m
+        labels:
+          severity: warning
+          component: kubernetes
+        annotations:
+          summary: "Pod is not ready"
+          description: "Pod {{ $labels.pod }} in namespace {{ $labels.namespace }} has been in {{ $labels.phase }} phase for more than 10 minutes"
+
+      # HPA at Max Capacity
+      - alert: HPAAtMaxCapacity
+        expr: |
+          kube_horizontalpodautoscaler_status_current_replicas >= kube_horizontalpodautoscaler_spec_max_replicas
+        for: 15m
+        labels:
+          severity: warning
+          component: kubernetes
+        annotations:
+          summary: "HPA has reached maximum replicas"
+          description: "HPA {{ $labels.horizontalpodautoscaler }} has been at max capacity ({{ $value }} replicas) for 15 minutes"

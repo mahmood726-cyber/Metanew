@@ -1,0 +1,86 @@
+version: '3.8'
+
+services:
+  # Locust Master
+  locust-master:
+    image: locustio/locust:2.16.1
+    container_name: evidenceos-locust-master
+    ports:
+      - "8089:8089"
+    volumes:
+      - ./:/mnt/locust
+    command: -f /mnt/locust/locustfile.py --master --expect-workers=2 --host=http://backend:8000
+    networks:
+      - loadtest
+    environment:
+      - LOCUST_MODE=master
+
+  # Locust Workers
+  locust-worker-1:
+    image: locustio/locust:2.16.1
+    container_name: evidenceos-locust-worker-1
+    volumes:
+      - ./:/mnt/locust
+    command: -f /mnt/locust/locustfile.py --worker --master-host=locust-master --host=http://backend:8000
+    networks:
+      - loadtest
+    depends_on:
+      - locust-master
+    environment:
+      - LOCUST_MODE=worker
+
+  locust-worker-2:
+    image: locustio/locust:2.16.1
+    container_name: evidenceos-locust-worker-2
+    volumes:
+      - ./:/mnt/locust
+    command: -f /mnt/locust/locustfile.py --worker --master-host=locust-master --host=http://backend:8000
+    networks:
+      - loadtest
+    depends_on:
+      - locust-master
+    environment:
+      - LOCUST_MODE=worker
+
+  # EvidenceOS Backend (target for load testing)
+  backend:
+    build:
+      context: ../backend
+      dockerfile: Dockerfile
+    container_name: evidenceos-backend-loadtest
+    environment:
+      - DATABASE_URL=postgresql://postgres:your_password@postgres:5432/evidenceos
+      - REDIS_URL=redis://redis:6379
+      - ENABLE_CACHE=true
+      - ENABLE_ML_FEATURES=true
+      - LOG_LEVEL=WARNING  # Reduce logging during load test
+      - WORKERS=8
+    networks:
+      - loadtest
+    depends_on:
+      - redis
+      - postgres
+
+  # Redis
+  redis:
+    image: redis:7-alpine
+    container_name: evidenceos-redis-loadtest
+    command: redis-server --maxmemory 4gb --maxmemory-policy allkeys-lru
+    networks:
+      - loadtest
+
+  # PostgreSQL
+  postgres:
+    image: postgres:15-alpine
+    container_name: evidenceos-postgres-loadtest
+    environment:
+      - POSTGRES_DB=evidenceos
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=your_password
+    networks:
+      - loadtest
+    shm_size: 256mb  # Increase shared memory for performance
+
+networks:
+  loadtest:
+    driver: bridge

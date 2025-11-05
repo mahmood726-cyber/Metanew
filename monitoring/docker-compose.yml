@@ -1,0 +1,204 @@
+version: '3.8'
+
+services:
+  # Prometheus - Metrics Collection & Storage
+  prometheus:
+    image: prom/prometheus:v2.45.0
+    container_name: evidenceos-prometheus
+    restart: unless-stopped
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./prometheus/rules:/etc/prometheus/rules
+      - prometheus-data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--storage.tsdb.retention.time=30d'
+      - '--storage.tsdb.retention.size=50GB'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--web.enable-lifecycle'
+      - '--web.enable-admin-api'
+    ports:
+      - "9090:9090"
+    networks:
+      - monitoring
+    labels:
+      - "prometheus.io/scrape=true"
+      - "prometheus.io/port=9090"
+
+  # Grafana - Metrics Visualization
+  grafana:
+    image: grafana/grafana:10.0.3
+    container_name: evidenceos-grafana
+    restart: unless-stopped
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin123  # Change in production!
+      - GF_USERS_ALLOW_SIGN_UP=false
+      - GF_SERVER_ROOT_URL=http://localhost:3000
+      - GF_INSTALL_PLUGINS=redis-datasource
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ./grafana/dashboards:/etc/grafana/provisioning/dashboards
+      - ./grafana/datasources:/etc/grafana/provisioning/datasources
+    ports:
+      - "3000:3000"
+    networks:
+      - monitoring
+    depends_on:
+      - prometheus
+
+  # AlertManager - Alert Management
+  alertmanager:
+    image: prom/alertmanager:v0.26.0
+    container_name: evidenceos-alertmanager
+    restart: unless-stopped
+    volumes:
+      - ./alertmanager/alertmanager.yml:/etc/alertmanager/alertmanager.yml
+      - alertmanager-data:/alertmanager
+    command:
+      - '--config.file=/etc/alertmanager/alertmanager.yml'
+      - '--storage.path=/alertmanager'
+    ports:
+      - "9093:9093"
+    networks:
+      - monitoring
+
+  # Node Exporter - System Metrics
+  node-exporter:
+    image: prom/node-exporter:v1.6.1
+    container_name: evidenceos-node-exporter
+    restart: unless-stopped
+    command:
+      - '--path.rootfs=/host'
+      - '--path.procfs=/host/proc'
+      - '--path.sysfs=/host/sys'
+      - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
+    volumes:
+      - /:/host:ro,rslave
+    ports:
+      - "9100:9100"
+    networks:
+      - monitoring
+
+  # Redis Exporter - Redis Metrics
+  redis-exporter:
+    image: oliver006/redis_exporter:v1.52.0
+    container_name: evidenceos-redis-exporter
+    restart: unless-stopped
+    environment:
+      - REDIS_ADDR=redis:6379
+    ports:
+      - "9121:9121"
+    networks:
+      - monitoring
+      - evidenceos
+    depends_on:
+      - redis
+
+  # Postgres Exporter - PostgreSQL Metrics
+  postgres-exporter:
+    image: prometheuscommunity/postgres-exporter:v0.13.2
+    container_name: evidenceos-postgres-exporter
+    restart: unless-stopped
+    environment:
+      - DATA_SOURCE_NAME=postgresql://postgres:your_password@postgres:5432/evidenceos?sslmode=disable
+    ports:
+      - "9187:9187"
+    networks:
+      - monitoring
+      - evidenceos
+    depends_on:
+      - postgres
+
+  # Redis - Required by backend
+  redis:
+    image: redis:7-alpine
+    container_name: evidenceos-redis
+    restart: unless-stopped
+    command: redis-server --maxmemory 2gb --maxmemory-policy allkeys-lru --save 60 1000
+    volumes:
+      - redis-data:/data
+    ports:
+      - "6379:6379"
+    networks:
+      - evidenceos
+      - monitoring
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+
+  # PostgreSQL - Required by backend
+  postgres:
+    image: postgres:15-alpine
+    container_name: evidenceos-postgres
+    restart: unless-stopped
+    environment:
+      - POSTGRES_DB=evidenceos
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=your_password  # Change in production!
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - evidenceos
+      - monitoring
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # EvidenceOS Backend - Application to Monitor
+  backend:
+    build:
+      context: ../backend
+      dockerfile: Dockerfile
+    container_name: evidenceos-backend
+    restart: unless-stopped
+    environment:
+      - DATABASE_URL=postgresql://postgres:your_password@postgres:5432/evidenceos
+      - REDIS_URL=redis://redis:6379
+      - ENABLE_CACHE=true
+      - ENABLE_ML_FEATURES=true
+      - LOG_LEVEL=INFO
+      - WORKERS=4
+    volumes:
+      - ../backend:/app
+      - backend-data:/app/data
+    ports:
+      - "8000:8000"
+    networks:
+      - evidenceos
+      - monitoring
+    depends_on:
+      - redis
+      - postgres
+    labels:
+      - "prometheus.io/scrape=true"
+      - "prometheus.io/port=8000"
+      - "prometheus.io/path=/metrics"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+networks:
+  monitoring:
+    driver: bridge
+  evidenceos:
+    driver: bridge
+
+volumes:
+  prometheus-data:
+  grafana-data:
+  alertmanager-data:
+  redis-data:
+  postgres-data:
+  backend-data:
