@@ -3,7 +3,7 @@ Automated Risk of Bias (ROB) Assessment for Systematic Reviews
 Uses ML to classify studies according to Cochrane ROB 2.0 criteria
 """
 import logging
-from typing import Dict, List, Any, Tuple
+from typing import Dict, List, Any, Tuple, Optional
 import numpy as np
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.ensemble import RandomForestClassifier

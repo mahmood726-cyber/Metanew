@@ -30,6 +30,7 @@ from auth import (
 )
 from api.auth_routes import router as auth_router
 from api.ml_routes import router as ml_router
+from api.ai_features_routes import router as ai_features_router
 
 # Configure logging
 logging.basicConfig(
@@ -149,6 +150,9 @@ app.include_router(auth_router, prefix="/api")
 
 # Include AI/ML routes with /api prefix
 app.include_router(ml_router, prefix="/api")
+
+# Include advanced AI features routes with /api prefix
+app.include_router(ai_features_router, prefix="/api")
 
 
 # Health check endpoints (no auth required)
