@@ -32,6 +32,7 @@ from auth import (
     PermissionChecker,
 )
 from api.auth_routes import router as auth_router
+from api.ml_routes import router as ml_router
 
 # Configure logging
 logging.basicConfig(
@@ -148,6 +149,9 @@ async def log_requests(request: Request, call_next):
 
 # Include authentication routes
 app.include_router(auth_router)
+
+# Include AI/ML routes
+app.include_router(ml_router)
 
 
 # Health check endpoints (no auth required)

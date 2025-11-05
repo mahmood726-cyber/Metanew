@@ -48,12 +48,19 @@ python-json-logger==2.0.7  # Structured logging
 # HTTP client
 httpx==0.25.2  # Async HTTP client
 
+# Machine Learning & AI
+scikit-learn==1.3.2  # ML models (Random Forest, Gradient Boosting)
+scipy==1.11.4  # Scientific computing (stats, optimization)
+joblib==1.3.2  # Model persistence
+
 # Optional: Bayesian analysis (PyMC)
 # pymc==5.10.0
 # arviz==0.17.0
 
-# Optional: LLM support
-# llama-cpp-python==0.2.18
+# Optional: Local LLM support (Llama 3)
+# llama-cpp-python==0.2.20  # Local Llama models (CPU/GPU)
+# transformers==4.36.0  # HuggingFace transformers (optional)
+# sentence-transformers==2.2.2  # Embeddings (optional)
 
 # Testing
 pytest==7.4.3
