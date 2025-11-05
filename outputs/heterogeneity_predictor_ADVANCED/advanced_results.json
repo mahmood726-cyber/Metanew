@@ -1,0 +1,56 @@
+{
+  "best_model": "Random Forest",
+  "point_prediction": {
+    "r2": 0.3966569183804357,
+    "rmse": 25.185674685385464,
+    "mae": 17.72581038801313
+  },
+  "conformal_intervals": {
+    "90": {
+      "coverage": 0.8979591836734694,
+      "width": 60.99814894096708,
+      "quantile": 42.54676808724368
+    },
+    "95": {
+      "coverage": 0.9251700680272109,
+      "width": 65.27725147763311,
+      "quantile": 46.5089568138615
+    },
+    "99": {
+      "coverage": 0.9523809523809523,
+      "width": 74.23302023682281,
+      "quantile": 55.590940981107906
+    }
+  },
+  "calibration": {
+    "slope": 1.110584093714208,
+    "intercept": 3.7441018432116633,
+    "mean_calibration_error": 6.183380121220481
+  },
+  "heterogeneity_risk_score": {
+    "low": 0,
+    "moderate": 111,
+    "high": 29,
+    "very_high": 7
+  },
+  "n_train": 243,
+  "n_cal": 98,
+  "n_test": 147,
+  "features": [
+    "n_studies",
+    "log_n_studies",
+    "total_participants",
+    "log_total_participants",
+    "mean_sample_size",
+    "sd_sample_size",
+    "range_sample_size",
+    "cv_sample_size",
+    "mean_events_exp",
+    "sd_events_exp",
+    "mean_events_con",
+    "sd_events_con",
+    "mean_baseline_risk",
+    "mean_allocation_ratio",
+    "sd_allocation_ratio"
+  ]
+}
