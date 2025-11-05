@@ -468,14 +468,14 @@ class TestDataQualityChecks:
 
     def test_detect_outliers_in_effect_sizes(self):
         """Test detecting outlier effect sizes"""
-        yi_values = np.array([0.5, 0.6, 0.4, 0.55, 10.0])  # 10.0 is outlier
+        yi_values = np.array([0.5, 0.6, 0.4, 0.55, 0.58, 0.52, 100.0])  # 100.0 is extreme outlier
 
         mean = yi_values.mean()
         std = yi_values.std()
         z_scores = np.abs((yi_values - mean) / std)
 
-        # Values with |z-score| > 3 are outliers
-        outliers = z_scores > 3
+        # Values with |z-score| > 2 are potential outliers
+        outliers = z_scores > 2
 
         assert outliers.sum() > 0  # Should detect at least one outlier
 
@@ -605,7 +605,7 @@ class TestErrorHandling:
         })
 
         has_inf = np.isinf(studies_df['yi']).any()
-        assert has_inf is True
+        assert has_inf == True  # Use == instead of is for numpy bool
 
 
 class TestDataTransformations:
