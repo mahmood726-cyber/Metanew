@@ -78,6 +78,28 @@ from .automl import (
     create_automl,
 )
 
+# NEW: Advanced AI Features (2025)
+from .report_generation import (
+    NaturalLanguageReportGenerator,
+    ReportSection,
+)
+
+from .risk_of_bias_assessment import (
+    RiskOfBiasAssessor,
+)
+
+from .study_screening import (
+    StudyScreeningAssistant,
+)
+
+from .pdf_extraction import (
+    PDFDataExtractor,
+)
+
+from .bayesian_nma import (
+    BayesianNMA,
+)
+
 __all__ = [
     # Original models
     "HeterogeneityPredictor",
@@ -131,4 +153,11 @@ __all__ = [
     "SimpleAutoML",
     "OptimizationResult",
     "create_automl",
+    # NEW: Advanced AI Features
+    "NaturalLanguageReportGenerator",
+    "ReportSection",
+    "RiskOfBiasAssessor",
+    "StudyScreeningAssistant",
+    "PDFDataExtractor",
+    "BayesianNMA",
 ]
