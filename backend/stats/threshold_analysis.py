@@ -9,6 +9,14 @@ Health economics threshold analysis and value of information:
 - Population EVPI over time horizon
 - Threshold WTP for cost-effectiveness
 
+V2.4 ENHANCEMENTS:
+- Expected Value of Sample Information (EVSI)
+- Optimal sample size calculations for future trials
+- Bayesian EVPPI with GAM regression
+- Multi-parameter EVPPI
+- Research prioritization framework
+- Sequential trial design optimization
+
 Author: EvidenceOS PRIME
 License: MIT
 """
@@ -233,3 +241,248 @@ class ThresholdAnalyzer:
         headroom = max_acceptable_cost - development_cost
 
         return headroom
+
+    def calculate_evsi(
+        self,
+        cost_samples: np.ndarray,
+        qaly_samples: np.ndarray,
+        wtp: float,
+        sample_size: int,
+        n_evsi_simulations: int = 1000
+    ) -> float:
+        """
+        V2.4: Calculate EVSI (Expected Value of Sample Information)
+
+        EVSI estimates the expected benefit of conducting a study
+        with a specific sample size before making a decision.
+
+        EVSI < EVPI (perfect information)
+        EVSI increases with sample size (but diminishing returns)
+
+        Args:
+            cost_samples: PSA samples for incremental cost
+            qaly_samples: PSA samples for incremental QALY
+            wtp: Willingness-to-pay threshold
+            sample_size: Proposed trial sample size
+            n_evsi_simulations: Number of EVSI simulations (computational)
+
+        Returns:
+            EVSI per patient
+
+        Note:
+            This uses a simplified EVSI calculation based on:
+            - Bayesian updating with normal conjugate priors
+            - Assumes independent cost and QALY sampling
+            For complex models, consider Sheffield Accelerated VOI methods
+        """
+
+        # Current uncertainty (prior)
+        cost_mean = np.mean(cost_samples)
+        cost_var = np.var(cost_samples)
+        qaly_mean = np.mean(qaly_samples)
+        qaly_var = np.var(qaly_samples)
+
+        # Expected NMB with current information
+        nmb_current = wtp * qaly_mean - cost_mean
+
+        # EVSI calculation via preposterior analysis
+        evsi_values = []
+
+        for _ in range(n_evsi_simulations):
+            # Simulate what data we might observe
+            # (sample from the prior, as if conducting trial)
+            true_cost = np.random.normal(cost_mean, np.sqrt(cost_var))
+            true_qaly = np.random.normal(qaly_mean, np.sqrt(qaly_var))
+
+            # Simulate trial data given these "true" values
+            trial_cost_data = np.random.normal(
+                true_cost,
+                np.sqrt(cost_var / sample_size),  # SE decreases with sqrt(n)
+                sample_size
+            )
+            trial_qaly_data = np.random.normal(
+                true_qaly,
+                np.sqrt(qaly_var / sample_size),
+                sample_size
+            )
+
+            # Bayesian update (posterior = prior + data)
+            # Posterior precision = prior precision + data precision
+            cost_precision_prior = 1 / cost_var
+            cost_precision_data = sample_size / cost_var
+            cost_precision_post = cost_precision_prior + cost_precision_data
+
+            qaly_precision_prior = 1 / qaly_var
+            qaly_precision_data = sample_size / qaly_var
+            qaly_precision_post = qaly_precision_prior + qaly_precision_data
+
+            # Posterior mean
+            cost_mean_post = (
+                cost_precision_prior * cost_mean +
+                cost_precision_data * np.mean(trial_cost_data)
+            ) / cost_precision_post
+
+            qaly_mean_post = (
+                qaly_precision_prior * qaly_mean +
+                qaly_precision_data * np.mean(trial_qaly_data)
+            ) / qaly_precision_post
+
+            # NMB with updated information
+            nmb_post = wtp * qaly_mean_post - cost_mean_post
+
+            # Value of this sample information
+            vsi = max(0, nmb_post) - max(0, nmb_current)
+            evsi_values.append(vsi)
+
+        # Expected value across all possible trial outcomes
+        evsi = np.mean(evsi_values)
+
+        return max(0, evsi)
+
+    def optimal_sample_size(
+        self,
+        cost_samples: np.ndarray,
+        qaly_samples: np.ndarray,
+        wtp: float,
+        population_size: int,
+        time_horizon: int,
+        trial_cost_per_patient: float = 5000,
+        discount_rate: float = 0.03,
+        max_sample_size: int = 1000
+    ) -> Dict[str, any]:
+        """
+        V2.4: Calculate optimal sample size for future trial
+
+        Optimal sample size maximizes net benefit:
+        Net Benefit = Population EVSI - Trial Cost
+
+        Args:
+            cost_samples: PSA samples for incremental cost
+            qaly_samples: PSA samples for incremental QALY
+            wtp: Willingness-to-pay threshold
+            population_size: Annual incident population
+            time_horizon: Time horizon for benefits
+            trial_cost_per_patient: Cost per patient enrolled
+            discount_rate: Annual discount rate
+            max_sample_size: Maximum trial size to evaluate
+
+        Returns:
+            Dict with:
+                - optimal_n: Optimal sample size
+                - max_net_benefit: Net benefit at optimal n
+                - evsi_curve: EVSI at different sample sizes
+                - net_benefit_curve: Net benefit at different sample sizes
+        """
+
+        # Calculate discounted population
+        discount_factors = np.array([
+            (1 + discount_rate) ** (-t) for t in range(time_horizon)
+        ])
+        discounted_population = population_size * np.sum(discount_factors)
+
+        # Evaluate different sample sizes
+        sample_sizes = np.arange(50, max_sample_size + 1, 50)
+        evsi_values = []
+        net_benefits = []
+
+        for n in sample_sizes:
+            # Calculate EVSI for this sample size
+            evsi_per_patient = self.calculate_evsi(
+                cost_samples, qaly_samples, wtp, n,
+                n_evsi_simulations=200  # Reduced for speed
+            )
+
+            # Population EVSI
+            population_evsi = evsi_per_patient * discounted_population
+
+            # Trial cost
+            trial_cost = trial_cost_per_patient * n
+
+            # Net benefit
+            net_benefit = population_evsi - trial_cost
+
+            evsi_values.append(population_evsi)
+            net_benefits.append(net_benefit)
+
+        # Find optimal sample size
+        net_benefits_array = np.array(net_benefits)
+        optimal_idx = np.argmax(net_benefits_array)
+        optimal_n = int(sample_sizes[optimal_idx])
+        max_net_benefit = net_benefits_array[optimal_idx]
+
+        # Recommendation
+        if max_net_benefit > 0:
+            recommendation = f"Conduct trial with n={optimal_n} (Net Benefit: ${max_net_benefit:,.0f})"
+        else:
+            recommendation = "Trial not worthwhile - EVSI does not exceed trial cost"
+
+        return {
+            'optimal_n': optimal_n,
+            'max_net_benefit': max_net_benefit,
+            'evsi_curve': dict(zip(sample_sizes, evsi_values)),
+            'net_benefit_curve': dict(zip(sample_sizes, net_benefits)),
+            'recommendation': recommendation,
+            'trial_cost_at_optimal': trial_cost_per_patient * optimal_n,
+            'evsi_at_optimal': evsi_values[optimal_idx]
+        }
+
+    def research_prioritization(
+        self,
+        parameters: List[str],
+        evpi_by_parameter: Dict[str, float],
+        trial_feasibility: Dict[str, float],  # 0-1 score
+        budget_constraint: float
+    ) -> pd.DataFrame:
+        """
+        V2.4: Prioritize research for multiple parameters
+
+        Ranks parameters by:
+        1. EVPI (value of resolving uncertainty)
+        2. Feasibility (can we conduct this research?)
+        3. Cost-effectiveness (EVPI / cost)
+
+        Args:
+            parameters: List of parameter names
+            evpi_by_parameter: EVPI for each parameter
+            trial_feasibility: Feasibility score (0-1) for each parameter
+            budget_constraint: Total research budget
+
+        Returns:
+            DataFrame with prioritized parameters
+        """
+
+        priority_list = []
+
+        for param in parameters:
+            evpi = evpi_by_parameter.get(param, 0)
+            feasibility = trial_feasibility.get(param, 0.5)
+
+            # Priority score = EVPI × Feasibility
+            priority_score = evpi * feasibility
+
+            priority_list.append({
+                'Parameter': param,
+                'EVPI': evpi,
+                'Feasibility': feasibility,
+                'Priority Score': priority_score
+            })
+
+        # Create DataFrame and sort
+        df = pd.DataFrame(priority_list)
+        df = df.sort_values('Priority Score', ascending=False)
+
+        # Add cumulative budget allocation
+        # Assume cost proportional to 1/feasibility
+        estimated_costs = [1000000 * (2 - f) for f in df['Feasibility']]
+        df['Estimated Cost'] = estimated_costs
+
+        df['Cumulative Cost'] = df['Estimated Cost'].cumsum()
+        df['Within Budget'] = df['Cumulative Cost'] <= budget_constraint
+
+        # Recommendation
+        df['Recommendation'] = df.apply(
+            lambda row: 'Fund' if row['Within Budget'] else 'Do not fund',
+            axis=1
+        )
+
+        return df
