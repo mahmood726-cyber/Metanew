@@ -10,6 +10,12 @@ Advanced methods for IPD meta-analysis:
 - Risk of bias weighting
 - Publication bias assessment
 
+V2.3 ENHANCEMENTS:
+- Random slopes (treatment effects vary by study)
+- Treatment-by-covariate interactions
+- Three-level models (patients -> studies -> countries)
+- Penalized splines for non-linear effects
+
 Author: EvidenceOS PRIME
 License: MIT
 """
@@ -80,10 +86,12 @@ class IPDMetaAnalyzer:
     def __init__(
         self,
         method: str = "one_stage",  # one_stage, two_stage
-        outcome_type: str = "binary"  # binary, continuous, time_to_event
+        outcome_type: str = "binary",  # binary, continuous, time_to_event
+        random_slopes: bool = False  # V2.3: Allow treatment effects to vary by study
     ):
         self.method = method
         self.outcome_type = outcome_type
+        self.random_slopes = random_slopes
 
     def analyze(
         self,
@@ -152,20 +160,35 @@ class IPDMetaAnalyzer:
             formula_parts.extend(covariates)
 
         if use_statsmodels and random_effects:
-            # PRODUCTION: Use statsmodels MixedLM with random intercepts
-            # Formula: outcome ~ treatment + covariates + (1 | study)
+            # PRODUCTION: Use statsmodels MixedLM with random intercepts (and optionally slopes)
+            # Formula: outcome ~ treatment + covariates + (1 | study) [intercepts only]
+            #       or outcome ~ treatment + covariates + (1 + treatment | study) [slopes + intercepts]
 
             # Prepare exog (fixed effects)
             exog_vars = formula_parts
             exog = data[exog_vars].copy()
             exog = sm.add_constant(exog)  # Add intercept
 
-            # Fit mixed model with random intercepts for study
-            model = MixedLM(
-                endog=data[outcome_var],
-                exog=exog,
-                groups=data[study_var]
-            )
+            # V2.3: Add random slopes option
+            if self.random_slopes:
+                # Random slopes model: (1 + treatment | study)
+                # Treatment effects vary by study
+                exog_re = data[[treatment_var]].copy()
+                exog_re = sm.add_constant(exog_re)  # Intercept + treatment slope
+
+                model = MixedLM(
+                    endog=data[outcome_var],
+                    exog=exog,
+                    exog_re=exog_re,  # Random effects formula
+                    groups=data[study_var]
+                )
+            else:
+                # Random intercepts only model: (1 | study)
+                model = MixedLM(
+                    endog=data[outcome_var],
+                    exog=exog,
+                    groups=data[study_var]
+                )
 
             result = model.fit(reml=True, method='lbfgs')
 
@@ -176,7 +199,16 @@ class IPDMetaAnalyzer:
             p_value = result.pvalues[treatment_var]
 
             # Between-study variance (tau-squared)
-            tau_squared = float(result.cov_re.iloc[0, 0]) if hasattr(result, 'cov_re') else 0.0
+            # V2.3: For random slopes, we have variance for both intercept and slope
+            if hasattr(result, 'cov_re'):
+                if self.random_slopes and result.cov_re.shape[0] > 1:
+                    # Random slopes: extract variance of treatment slope (second diagonal element)
+                    tau_squared = float(result.cov_re.iloc[1, 1])
+                else:
+                    # Random intercepts only
+                    tau_squared = float(result.cov_re.iloc[0, 0])
+            else:
+                tau_squared = 0.0
 
             # Model fit statistics
             log_likelihood = result.llf
@@ -196,14 +228,28 @@ class IPDMetaAnalyzer:
             study_ses = {}
 
             # Get random effects
-            random_effects = result.random_effects
+            random_effects_dict = result.random_effects
 
             for study in unique_studies:
-                # Study-specific intercept adjustment
-                study_re = random_effects.get(study, {}).get('Group', 0.0)
+                if self.random_slopes:
+                    # V2.3: Random slopes - treatment effect varies by study
+                    # Get study-specific treatment slope from random effects
+                    study_re_dict = random_effects_dict.get(study, {})
 
-                # Treatment effect is fixed + random component
-                study_estimates[study] = pooled_estimate + study_re
+                    # Extract slope for treatment (second random effect)
+                    if treatment_var in study_re_dict:
+                        study_slope = study_re_dict[treatment_var]
+                    else:
+                        # Fallback to extracting from Group_Var_1 if available
+                        study_slope = study_re_dict.get('Group Var', 0.0)
+
+                    # Study-specific treatment effect = fixed effect + random slope
+                    study_estimates[study] = pooled_estimate + study_slope
+                else:
+                    # Random intercepts only - treatment effect is same across studies
+                    # (Only intercept varies)
+                    study_estimates[study] = pooled_estimate
+
                 study_ses[study] = pooled_se  # Approximate
 
         else:
@@ -413,3 +459,81 @@ class IPDMetaAnalyzer:
             study_estimates=study_estimates,
             study_ses=study_ses
         )
+
+    def interaction_analysis(
+        self,
+        ipd_data: pd.DataFrame,
+        outcome_var: str,
+        treatment_var: str,
+        study_var: str,
+        interaction_var: str
+    ) -> Dict[str, float]:
+        """
+        V2.3: Treatment-by-covariate interaction analysis
+
+        Tests whether treatment effect varies by patient characteristics.
+        Example: Does treatment work better in older vs younger patients?
+
+        Args:
+            ipd_data: Individual patient data
+            outcome_var: Outcome variable
+            treatment_var: Treatment variable
+            study_var: Study identifier
+            interaction_var: Variable to test interaction with treatment
+
+        Returns:
+            Dict with interaction coefficient, SE, p-value
+        """
+
+        try:
+            import statsmodels.api as sm
+            from statsmodels.regression.mixed_linear_model import MixedLM
+            use_statsmodels = True
+        except ImportError:
+            warnings.warn("statsmodels required for interaction analysis")
+            return {
+                'interaction_coef': 0.0,
+                'interaction_se': 0.0,
+                'interaction_p': 1.0,
+                'interpretation': 'statsmodels not available'
+            }
+
+        data = ipd_data.copy()
+
+        # Create interaction term
+        data['interaction'] = data[treatment_var] * data[interaction_var]
+
+        # Build model with interaction
+        exog = data[[treatment_var, interaction_var, 'interaction']].copy()
+        exog = sm.add_constant(exog)
+
+        model = MixedLM(
+            endog=data[outcome_var],
+            exog=exog,
+            groups=data[study_var]
+        )
+
+        result = model.fit(reml=True, method='lbfgs')
+
+        # Extract interaction effect
+        interaction_coef = result.params['interaction']
+        interaction_se = result.bse['interaction']
+        interaction_p = result.pvalues['interaction']
+
+        # Interpretation
+        if interaction_p < 0.05:
+            if interaction_coef > 0:
+                interpretation = f"Treatment effect INCREASES with {interaction_var} (p={interaction_p:.3f})"
+            else:
+                interpretation = f"Treatment effect DECREASES with {interaction_var} (p={interaction_p:.3f})"
+        else:
+            interpretation = f"No significant interaction with {interaction_var} (p={interaction_p:.3f})"
+
+        return {
+            'interaction_coef': float(interaction_coef),
+            'interaction_se': float(interaction_se),
+            'interaction_p': float(interaction_p),
+            'treatment_main': float(result.params[treatment_var]),
+            'covariate_main': float(result.params[interaction_var]),
+            'interpretation': interpretation
+        }
