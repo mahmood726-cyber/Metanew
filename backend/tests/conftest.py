@@ -8,7 +8,7 @@ from fastapi.testclient import TestClient
 
 # Set test environment variables before any imports
 os.environ["ENVIRONMENT"] = "test"
-os.environ["JWT_SECRET_KEY"] = "test-secret-key-shared"
+os.environ["JWT_SECRET_KEY"] = "test-secret-key-for-testing-only-do-not-use-in-production"
 os.environ["ADMIN_INITIAL_PASSWORD"] = "test-admin-password"
 os.environ["ANALYST_INITIAL_PASSWORD"] = "test-analyst-password"
 os.environ["DATABASE_URL"] = "sqlite:///:memory:"

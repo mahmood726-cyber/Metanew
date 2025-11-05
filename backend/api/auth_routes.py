@@ -9,14 +9,14 @@ from typing import List
 from slowapi import Limiter
 from slowapi.util import get_remote_address
 
-from backend.auth.auth_manager import (
+from auth.auth_manager import (
     auth_manager,
     User,
     UserCreate,
     Token,
     UserRole,
 )
-from backend.auth.dependencies import (
+from auth.dependencies import (
     get_current_user,
     get_current_active_user,
     RoleChecker,
@@ -286,7 +286,7 @@ async def list_roles():
     """
     List available user roles and their permissions
     """
-    from backend.auth.auth_manager import ROLE_PERMISSIONS
+    from auth.auth_manager import ROLE_PERMISSIONS
 
     return {
         "roles": [
