@@ -1,0 +1,26 @@
+study_id,author,year,journal,pmid,intervention,comparator,events_intervention,n_intervention,events_comparator,n_comparator,age_mean,percent_male,follow_up_months,rob_random,rob_allocation,rob_blinding,rob_attrition,rob_reporting,rob_overall,disease,intervention_class,industry_funded
+BIN001,Smith,2020,NEJM,32001234,Intervention A 10mg daily,Placebo,45,200,67,198,62.5,65,24,low,low,low,low,low,low,Cardiovascular disease,ACE inhibitor,no
+BIN002,Jones,2019,Lancet,31234567,Intervention A 10mg daily,Placebo,32,150,48,155,64.2,58,24,low,low,low,low,low,low,Cardiovascular disease,ACE inhibitor,no
+BIN003,Brown,2021,JAMA,33567890,Intervention A 10mg daily,Placebo,21,100,29,102,59.8,62,12,unclear,unclear,low,low,low,unclear,Cardiovascular disease,ACE inhibitor,no
+BIN004,Davis,2018,BMJ,30876543,Intervention A 10mg daily,Placebo,56,220,78,215,63.7,68,24,low,low,low,low,low,low,Cardiovascular disease,ACE inhibitor,no
+BIN005,Wilson,2022,Circulation,34123456,Intervention A 10mg daily,Placebo,38,180,52,175,61.3,70,24,low,low,low,low,low,low,Cardiovascular disease,ACE inhibitor,yes
+BIN006,Taylor,2020,Eur Heart J,32345678,Intervention A 10mg daily,Placebo,44,190,61,188,60.9,55,18,high,unclear,high,low,low,high,Cardiovascular disease,ACE inhibitor,yes
+BIN007,Anderson,2021,Am Heart J,33234567,Intervention A 10mg daily,Placebo,27,130,39,128,65.4,72,24,low,low,low,low,low,low,Cardiovascular disease,ACE inhibitor,no
+BIN008,Thomas,2019,Heart,31456789,Intervention A 10mg daily,Placebo,19,95,26,98,58.6,60,12,low,low,low,unclear,low,low,Cardiovascular disease,ACE inhibitor,no
+BIN009,White,2020,Atherosclerosis,32567890,Intervention A 20mg daily,Placebo,52,210,74,208,63.2,67,24,low,low,low,low,low,low,Cardiovascular disease,ACE inhibitor,yes
+BIN010,Harris,2021,J Am Coll Cardiol,33345678,Intervention A 20mg daily,Placebo,41,185,58,182,61.8,64,24,low,low,low,low,low,low,Cardiovascular disease,ACE inhibitor,no
+BIN011,Martin,2019,Hypertension,31567890,Intervention A 5mg daily,Placebo,28,140,35,138,60.5,69,12,unclear,low,low,low,low,unclear,Cardiovascular disease,ACE inhibitor,no
+BIN012,Thompson,2020,Am J Cardiol,32678901,Intervention A 5mg daily,Placebo,33,165,47,162,62.9,71,18,low,low,low,low,low,low,Cardiovascular disease,ACE inhibitor,yes
+BIN013,Garcia,2021,Int J Cardiol,33456789,Intervention B 50mg daily,Placebo,36,175,51,172,64.7,66,24,low,low,low,low,low,low,Cardiovascular disease,Beta blocker,no
+BIN014,Martinez,2020,Clin Cardiol,32789012,Intervention B 50mg daily,Placebo,29,145,41,143,59.3,63,18,low,unclear,low,low,low,low,Cardiovascular disease,Beta blocker,no
+BIN015,Rodriguez,2022,Cardiovasc Drugs Ther,34234567,Intervention B 100mg daily,Placebo,48,200,67,198,62.1,68,24,low,low,low,low,low,low,Cardiovascular disease,Beta blocker,yes
+BIN016,Hernandez,2019,J Cardiovasc Pharmacol,31678901,Intervention B 100mg daily,Placebo,35,160,49,158,60.8,65,18,unclear,unclear,unclear,low,low,unclear,Cardiovascular disease,Beta blocker,yes
+BIN017,Lopez,2021,Prog Cardiovasc Dis,33567891,Intervention B 50mg daily,Placebo,42,190,59,188,63.5,70,24,low,low,low,low,low,low,Cardiovascular disease,Beta blocker,no
+BIN018,Gonzalez,2020,Am J Med,32890123,Intervention B 100mg daily,Placebo,31,155,44,152,61.2,67,18,high,unclear,high,unclear,low,high,Cardiovascular disease,Beta blocker,yes
+BIN019,Perez,2019,Eur J Heart Fail,31789012,Intervention C 200mg daily,Standard care,38,180,53,178,65.9,72,24,low,low,low,low,low,low,Heart failure,ARB,no
+BIN020,Sanchez,2021,J Card Fail,33678902,Intervention C 200mg daily,Standard care,45,195,63,192,64.3,69,24,low,low,low,low,low,low,Heart failure,ARB,yes
+BIN021,Ramirez,2020,ESC Heart Fail,32901234,Intervention C 100mg daily,Standard care,27,135,38,132,62.7,66,18,low,unclear,low,low,low,low,Heart failure,ARB,no
+BIN022,Torres,2022,JACC Heart Fail,34345678,Intervention C 100mg daily,Standard care,34,170,48,168,63.8,71,24,low,low,low,low,low,low,Heart failure,ARB,yes
+BIN023,Flores,2019,Circ Heart Fail,31890123,Intervention C 200mg daily,Standard care,51,205,71,202,64.6,68,24,unclear,unclear,low,low,low,unclear,Heart failure,ARB,yes
+BIN024,Rivera,2021,Am Heart J,33789013,Intervention C 100mg daily,Standard care,29,150,41,148,61.9,65,18,low,low,low,unclear,low,low,Heart failure,ARB,no
+BIN025,Morales,2020,Heart Fail Rev,32012345,Intervention D 40mg daily,Placebo,43,185,61,182,58.4,63,24,low,low,low,low,low,low,Chronic disease,Statin,no

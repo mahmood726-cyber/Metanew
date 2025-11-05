@@ -1,0 +1,26 @@
+study_id,author,year,journal,pmid,intervention,comparator,outcome,hr,ci_lower,ci_upper,median_intervention_months,median_comparator_months,n_intervention,n_comparator,age_mean,percent_male,rob_overall,disease,intervention_class,industry_funded
+SURV001,Garcia,2020,JCO,32123456,Chemotherapy + Immunotherapy A,Chemotherapy,Progression-Free Survival,0.72,0.58,0.89,8.5,5.2,287,284,64.2,68,low,NSCLC,Immunotherapy,yes
+SURV002,Martinez,2021,Lancet Oncol,33234567,Chemotherapy + Immunotherapy A,Chemotherapy,Progression-Free Survival,0.68,0.52,0.88,9.1,5.5,295,292,63.7,65,low,NSCLC,Immunotherapy,yes
+SURV003,Rodriguez,2019,Ann Oncol,31345678,Chemotherapy + Immunotherapy A,Chemotherapy,Progression-Free Survival,0.75,0.61,0.92,7.8,5.0,265,262,65.3,70,unclear,NSCLC,Immunotherapy,yes
+SURV004,Hernandez,2022,NEJM,34456789,Chemotherapy + Immunotherapy A,Chemotherapy,Progression-Free Survival,0.70,0.55,0.89,8.8,5.3,302,298,62.9,67,low,NSCLC,Immunotherapy,yes
+SURV005,Lopez,2020,Lancet,32567890,Chemotherapy + Immunotherapy A,Chemotherapy,Progression-Free Survival,0.65,0.49,0.86,9.4,5.7,278,275,64.8,69,low,NSCLC,Immunotherapy,yes
+SURV006,Gonzalez,2021,JAMA Oncol,33678901,Chemotherapy + Immunotherapy B,Chemotherapy,Progression-Free Survival,0.78,0.63,0.96,7.5,4.9,258,255,63.4,66,high,NSCLC,Immunotherapy,yes
+SURV007,Perez,2019,Cancer,31789012,Chemotherapy + Immunotherapy B,Chemotherapy,Progression-Free Survival,0.73,0.57,0.93,8.2,5.1,270,268,65.1,71,low,NSCLC,Immunotherapy,no
+SURV008,Sanchez,2022,Br J Cancer,34890123,Immunotherapy A monotherapy,Chemotherapy,Overall Survival,0.69,0.54,0.88,18.5,12.3,315,312,63.8,68,low,Melanoma,Immunotherapy,yes
+SURV009,Ramirez,2020,NEJM,32901234,Immunotherapy A monotherapy,Chemotherapy,Overall Survival,0.66,0.50,0.87,19.2,11.8,298,295,62.4,65,low,Melanoma,Immunotherapy,yes
+SURV010,Torres,2021,JCO,33012345,Immunotherapy B monotherapy,Chemotherapy,Overall Survival,0.71,0.56,0.90,17.8,12.5,285,282,64.7,70,low,Melanoma,Immunotherapy,yes
+SURV011,Flores,2019,Lancet Oncol,31123456,Immunotherapy B monotherapy,Chemotherapy,Overall Survival,0.74,0.59,0.93,17.2,11.9,272,269,63.2,67,unclear,Melanoma,Immunotherapy,yes
+SURV012,Rivera,2022,Ann Oncol,34234567,Combination Immunotherapy,Immunotherapy A,Overall Survival,0.63,0.47,0.84,21.5,16.8,245,242,62.9,69,low,Melanoma,Immunotherapy,yes
+SURV013,Morales,2020,Cancer,32345678,Combination Immunotherapy,Immunotherapy A,Overall Survival,0.67,0.51,0.88,20.3,16.2,258,255,64.1,66,low,Melanoma,Immunotherapy,yes
+SURV014,Castro,2021,JAMA,33456789,Targeted Therapy A,Chemotherapy,Progression-Free Survival,0.58,0.42,0.80,11.2,6.8,202,199,58.4,52,low,Breast Cancer,Targeted,yes
+SURV015,Diaz,2019,Lancet,31567890,Targeted Therapy A,Chemotherapy,Progression-Free Survival,0.62,0.46,0.83,10.5,6.5,215,212,59.7,55,low,Breast Cancer,Targeted,yes
+SURV016,Fernandez,2022,NEJM,34678901,Targeted Therapy A,Chemotherapy,Progression-Free Survival,0.55,0.39,0.77,11.8,7.1,228,225,57.9,51,low,Breast Cancer,Targeted,yes
+SURV017,Gomez,2020,JCO,32789012,Targeted Therapy B,Standard therapy,Overall Survival,0.70,0.53,0.92,22.5,18.2,188,185,60.3,53,unclear,Breast Cancer,Targeted,yes
+SURV018,Herrera,2021,Ann Oncol,33890123,Targeted Therapy B,Standard therapy,Overall Survival,0.67,0.50,0.90,23.1,18.8,195,192,59.1,54,low,Breast Cancer,Targeted,no
+SURV019,Jimenez,2019,Lancet Oncol,31901234,Hormone Therapy A,Placebo,Disease-Free Survival,0.75,0.60,0.94,48.5,38.2,425,422,52.3,0,low,Breast Cancer,Hormone,no
+SURV020,Mendez,2022,JAMA Oncol,34012345,Hormone Therapy A,Placebo,Disease-Free Survival,0.72,0.56,0.92,49.8,39.1,438,435,53.7,0,low,Breast Cancer,Hormone,no
+SURV021,Nunez,2020,Cancer,32123457,Hormone Therapy B,Placebo,Disease-Free Survival,0.68,0.51,0.90,51.2,40.5,412,409,51.8,0,low,Breast Cancer,Hormone,yes
+SURV022,Ortiz,2021,Br J Cancer,33234568,Tyrosine Kinase Inhibitor A,Chemotherapy,Progression-Free Survival,0.52,0.36,0.75,13.5,8.2,165,162,61.4,64,low,Renal Cell Carcinoma,TKI,yes
+SURV023,Pena,2019,JCO,31345679,Tyrosine Kinase Inhibitor A,Chemotherapy,Progression-Free Survival,0.56,0.40,0.78,12.8,7.9,172,169,62.7,67,low,Renal Cell Carcinoma,TKI,yes
+SURV024,Quintero,2022,Lancet Oncol,34456790,Tyrosine Kinase Inhibitor B,Sunitinib,Overall Survival,0.69,0.52,0.91,28.3,22.5,155,152,60.8,65,low,Renal Cell Carcinoma,TKI,yes
+SURV025,Ramos,2020,Ann Oncol,32567891,Tyrosine Kinase Inhibitor B,Sunitinib,Overall Survival,0.65,0.48,0.88,29.7,23.2,148,145,59.6,63,unclear,Renal Cell Carcinoma,TKI,yes
