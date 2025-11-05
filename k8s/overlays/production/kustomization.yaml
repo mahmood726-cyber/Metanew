@@ -1,0 +1,55 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: evidenceos-production
+
+bases:
+  - ../../base
+
+namePrefix: prod-
+
+commonLabels:
+  environment: production
+
+replicas:
+  - name: evidenceos-backend
+    count: 5
+
+images:
+  - name: ghcr.io/your-org/evidenceos-backend
+    newTag: latest
+
+patches:
+  - patch: |-
+      - op: replace
+        path: /spec/rules/0/host
+        value: evidenceos.com
+    target:
+      kind: Ingress
+      name: evidenceos-ingress
+
+  # Increase resources for production
+  - patch: |-
+      - op: replace
+        path: /spec/template/spec/containers/0/resources/requests/memory
+        value: 4Gi
+      - op: replace
+        path: /spec/template/spec/containers/0/resources/limits/memory
+        value: 8Gi
+    target:
+      kind: Deployment
+      name: evidenceos-backend
+
+configMapGenerator:
+  - name: evidenceos-config
+    behavior: merge
+    literals:
+      - LOG_LEVEL=WARNING
+      - ENABLE_DEBUG=false
+      - WORKERS=8
+
+resources:
+  - namespace.yaml
+
+files:
+  - namespace.yaml

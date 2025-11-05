@@ -1,0 +1,52 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: evidenceos-config
+  namespace: evidenceos
+  labels:
+    app: evidenceos
+data:
+  # Application settings
+  LOG_LEVEL: "INFO"
+  WORKERS: "4"
+
+  # Redis settings
+  REDIS_HOST: "redis-service"
+  REDIS_PORT: "6379"
+  CACHE_TTL_PREDICTIONS: "3600"
+  CACHE_TTL_RECOMMENDATIONS: "1800"
+
+  # ML settings
+  ML_MODEL_REGISTRY_PATH: "/app/data/model_registry"
+  ML_EXPERIMENTS_PATH: "/app/data/experiments"
+
+  # Performance settings
+  MAX_UPLOAD_SIZE: "50M"
+  REQUEST_TIMEOUT: "300"
+
+  # Feature flags
+  ENABLE_CACHE: "true"
+  ENABLE_ML_FEATURES: "true"
+  ENABLE_RAG: "true"
+  ENABLE_AUTOML: "true"
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: evidenceos-secrets
+  namespace: evidenceos
+  labels:
+    app: evidenceos
+type: Opaque
+stringData:
+  # Database credentials (replace with actual values)
+  postgres-user: evidenceos
+  postgres-password: CHANGE_ME_IN_PRODUCTION
+  database-url: postgresql://evidenceos:CHANGE_ME_IN_PRODUCTION@postgres-service:5432/evidenceos
+
+  # JWT secret (replace with actual value)
+  jwt-secret: CHANGE_ME_IN_PRODUCTION_USE_STRONG_RANDOM_STRING
+
+  # Admin credentials (replace with actual values)
+  admin-username: admin
+  admin-password: CHANGE_ME_IN_PRODUCTION

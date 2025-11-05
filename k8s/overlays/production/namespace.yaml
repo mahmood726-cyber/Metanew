@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: evidenceos-production
+  labels:
+    app: evidenceos
+    environment: production
