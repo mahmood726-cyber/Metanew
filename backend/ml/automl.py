@@ -5,7 +5,7 @@ Based on 2025 healthcare ML best practices
 """
 import numpy as np
 import pandas as pd
-from typing import Dict, List, Optional, Any, Callable, Tuple
+from typing import Dict, List, Optional, Any, Callable, Tuple, Union
 from dataclasses import dataclass
 import logging
 import time
