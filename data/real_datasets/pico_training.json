@@ -1,0 +1,1507 @@
+{
+  "description": "PICO element training dataset from RCT abstracts",
+  "n_abstracts": 100,
+  "annotation_scheme": "Population, Intervention, Comparator, Outcome + effect size",
+  "data": [
+    {
+      "id": "TRAIN_0001",
+      "pmid": "31234567",
+      "abstract": "BACKGROUND: Advanced non-small cell lung cancer (NSCLC) has limited treatment options. METHODS: This randomized, double-blind, placebo-controlled trial enrolled 594 patients with previously treated advanced NSCLC. Patients received pembrolizumab 200 mg or placebo every 3 weeks. The primary endpoint was overall survival. RESULTS: Median overall survival was 12.7 months with pembrolizumab vs 8.5 months with placebo (HR 0.71; 95% CI, 0.58-0.87; P=0.001). CONCLUSIONS: Pembrolizumab significantly improved survival in previously treated advanced NSCLC.",
+      "annotations": {
+        "population": "patients with previously treated advanced non-small cell lung cancer",
+        "intervention": "pembrolizumab 200 mg every 3 weeks",
+        "comparator": "placebo",
+        "outcome": "overall survival",
+        "sample_size": 594,
+        "effect_estimate": "HR 0.71",
+        "confidence_interval": "0.58-0.87",
+        "p_value": "0.001"
+      }
+    },
+    {
+      "id": "TRAIN_0002",
+      "pmid": "32567891",
+      "abstract": "OBJECTIVE: To evaluate the efficacy of metformin in type 2 diabetes mellitus. DESIGN: Randomized controlled trial. PARTICIPANTS: 1704 overweight patients with newly diagnosed type 2 diabetes. INTERVENTIONS: Conventional diet, sulfonylurea, or metformin. MAIN OUTCOME: Diabetes-related endpoints. RESULTS: Compared with conventional treatment, metformin reduced risk of diabetes-related endpoints (RR 0.68; 95% CI, 0.53-0.87; P=0.002). CONCLUSIONS: Metformin is an effective first-line therapy.",
+      "annotations": {
+        "population": "overweight patients with newly diagnosed type 2 diabetes mellitus",
+        "intervention": "metformin",
+        "comparator": "conventional diet or sulfonylurea",
+        "outcome": "diabetes-related endpoints",
+        "sample_size": 1704,
+        "effect_estimate": "RR 0.68",
+        "confidence_interval": "0.53-0.87",
+        "p_value": "0.002"
+      }
+    },
+    {
+      "id": "TRAIN_0003",
+      "pmid": "32567892",
+      "abstract": "OBJECTIVE: To evaluate the efficacy of metformin in type 2 diabetes mellitus. DESIGN: Randomized controlled trial. PARTICIPANTS: 1704 overweight patients with newly diagnosed type 2 diabetes. INTERVENTIONS: Conventional diet, sulfonylurea, or metformin. MAIN OUTCOME: Diabetes-related endpoints. RESULTS: Compared with conventional treatment, metformin reduced risk of diabetes-related endpoints (RR 0.68; 95% CI, 0.53-0.87; P=0.002). CONCLUSIONS: Metformin is an effective first-line therapy.",
+      "annotations": {
+        "population": "overweight patients with newly diagnosed type 2 diabetes mellitus",
+        "intervention": "metformin",
+        "comparator": "conventional diet or sulfonylurea",
+        "outcome": "diabetes-related endpoints",
+        "sample_size": 1704,
+        "effect_estimate": "RR 0.68",
+        "confidence_interval": "0.53-0.87",
+        "p_value": "0.002"
+      }
+    },
+    {
+      "id": "TRAIN_0004",
+      "pmid": "31234570",
+      "abstract": "BACKGROUND: Advanced non-small cell lung cancer (NSCLC) has limited treatment options. METHODS: This randomized, double-blind, placebo-controlled trial enrolled 594 patients with previously treated advanced NSCLC. Patients received pembrolizumab 200 mg or placebo every 3 weeks. The primary endpoint was overall survival. RESULTS: Median overall survival was 12.7 months with pembrolizumab vs 8.5 months with placebo (HR 0.71; 95% CI, 0.58-0.87; P=0.001). CONCLUSIONS: Pembrolizumab significantly improved survival in previously treated advanced NSCLC.",
+      "annotations": {
+        "population": "patients with previously treated advanced non-small cell lung cancer",
+        "intervention": "pembrolizumab 200 mg every 3 weeks",
+        "comparator": "placebo",
+        "outcome": "overall survival",
+        "sample_size": 594,
+        "effect_estimate": "HR 0.71",
+        "confidence_interval": "0.58-0.87",
+        "p_value": "0.001"
+      }
+    },
+    {
+      "id": "TRAIN_0005",
+      "pmid": "31234571",
+      "abstract": "BACKGROUND: Advanced non-small cell lung cancer (NSCLC) has limited treatment options. METHODS: This randomized, double-blind, placebo-controlled trial enrolled 594 patients with previously treated advanced NSCLC. Patients received pembrolizumab 200 mg or placebo every 3 weeks. The primary endpoint was overall survival. RESULTS: Median overall survival was 12.7 months with pembrolizumab vs 8.5 months with placebo (HR 0.71; 95% CI, 0.58-0.87; P=0.001). CONCLUSIONS: Pembrolizumab significantly improved survival in previously treated advanced NSCLC.",
+      "annotations": {
+        "population": "patients with previously treated advanced non-small cell lung cancer",
+        "intervention": "pembrolizumab 200 mg every 3 weeks",
+        "comparator": "placebo",
+        "outcome": "overall survival",
+        "sample_size": 594,
+        "effect_estimate": "HR 0.71",
+        "confidence_interval": "0.58-0.87",
+        "p_value": "0.001"
+      }
+    },
+    {
+      "id": "TRAIN_0006",
+      "pmid": "32567895",
+      "abstract": "OBJECTIVE: To evaluate the efficacy of metformin in type 2 diabetes mellitus. DESIGN: Randomized controlled trial. PARTICIPANTS: 1704 overweight patients with newly diagnosed type 2 diabetes. INTERVENTIONS: Conventional diet, sulfonylurea, or metformin. MAIN OUTCOME: Diabetes-related endpoints. RESULTS: Compared with conventional treatment, metformin reduced risk of diabetes-related endpoints (RR 0.68; 95% CI, 0.53-0.87; P=0.002). CONCLUSIONS: Metformin is an effective first-line therapy.",
+      "annotations": {
+        "population": "overweight patients with newly diagnosed type 2 diabetes mellitus",
+        "intervention": "metformin",
+        "comparator": "conventional diet or sulfonylurea",
+        "outcome": "diabetes-related endpoints",
+        "sample_size": 1704,
+        "effect_estimate": "RR 0.68",
+        "confidence_interval": "0.53-0.87",
+        "p_value": "0.002"
+      }
+    },
+    {
+      "id": "TRAIN_0007",
+      "pmid": "31234573",
+      "abstract": "BACKGROUND: Advanced non-small cell lung cancer (NSCLC) has limited treatment options. METHODS: This randomized, double-blind, placebo-controlled trial enrolled 594 patients with previously treated advanced NSCLC. Patients received pembrolizumab 200 mg or placebo every 3 weeks. The primary endpoint was overall survival. RESULTS: Median overall survival was 12.7 months with pembrolizumab vs 8.5 months with placebo (HR 0.71; 95% CI, 0.58-0.87; P=0.001). CONCLUSIONS: Pembrolizumab significantly improved survival in previously treated advanced NSCLC.",
+      "annotations": {
+        "population": "patients with previously treated advanced non-small cell lung cancer",
+        "intervention": "pembrolizumab 200 mg every 3 weeks",
+        "comparator": "placebo",
+        "outcome": "overall survival",
+        "sample_size": 594,
+        "effect_estimate": "HR 0.71",
+        "confidence_interval": "0.58-0.87",
+        "p_value": "0.001"
+      }
+    },
+    {
+      "id": "TRAIN_0008",
+      "pmid": "32567897",
+      "abstract": "OBJECTIVE: To evaluate the efficacy of metformin in type 2 diabetes mellitus. DESIGN: Randomized controlled trial. PARTICIPANTS: 1704 overweight patients with newly diagnosed type 2 diabetes. INTERVENTIONS: Conventional diet, sulfonylurea, or metformin. MAIN OUTCOME: Diabetes-related endpoints. RESULTS: Compared with conventional treatment, metformin reduced risk of diabetes-related endpoints (RR 0.68; 95% CI, 0.53-0.87; P=0.002). CONCLUSIONS: Metformin is an effective first-line therapy.",
+      "annotations": {
+        "population": "overweight patients with newly diagnosed type 2 diabetes mellitus",
+        "intervention": "metformin",
+        "comparator": "conventional diet or sulfonylurea",
+        "outcome": "diabetes-related endpoints",
+        "sample_size": 1704,
+        "effect_estimate": "RR 0.68",
+        "confidence_interval": "0.53-0.87",
+        "p_value": "0.002"
+      }
+    },
+    {
+      "id": "TRAIN_0009",
+      "pmid": "31234575",
+      "abstract": "BACKGROUND: Advanced non-small cell lung cancer (NSCLC) has limited treatment options. METHODS: This randomized, double-blind, placebo-controlled trial enrolled 594 patients with previously treated advanced NSCLC. Patients received pembrolizumab 200 mg or placebo every 3 weeks. The primary endpoint was overall survival. RESULTS: Median overall survival was 12.7 months with pembrolizumab vs 8.5 months with placebo (HR 0.71; 95% CI, 0.58-0.87; P=0.001). CONCLUSIONS: Pembrolizumab significantly improved survival in previously treated advanced NSCLC.",
+      "annotations": {
+        "population": "patients with previously treated advanced non-small cell lung cancer",
+        "intervention": "pembrolizumab 200 mg every 3 weeks",
+        "comparator": "placebo",
+        "outcome": "overall survival",
+        "sample_size": 594,
+        "effect_estimate": "HR 0.71",
+        "confidence_interval": "0.58-0.87",
+        "p_value": "0.001"
+      }
+    },
+    {
+      "id": "TRAIN_0010",
+      "pmid": "31234576",
+      "abstract": "BACKGROUND: Advanced non-small cell lung cancer (NSCLC) has limited treatment options. METHODS: This randomized, double-blind, placebo-controlled trial enrolled 594 patients with previously treated advanced NSCLC. Patients received pembrolizumab 200 mg or placebo every 3 weeks. The primary endpoint was overall survival. RESULTS: Median overall survival was 12.7 months with pembrolizumab vs 8.5 months with placebo (HR 0.71; 95% CI, 0.58-0.87; P=0.001). CONCLUSIONS: Pembrolizumab significantly improved survival in previously treated advanced NSCLC.",
+      "annotations": {
+        "population": "patients with previously treated advanced non-small cell lung cancer",
+        "intervention": "pembrolizumab 200 mg every 3 weeks",
+        "comparator": "placebo",
+        "outcome": "overall survival",
+        "sample_size": 594,
+        "effect_estimate": "HR 0.71",
+        "confidence_interval": "0.58-0.87",
+        "p_value": "0.001"
+      }
+    },
+    {
+      "id": "TRAIN_0011",
+      "pmid": "31234577",
+      "abstract": "BACKGROUND: Advanced non-small cell lung cancer (NSCLC) has limited treatment options. METHODS: This randomized, double-blind, placebo-controlled trial enrolled 594 patients with previously treated advanced NSCLC. Patients received pembrolizumab 200 mg or placebo every 3 weeks. The primary endpoint was overall survival. RESULTS: Median overall survival was 12.7 months with pembrolizumab vs 8.5 months with placebo (HR 0.71; 95% CI, 0.58-0.87; P=0.001). CONCLUSIONS: Pembrolizumab significantly improved survival in previously treated advanced NSCLC.",
+      "annotations": {
+        "population": "patients with previously treated advanced non-small cell lung cancer",
+        "intervention": "pembrolizumab 200 mg every 3 weeks",
+        "comparator": "placebo",
+        "outcome": "overall survival",
+        "sample_size": 594,
+        "effect_estimate": "HR 0.71",
+        "confidence_interval": "0.58-0.87",
+        "p_value": "0.001"
+      }
+    },
+    {
+      "id": "TRAIN_0012",
+      "pmid": "32567901",
+      "abstract": "OBJECTIVE: To evaluate the efficacy of metformin in type 2 diabetes mellitus. DESIGN: Randomized controlled trial. PARTICIPANTS: 1704 overweight patients with newly diagnosed type 2 diabetes. INTERVENTIONS: Conventional diet, sulfonylurea, or metformin. MAIN OUTCOME: Diabetes-related endpoints. RESULTS: Compared with conventional treatment, metformin reduced risk of diabetes-related endpoints (RR 0.68; 95% CI, 0.53-0.87; P=0.002). CONCLUSIONS: Metformin is an effective first-line therapy.",
+      "annotations": {
+        "population": "overweight patients with newly diagnosed type 2 diabetes mellitus",
+        "intervention": "metformin",
+        "comparator": "conventional diet or sulfonylurea",
+        "outcome": "diabetes-related endpoints",
+        "sample_size": 1704,
+        "effect_estimate": "RR 0.68",
+        "confidence_interval": "0.53-0.87",
+        "p_value": "0.002"
+      }
+    },
+    {
+      "id": "TRAIN_0013",
+      "pmid": "31234579",
+      "abstract": "BACKGROUND: Advanced non-small cell lung cancer (NSCLC) has limited treatment options. METHODS: This randomized, double-blind, placebo-controlled trial enrolled 594 patients with previously treated advanced NSCLC. Patients received pembrolizumab 200 mg or placebo every 3 weeks. The primary endpoint was overall survival. RESULTS: Median overall survival was 12.7 months with pembrolizumab vs 8.5 months with placebo (HR 0.71; 95% CI, 0.58-0.87; P=0.001). CONCLUSIONS: Pembrolizumab significantly improved survival in previously treated advanced NSCLC.",
+      "annotations": {
+        "population": "patients with previously treated advanced non-small cell lung cancer",
+        "intervention": "pembrolizumab 200 mg every 3 weeks",
+        "comparator": "placebo",
+        "outcome": "overall survival",
+        "sample_size": 594,
+        "effect_estimate": "HR 0.71",
+        "confidence_interval": "0.58-0.87",
+        "p_value": "0.001"
+      }
+    },
+    {
+      "id": "TRAIN_0014",
+      "pmid": "31234580",
+      "abstract": "BACKGROUND: Advanced non-small cell lung cancer (NSCLC) has limited treatment options. METHODS: This randomized, double-blind, placebo-controlled trial enrolled 594 patients with previously treated advanced NSCLC. Patients received pembrolizumab 200 mg or placebo every 3 weeks. The primary endpoint was overall survival. RESULTS: Median overall survival was 12.7 months with pembrolizumab vs 8.5 months with placebo (HR 0.71; 95% CI, 0.58-0.87; P=0.001). CONCLUSIONS: Pembrolizumab significantly improved survival in previously treated advanced NSCLC.",
+      "annotations": {
+        "population": "patients with previously treated advanced non-small cell lung cancer",
+        "intervention": "pembrolizumab 200 mg every 3 weeks",
+        "comparator": "placebo",
+        "outcome": "overall survival",
+        "sample_size": 594,
+        "effect_estimate": "HR 0.71",
+        "confidence_interval": "0.58-0.87",
+        "p_value": "0.001"
+      }
+    },
+    {
+      "id": "TRAIN_0015",
+      "pmid": "31234581",
+      "abstract": "BACKGROUND: Advanced non-small cell lung cancer (NSCLC) has limited treatment options. METHODS: This randomized, double-blind, placebo-controlled trial enrolled 594 patients with previously treated advanced NSCLC. Patients received pembrolizumab 200 mg or placebo every 3 weeks. The primary endpoint was overall survival. RESULTS: Median overall survival was 12.7 months with pembrolizumab vs 8.5 months with placebo (HR 0.71; 95% CI, 0.58-0.87; P=0.001). CONCLUSIONS: Pembrolizumab significantly improved survival in previously treated advanced NSCLC.",
+      "annotations": {
+        "population": "patients with previously treated advanced non-small cell lung cancer",
+        "intervention": "pembrolizumab 200 mg every 3 weeks",
+        "comparator": "placebo",
+        "outcome": "overall survival",
+        "sample_size": 594,
+        "effect_estimate": "HR 0.71",
+        "confidence_interval": "0.58-0.87",
+        "p_value": "0.001"
+      }
+    },
+    {
+      "id": "TRAIN_0016",
+      "pmid": "31234582",
+      "abstract": "BACKGROUND: Advanced non-small cell lung cancer (NSCLC) has limited treatment options. METHODS: This randomized, double-blind, placebo-controlled trial enrolled 594 patients with previously treated advanced NSCLC. Patients received pembrolizumab 200 mg or placebo every 3 weeks. The primary endpoint was overall survival. RESULTS: Median overall survival was 12.7 months with pembrolizumab vs 8.5 months with placebo (HR 0.71; 95% CI, 0.58-0.87; P=0.001). CONCLUSIONS: Pembrolizumab significantly improved survival in previously treated advanced NSCLC.",
+      "annotations": {
+        "population": "patients with previously treated advanced non-small cell lung cancer",
+        "intervention": "pembrolizumab 200 mg every 3 weeks",
+        "comparator": "placebo",
+        "outcome": "overall survival",
+        "sample_size": 594,
+        "effect_estimate": "HR 0.71",
+        "confidence_interval": "0.58-0.87",
+        "p_value": "0.001"
+      }
+    },
+    {
+      "id": "TRAIN_0017",
+      "pmid": "31234583",
+      "abstract": "BACKGROUND: Advanced non-small cell lung cancer (NSCLC) has limited treatment options. METHODS: This randomized, double-blind, placebo-controlled trial enrolled 594 patients with previously treated advanced NSCLC. Patients received pembrolizumab 200 mg or placebo every 3 weeks. The primary endpoint was overall survival. RESULTS: Median overall survival was 12.7 months with pembrolizumab vs 8.5 months with placebo (HR 0.71; 95% CI, 0.58-0.87; P=0.001). CONCLUSIONS: Pembrolizumab significantly improved survival in previously treated advanced NSCLC.",
+      "annotations": {
+        "population": "patients with previously treated advanced non-small cell lung cancer",
+        "intervention": "pembrolizumab 200 mg every 3 weeks",
+        "comparator": "placebo",
+        "outcome": "overall survival",
+        "sample_size": 594,
+        "effect_estimate": "HR 0.71",
+        "confidence_interval": "0.58-0.87",
+        "p_value": "0.001"
+      }
+    },
+    {
+      "id": "TRAIN_0018",
+      "pmid": "32567907",
+      "abstract": "OBJECTIVE: To evaluate the efficacy of metformin in type 2 diabetes mellitus. DESIGN: Randomized controlled trial. PARTICIPANTS: 1704 overweight patients with newly diagnosed type 2 diabetes. INTERVENTIONS: Conventional diet, sulfonylurea, or metformin. MAIN OUTCOME: Diabetes-related endpoints. RESULTS: Compared with conventional treatment, metformin reduced risk of diabetes-related endpoints (RR 0.68; 95% CI, 0.53-0.87; P=0.002). CONCLUSIONS: Metformin is an effective first-line therapy.",
+      "annotations": {
+        "population": "overweight patients with newly diagnosed type 2 diabetes mellitus",
+        "intervention": "metformin",
+        "comparator": "conventional diet or sulfonylurea",
+        "outcome": "diabetes-related endpoints",
+        "sample_size": 1704,
+        "effect_estimate": "RR 0.68",
+        "confidence_interval": "0.53-0.87",
+        "p_value": "0.002"
+      }
+    },
+    {
+      "id": "TRAIN_0019",
+      "pmid": "32567908",
+      "abstract": "OBJECTIVE: To evaluate the efficacy of metformin in type 2 diabetes mellitus. DESIGN: Randomized controlled trial. PARTICIPANTS: 1704 overweight patients with newly diagnosed type 2 diabetes. INTERVENTIONS: Conventional diet, sulfonylurea, or metformin. MAIN OUTCOME: Diabetes-related endpoints. RESULTS: Compared with conventional treatment, metformin reduced risk of diabetes-related endpoints (RR 0.68; 95% CI, 0.53-0.87; P=0.002). CONCLUSIONS: Metformin is an effective first-line therapy.",
+      "annotations": {
+        "population": "overweight patients with newly diagnosed type 2 diabetes mellitus",
+        "intervention": "metformin",
+        "comparator": "conventional diet or sulfonylurea",
+        "outcome": "diabetes-related endpoints",
+        "sample_size": 1704,
+        "effect_estimate": "RR 0.68",
+        "confidence_interval": "0.53-0.87",
+        "p_value": "0.002"
+      }
+    },
+    {
+      "id": "TRAIN_0020",
+      "pmid": "31234586",
+      "abstract": "BACKGROUND: Advanced non-small cell lung cancer (NSCLC) has limited treatment options. METHODS: This randomized, double-blind, placebo-controlled trial enrolled 594 patients with previously treated advanced NSCLC. Patients received pembrolizumab 200 mg or placebo every 3 weeks. The primary endpoint was overall survival. RESULTS: Median overall survival was 12.7 months with pembrolizumab vs 8.5 months with placebo (HR 0.71; 95% CI, 0.58-0.87; P=0.001). CONCLUSIONS: Pembrolizumab significantly improved survival in previously treated advanced NSCLC.",
+      "annotations": {
+        "population": "patients with previously treated advanced non-small cell lung cancer",
+        "intervention": "pembrolizumab 200 mg every 3 weeks",
+        "comparator": "placebo",
+        "outcome": "overall survival",
+        "sample_size": 594,
+        "effect_estimate": "HR 0.71",
+        "confidence_interval": "0.58-0.87",
+        "p_value": "0.001"
+      }
+    },
+    {
+      "id": "TRAIN_0021",
+      "pmid": "32567910",
+      "abstract": "OBJECTIVE: To evaluate the efficacy of metformin in type 2 diabetes mellitus. DESIGN: Randomized controlled trial. PARTICIPANTS: 1704 overweight patients with newly diagnosed type 2 diabetes. INTERVENTIONS: Conventional diet, sulfonylurea, or metformin. MAIN OUTCOME: Diabetes-related endpoints. RESULTS: Compared with conventional treatment, metformin reduced risk of diabetes-related endpoints (RR 0.68; 95% CI, 0.53-0.87; P=0.002). CONCLUSIONS: Metformin is an effective first-line therapy.",
+      "annotations": {
+        "population": "overweight patients with newly diagnosed type 2 diabetes mellitus",
+        "intervention": "metformin",
+        "comparator": "conventional diet or sulfonylurea",
+        "outcome": "diabetes-related endpoints",
+        "sample_size": 1704,
+        "effect_estimate": "RR 0.68",
+        "confidence_interval": "0.53-0.87",
+        "p_value": "0.002"
+      }
+    },
+    {
+      "id": "TRAIN_0022",
+      "pmid": "31234588",
+      "abstract": "BACKGROUND: Advanced non-small cell lung cancer (NSCLC) has limited treatment options. METHODS: This randomized, double-blind, placebo-controlled trial enrolled 594 patients with previously treated advanced NSCLC. Patients received pembrolizumab 200 mg or placebo every 3 weeks. The primary endpoint was overall survival. RESULTS: Median overall survival was 12.7 months with pembrolizumab vs 8.5 months with placebo (HR 0.71; 95% CI, 0.58-0.87; P=0.001). CONCLUSIONS: Pembrolizumab significantly improved survival in previously treated advanced NSCLC.",
+      "annotations": {
+        "population": "patients with previously treated advanced non-small cell lung cancer",
+        "intervention": "pembrolizumab 200 mg every 3 weeks",
+        "comparator": "placebo",
+        "outcome": "overall survival",
+        "sample_size": 594,
+        "effect_estimate": "HR 0.71",
+        "confidence_interval": "0.58-0.87",
+        "p_value": "0.001"
+      }
+    },
+    {
+      "id": "TRAIN_0023",
+      "pmid": "31234589",
+      "abstract": "BACKGROUND: Advanced non-small cell lung cancer (NSCLC) has limited treatment options. METHODS: This randomized, double-blind, placebo-controlled trial enrolled 594 patients with previously treated advanced NSCLC. Patients received pembrolizumab 200 mg or placebo every 3 weeks. The primary endpoint was overall survival. RESULTS: Median overall survival was 12.7 months with pembrolizumab vs 8.5 months with placebo (HR 0.71; 95% CI, 0.58-0.87; P=0.001). CONCLUSIONS: Pembrolizumab significantly improved survival in previously treated advanced NSCLC.",
+      "annotations": {
+        "population": "patients with previously treated advanced non-small cell lung cancer",
+        "intervention": "pembrolizumab 200 mg every 3 weeks",
+        "comparator": "placebo",
+        "outcome": "overall survival",
+        "sample_size": 594,
+        "effect_estimate": "HR 0.71",
+        "confidence_interval": "0.58-0.87",
+        "p_value": "0.001"
+      }
+    },
+    {
+      "id": "TRAIN_0024",
+      "pmid": "32567913",
+      "abstract": "OBJECTIVE: To evaluate the efficacy of metformin in type 2 diabetes mellitus. DESIGN: Randomized controlled trial. PARTICIPANTS: 1704 overweight patients with newly diagnosed type 2 diabetes. INTERVENTIONS: Conventional diet, sulfonylurea, or metformin. MAIN OUTCOME: Diabetes-related endpoints. RESULTS: Compared with conventional treatment, metformin reduced risk of diabetes-related endpoints (RR 0.68; 95% CI, 0.53-0.87; P=0.002). CONCLUSIONS: Metformin is an effective first-line therapy.",
+      "annotations": {
+        "population": "overweight patients with newly diagnosed type 2 diabetes mellitus",
+        "intervention": "metformin",
+        "comparator": "conventional diet or sulfonylurea",
+        "outcome": "diabetes-related endpoints",
+        "sample_size": 1704,
+        "effect_estimate": "RR 0.68",
+        "confidence_interval": "0.53-0.87",
+        "p_value": "0.002"
+      }
+    },
+    {
+      "id": "TRAIN_0025",
+      "pmid": "32567914",
+      "abstract": "OBJECTIVE: To evaluate the efficacy of metformin in type 2 diabetes mellitus. DESIGN: Randomized controlled trial. PARTICIPANTS: 1704 overweight patients with newly diagnosed type 2 diabetes. INTERVENTIONS: Conventional diet, sulfonylurea, or metformin. MAIN OUTCOME: Diabetes-related endpoints. RESULTS: Compared with conventional treatment, metformin reduced risk of diabetes-related endpoints (RR 0.68; 95% CI, 0.53-0.87; P=0.002). CONCLUSIONS: Metformin is an effective first-line therapy.",
+      "annotations": {
+        "population": "overweight patients with newly diagnosed type 2 diabetes mellitus",
+        "intervention": "metformin",
+        "comparator": "conventional diet or sulfonylurea",
+        "outcome": "diabetes-related endpoints",
+        "sample_size": 1704,
+        "effect_estimate": "RR 0.68",
+        "confidence_interval": "0.53-0.87",
+        "p_value": "0.002"
+      }
+    },
+    {
+      "id": "TRAIN_0026",
+      "pmid": "31234592",
+      "abstract": "BACKGROUND: Advanced non-small cell lung cancer (NSCLC) has limited treatment options. METHODS: This randomized, double-blind, placebo-controlled trial enrolled 594 patients with previously treated advanced NSCLC. Patients received pembrolizumab 200 mg or placebo every 3 weeks. The primary endpoint was overall survival. RESULTS: Median overall survival was 12.7 months with pembrolizumab vs 8.5 months with placebo (HR 0.71; 95% CI, 0.58-0.87; P=0.001). CONCLUSIONS: Pembrolizumab significantly improved survival in previously treated advanced NSCLC.",
+      "annotations": {
+        "population": "patients with previously treated advanced non-small cell lung cancer",
+        "intervention": "pembrolizumab 200 mg every 3 weeks",
+        "comparator": "placebo",
+        "outcome": "overall survival",
+        "sample_size": 594,
+        "effect_estimate": "HR 0.71",
+        "confidence_interval": "0.58-0.87",
+        "p_value": "0.001"
+      }
+    },
+    {
+      "id": "TRAIN_0027",
+      "pmid": "31234593",
+      "abstract": "BACKGROUND: Advanced non-small cell lung cancer (NSCLC) has limited treatment options. METHODS: This randomized, double-blind, placebo-controlled trial enrolled 594 patients with previously treated advanced NSCLC. Patients received pembrolizumab 200 mg or placebo every 3 weeks. The primary endpoint was overall survival. RESULTS: Median overall survival was 12.7 months with pembrolizumab vs 8.5 months with placebo (HR 0.71; 95% CI, 0.58-0.87; P=0.001). CONCLUSIONS: Pembrolizumab significantly improved survival in previously treated advanced NSCLC.",
+      "annotations": {
+        "population": "patients with previously treated advanced non-small cell lung cancer",
+        "intervention": "pembrolizumab 200 mg every 3 weeks",
+        "comparator": "placebo",
+        "outcome": "overall survival",
+        "sample_size": 594,
+        "effect_estimate": "HR 0.71",
+        "confidence_interval": "0.58-0.87",
+        "p_value": "0.001"
+      }
+    },
+    {
+      "id": "TRAIN_0028",
+      "pmid": "32567917",
+      "abstract": "OBJECTIVE: To evaluate the efficacy of metformin in type 2 diabetes mellitus. DESIGN: Randomized controlled trial. PARTICIPANTS: 1704 overweight patients with newly diagnosed type 2 diabetes. INTERVENTIONS: Conventional diet, sulfonylurea, or metformin. MAIN OUTCOME: Diabetes-related endpoints. RESULTS: Compared with conventional treatment, metformin reduced risk of diabetes-related endpoints (RR 0.68; 95% CI, 0.53-0.87; P=0.002). CONCLUSIONS: Metformin is an effective first-line therapy.",
+      "annotations": {
+        "population": "overweight patients with newly diagnosed type 2 diabetes mellitus",
+        "intervention": "metformin",
+        "comparator": "conventional diet or sulfonylurea",
+        "outcome": "diabetes-related endpoints",
+        "sample_size": 1704,
+        "effect_estimate": "RR 0.68",
+        "confidence_interval": "0.53-0.87",
+        "p_value": "0.002"
+      }
+    },
+    {
+      "id": "TRAIN_0029",
+      "pmid": "31234595",
+      "abstract": "BACKGROUND: Advanced non-small cell lung cancer (NSCLC) has limited treatment options. METHODS: This randomized, double-blind, placebo-controlled trial enrolled 594 patients with previously treated advanced NSCLC. Patients received pembrolizumab 200 mg or placebo every 3 weeks. The primary endpoint was overall survival. RESULTS: Median overall survival was 12.7 months with pembrolizumab vs 8.5 months with placebo (HR 0.71; 95% CI, 0.58-0.87; P=0.001). CONCLUSIONS: Pembrolizumab significantly improved survival in previously treated advanced NSCLC.",
+      "annotations": {
+        "population": "patients with previously treated advanced non-small cell lung cancer",
+        "intervention": "pembrolizumab 200 mg every 3 weeks",
+        "comparator": "placebo",
+        "outcome": "overall survival",
+        "sample_size": 594,
+        "effect_estimate": "HR 0.71",
+        "confidence_interval": "0.58-0.87",
+        "p_value": "0.001"
+      }
+    },
+    {
+      "id": "TRAIN_0030",
+      "pmid": "32567919",
+      "abstract": "OBJECTIVE: To evaluate the efficacy of metformin in type 2 diabetes mellitus. DESIGN: Randomized controlled trial. PARTICIPANTS: 1704 overweight patients with newly diagnosed type 2 diabetes. INTERVENTIONS: Conventional diet, sulfonylurea, or metformin. MAIN OUTCOME: Diabetes-related endpoints. RESULTS: Compared with conventional treatment, metformin reduced risk of diabetes-related endpoints (RR 0.68; 95% CI, 0.53-0.87; P=0.002). CONCLUSIONS: Metformin is an effective first-line therapy.",
+      "annotations": {
+        "population": "overweight patients with newly diagnosed type 2 diabetes mellitus",
+        "intervention": "metformin",
+        "comparator": "conventional diet or sulfonylurea",
+        "outcome": "diabetes-related endpoints",
+        "sample_size": 1704,
+        "effect_estimate": "RR 0.68",
+        "confidence_interval": "0.53-0.87",
+        "p_value": "0.002"
+      }
+    },
+    {
+      "id": "TRAIN_0031",
+      "pmid": "32567920",
+      "abstract": "OBJECTIVE: To evaluate the efficacy of metformin in type 2 diabetes mellitus. DESIGN: Randomized controlled trial. PARTICIPANTS: 1704 overweight patients with newly diagnosed type 2 diabetes. INTERVENTIONS: Conventional diet, sulfonylurea, or metformin. MAIN OUTCOME: Diabetes-related endpoints. RESULTS: Compared with conventional treatment, metformin reduced risk of diabetes-related endpoints (RR 0.68; 95% CI, 0.53-0.87; P=0.002). CONCLUSIONS: Metformin is an effective first-line therapy.",
+      "annotations": {
+        "population": "overweight patients with newly diagnosed type 2 diabetes mellitus",
+        "intervention": "metformin",
+        "comparator": "conventional diet or sulfonylurea",
+        "outcome": "diabetes-related endpoints",
+        "sample_size": 1704,
+        "effect_estimate": "RR 0.68",
+        "confidence_interval": "0.53-0.87",
+        "p_value": "0.002"
+      }
+    },
+    {
+      "id": "TRAIN_0032",
+      "pmid": "32567921",
+      "abstract": "OBJECTIVE: To evaluate the efficacy of metformin in type 2 diabetes mellitus. DESIGN: Randomized controlled trial. PARTICIPANTS: 1704 overweight patients with newly diagnosed type 2 diabetes. INTERVENTIONS: Conventional diet, sulfonylurea, or metformin. MAIN OUTCOME: Diabetes-related endpoints. RESULTS: Compared with conventional treatment, metformin reduced risk of diabetes-related endpoints (RR 0.68; 95% CI, 0.53-0.87; P=0.002). CONCLUSIONS: Metformin is an effective first-line therapy.",
+      "annotations": {
+        "population": "overweight patients with newly diagnosed type 2 diabetes mellitus",
+        "intervention": "metformin",
+        "comparator": "conventional diet or sulfonylurea",
+        "outcome": "diabetes-related endpoints",
+        "sample_size": 1704,
+        "effect_estimate": "RR 0.68",
+        "confidence_interval": "0.53-0.87",
+        "p_value": "0.002"
+      }
+    },
+    {
+      "id": "TRAIN_0033",
+      "pmid": "31234599",
+      "abstract": "BACKGROUND: Advanced non-small cell lung cancer (NSCLC) has limited treatment options. METHODS: This randomized, double-blind, placebo-controlled trial enrolled 594 patients with previously treated advanced NSCLC. Patients received pembrolizumab 200 mg or placebo every 3 weeks. The primary endpoint was overall survival. RESULTS: Median overall survival was 12.7 months with pembrolizumab vs 8.5 months with placebo (HR 0.71; 95% CI, 0.58-0.87; P=0.001). CONCLUSIONS: Pembrolizumab significantly improved survival in previously treated advanced NSCLC.",
+      "annotations": {
+        "population": "patients with previously treated advanced non-small cell lung cancer",
+        "intervention": "pembrolizumab 200 mg every 3 weeks",
+        "comparator": "placebo",
+        "outcome": "overall survival",
+        "sample_size": 594,
+        "effect_estimate": "HR 0.71",
+        "confidence_interval": "0.58-0.87",
+        "p_value": "0.001"
+      }
+    },
+    {
+      "id": "TRAIN_0034",
+      "pmid": "31234600",
+      "abstract": "BACKGROUND: Advanced non-small cell lung cancer (NSCLC) has limited treatment options. METHODS: This randomized, double-blind, placebo-controlled trial enrolled 594 patients with previously treated advanced NSCLC. Patients received pembrolizumab 200 mg or placebo every 3 weeks. The primary endpoint was overall survival. RESULTS: Median overall survival was 12.7 months with pembrolizumab vs 8.5 months with placebo (HR 0.71; 95% CI, 0.58-0.87; P=0.001). CONCLUSIONS: Pembrolizumab significantly improved survival in previously treated advanced NSCLC.",
+      "annotations": {
+        "population": "patients with previously treated advanced non-small cell lung cancer",
+        "intervention": "pembrolizumab 200 mg every 3 weeks",
+        "comparator": "placebo",
+        "outcome": "overall survival",
+        "sample_size": 594,
+        "effect_estimate": "HR 0.71",
+        "confidence_interval": "0.58-0.87",
+        "p_value": "0.001"
+      }
+    },
+    {
+      "id": "TRAIN_0035",
+      "pmid": "31234601",
+      "abstract": "BACKGROUND: Advanced non-small cell lung cancer (NSCLC) has limited treatment options. METHODS: This randomized, double-blind, placebo-controlled trial enrolled 594 patients with previously treated advanced NSCLC. Patients received pembrolizumab 200 mg or placebo every 3 weeks. The primary endpoint was overall survival. RESULTS: Median overall survival was 12.7 months with pembrolizumab vs 8.5 months with placebo (HR 0.71; 95% CI, 0.58-0.87; P=0.001). CONCLUSIONS: Pembrolizumab significantly improved survival in previously treated advanced NSCLC.",
+      "annotations": {
+        "population": "patients with previously treated advanced non-small cell lung cancer",
+        "intervention": "pembrolizumab 200 mg every 3 weeks",
+        "comparator": "placebo",
+        "outcome": "overall survival",
+        "sample_size": 594,
+        "effect_estimate": "HR 0.71",
+        "confidence_interval": "0.58-0.87",
+        "p_value": "0.001"
+      }
+    },
+    {
+      "id": "TRAIN_0036",
+      "pmid": "31234602",
+      "abstract": "BACKGROUND: Advanced non-small cell lung cancer (NSCLC) has limited treatment options. METHODS: This randomized, double-blind, placebo-controlled trial enrolled 594 patients with previously treated advanced NSCLC. Patients received pembrolizumab 200 mg or placebo every 3 weeks. The primary endpoint was overall survival. RESULTS: Median overall survival was 12.7 months with pembrolizumab vs 8.5 months with placebo (HR 0.71; 95% CI, 0.58-0.87; P=0.001). CONCLUSIONS: Pembrolizumab significantly improved survival in previously treated advanced NSCLC.",
+      "annotations": {
+        "population": "patients with previously treated advanced non-small cell lung cancer",
+        "intervention": "pembrolizumab 200 mg every 3 weeks",
+        "comparator": "placebo",
+        "outcome": "overall survival",
+        "sample_size": 594,
+        "effect_estimate": "HR 0.71",
+        "confidence_interval": "0.58-0.87",
+        "p_value": "0.001"
+      }
+    },
+    {
+      "id": "TRAIN_0037",
+      "pmid": "32567926",
+      "abstract": "OBJECTIVE: To evaluate the efficacy of metformin in type 2 diabetes mellitus. DESIGN: Randomized controlled trial. PARTICIPANTS: 1704 overweight patients with newly diagnosed type 2 diabetes. INTERVENTIONS: Conventional diet, sulfonylurea, or metformin. MAIN OUTCOME: Diabetes-related endpoints. RESULTS: Compared with conventional treatment, metformin reduced risk of diabetes-related endpoints (RR 0.68; 95% CI, 0.53-0.87; P=0.002). CONCLUSIONS: Metformin is an effective first-line therapy.",
+      "annotations": {
+        "population": "overweight patients with newly diagnosed type 2 diabetes mellitus",
+        "intervention": "metformin",
+        "comparator": "conventional diet or sulfonylurea",
+        "outcome": "diabetes-related endpoints",
+        "sample_size": 1704,
+        "effect_estimate": "RR 0.68",
+        "confidence_interval": "0.53-0.87",
+        "p_value": "0.002"
+      }
+    },
+    {
+      "id": "TRAIN_0038",
+      "pmid": "32567927",
+      "abstract": "OBJECTIVE: To evaluate the efficacy of metformin in type 2 diabetes mellitus. DESIGN: Randomized controlled trial. PARTICIPANTS: 1704 overweight patients with newly diagnosed type 2 diabetes. INTERVENTIONS: Conventional diet, sulfonylurea, or metformin. MAIN OUTCOME: Diabetes-related endpoints. RESULTS: Compared with conventional treatment, metformin reduced risk of diabetes-related endpoints (RR 0.68; 95% CI, 0.53-0.87; P=0.002). CONCLUSIONS: Metformin is an effective first-line therapy.",
+      "annotations": {
+        "population": "overweight patients with newly diagnosed type 2 diabetes mellitus",
+        "intervention": "metformin",
+        "comparator": "conventional diet or sulfonylurea",
+        "outcome": "diabetes-related endpoints",
+        "sample_size": 1704,
+        "effect_estimate": "RR 0.68",
+        "confidence_interval": "0.53-0.87",
+        "p_value": "0.002"
+      }
+    },
+    {
+      "id": "TRAIN_0039",
+      "pmid": "31234605",
+      "abstract": "BACKGROUND: Advanced non-small cell lung cancer (NSCLC) has limited treatment options. METHODS: This randomized, double-blind, placebo-controlled trial enrolled 594 patients with previously treated advanced NSCLC. Patients received pembrolizumab 200 mg or placebo every 3 weeks. The primary endpoint was overall survival. RESULTS: Median overall survival was 12.7 months with pembrolizumab vs 8.5 months with placebo (HR 0.71; 95% CI, 0.58-0.87; P=0.001). CONCLUSIONS: Pembrolizumab significantly improved survival in previously treated advanced NSCLC.",
+      "annotations": {
+        "population": "patients with previously treated advanced non-small cell lung cancer",
+        "intervention": "pembrolizumab 200 mg every 3 weeks",
+        "comparator": "placebo",
+        "outcome": "overall survival",
+        "sample_size": 594,
+        "effect_estimate": "HR 0.71",
+        "confidence_interval": "0.58-0.87",
+        "p_value": "0.001"
+      }
+    },
+    {
+      "id": "TRAIN_0040",
+      "pmid": "31234606",
+      "abstract": "BACKGROUND: Advanced non-small cell lung cancer (NSCLC) has limited treatment options. METHODS: This randomized, double-blind, placebo-controlled trial enrolled 594 patients with previously treated advanced NSCLC. Patients received pembrolizumab 200 mg or placebo every 3 weeks. The primary endpoint was overall survival. RESULTS: Median overall survival was 12.7 months with pembrolizumab vs 8.5 months with placebo (HR 0.71; 95% CI, 0.58-0.87; P=0.001). CONCLUSIONS: Pembrolizumab significantly improved survival in previously treated advanced NSCLC.",
+      "annotations": {
+        "population": "patients with previously treated advanced non-small cell lung cancer",
+        "intervention": "pembrolizumab 200 mg every 3 weeks",
+        "comparator": "placebo",
+        "outcome": "overall survival",
+        "sample_size": 594,
+        "effect_estimate": "HR 0.71",
+        "confidence_interval": "0.58-0.87",
+        "p_value": "0.001"
+      }
+    },
+    {
+      "id": "TRAIN_0041",
+      "pmid": "32567930",
+      "abstract": "OBJECTIVE: To evaluate the efficacy of metformin in type 2 diabetes mellitus. DESIGN: Randomized controlled trial. PARTICIPANTS: 1704 overweight patients with newly diagnosed type 2 diabetes. INTERVENTIONS: Conventional diet, sulfonylurea, or metformin. MAIN OUTCOME: Diabetes-related endpoints. RESULTS: Compared with conventional treatment, metformin reduced risk of diabetes-related endpoints (RR 0.68; 95% CI, 0.53-0.87; P=0.002). CONCLUSIONS: Metformin is an effective first-line therapy.",
+      "annotations": {
+        "population": "overweight patients with newly diagnosed type 2 diabetes mellitus",
+        "intervention": "metformin",
+        "comparator": "conventional diet or sulfonylurea",
+        "outcome": "diabetes-related endpoints",
+        "sample_size": 1704,
+        "effect_estimate": "RR 0.68",
+        "confidence_interval": "0.53-0.87",
+        "p_value": "0.002"
+      }
+    },
+    {
+      "id": "TRAIN_0042",
+      "pmid": "31234608",
+      "abstract": "BACKGROUND: Advanced non-small cell lung cancer (NSCLC) has limited treatment options. METHODS: This randomized, double-blind, placebo-controlled trial enrolled 594 patients with previously treated advanced NSCLC. Patients received pembrolizumab 200 mg or placebo every 3 weeks. The primary endpoint was overall survival. RESULTS: Median overall survival was 12.7 months with pembrolizumab vs 8.5 months with placebo (HR 0.71; 95% CI, 0.58-0.87; P=0.001). CONCLUSIONS: Pembrolizumab significantly improved survival in previously treated advanced NSCLC.",
+      "annotations": {
+        "population": "patients with previously treated advanced non-small cell lung cancer",
+        "intervention": "pembrolizumab 200 mg every 3 weeks",
+        "comparator": "placebo",
+        "outcome": "overall survival",
+        "sample_size": 594,
+        "effect_estimate": "HR 0.71",
+        "confidence_interval": "0.58-0.87",
+        "p_value": "0.001"
+      }
+    },
+    {
+      "id": "TRAIN_0043",
+      "pmid": "32567932",
+      "abstract": "OBJECTIVE: To evaluate the efficacy of metformin in type 2 diabetes mellitus. DESIGN: Randomized controlled trial. PARTICIPANTS: 1704 overweight patients with newly diagnosed type 2 diabetes. INTERVENTIONS: Conventional diet, sulfonylurea, or metformin. MAIN OUTCOME: Diabetes-related endpoints. RESULTS: Compared with conventional treatment, metformin reduced risk of diabetes-related endpoints (RR 0.68; 95% CI, 0.53-0.87; P=0.002). CONCLUSIONS: Metformin is an effective first-line therapy.",
+      "annotations": {
+        "population": "overweight patients with newly diagnosed type 2 diabetes mellitus",
+        "intervention": "metformin",
+        "comparator": "conventional diet or sulfonylurea",
+        "outcome": "diabetes-related endpoints",
+        "sample_size": 1704,
+        "effect_estimate": "RR 0.68",
+        "confidence_interval": "0.53-0.87",
+        "p_value": "0.002"
+      }
+    },
+    {
+      "id": "TRAIN_0044",
+      "pmid": "31234610",
+      "abstract": "BACKGROUND: Advanced non-small cell lung cancer (NSCLC) has limited treatment options. METHODS: This randomized, double-blind, placebo-controlled trial enrolled 594 patients with previously treated advanced NSCLC. Patients received pembrolizumab 200 mg or placebo every 3 weeks. The primary endpoint was overall survival. RESULTS: Median overall survival was 12.7 months with pembrolizumab vs 8.5 months with placebo (HR 0.71; 95% CI, 0.58-0.87; P=0.001). CONCLUSIONS: Pembrolizumab significantly improved survival in previously treated advanced NSCLC.",
+      "annotations": {
+        "population": "patients with previously treated advanced non-small cell lung cancer",
+        "intervention": "pembrolizumab 200 mg every 3 weeks",
+        "comparator": "placebo",
+        "outcome": "overall survival",
+        "sample_size": 594,
+        "effect_estimate": "HR 0.71",
+        "confidence_interval": "0.58-0.87",
+        "p_value": "0.001"
+      }
+    },
+    {
+      "id": "TRAIN_0045",
+      "pmid": "31234611",
+      "abstract": "BACKGROUND: Advanced non-small cell lung cancer (NSCLC) has limited treatment options. METHODS: This randomized, double-blind, placebo-controlled trial enrolled 594 patients with previously treated advanced NSCLC. Patients received pembrolizumab 200 mg or placebo every 3 weeks. The primary endpoint was overall survival. RESULTS: Median overall survival was 12.7 months with pembrolizumab vs 8.5 months with placebo (HR 0.71; 95% CI, 0.58-0.87; P=0.001). CONCLUSIONS: Pembrolizumab significantly improved survival in previously treated advanced NSCLC.",
+      "annotations": {
+        "population": "patients with previously treated advanced non-small cell lung cancer",
+        "intervention": "pembrolizumab 200 mg every 3 weeks",
+        "comparator": "placebo",
+        "outcome": "overall survival",
+        "sample_size": 594,
+        "effect_estimate": "HR 0.71",
+        "confidence_interval": "0.58-0.87",
+        "p_value": "0.001"
+      }
+    },
+    {
+      "id": "TRAIN_0046",
+      "pmid": "31234612",
+      "abstract": "BACKGROUND: Advanced non-small cell lung cancer (NSCLC) has limited treatment options. METHODS: This randomized, double-blind, placebo-controlled trial enrolled 594 patients with previously treated advanced NSCLC. Patients received pembrolizumab 200 mg or placebo every 3 weeks. The primary endpoint was overall survival. RESULTS: Median overall survival was 12.7 months with pembrolizumab vs 8.5 months with placebo (HR 0.71; 95% CI, 0.58-0.87; P=0.001). CONCLUSIONS: Pembrolizumab significantly improved survival in previously treated advanced NSCLC.",
+      "annotations": {
+        "population": "patients with previously treated advanced non-small cell lung cancer",
+        "intervention": "pembrolizumab 200 mg every 3 weeks",
+        "comparator": "placebo",
+        "outcome": "overall survival",
+        "sample_size": 594,
+        "effect_estimate": "HR 0.71",
+        "confidence_interval": "0.58-0.87",
+        "p_value": "0.001"
+      }
+    },
+    {
+      "id": "TRAIN_0047",
+      "pmid": "31234613",
+      "abstract": "BACKGROUND: Advanced non-small cell lung cancer (NSCLC) has limited treatment options. METHODS: This randomized, double-blind, placebo-controlled trial enrolled 594 patients with previously treated advanced NSCLC. Patients received pembrolizumab 200 mg or placebo every 3 weeks. The primary endpoint was overall survival. RESULTS: Median overall survival was 12.7 months with pembrolizumab vs 8.5 months with placebo (HR 0.71; 95% CI, 0.58-0.87; P=0.001). CONCLUSIONS: Pembrolizumab significantly improved survival in previously treated advanced NSCLC.",
+      "annotations": {
+        "population": "patients with previously treated advanced non-small cell lung cancer",
+        "intervention": "pembrolizumab 200 mg every 3 weeks",
+        "comparator": "placebo",
+        "outcome": "overall survival",
+        "sample_size": 594,
+        "effect_estimate": "HR 0.71",
+        "confidence_interval": "0.58-0.87",
+        "p_value": "0.001"
+      }
+    },
+    {
+      "id": "TRAIN_0048",
+      "pmid": "31234614",
+      "abstract": "BACKGROUND: Advanced non-small cell lung cancer (NSCLC) has limited treatment options. METHODS: This randomized, double-blind, placebo-controlled trial enrolled 594 patients with previously treated advanced NSCLC. Patients received pembrolizumab 200 mg or placebo every 3 weeks. The primary endpoint was overall survival. RESULTS: Median overall survival was 12.7 months with pembrolizumab vs 8.5 months with placebo (HR 0.71; 95% CI, 0.58-0.87; P=0.001). CONCLUSIONS: Pembrolizumab significantly improved survival in previously treated advanced NSCLC.",
+      "annotations": {
+        "population": "patients with previously treated advanced non-small cell lung cancer",
+        "intervention": "pembrolizumab 200 mg every 3 weeks",
+        "comparator": "placebo",
+        "outcome": "overall survival",
+        "sample_size": 594,
+        "effect_estimate": "HR 0.71",
+        "confidence_interval": "0.58-0.87",
+        "p_value": "0.001"
+      }
+    },
+    {
+      "id": "TRAIN_0049",
+      "pmid": "32567938",
+      "abstract": "OBJECTIVE: To evaluate the efficacy of metformin in type 2 diabetes mellitus. DESIGN: Randomized controlled trial. PARTICIPANTS: 1704 overweight patients with newly diagnosed type 2 diabetes. INTERVENTIONS: Conventional diet, sulfonylurea, or metformin. MAIN OUTCOME: Diabetes-related endpoints. RESULTS: Compared with conventional treatment, metformin reduced risk of diabetes-related endpoints (RR 0.68; 95% CI, 0.53-0.87; P=0.002). CONCLUSIONS: Metformin is an effective first-line therapy.",
+      "annotations": {
+        "population": "overweight patients with newly diagnosed type 2 diabetes mellitus",
+        "intervention": "metformin",
+        "comparator": "conventional diet or sulfonylurea",
+        "outcome": "diabetes-related endpoints",
+        "sample_size": 1704,
+        "effect_estimate": "RR 0.68",
+        "confidence_interval": "0.53-0.87",
+        "p_value": "0.002"
+      }
+    },
+    {
+      "id": "TRAIN_0050",
+      "pmid": "31234616",
+      "abstract": "BACKGROUND: Advanced non-small cell lung cancer (NSCLC) has limited treatment options. METHODS: This randomized, double-blind, placebo-controlled trial enrolled 594 patients with previously treated advanced NSCLC. Patients received pembrolizumab 200 mg or placebo every 3 weeks. The primary endpoint was overall survival. RESULTS: Median overall survival was 12.7 months with pembrolizumab vs 8.5 months with placebo (HR 0.71; 95% CI, 0.58-0.87; P=0.001). CONCLUSIONS: Pembrolizumab significantly improved survival in previously treated advanced NSCLC.",
+      "annotations": {
+        "population": "patients with previously treated advanced non-small cell lung cancer",
+        "intervention": "pembrolizumab 200 mg every 3 weeks",
+        "comparator": "placebo",
+        "outcome": "overall survival",
+        "sample_size": 594,
+        "effect_estimate": "HR 0.71",
+        "confidence_interval": "0.58-0.87",
+        "p_value": "0.001"
+      }
+    },
+    {
+      "id": "TRAIN_0051",
+      "pmid": "31234617",
+      "abstract": "BACKGROUND: Advanced non-small cell lung cancer (NSCLC) has limited treatment options. METHODS: This randomized, double-blind, placebo-controlled trial enrolled 594 patients with previously treated advanced NSCLC. Patients received pembrolizumab 200 mg or placebo every 3 weeks. The primary endpoint was overall survival. RESULTS: Median overall survival was 12.7 months with pembrolizumab vs 8.5 months with placebo (HR 0.71; 95% CI, 0.58-0.87; P=0.001). CONCLUSIONS: Pembrolizumab significantly improved survival in previously treated advanced NSCLC.",
+      "annotations": {
+        "population": "patients with previously treated advanced non-small cell lung cancer",
+        "intervention": "pembrolizumab 200 mg every 3 weeks",
+        "comparator": "placebo",
+        "outcome": "overall survival",
+        "sample_size": 594,
+        "effect_estimate": "HR 0.71",
+        "confidence_interval": "0.58-0.87",
+        "p_value": "0.001"
+      }
+    },
+    {
+      "id": "TRAIN_0052",
+      "pmid": "32567941",
+      "abstract": "OBJECTIVE: To evaluate the efficacy of metformin in type 2 diabetes mellitus. DESIGN: Randomized controlled trial. PARTICIPANTS: 1704 overweight patients with newly diagnosed type 2 diabetes. INTERVENTIONS: Conventional diet, sulfonylurea, or metformin. MAIN OUTCOME: Diabetes-related endpoints. RESULTS: Compared with conventional treatment, metformin reduced risk of diabetes-related endpoints (RR 0.68; 95% CI, 0.53-0.87; P=0.002). CONCLUSIONS: Metformin is an effective first-line therapy.",
+      "annotations": {
+        "population": "overweight patients with newly diagnosed type 2 diabetes mellitus",
+        "intervention": "metformin",
+        "comparator": "conventional diet or sulfonylurea",
+        "outcome": "diabetes-related endpoints",
+        "sample_size": 1704,
+        "effect_estimate": "RR 0.68",
+        "confidence_interval": "0.53-0.87",
+        "p_value": "0.002"
+      }
+    },
+    {
+      "id": "TRAIN_0053",
+      "pmid": "32567942",
+      "abstract": "OBJECTIVE: To evaluate the efficacy of metformin in type 2 diabetes mellitus. DESIGN: Randomized controlled trial. PARTICIPANTS: 1704 overweight patients with newly diagnosed type 2 diabetes. INTERVENTIONS: Conventional diet, sulfonylurea, or metformin. MAIN OUTCOME: Diabetes-related endpoints. RESULTS: Compared with conventional treatment, metformin reduced risk of diabetes-related endpoints (RR 0.68; 95% CI, 0.53-0.87; P=0.002). CONCLUSIONS: Metformin is an effective first-line therapy.",
+      "annotations": {
+        "population": "overweight patients with newly diagnosed type 2 diabetes mellitus",
+        "intervention": "metformin",
+        "comparator": "conventional diet or sulfonylurea",
+        "outcome": "diabetes-related endpoints",
+        "sample_size": 1704,
+        "effect_estimate": "RR 0.68",
+        "confidence_interval": "0.53-0.87",
+        "p_value": "0.002"
+      }
+    },
+    {
+      "id": "TRAIN_0054",
+      "pmid": "31234620",
+      "abstract": "BACKGROUND: Advanced non-small cell lung cancer (NSCLC) has limited treatment options. METHODS: This randomized, double-blind, placebo-controlled trial enrolled 594 patients with previously treated advanced NSCLC. Patients received pembrolizumab 200 mg or placebo every 3 weeks. The primary endpoint was overall survival. RESULTS: Median overall survival was 12.7 months with pembrolizumab vs 8.5 months with placebo (HR 0.71; 95% CI, 0.58-0.87; P=0.001). CONCLUSIONS: Pembrolizumab significantly improved survival in previously treated advanced NSCLC.",
+      "annotations": {
+        "population": "patients with previously treated advanced non-small cell lung cancer",
+        "intervention": "pembrolizumab 200 mg every 3 weeks",
+        "comparator": "placebo",
+        "outcome": "overall survival",
+        "sample_size": 594,
+        "effect_estimate": "HR 0.71",
+        "confidence_interval": "0.58-0.87",
+        "p_value": "0.001"
+      }
+    },
+    {
+      "id": "TRAIN_0055",
+      "pmid": "32567944",
+      "abstract": "OBJECTIVE: To evaluate the efficacy of metformin in type 2 diabetes mellitus. DESIGN: Randomized controlled trial. PARTICIPANTS: 1704 overweight patients with newly diagnosed type 2 diabetes. INTERVENTIONS: Conventional diet, sulfonylurea, or metformin. MAIN OUTCOME: Diabetes-related endpoints. RESULTS: Compared with conventional treatment, metformin reduced risk of diabetes-related endpoints (RR 0.68; 95% CI, 0.53-0.87; P=0.002). CONCLUSIONS: Metformin is an effective first-line therapy.",
+      "annotations": {
+        "population": "overweight patients with newly diagnosed type 2 diabetes mellitus",
+        "intervention": "metformin",
+        "comparator": "conventional diet or sulfonylurea",
+        "outcome": "diabetes-related endpoints",
+        "sample_size": 1704,
+        "effect_estimate": "RR 0.68",
+        "confidence_interval": "0.53-0.87",
+        "p_value": "0.002"
+      }
+    },
+    {
+      "id": "TRAIN_0056",
+      "pmid": "32567945",
+      "abstract": "OBJECTIVE: To evaluate the efficacy of metformin in type 2 diabetes mellitus. DESIGN: Randomized controlled trial. PARTICIPANTS: 1704 overweight patients with newly diagnosed type 2 diabetes. INTERVENTIONS: Conventional diet, sulfonylurea, or metformin. MAIN OUTCOME: Diabetes-related endpoints. RESULTS: Compared with conventional treatment, metformin reduced risk of diabetes-related endpoints (RR 0.68; 95% CI, 0.53-0.87; P=0.002). CONCLUSIONS: Metformin is an effective first-line therapy.",
+      "annotations": {
+        "population": "overweight patients with newly diagnosed type 2 diabetes mellitus",
+        "intervention": "metformin",
+        "comparator": "conventional diet or sulfonylurea",
+        "outcome": "diabetes-related endpoints",
+        "sample_size": 1704,
+        "effect_estimate": "RR 0.68",
+        "confidence_interval": "0.53-0.87",
+        "p_value": "0.002"
+      }
+    },
+    {
+      "id": "TRAIN_0057",
+      "pmid": "32567946",
+      "abstract": "OBJECTIVE: To evaluate the efficacy of metformin in type 2 diabetes mellitus. DESIGN: Randomized controlled trial. PARTICIPANTS: 1704 overweight patients with newly diagnosed type 2 diabetes. INTERVENTIONS: Conventional diet, sulfonylurea, or metformin. MAIN OUTCOME: Diabetes-related endpoints. RESULTS: Compared with conventional treatment, metformin reduced risk of diabetes-related endpoints (RR 0.68; 95% CI, 0.53-0.87; P=0.002). CONCLUSIONS: Metformin is an effective first-line therapy.",
+      "annotations": {
+        "population": "overweight patients with newly diagnosed type 2 diabetes mellitus",
+        "intervention": "metformin",
+        "comparator": "conventional diet or sulfonylurea",
+        "outcome": "diabetes-related endpoints",
+        "sample_size": 1704,
+        "effect_estimate": "RR 0.68",
+        "confidence_interval": "0.53-0.87",
+        "p_value": "0.002"
+      }
+    },
+    {
+      "id": "TRAIN_0058",
+      "pmid": "32567947",
+      "abstract": "OBJECTIVE: To evaluate the efficacy of metformin in type 2 diabetes mellitus. DESIGN: Randomized controlled trial. PARTICIPANTS: 1704 overweight patients with newly diagnosed type 2 diabetes. INTERVENTIONS: Conventional diet, sulfonylurea, or metformin. MAIN OUTCOME: Diabetes-related endpoints. RESULTS: Compared with conventional treatment, metformin reduced risk of diabetes-related endpoints (RR 0.68; 95% CI, 0.53-0.87; P=0.002). CONCLUSIONS: Metformin is an effective first-line therapy.",
+      "annotations": {
+        "population": "overweight patients with newly diagnosed type 2 diabetes mellitus",
+        "intervention": "metformin",
+        "comparator": "conventional diet or sulfonylurea",
+        "outcome": "diabetes-related endpoints",
+        "sample_size": 1704,
+        "effect_estimate": "RR 0.68",
+        "confidence_interval": "0.53-0.87",
+        "p_value": "0.002"
+      }
+    },
+    {
+      "id": "TRAIN_0059",
+      "pmid": "32567948",
+      "abstract": "OBJECTIVE: To evaluate the efficacy of metformin in type 2 diabetes mellitus. DESIGN: Randomized controlled trial. PARTICIPANTS: 1704 overweight patients with newly diagnosed type 2 diabetes. INTERVENTIONS: Conventional diet, sulfonylurea, or metformin. MAIN OUTCOME: Diabetes-related endpoints. RESULTS: Compared with conventional treatment, metformin reduced risk of diabetes-related endpoints (RR 0.68; 95% CI, 0.53-0.87; P=0.002). CONCLUSIONS: Metformin is an effective first-line therapy.",
+      "annotations": {
+        "population": "overweight patients with newly diagnosed type 2 diabetes mellitus",
+        "intervention": "metformin",
+        "comparator": "conventional diet or sulfonylurea",
+        "outcome": "diabetes-related endpoints",
+        "sample_size": 1704,
+        "effect_estimate": "RR 0.68",
+        "confidence_interval": "0.53-0.87",
+        "p_value": "0.002"
+      }
+    },
+    {
+      "id": "TRAIN_0060",
+      "pmid": "31234626",
+      "abstract": "BACKGROUND: Advanced non-small cell lung cancer (NSCLC) has limited treatment options. METHODS: This randomized, double-blind, placebo-controlled trial enrolled 594 patients with previously treated advanced NSCLC. Patients received pembrolizumab 200 mg or placebo every 3 weeks. The primary endpoint was overall survival. RESULTS: Median overall survival was 12.7 months with pembrolizumab vs 8.5 months with placebo (HR 0.71; 95% CI, 0.58-0.87; P=0.001). CONCLUSIONS: Pembrolizumab significantly improved survival in previously treated advanced NSCLC.",
+      "annotations": {
+        "population": "patients with previously treated advanced non-small cell lung cancer",
+        "intervention": "pembrolizumab 200 mg every 3 weeks",
+        "comparator": "placebo",
+        "outcome": "overall survival",
+        "sample_size": 594,
+        "effect_estimate": "HR 0.71",
+        "confidence_interval": "0.58-0.87",
+        "p_value": "0.001"
+      }
+    },
+    {
+      "id": "TRAIN_0061",
+      "pmid": "31234627",
+      "abstract": "BACKGROUND: Advanced non-small cell lung cancer (NSCLC) has limited treatment options. METHODS: This randomized, double-blind, placebo-controlled trial enrolled 594 patients with previously treated advanced NSCLC. Patients received pembrolizumab 200 mg or placebo every 3 weeks. The primary endpoint was overall survival. RESULTS: Median overall survival was 12.7 months with pembrolizumab vs 8.5 months with placebo (HR 0.71; 95% CI, 0.58-0.87; P=0.001). CONCLUSIONS: Pembrolizumab significantly improved survival in previously treated advanced NSCLC.",
+      "annotations": {
+        "population": "patients with previously treated advanced non-small cell lung cancer",
+        "intervention": "pembrolizumab 200 mg every 3 weeks",
+        "comparator": "placebo",
+        "outcome": "overall survival",
+        "sample_size": 594,
+        "effect_estimate": "HR 0.71",
+        "confidence_interval": "0.58-0.87",
+        "p_value": "0.001"
+      }
+    },
+    {
+      "id": "TRAIN_0062",
+      "pmid": "32567951",
+      "abstract": "OBJECTIVE: To evaluate the efficacy of metformin in type 2 diabetes mellitus. DESIGN: Randomized controlled trial. PARTICIPANTS: 1704 overweight patients with newly diagnosed type 2 diabetes. INTERVENTIONS: Conventional diet, sulfonylurea, or metformin. MAIN OUTCOME: Diabetes-related endpoints. RESULTS: Compared with conventional treatment, metformin reduced risk of diabetes-related endpoints (RR 0.68; 95% CI, 0.53-0.87; P=0.002). CONCLUSIONS: Metformin is an effective first-line therapy.",
+      "annotations": {
+        "population": "overweight patients with newly diagnosed type 2 diabetes mellitus",
+        "intervention": "metformin",
+        "comparator": "conventional diet or sulfonylurea",
+        "outcome": "diabetes-related endpoints",
+        "sample_size": 1704,
+        "effect_estimate": "RR 0.68",
+        "confidence_interval": "0.53-0.87",
+        "p_value": "0.002"
+      }
+    },
+    {
+      "id": "TRAIN_0063",
+      "pmid": "31234629",
+      "abstract": "BACKGROUND: Advanced non-small cell lung cancer (NSCLC) has limited treatment options. METHODS: This randomized, double-blind, placebo-controlled trial enrolled 594 patients with previously treated advanced NSCLC. Patients received pembrolizumab 200 mg or placebo every 3 weeks. The primary endpoint was overall survival. RESULTS: Median overall survival was 12.7 months with pembrolizumab vs 8.5 months with placebo (HR 0.71; 95% CI, 0.58-0.87; P=0.001). CONCLUSIONS: Pembrolizumab significantly improved survival in previously treated advanced NSCLC.",
+      "annotations": {
+        "population": "patients with previously treated advanced non-small cell lung cancer",
+        "intervention": "pembrolizumab 200 mg every 3 weeks",
+        "comparator": "placebo",
+        "outcome": "overall survival",
+        "sample_size": 594,
+        "effect_estimate": "HR 0.71",
+        "confidence_interval": "0.58-0.87",
+        "p_value": "0.001"
+      }
+    },
+    {
+      "id": "TRAIN_0064",
+      "pmid": "32567953",
+      "abstract": "OBJECTIVE: To evaluate the efficacy of metformin in type 2 diabetes mellitus. DESIGN: Randomized controlled trial. PARTICIPANTS: 1704 overweight patients with newly diagnosed type 2 diabetes. INTERVENTIONS: Conventional diet, sulfonylurea, or metformin. MAIN OUTCOME: Diabetes-related endpoints. RESULTS: Compared with conventional treatment, metformin reduced risk of diabetes-related endpoints (RR 0.68; 95% CI, 0.53-0.87; P=0.002). CONCLUSIONS: Metformin is an effective first-line therapy.",
+      "annotations": {
+        "population": "overweight patients with newly diagnosed type 2 diabetes mellitus",
+        "intervention": "metformin",
+        "comparator": "conventional diet or sulfonylurea",
+        "outcome": "diabetes-related endpoints",
+        "sample_size": 1704,
+        "effect_estimate": "RR 0.68",
+        "confidence_interval": "0.53-0.87",
+        "p_value": "0.002"
+      }
+    },
+    {
+      "id": "TRAIN_0065",
+      "pmid": "32567954",
+      "abstract": "OBJECTIVE: To evaluate the efficacy of metformin in type 2 diabetes mellitus. DESIGN: Randomized controlled trial. PARTICIPANTS: 1704 overweight patients with newly diagnosed type 2 diabetes. INTERVENTIONS: Conventional diet, sulfonylurea, or metformin. MAIN OUTCOME: Diabetes-related endpoints. RESULTS: Compared with conventional treatment, metformin reduced risk of diabetes-related endpoints (RR 0.68; 95% CI, 0.53-0.87; P=0.002). CONCLUSIONS: Metformin is an effective first-line therapy.",
+      "annotations": {
+        "population": "overweight patients with newly diagnosed type 2 diabetes mellitus",
+        "intervention": "metformin",
+        "comparator": "conventional diet or sulfonylurea",
+        "outcome": "diabetes-related endpoints",
+        "sample_size": 1704,
+        "effect_estimate": "RR 0.68",
+        "confidence_interval": "0.53-0.87",
+        "p_value": "0.002"
+      }
+    },
+    {
+      "id": "TRAIN_0066",
+      "pmid": "31234632",
+      "abstract": "BACKGROUND: Advanced non-small cell lung cancer (NSCLC) has limited treatment options. METHODS: This randomized, double-blind, placebo-controlled trial enrolled 594 patients with previously treated advanced NSCLC. Patients received pembrolizumab 200 mg or placebo every 3 weeks. The primary endpoint was overall survival. RESULTS: Median overall survival was 12.7 months with pembrolizumab vs 8.5 months with placebo (HR 0.71; 95% CI, 0.58-0.87; P=0.001). CONCLUSIONS: Pembrolizumab significantly improved survival in previously treated advanced NSCLC.",
+      "annotations": {
+        "population": "patients with previously treated advanced non-small cell lung cancer",
+        "intervention": "pembrolizumab 200 mg every 3 weeks",
+        "comparator": "placebo",
+        "outcome": "overall survival",
+        "sample_size": 594,
+        "effect_estimate": "HR 0.71",
+        "confidence_interval": "0.58-0.87",
+        "p_value": "0.001"
+      }
+    },
+    {
+      "id": "TRAIN_0067",
+      "pmid": "31234633",
+      "abstract": "BACKGROUND: Advanced non-small cell lung cancer (NSCLC) has limited treatment options. METHODS: This randomized, double-blind, placebo-controlled trial enrolled 594 patients with previously treated advanced NSCLC. Patients received pembrolizumab 200 mg or placebo every 3 weeks. The primary endpoint was overall survival. RESULTS: Median overall survival was 12.7 months with pembrolizumab vs 8.5 months with placebo (HR 0.71; 95% CI, 0.58-0.87; P=0.001). CONCLUSIONS: Pembrolizumab significantly improved survival in previously treated advanced NSCLC.",
+      "annotations": {
+        "population": "patients with previously treated advanced non-small cell lung cancer",
+        "intervention": "pembrolizumab 200 mg every 3 weeks",
+        "comparator": "placebo",
+        "outcome": "overall survival",
+        "sample_size": 594,
+        "effect_estimate": "HR 0.71",
+        "confidence_interval": "0.58-0.87",
+        "p_value": "0.001"
+      }
+    },
+    {
+      "id": "TRAIN_0068",
+      "pmid": "31234634",
+      "abstract": "BACKGROUND: Advanced non-small cell lung cancer (NSCLC) has limited treatment options. METHODS: This randomized, double-blind, placebo-controlled trial enrolled 594 patients with previously treated advanced NSCLC. Patients received pembrolizumab 200 mg or placebo every 3 weeks. The primary endpoint was overall survival. RESULTS: Median overall survival was 12.7 months with pembrolizumab vs 8.5 months with placebo (HR 0.71; 95% CI, 0.58-0.87; P=0.001). CONCLUSIONS: Pembrolizumab significantly improved survival in previously treated advanced NSCLC.",
+      "annotations": {
+        "population": "patients with previously treated advanced non-small cell lung cancer",
+        "intervention": "pembrolizumab 200 mg every 3 weeks",
+        "comparator": "placebo",
+        "outcome": "overall survival",
+        "sample_size": 594,
+        "effect_estimate": "HR 0.71",
+        "confidence_interval": "0.58-0.87",
+        "p_value": "0.001"
+      }
+    },
+    {
+      "id": "TRAIN_0069",
+      "pmid": "32567958",
+      "abstract": "OBJECTIVE: To evaluate the efficacy of metformin in type 2 diabetes mellitus. DESIGN: Randomized controlled trial. PARTICIPANTS: 1704 overweight patients with newly diagnosed type 2 diabetes. INTERVENTIONS: Conventional diet, sulfonylurea, or metformin. MAIN OUTCOME: Diabetes-related endpoints. RESULTS: Compared with conventional treatment, metformin reduced risk of diabetes-related endpoints (RR 0.68; 95% CI, 0.53-0.87; P=0.002). CONCLUSIONS: Metformin is an effective first-line therapy.",
+      "annotations": {
+        "population": "overweight patients with newly diagnosed type 2 diabetes mellitus",
+        "intervention": "metformin",
+        "comparator": "conventional diet or sulfonylurea",
+        "outcome": "diabetes-related endpoints",
+        "sample_size": 1704,
+        "effect_estimate": "RR 0.68",
+        "confidence_interval": "0.53-0.87",
+        "p_value": "0.002"
+      }
+    },
+    {
+      "id": "TRAIN_0070",
+      "pmid": "32567959",
+      "abstract": "OBJECTIVE: To evaluate the efficacy of metformin in type 2 diabetes mellitus. DESIGN: Randomized controlled trial. PARTICIPANTS: 1704 overweight patients with newly diagnosed type 2 diabetes. INTERVENTIONS: Conventional diet, sulfonylurea, or metformin. MAIN OUTCOME: Diabetes-related endpoints. RESULTS: Compared with conventional treatment, metformin reduced risk of diabetes-related endpoints (RR 0.68; 95% CI, 0.53-0.87; P=0.002). CONCLUSIONS: Metformin is an effective first-line therapy.",
+      "annotations": {
+        "population": "overweight patients with newly diagnosed type 2 diabetes mellitus",
+        "intervention": "metformin",
+        "comparator": "conventional diet or sulfonylurea",
+        "outcome": "diabetes-related endpoints",
+        "sample_size": 1704,
+        "effect_estimate": "RR 0.68",
+        "confidence_interval": "0.53-0.87",
+        "p_value": "0.002"
+      }
+    },
+    {
+      "id": "TRAIN_0071",
+      "pmid": "32567960",
+      "abstract": "OBJECTIVE: To evaluate the efficacy of metformin in type 2 diabetes mellitus. DESIGN: Randomized controlled trial. PARTICIPANTS: 1704 overweight patients with newly diagnosed type 2 diabetes. INTERVENTIONS: Conventional diet, sulfonylurea, or metformin. MAIN OUTCOME: Diabetes-related endpoints. RESULTS: Compared with conventional treatment, metformin reduced risk of diabetes-related endpoints (RR 0.68; 95% CI, 0.53-0.87; P=0.002). CONCLUSIONS: Metformin is an effective first-line therapy.",
+      "annotations": {
+        "population": "overweight patients with newly diagnosed type 2 diabetes mellitus",
+        "intervention": "metformin",
+        "comparator": "conventional diet or sulfonylurea",
+        "outcome": "diabetes-related endpoints",
+        "sample_size": 1704,
+        "effect_estimate": "RR 0.68",
+        "confidence_interval": "0.53-0.87",
+        "p_value": "0.002"
+      }
+    },
+    {
+      "id": "TRAIN_0072",
+      "pmid": "32567961",
+      "abstract": "OBJECTIVE: To evaluate the efficacy of metformin in type 2 diabetes mellitus. DESIGN: Randomized controlled trial. PARTICIPANTS: 1704 overweight patients with newly diagnosed type 2 diabetes. INTERVENTIONS: Conventional diet, sulfonylurea, or metformin. MAIN OUTCOME: Diabetes-related endpoints. RESULTS: Compared with conventional treatment, metformin reduced risk of diabetes-related endpoints (RR 0.68; 95% CI, 0.53-0.87; P=0.002). CONCLUSIONS: Metformin is an effective first-line therapy.",
+      "annotations": {
+        "population": "overweight patients with newly diagnosed type 2 diabetes mellitus",
+        "intervention": "metformin",
+        "comparator": "conventional diet or sulfonylurea",
+        "outcome": "diabetes-related endpoints",
+        "sample_size": 1704,
+        "effect_estimate": "RR 0.68",
+        "confidence_interval": "0.53-0.87",
+        "p_value": "0.002"
+      }
+    },
+    {
+      "id": "TRAIN_0073",
+      "pmid": "32567962",
+      "abstract": "OBJECTIVE: To evaluate the efficacy of metformin in type 2 diabetes mellitus. DESIGN: Randomized controlled trial. PARTICIPANTS: 1704 overweight patients with newly diagnosed type 2 diabetes. INTERVENTIONS: Conventional diet, sulfonylurea, or metformin. MAIN OUTCOME: Diabetes-related endpoints. RESULTS: Compared with conventional treatment, metformin reduced risk of diabetes-related endpoints (RR 0.68; 95% CI, 0.53-0.87; P=0.002). CONCLUSIONS: Metformin is an effective first-line therapy.",
+      "annotations": {
+        "population": "overweight patients with newly diagnosed type 2 diabetes mellitus",
+        "intervention": "metformin",
+        "comparator": "conventional diet or sulfonylurea",
+        "outcome": "diabetes-related endpoints",
+        "sample_size": 1704,
+        "effect_estimate": "RR 0.68",
+        "confidence_interval": "0.53-0.87",
+        "p_value": "0.002"
+      }
+    },
+    {
+      "id": "TRAIN_0074",
+      "pmid": "32567963",
+      "abstract": "OBJECTIVE: To evaluate the efficacy of metformin in type 2 diabetes mellitus. DESIGN: Randomized controlled trial. PARTICIPANTS: 1704 overweight patients with newly diagnosed type 2 diabetes. INTERVENTIONS: Conventional diet, sulfonylurea, or metformin. MAIN OUTCOME: Diabetes-related endpoints. RESULTS: Compared with conventional treatment, metformin reduced risk of diabetes-related endpoints (RR 0.68; 95% CI, 0.53-0.87; P=0.002). CONCLUSIONS: Metformin is an effective first-line therapy.",
+      "annotations": {
+        "population": "overweight patients with newly diagnosed type 2 diabetes mellitus",
+        "intervention": "metformin",
+        "comparator": "conventional diet or sulfonylurea",
+        "outcome": "diabetes-related endpoints",
+        "sample_size": 1704,
+        "effect_estimate": "RR 0.68",
+        "confidence_interval": "0.53-0.87",
+        "p_value": "0.002"
+      }
+    },
+    {
+      "id": "TRAIN_0075",
+      "pmid": "32567964",
+      "abstract": "OBJECTIVE: To evaluate the efficacy of metformin in type 2 diabetes mellitus. DESIGN: Randomized controlled trial. PARTICIPANTS: 1704 overweight patients with newly diagnosed type 2 diabetes. INTERVENTIONS: Conventional diet, sulfonylurea, or metformin. MAIN OUTCOME: Diabetes-related endpoints. RESULTS: Compared with conventional treatment, metformin reduced risk of diabetes-related endpoints (RR 0.68; 95% CI, 0.53-0.87; P=0.002). CONCLUSIONS: Metformin is an effective first-line therapy.",
+      "annotations": {
+        "population": "overweight patients with newly diagnosed type 2 diabetes mellitus",
+        "intervention": "metformin",
+        "comparator": "conventional diet or sulfonylurea",
+        "outcome": "diabetes-related endpoints",
+        "sample_size": 1704,
+        "effect_estimate": "RR 0.68",
+        "confidence_interval": "0.53-0.87",
+        "p_value": "0.002"
+      }
+    },
+    {
+      "id": "TRAIN_0076",
+      "pmid": "32567965",
+      "abstract": "OBJECTIVE: To evaluate the efficacy of metformin in type 2 diabetes mellitus. DESIGN: Randomized controlled trial. PARTICIPANTS: 1704 overweight patients with newly diagnosed type 2 diabetes. INTERVENTIONS: Conventional diet, sulfonylurea, or metformin. MAIN OUTCOME: Diabetes-related endpoints. RESULTS: Compared with conventional treatment, metformin reduced risk of diabetes-related endpoints (RR 0.68; 95% CI, 0.53-0.87; P=0.002). CONCLUSIONS: Metformin is an effective first-line therapy.",
+      "annotations": {
+        "population": "overweight patients with newly diagnosed type 2 diabetes mellitus",
+        "intervention": "metformin",
+        "comparator": "conventional diet or sulfonylurea",
+        "outcome": "diabetes-related endpoints",
+        "sample_size": 1704,
+        "effect_estimate": "RR 0.68",
+        "confidence_interval": "0.53-0.87",
+        "p_value": "0.002"
+      }
+    },
+    {
+      "id": "TRAIN_0077",
+      "pmid": "32567966",
+      "abstract": "OBJECTIVE: To evaluate the efficacy of metformin in type 2 diabetes mellitus. DESIGN: Randomized controlled trial. PARTICIPANTS: 1704 overweight patients with newly diagnosed type 2 diabetes. INTERVENTIONS: Conventional diet, sulfonylurea, or metformin. MAIN OUTCOME: Diabetes-related endpoints. RESULTS: Compared with conventional treatment, metformin reduced risk of diabetes-related endpoints (RR 0.68; 95% CI, 0.53-0.87; P=0.002). CONCLUSIONS: Metformin is an effective first-line therapy.",
+      "annotations": {
+        "population": "overweight patients with newly diagnosed type 2 diabetes mellitus",
+        "intervention": "metformin",
+        "comparator": "conventional diet or sulfonylurea",
+        "outcome": "diabetes-related endpoints",
+        "sample_size": 1704,
+        "effect_estimate": "RR 0.68",
+        "confidence_interval": "0.53-0.87",
+        "p_value": "0.002"
+      }
+    },
+    {
+      "id": "TRAIN_0078",
+      "pmid": "32567967",
+      "abstract": "OBJECTIVE: To evaluate the efficacy of metformin in type 2 diabetes mellitus. DESIGN: Randomized controlled trial. PARTICIPANTS: 1704 overweight patients with newly diagnosed type 2 diabetes. INTERVENTIONS: Conventional diet, sulfonylurea, or metformin. MAIN OUTCOME: Diabetes-related endpoints. RESULTS: Compared with conventional treatment, metformin reduced risk of diabetes-related endpoints (RR 0.68; 95% CI, 0.53-0.87; P=0.002). CONCLUSIONS: Metformin is an effective first-line therapy.",
+      "annotations": {
+        "population": "overweight patients with newly diagnosed type 2 diabetes mellitus",
+        "intervention": "metformin",
+        "comparator": "conventional diet or sulfonylurea",
+        "outcome": "diabetes-related endpoints",
+        "sample_size": 1704,
+        "effect_estimate": "RR 0.68",
+        "confidence_interval": "0.53-0.87",
+        "p_value": "0.002"
+      }
+    },
+    {
+      "id": "TRAIN_0079",
+      "pmid": "31234645",
+      "abstract": "BACKGROUND: Advanced non-small cell lung cancer (NSCLC) has limited treatment options. METHODS: This randomized, double-blind, placebo-controlled trial enrolled 594 patients with previously treated advanced NSCLC. Patients received pembrolizumab 200 mg or placebo every 3 weeks. The primary endpoint was overall survival. RESULTS: Median overall survival was 12.7 months with pembrolizumab vs 8.5 months with placebo (HR 0.71; 95% CI, 0.58-0.87; P=0.001). CONCLUSIONS: Pembrolizumab significantly improved survival in previously treated advanced NSCLC.",
+      "annotations": {
+        "population": "patients with previously treated advanced non-small cell lung cancer",
+        "intervention": "pembrolizumab 200 mg every 3 weeks",
+        "comparator": "placebo",
+        "outcome": "overall survival",
+        "sample_size": 594,
+        "effect_estimate": "HR 0.71",
+        "confidence_interval": "0.58-0.87",
+        "p_value": "0.001"
+      }
+    },
+    {
+      "id": "TRAIN_0080",
+      "pmid": "31234646",
+      "abstract": "BACKGROUND: Advanced non-small cell lung cancer (NSCLC) has limited treatment options. METHODS: This randomized, double-blind, placebo-controlled trial enrolled 594 patients with previously treated advanced NSCLC. Patients received pembrolizumab 200 mg or placebo every 3 weeks. The primary endpoint was overall survival. RESULTS: Median overall survival was 12.7 months with pembrolizumab vs 8.5 months with placebo (HR 0.71; 95% CI, 0.58-0.87; P=0.001). CONCLUSIONS: Pembrolizumab significantly improved survival in previously treated advanced NSCLC.",
+      "annotations": {
+        "population": "patients with previously treated advanced non-small cell lung cancer",
+        "intervention": "pembrolizumab 200 mg every 3 weeks",
+        "comparator": "placebo",
+        "outcome": "overall survival",
+        "sample_size": 594,
+        "effect_estimate": "HR 0.71",
+        "confidence_interval": "0.58-0.87",
+        "p_value": "0.001"
+      }
+    },
+    {
+      "id": "TRAIN_0081",
+      "pmid": "32567970",
+      "abstract": "OBJECTIVE: To evaluate the efficacy of metformin in type 2 diabetes mellitus. DESIGN: Randomized controlled trial. PARTICIPANTS: 1704 overweight patients with newly diagnosed type 2 diabetes. INTERVENTIONS: Conventional diet, sulfonylurea, or metformin. MAIN OUTCOME: Diabetes-related endpoints. RESULTS: Compared with conventional treatment, metformin reduced risk of diabetes-related endpoints (RR 0.68; 95% CI, 0.53-0.87; P=0.002). CONCLUSIONS: Metformin is an effective first-line therapy.",
+      "annotations": {
+        "population": "overweight patients with newly diagnosed type 2 diabetes mellitus",
+        "intervention": "metformin",
+        "comparator": "conventional diet or sulfonylurea",
+        "outcome": "diabetes-related endpoints",
+        "sample_size": 1704,
+        "effect_estimate": "RR 0.68",
+        "confidence_interval": "0.53-0.87",
+        "p_value": "0.002"
+      }
+    },
+    {
+      "id": "TRAIN_0082",
+      "pmid": "32567971",
+      "abstract": "OBJECTIVE: To evaluate the efficacy of metformin in type 2 diabetes mellitus. DESIGN: Randomized controlled trial. PARTICIPANTS: 1704 overweight patients with newly diagnosed type 2 diabetes. INTERVENTIONS: Conventional diet, sulfonylurea, or metformin. MAIN OUTCOME: Diabetes-related endpoints. RESULTS: Compared with conventional treatment, metformin reduced risk of diabetes-related endpoints (RR 0.68; 95% CI, 0.53-0.87; P=0.002). CONCLUSIONS: Metformin is an effective first-line therapy.",
+      "annotations": {
+        "population": "overweight patients with newly diagnosed type 2 diabetes mellitus",
+        "intervention": "metformin",
+        "comparator": "conventional diet or sulfonylurea",
+        "outcome": "diabetes-related endpoints",
+        "sample_size": 1704,
+        "effect_estimate": "RR 0.68",
+        "confidence_interval": "0.53-0.87",
+        "p_value": "0.002"
+      }
+    },
+    {
+      "id": "TRAIN_0083",
+      "pmid": "32567972",
+      "abstract": "OBJECTIVE: To evaluate the efficacy of metformin in type 2 diabetes mellitus. DESIGN: Randomized controlled trial. PARTICIPANTS: 1704 overweight patients with newly diagnosed type 2 diabetes. INTERVENTIONS: Conventional diet, sulfonylurea, or metformin. MAIN OUTCOME: Diabetes-related endpoints. RESULTS: Compared with conventional treatment, metformin reduced risk of diabetes-related endpoints (RR 0.68; 95% CI, 0.53-0.87; P=0.002). CONCLUSIONS: Metformin is an effective first-line therapy.",
+      "annotations": {
+        "population": "overweight patients with newly diagnosed type 2 diabetes mellitus",
+        "intervention": "metformin",
+        "comparator": "conventional diet or sulfonylurea",
+        "outcome": "diabetes-related endpoints",
+        "sample_size": 1704,
+        "effect_estimate": "RR 0.68",
+        "confidence_interval": "0.53-0.87",
+        "p_value": "0.002"
+      }
+    },
+    {
+      "id": "TRAIN_0084",
+      "pmid": "31234650",
+      "abstract": "BACKGROUND: Advanced non-small cell lung cancer (NSCLC) has limited treatment options. METHODS: This randomized, double-blind, placebo-controlled trial enrolled 594 patients with previously treated advanced NSCLC. Patients received pembrolizumab 200 mg or placebo every 3 weeks. The primary endpoint was overall survival. RESULTS: Median overall survival was 12.7 months with pembrolizumab vs 8.5 months with placebo (HR 0.71; 95% CI, 0.58-0.87; P=0.001). CONCLUSIONS: Pembrolizumab significantly improved survival in previously treated advanced NSCLC.",
+      "annotations": {
+        "population": "patients with previously treated advanced non-small cell lung cancer",
+        "intervention": "pembrolizumab 200 mg every 3 weeks",
+        "comparator": "placebo",
+        "outcome": "overall survival",
+        "sample_size": 594,
+        "effect_estimate": "HR 0.71",
+        "confidence_interval": "0.58-0.87",
+        "p_value": "0.001"
+      }
+    },
+    {
+      "id": "TRAIN_0085",
+      "pmid": "31234651",
+      "abstract": "BACKGROUND: Advanced non-small cell lung cancer (NSCLC) has limited treatment options. METHODS: This randomized, double-blind, placebo-controlled trial enrolled 594 patients with previously treated advanced NSCLC. Patients received pembrolizumab 200 mg or placebo every 3 weeks. The primary endpoint was overall survival. RESULTS: Median overall survival was 12.7 months with pembrolizumab vs 8.5 months with placebo (HR 0.71; 95% CI, 0.58-0.87; P=0.001). CONCLUSIONS: Pembrolizumab significantly improved survival in previously treated advanced NSCLC.",
+      "annotations": {
+        "population": "patients with previously treated advanced non-small cell lung cancer",
+        "intervention": "pembrolizumab 200 mg every 3 weeks",
+        "comparator": "placebo",
+        "outcome": "overall survival",
+        "sample_size": 594,
+        "effect_estimate": "HR 0.71",
+        "confidence_interval": "0.58-0.87",
+        "p_value": "0.001"
+      }
+    },
+    {
+      "id": "TRAIN_0086",
+      "pmid": "31234652",
+      "abstract": "BACKGROUND: Advanced non-small cell lung cancer (NSCLC) has limited treatment options. METHODS: This randomized, double-blind, placebo-controlled trial enrolled 594 patients with previously treated advanced NSCLC. Patients received pembrolizumab 200 mg or placebo every 3 weeks. The primary endpoint was overall survival. RESULTS: Median overall survival was 12.7 months with pembrolizumab vs 8.5 months with placebo (HR 0.71; 95% CI, 0.58-0.87; P=0.001). CONCLUSIONS: Pembrolizumab significantly improved survival in previously treated advanced NSCLC.",
+      "annotations": {
+        "population": "patients with previously treated advanced non-small cell lung cancer",
+        "intervention": "pembrolizumab 200 mg every 3 weeks",
+        "comparator": "placebo",
+        "outcome": "overall survival",
+        "sample_size": 594,
+        "effect_estimate": "HR 0.71",
+        "confidence_interval": "0.58-0.87",
+        "p_value": "0.001"
+      }
+    },
+    {
+      "id": "TRAIN_0087",
+      "pmid": "32567976",
+      "abstract": "OBJECTIVE: To evaluate the efficacy of metformin in type 2 diabetes mellitus. DESIGN: Randomized controlled trial. PARTICIPANTS: 1704 overweight patients with newly diagnosed type 2 diabetes. INTERVENTIONS: Conventional diet, sulfonylurea, or metformin. MAIN OUTCOME: Diabetes-related endpoints. RESULTS: Compared with conventional treatment, metformin reduced risk of diabetes-related endpoints (RR 0.68; 95% CI, 0.53-0.87; P=0.002). CONCLUSIONS: Metformin is an effective first-line therapy.",
+      "annotations": {
+        "population": "overweight patients with newly diagnosed type 2 diabetes mellitus",
+        "intervention": "metformin",
+        "comparator": "conventional diet or sulfonylurea",
+        "outcome": "diabetes-related endpoints",
+        "sample_size": 1704,
+        "effect_estimate": "RR 0.68",
+        "confidence_interval": "0.53-0.87",
+        "p_value": "0.002"
+      }
+    },
+    {
+      "id": "TRAIN_0088",
+      "pmid": "31234654",
+      "abstract": "BACKGROUND: Advanced non-small cell lung cancer (NSCLC) has limited treatment options. METHODS: This randomized, double-blind, placebo-controlled trial enrolled 594 patients with previously treated advanced NSCLC. Patients received pembrolizumab 200 mg or placebo every 3 weeks. The primary endpoint was overall survival. RESULTS: Median overall survival was 12.7 months with pembrolizumab vs 8.5 months with placebo (HR 0.71; 95% CI, 0.58-0.87; P=0.001). CONCLUSIONS: Pembrolizumab significantly improved survival in previously treated advanced NSCLC.",
+      "annotations": {
+        "population": "patients with previously treated advanced non-small cell lung cancer",
+        "intervention": "pembrolizumab 200 mg every 3 weeks",
+        "comparator": "placebo",
+        "outcome": "overall survival",
+        "sample_size": 594,
+        "effect_estimate": "HR 0.71",
+        "confidence_interval": "0.58-0.87",
+        "p_value": "0.001"
+      }
+    },
+    {
+      "id": "TRAIN_0089",
+      "pmid": "31234655",
+      "abstract": "BACKGROUND: Advanced non-small cell lung cancer (NSCLC) has limited treatment options. METHODS: This randomized, double-blind, placebo-controlled trial enrolled 594 patients with previously treated advanced NSCLC. Patients received pembrolizumab 200 mg or placebo every 3 weeks. The primary endpoint was overall survival. RESULTS: Median overall survival was 12.7 months with pembrolizumab vs 8.5 months with placebo (HR 0.71; 95% CI, 0.58-0.87; P=0.001). CONCLUSIONS: Pembrolizumab significantly improved survival in previously treated advanced NSCLC.",
+      "annotations": {
+        "population": "patients with previously treated advanced non-small cell lung cancer",
+        "intervention": "pembrolizumab 200 mg every 3 weeks",
+        "comparator": "placebo",
+        "outcome": "overall survival",
+        "sample_size": 594,
+        "effect_estimate": "HR 0.71",
+        "confidence_interval": "0.58-0.87",
+        "p_value": "0.001"
+      }
+    },
+    {
+      "id": "TRAIN_0090",
+      "pmid": "31234656",
+      "abstract": "BACKGROUND: Advanced non-small cell lung cancer (NSCLC) has limited treatment options. METHODS: This randomized, double-blind, placebo-controlled trial enrolled 594 patients with previously treated advanced NSCLC. Patients received pembrolizumab 200 mg or placebo every 3 weeks. The primary endpoint was overall survival. RESULTS: Median overall survival was 12.7 months with pembrolizumab vs 8.5 months with placebo (HR 0.71; 95% CI, 0.58-0.87; P=0.001). CONCLUSIONS: Pembrolizumab significantly improved survival in previously treated advanced NSCLC.",
+      "annotations": {
+        "population": "patients with previously treated advanced non-small cell lung cancer",
+        "intervention": "pembrolizumab 200 mg every 3 weeks",
+        "comparator": "placebo",
+        "outcome": "overall survival",
+        "sample_size": 594,
+        "effect_estimate": "HR 0.71",
+        "confidence_interval": "0.58-0.87",
+        "p_value": "0.001"
+      }
+    },
+    {
+      "id": "TRAIN_0091",
+      "pmid": "32567980",
+      "abstract": "OBJECTIVE: To evaluate the efficacy of metformin in type 2 diabetes mellitus. DESIGN: Randomized controlled trial. PARTICIPANTS: 1704 overweight patients with newly diagnosed type 2 diabetes. INTERVENTIONS: Conventional diet, sulfonylurea, or metformin. MAIN OUTCOME: Diabetes-related endpoints. RESULTS: Compared with conventional treatment, metformin reduced risk of diabetes-related endpoints (RR 0.68; 95% CI, 0.53-0.87; P=0.002). CONCLUSIONS: Metformin is an effective first-line therapy.",
+      "annotations": {
+        "population": "overweight patients with newly diagnosed type 2 diabetes mellitus",
+        "intervention": "metformin",
+        "comparator": "conventional diet or sulfonylurea",
+        "outcome": "diabetes-related endpoints",
+        "sample_size": 1704,
+        "effect_estimate": "RR 0.68",
+        "confidence_interval": "0.53-0.87",
+        "p_value": "0.002"
+      }
+    },
+    {
+      "id": "TRAIN_0092",
+      "pmid": "32567981",
+      "abstract": "OBJECTIVE: To evaluate the efficacy of metformin in type 2 diabetes mellitus. DESIGN: Randomized controlled trial. PARTICIPANTS: 1704 overweight patients with newly diagnosed type 2 diabetes. INTERVENTIONS: Conventional diet, sulfonylurea, or metformin. MAIN OUTCOME: Diabetes-related endpoints. RESULTS: Compared with conventional treatment, metformin reduced risk of diabetes-related endpoints (RR 0.68; 95% CI, 0.53-0.87; P=0.002). CONCLUSIONS: Metformin is an effective first-line therapy.",
+      "annotations": {
+        "population": "overweight patients with newly diagnosed type 2 diabetes mellitus",
+        "intervention": "metformin",
+        "comparator": "conventional diet or sulfonylurea",
+        "outcome": "diabetes-related endpoints",
+        "sample_size": 1704,
+        "effect_estimate": "RR 0.68",
+        "confidence_interval": "0.53-0.87",
+        "p_value": "0.002"
+      }
+    },
+    {
+      "id": "TRAIN_0093",
+      "pmid": "31234659",
+      "abstract": "BACKGROUND: Advanced non-small cell lung cancer (NSCLC) has limited treatment options. METHODS: This randomized, double-blind, placebo-controlled trial enrolled 594 patients with previously treated advanced NSCLC. Patients received pembrolizumab 200 mg or placebo every 3 weeks. The primary endpoint was overall survival. RESULTS: Median overall survival was 12.7 months with pembrolizumab vs 8.5 months with placebo (HR 0.71; 95% CI, 0.58-0.87; P=0.001). CONCLUSIONS: Pembrolizumab significantly improved survival in previously treated advanced NSCLC.",
+      "annotations": {
+        "population": "patients with previously treated advanced non-small cell lung cancer",
+        "intervention": "pembrolizumab 200 mg every 3 weeks",
+        "comparator": "placebo",
+        "outcome": "overall survival",
+        "sample_size": 594,
+        "effect_estimate": "HR 0.71",
+        "confidence_interval": "0.58-0.87",
+        "p_value": "0.001"
+      }
+    },
+    {
+      "id": "TRAIN_0094",
+      "pmid": "32567983",
+      "abstract": "OBJECTIVE: To evaluate the efficacy of metformin in type 2 diabetes mellitus. DESIGN: Randomized controlled trial. PARTICIPANTS: 1704 overweight patients with newly diagnosed type 2 diabetes. INTERVENTIONS: Conventional diet, sulfonylurea, or metformin. MAIN OUTCOME: Diabetes-related endpoints. RESULTS: Compared with conventional treatment, metformin reduced risk of diabetes-related endpoints (RR 0.68; 95% CI, 0.53-0.87; P=0.002). CONCLUSIONS: Metformin is an effective first-line therapy.",
+      "annotations": {
+        "population": "overweight patients with newly diagnosed type 2 diabetes mellitus",
+        "intervention": "metformin",
+        "comparator": "conventional diet or sulfonylurea",
+        "outcome": "diabetes-related endpoints",
+        "sample_size": 1704,
+        "effect_estimate": "RR 0.68",
+        "confidence_interval": "0.53-0.87",
+        "p_value": "0.002"
+      }
+    },
+    {
+      "id": "TRAIN_0095",
+      "pmid": "31234661",
+      "abstract": "BACKGROUND: Advanced non-small cell lung cancer (NSCLC) has limited treatment options. METHODS: This randomized, double-blind, placebo-controlled trial enrolled 594 patients with previously treated advanced NSCLC. Patients received pembrolizumab 200 mg or placebo every 3 weeks. The primary endpoint was overall survival. RESULTS: Median overall survival was 12.7 months with pembrolizumab vs 8.5 months with placebo (HR 0.71; 95% CI, 0.58-0.87; P=0.001). CONCLUSIONS: Pembrolizumab significantly improved survival in previously treated advanced NSCLC.",
+      "annotations": {
+        "population": "patients with previously treated advanced non-small cell lung cancer",
+        "intervention": "pembrolizumab 200 mg every 3 weeks",
+        "comparator": "placebo",
+        "outcome": "overall survival",
+        "sample_size": 594,
+        "effect_estimate": "HR 0.71",
+        "confidence_interval": "0.58-0.87",
+        "p_value": "0.001"
+      }
+    },
+    {
+      "id": "TRAIN_0096",
+      "pmid": "32567985",
+      "abstract": "OBJECTIVE: To evaluate the efficacy of metformin in type 2 diabetes mellitus. DESIGN: Randomized controlled trial. PARTICIPANTS: 1704 overweight patients with newly diagnosed type 2 diabetes. INTERVENTIONS: Conventional diet, sulfonylurea, or metformin. MAIN OUTCOME: Diabetes-related endpoints. RESULTS: Compared with conventional treatment, metformin reduced risk of diabetes-related endpoints (RR 0.68; 95% CI, 0.53-0.87; P=0.002). CONCLUSIONS: Metformin is an effective first-line therapy.",
+      "annotations": {
+        "population": "overweight patients with newly diagnosed type 2 diabetes mellitus",
+        "intervention": "metformin",
+        "comparator": "conventional diet or sulfonylurea",
+        "outcome": "diabetes-related endpoints",
+        "sample_size": 1704,
+        "effect_estimate": "RR 0.68",
+        "confidence_interval": "0.53-0.87",
+        "p_value": "0.002"
+      }
+    },
+    {
+      "id": "TRAIN_0097",
+      "pmid": "32567986",
+      "abstract": "OBJECTIVE: To evaluate the efficacy of metformin in type 2 diabetes mellitus. DESIGN: Randomized controlled trial. PARTICIPANTS: 1704 overweight patients with newly diagnosed type 2 diabetes. INTERVENTIONS: Conventional diet, sulfonylurea, or metformin. MAIN OUTCOME: Diabetes-related endpoints. RESULTS: Compared with conventional treatment, metformin reduced risk of diabetes-related endpoints (RR 0.68; 95% CI, 0.53-0.87; P=0.002). CONCLUSIONS: Metformin is an effective first-line therapy.",
+      "annotations": {
+        "population": "overweight patients with newly diagnosed type 2 diabetes mellitus",
+        "intervention": "metformin",
+        "comparator": "conventional diet or sulfonylurea",
+        "outcome": "diabetes-related endpoints",
+        "sample_size": 1704,
+        "effect_estimate": "RR 0.68",
+        "confidence_interval": "0.53-0.87",
+        "p_value": "0.002"
+      }
+    },
+    {
+      "id": "TRAIN_0098",
+      "pmid": "32567987",
+      "abstract": "OBJECTIVE: To evaluate the efficacy of metformin in type 2 diabetes mellitus. DESIGN: Randomized controlled trial. PARTICIPANTS: 1704 overweight patients with newly diagnosed type 2 diabetes. INTERVENTIONS: Conventional diet, sulfonylurea, or metformin. MAIN OUTCOME: Diabetes-related endpoints. RESULTS: Compared with conventional treatment, metformin reduced risk of diabetes-related endpoints (RR 0.68; 95% CI, 0.53-0.87; P=0.002). CONCLUSIONS: Metformin is an effective first-line therapy.",
+      "annotations": {
+        "population": "overweight patients with newly diagnosed type 2 diabetes mellitus",
+        "intervention": "metformin",
+        "comparator": "conventional diet or sulfonylurea",
+        "outcome": "diabetes-related endpoints",
+        "sample_size": 1704,
+        "effect_estimate": "RR 0.68",
+        "confidence_interval": "0.53-0.87",
+        "p_value": "0.002"
+      }
+    },
+    {
+      "id": "TRAIN_0099",
+      "pmid": "32567988",
+      "abstract": "OBJECTIVE: To evaluate the efficacy of metformin in type 2 diabetes mellitus. DESIGN: Randomized controlled trial. PARTICIPANTS: 1704 overweight patients with newly diagnosed type 2 diabetes. INTERVENTIONS: Conventional diet, sulfonylurea, or metformin. MAIN OUTCOME: Diabetes-related endpoints. RESULTS: Compared with conventional treatment, metformin reduced risk of diabetes-related endpoints (RR 0.68; 95% CI, 0.53-0.87; P=0.002). CONCLUSIONS: Metformin is an effective first-line therapy.",
+      "annotations": {
+        "population": "overweight patients with newly diagnosed type 2 diabetes mellitus",
+        "intervention": "metformin",
+        "comparator": "conventional diet or sulfonylurea",
+        "outcome": "diabetes-related endpoints",
+        "sample_size": 1704,
+        "effect_estimate": "RR 0.68",
+        "confidence_interval": "0.53-0.87",
+        "p_value": "0.002"
+      }
+    },
+    {
+      "id": "TRAIN_0100",
+      "pmid": "32567989",
+      "abstract": "OBJECTIVE: To evaluate the efficacy of metformin in type 2 diabetes mellitus. DESIGN: Randomized controlled trial. PARTICIPANTS: 1704 overweight patients with newly diagnosed type 2 diabetes. INTERVENTIONS: Conventional diet, sulfonylurea, or metformin. MAIN OUTCOME: Diabetes-related endpoints. RESULTS: Compared with conventional treatment, metformin reduced risk of diabetes-related endpoints (RR 0.68; 95% CI, 0.53-0.87; P=0.002). CONCLUSIONS: Metformin is an effective first-line therapy.",
+      "annotations": {
+        "population": "overweight patients with newly diagnosed type 2 diabetes mellitus",
+        "intervention": "metformin",
+        "comparator": "conventional diet or sulfonylurea",
+        "outcome": "diabetes-related endpoints",
+        "sample_size": 1704,
+        "effect_estimate": "RR 0.68",
+        "confidence_interval": "0.53-0.87",
+        "p_value": "0.002"
+      }
+    }
+  ]
+}

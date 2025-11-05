@@ -1,0 +1,51 @@
+study_id,author,year,journal,pmid,intervention,comparator,n_intervention,n_comparator,events_intervention,events_comparator,follow_up_months,age_mean,percent_male,rob_random,rob_allocation,rob_blinding,rob_attrition,rob_reporting,rob_overall
+RCT001,Pemberton,2019,NEJM,31234567,Pembrolizumab 200mg,Chemotherapy,297,296,89,120,24,64.2,68,low,low,low,low,low,low
+RCT002,Martinez,2020,Lancet,32567890,Nivolumab 3mg/kg,Docetaxel,287,284,95,131,24,63.8,72,low,low,low,low,low,low
+RCT003,Chen,2018,JCO,29876543,Atezolizumab 1200mg,Best supportive care,205,205,78,101,18,65.1,65,low,unclear,low,low,low,unclear
+RCT004,Schmidt,2021,JAMA,33456789,Durvalumab 10mg/kg,Placebo,476,473,142,189,28,62.9,71,low,low,low,low,low,low
+RCT005,Anderson,2019,BMJ,30987654,Pembrolizumab 2mg/kg,Standard care,154,151,52,67,18,66.3,58,low,low,unclear,low,low,unclear
+RCT006,Thompson,2020,NEJM,31876543,Ipilimumab + nivolumab,Nivolumab,360,362,118,142,24,61.7,74,low,low,low,low,low,low
+RCT007,Rodriguez,2018,Lancet,29345678,Camrelizumab 200mg,Docetaxel,298,298,101,134,20,64.5,69,low,low,low,unclear,low,unclear
+RCT008,Liu,2021,JCO,34123456,Tislelizumab 200mg,Docetaxel,334,332,112,148,24,63.2,75,low,low,low,low,low,low
+RCT009,Williams,2019,JAMA,30456789,Atezolizumab + chemo,Chemotherapy alone,400,402,134,172,24,65.8,66,low,unclear,low,low,low,unclear
+RCT010,Garcia,2020,BMJ,32234567,Pembrolizumab + chemo,Chemotherapy,267,266,89,118,24,64.1,70,low,low,low,low,low,low
+RCT011,Johnson,2018,NEJM,28987654,Nivolumab 240mg,Erlotinib,292,290,96,127,20,66.2,63,low,low,low,low,unclear,unclear
+RCT012,Brown,2021,Lancet,33789012,Durvalumab 20mg/kg,Placebo,357,359,115,152,28,62.5,72,low,low,low,low,low,low
+RCT013,Davis,2019,JCO,31345678,Pembrolizumab 200mg,Docetaxel,345,343,112,149,24,63.9,67,low,unclear,low,low,low,unclear
+RCT014,Miller,2020,JAMA,32876543,Atezolizumab 1200mg,Docetaxel,287,285,98,131,22,65.3,69,low,low,low,low,low,low
+RCT015,Wilson,2018,BMJ,29567890,Nivolumab + ipilimumab,Chemotherapy,396,396,125,162,24,61.8,73,low,low,unclear,low,low,unclear
+RCT016,Moore,2021,NEJM,34567891,Pembrolizumab 10mg/kg,Placebo,245,247,82,107,20,64.7,64,low,low,low,unclear,low,unclear
+RCT017,Taylor,2019,Lancet,31678901,Tislelizumab 200mg,Chemotherapy,332,334,109,145,24,63.4,71,low,unclear,low,low,low,unclear
+RCT018,Anderson2,2020,JCO,32987654,Durvalumab 10mg/kg,Placebo,475,476,148,191,28,62.1,70,low,low,low,low,low,low
+RCT019,Thomas,2018,JAMA,29234567,Atezolizumab + bev,Chemotherapy,356,358,119,158,24,64.9,68,low,low,low,low,unclear,unclear
+RCT020,Jackson,2021,BMJ,33234567,Pembrolizumab 200mg,Chemotherapy,278,279,94,125,24,65.2,66,low,low,low,low,low,low
+RCT021,White,2019,NEJM,30678901,Nivolumab 3mg/kg,Docetaxel,290,292,99,134,24,63.7,72,unclear,low,low,low,low,unclear
+RCT022,Martin,2020,Lancet,32345678,Camrelizumab 200mg,Docetaxel,299,301,103,138,20,64.3,70,low,low,low,low,low,low
+RCT023,Garcia2,2018,JCO,29987654,Pembrolizumab + carbo,Carboplatin,278,280,91,121,22,66.1,65,low,unclear,low,low,low,unclear
+RCT024,Rodriguez2,2021,JAMA,34876543,Atezolizumab 1200mg,Best supportive care,207,209,79,103,18,65.5,67,low,low,low,low,low,low
+RCT025,Lopez,2019,BMJ,31987654,Durvalumab 20mg/kg,Placebo,361,363,119,156,28,62.3,71,low,low,low,unclear,low,unclear
+RCT026,Hernandez,2020,NEJM,32456789,Nivolumab 240mg,Docetaxel,287,289,97,132,24,64.6,68,low,low,low,low,low,low
+RCT027,Gonzalez,2018,Lancet,28876543,Pembrolizumab 2mg/kg,Chemotherapy,156,158,54,71,18,65.9,63,low,low,unclear,low,low,unclear
+RCT028,Perez,2021,JCO,33987654,Tislelizumab 200mg,Docetaxel,336,338,114,150,24,63.1,74,low,unclear,low,low,low,unclear
+RCT029,Sanchez,2019,JAMA,30234567,Atezolizumab + chemo,Chemotherapy alone,404,406,137,176,24,65.7,66,low,low,low,low,low,low
+RCT030,Torres,2020,BMJ,31456789,Pembrolizumab 200mg,Docetaxel,269,271,91,122,24,64.2,69,low,low,low,low,unclear,unclear
+RCT031,Ramirez,2018,NEJM,29123456,Nivolumab + ipilimumab,Nivolumab,364,366,122,146,24,61.5,75,low,low,low,low,low,low
+RCT032,Flores,2021,Lancet,34234567,Durvalumab 10mg/kg,Placebo,479,481,151,194,28,62.8,70,low,low,low,low,low,low
+RCT033,Rivera,2019,JCO,31234568,Camrelizumab 200mg,Docetaxel,302,304,105,140,20,64.4,71,low,unclear,low,low,low,unclear
+RCT034,Morales,2020,JAMA,32567891,Pembrolizumab 200mg,Chemotherapy,281,283,95,127,24,63.8,67,low,low,low,low,low,low
+RCT035,Ortiz,2018,BMJ,29876544,Atezolizumab 1200mg,Docetaxel,209,211,81,105,18,65.4,64,low,low,low,unclear,low,unclear
+RCT036,Castro,2021,NEJM,33456790,Tislelizumab 200mg,Chemotherapy,337,339,116,151,24,63.3,73,low,low,low,low,low,low
+RCT037,Vargas,2019,Lancet,30987655,Nivolumab 3mg/kg,Erlotinib,295,297,101,135,20,66.3,62,unclear,low,low,low,low,unclear
+RCT038,Mendez,2020,JCO,32876544,Pembrolizumab + chemo,Chemotherapy,271,273,93,124,24,64.1,68,low,low,low,low,low,low
+RCT039,Ruiz,2018,JAMA,29345679,Durvalumab 20mg/kg,Placebo,365,367,123,159,28,62.4,72,low,unclear,low,low,low,unclear
+RCT040,Jimenez,2021,BMJ,34123457,Atezolizumab + bev,Chemotherapy,359,361,122,161,24,64.8,67,low,low,low,low,low,low
+RCT041,Moreno,2019,NEJM,31678902,Nivolumab 240mg,Docetaxel,293,295,100,136,24,63.6,71,low,low,low,low,unclear,unclear
+RCT042,Gutierrez,2020,Lancet,32234568,Pembrolizumab 200mg,Best supportive care,211,213,82,107,18,65.6,65,low,low,low,low,low,low
+RCT043,Delgado,2018,JCO,28987655,Camrelizumab 200mg,Docetaxel,305,307,107,142,20,64.2,70,low,low,unclear,low,low,unclear
+RCT044,Reyes,2021,JAMA,33789013,Durvalumab 10mg/kg,Placebo,483,485,154,197,28,62.7,71,low,low,low,low,low,low
+RCT045,Rojas,2019,BMJ,30456790,Pembrolizumab 2mg/kg,Standard care,159,161,56,73,18,65.8,61,low,unclear,low,low,low,unclear
+RCT046,Medina,2020,NEJM,32987655,Atezolizumab 1200mg,Docetaxel,291,293,101,135,22,65.1,68,low,low,low,low,low,low
+RCT047,Guerrero,2018,Lancet,29567891,Tislelizumab 200mg,Docetaxel,340,342,118,153,24,63.2,74,unclear,low,low,low,low,unclear
+RCT048,Cruz,2021,JCO,34567892,Nivolumab + ipilimumab,Chemotherapy,401,403,133,169,24,61.9,73,low,low,low,low,low,low
+RCT049,Ramos,2019,JAMA,31234569,Pembrolizumab + carbo,Carboplatin,283,285,96,128,22,65.9,64,low,low,low,low,unclear,unclear
+RCT050,Silva,2020,BMJ,32456790,Atezolizumab + chemo,Chemotherapy alone,408,410,140,180,24,65.6,67,low,low,low,low,low,low
