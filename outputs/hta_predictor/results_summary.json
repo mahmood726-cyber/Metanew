@@ -1,0 +1,52 @@
+{
+  "best_model": "Random Forest",
+  "test_accuracy": 1.0,
+  "f1_score": 1.0,
+  "cv_mean": 0.9974999999999999,
+  "cv_std": 0.004999999999999982,
+  "n_train": 800,
+  "n_test": 200,
+  "n_features": 16,
+  "feature_importance": [
+    {
+      "feature": "composite_score",
+      "importance": 0.6502748818308284
+    },
+    {
+      "feature": "cost_effectiveness_score",
+      "importance": 0.08969121970039218
+    },
+    {
+      "feature": "innovation_score",
+      "importance": 0.08880032822098434
+    },
+    {
+      "feature": "clinical_benefit_score",
+      "importance": 0.0744999715478354
+    },
+    {
+      "feature": "discontinuation_rate",
+      "importance": 0.013309181999397847
+    },
+    {
+      "feature": "total_patients_evidence",
+      "importance": 0.011517508538514774
+    },
+    {
+      "feature": "serious_adverse_events_rate",
+      "importance": 0.010904762012694167
+    },
+    {
+      "feature": "icer_per_qaly",
+      "importance": 0.00957969345906808
+    },
+    {
+      "feature": "icer_ratio",
+      "importance": 0.009267894824879889
+    },
+    {
+      "feature": "effect_size",
+      "importance": 0.009170044659323725
+    }
+  ]
+}
