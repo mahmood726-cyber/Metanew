@@ -27,9 +27,9 @@ def client():
 @pytest.fixture
 def auth_headers(client):
     """Get authentication headers for testing"""
-    # Login as admin
+    # Login as admin using OAuth2 endpoint
     response = client.post(
-        "/api/auth/login",
+        "/api/auth/login/oauth",
         data={"username": "admin", "password": "test-admin-password"}
     )
     assert response.status_code == 200
@@ -79,9 +79,9 @@ class TestAuthRoutes:
     """Test authentication routes"""
 
     def test_login_success(self, client):
-        """Test successful login"""
+        """Test successful login via OAuth2 endpoint"""
         response = client.post(
-            "/api/auth/login",
+            "/api/auth/login/oauth",
             data={
                 "username": "admin",
                 "password": "test-admin-password"
@@ -98,7 +98,7 @@ class TestAuthRoutes:
     def test_login_wrong_password(self, client):
         """Test login with wrong password"""
         response = client.post(
-            "/api/auth/login",
+            "/api/auth/login/oauth",
             data={
                 "username": "admin",
                 "password": "wrong-password"
@@ -110,7 +110,7 @@ class TestAuthRoutes:
     def test_login_nonexistent_user(self, client):
         """Test login with nonexistent user"""
         response = client.post(
-            "/api/auth/login",
+            "/api/auth/login/oauth",
             data={
                 "username": "nonexistent",
                 "password": "password"
@@ -137,7 +137,8 @@ class TestAuthRoutes:
         """Test getting current user without auth"""
         response = client.get("/api/auth/me")
 
-        assert response.status_code == 401
+        # 403 is returned when no credentials provided (HTTPBearer auto_error=True)
+        assert response.status_code == 403
 
     def test_logout(self, client, auth_headers):
         """Test logout"""

@@ -147,11 +147,11 @@ async def log_requests(request: Request, call_next):
         raise
 
 
-# Include authentication routes
-app.include_router(auth_router)
+# Include authentication routes with /api prefix
+app.include_router(auth_router, prefix="/api")
 
-# Include AI/ML routes
-app.include_router(ml_router)
+# Include AI/ML routes with /api prefix
+app.include_router(ml_router, prefix="/api")
 
 
 # Health check endpoints (no auth required)
@@ -178,6 +178,39 @@ async def health_check(request: Request):
         "status": "healthy",
         "version": "2.0.0",
         "python_version": sys.version,
+        "timestamp": datetime.utcnow().isoformat()
+    }
+
+
+@app.get("/ready")
+@limiter.limit("60/minute")
+async def readiness_check(request: Request):
+    """Kubernetes readiness probe - checks if app is ready to serve traffic"""
+    # Check critical dependencies
+    try:
+        # Could add database connectivity check, etc.
+        return {
+            "status": "ready",
+            "timestamp": datetime.utcnow().isoformat()
+        }
+    except Exception as e:
+        logger.error(f"Readiness check failed: {str(e)}")
+        return JSONResponse(
+            status_code=503,
+            content={
+                "status": "not_ready",
+                "error": str(e),
+                "timestamp": datetime.utcnow().isoformat()
+            }
+        )
+
+
+@app.get("/live")
+@limiter.limit("60/minute")
+async def liveness_check(request: Request):
+    """Kubernetes liveness probe - checks if app is alive"""
+    return {
+        "status": "alive",
         "timestamp": datetime.utcnow().isoformat()
     }
 
