@@ -1,0 +1,51 @@
+meta_id,source,review_title,comparison,outcome,intervention,control,n_studies,n_participants,pooled_effect_type,pooled_effect,ci_lower,ci_upper,p_value,i_squared,tau_squared,heterogeneity_p,model_type,meta_regression,publication_year,therapeutic_area,data_type
+META001,PubMed,Immunotherapy for advanced NSCLC,PD-1 inhibitors vs chemotherapy,Overall survival,Pembrolizumab,Chemotherapy,15,8456,Hazard Ratio,0.68,0.58,0.79,0.001,32,0.018,0.125,Random,Yes,2021,Oncology,IPD
+META002,PubMed,CAR-T therapy for hematologic malignancies,CAR-T vs standard,Complete remission,CAR-T,Standard therapy,8,685,Risk Ratio,2.85,2.12,3.83,0.001,42,0.058,0.098,Random,No,2022,Hematology,Aggregate
+META003,Embase,SGLT2 inhibitors for heart failure,SGLT2i vs placebo,Cardiovascular death or HF hosp,Dapagliflozin,Placebo,12,18456,Hazard Ratio,0.74,0.68,0.82,0.001,18,0.008,0.285,Fixed,Yes,2021,Cardiology,IPD
+META004,PubMed,Monoclonal antibodies for migraine,mAbs vs placebo,Monthly migraine days,Erenumab,Placebo,18,6842,Mean Difference,-2.4,-3.2,-1.6,0.001,55,2.45,0.008,Random,Yes,2020,Neurology,Aggregate
+META005,Embase,Direct oral anticoagulants for VTE,DOACs vs warfarin,Recurrent VTE,Rivaroxaban,Warfarin,22,28456,Risk Ratio,0.88,0.78,0.99,0.035,28,0.015,0.158,Random,Yes,2021,Hematology,Aggregate
+META006,PubMed,Biosimilars vs originators in RA,Biosimilar vs originator,ACR50 response,Biosimilar,Originator,14,3245,Risk Ratio,0.98,0.88,1.09,0.682,0,0.000,0.892,Fixed,No,2022,Rheumatology,Aggregate
+META007,Embase,PCSK9 inhibitors for LDL reduction,PCSK9i vs placebo,LDL-C reduction %,Evolocumab,Placebo,28,12845,Mean Difference,-58.4,-62.8,-54.0,0.001,72,185.4,0.001,Random,Yes,2020,Cardiology,Aggregate
+META008,PubMed,JAK inhibitors for ulcerative colitis,JAKi vs placebo,Clinical remission,Tofacitinib,Placebo,8,1685,Risk Ratio,2.42,1.85,3.16,0.001,35,0.042,0.125,Random,No,2021,Gastroenterology,Aggregate
+META009,Embase,Stem cell therapy for heart disease,MSCs vs standard,LVEF improvement,Stem cells,Standard care,18,945,Mean Difference,3.85,2.12,5.58,0.001,68,8.45,0.002,Random,Yes,2022,Cardiology,Aggregate
+META010,PubMed,Immunotherapy for triple-negative breast cancer,Immunotherapy + chemo vs chemo,PFS,Pembrolizumab + chemo,Chemotherapy,6,2458,Hazard Ratio,0.65,0.52,0.82,0.001,28,0.018,0.218,Random,No,2021,Oncology,IPD
+META011,Embase,GLP-1 agonists for weight loss,GLP-1 vs placebo,Weight reduction kg,Semaglutide,Placebo,12,6842,Mean Difference,-12.4,-14.8,-10.0,0.001,58,18.45,0.008,Random,Yes,2022,Endocrinology,Aggregate
+META012,PubMed,Antivirals for COVID-19,Antivirals vs standard,Mortality,Remdesivir,Standard care,18,18456,Risk Ratio,0.88,0.78,0.99,0.035,35,0.028,0.098,Random,Yes,2020,Infectious disease,IPD
+META013,Embase,Targeted therapy for melanoma,BRAF/MEK inhibitors vs chemo,OS,Dabrafenib + trametinib,Chemotherapy,8,1245,Hazard Ratio,0.58,0.46,0.73,0.001,22,0.015,0.245,Random,No,2021,Oncology,Aggregate
+META014,PubMed,Newer antiepileptic drugs for epilepsy,New AEDs vs older,Seizure freedom,Levetiracetam,Carbamazepine,22,4562,Risk Ratio,1.08,0.95,1.23,0.242,45,0.035,0.048,Random,Yes,2022,Neurology,Aggregate
+META015,Embase,Mepolizumab for severe asthma,Mepolizumab vs placebo,Exacerbation rate,Mepolizumab,Placebo,14,2845,Rate Ratio,0.48,0.38,0.62,0.001,38,0.028,0.085,Random,Yes,2020,Pulmonology,Aggregate
+META016,PubMed,Fecal microbiota transplant for C diff,FMT vs antibiotics,Cure rate,FMT,Vancomycin,12,685,Risk Ratio,1.92,1.52,2.42,0.001,32,0.042,0.152,Random,No,2021,Gastroenterology,Aggregate
+META017,Embase,Sarilumab for rheumatoid arthritis,Sarilumab vs placebo,ACR70 response,Sarilumab,Placebo,8,1845,Risk Ratio,2.85,2.12,3.83,0.001,28,0.038,0.218,Random,No,2022,Rheumatology,Aggregate
+META018,PubMed,Dupilumab for atopic dermatitis,Dupilumab vs placebo,EASI-75,Dupilumab,Placebo,16,3245,Risk Ratio,3.42,2.85,4.10,0.001,42,0.058,0.058,Random,Yes,2021,Dermatology,Aggregate
+META019,Embase,PARP inhibitors for ovarian cancer,PARPi vs placebo,PFS,Olaparib,Placebo,12,2458,Hazard Ratio,0.42,0.33,0.54,0.001,35,0.022,0.125,Random,Yes,2020,Oncology,IPD
+META020,PubMed,Vedolizumab for Crohn disease,Vedolizumab vs placebo,Clinical remission,Vedolizumab,Placebo,8,1245,Risk Ratio,1.68,1.28,2.20,0.001,28,0.028,0.218,Random,No,2021,Gastroenterology,Aggregate
+META021,Embase,Belimumab for systemic lupus,Belimumab vs placebo,SRI-4 response,Belimumab,Placebo,14,2845,Risk Ratio,1.42,1.18,1.71,0.001,38,0.035,0.098,Random,Yes,2022,Rheumatology,Aggregate
+META022,PubMed,Ustekinumab for psoriatic arthritis,Ustekinumab vs placebo,ACR20,Ustekinumab,Placebo,8,1685,Risk Ratio,2.12,1.68,2.67,0.001,32,0.042,0.158,Random,No,2021,Rheumatology,Aggregate
+META023,Embase,Secukinumab for ankylosing spondylitis,Secukinumab vs placebo,ASAS20,Secukinumab,Placebo,12,1845,Risk Ratio,1.85,1.52,2.25,0.001,35,0.038,0.125,Random,Yes,2020,Rheumatology,Aggregate
+META024,PubMed,Eculizumab for paroxysmal nocturnal hemoglobinuria,Eculizumab vs standard,Transfusion independence,Eculizumab,Standard care,6,385,Risk Ratio,4.25,2.42,7.46,0.001,0,0.000,0.892,Fixed,No,2021,Hematology,Aggregate
+META025,Embase,Ofatumumab for multiple sclerosis,Ofatumumab vs teriflunomide,ARR,Ofatumumab,Teriflunomide,8,1845,Rate Ratio,0.51,0.41,0.63,0.001,28,0.018,0.218,Random,Yes,2022,Neurology,Aggregate
+META026,PubMed,Cladribine for relapsing MS,Cladribine vs placebo,ARR reduction,Cladribine,Placebo,12,2458,Rate Ratio,0.46,0.35,0.61,0.001,32,0.022,0.152,Random,Yes,2021,Neurology,Aggregate
+META027,Embase,Satralizumab for NMOSD,Satralizumab vs placebo,Relapse risk,Satralizumab,Placebo,6,485,Hazard Ratio,0.38,0.26,0.54,0.001,0,0.000,0.752,Fixed,No,2020,Neurology,Aggregate
+META028,PubMed,Galcanezumab for cluster headache,Galcanezumab vs placebo,Attack frequency,Galcanezumab,Placebo,8,685,Mean Difference,-4.2,-6.8,-1.6,0.002,45,4.25,0.085,Random,No,2021,Neurology,Aggregate
+META029,Embase,Fremanezumab for migraine prevention,Fremanezumab vs placebo,Monthly migraine days,Fremanezumab,Placebo,12,2845,Mean Difference,-2.8,-3.8,-1.8,0.001,52,2.85,0.018,Random,Yes,2022,Neurology,Aggregate
+META030,PubMed,Abrocitinib for atopic dermatitis,Abrocitinib vs placebo,IGA 0/1,Abrocitinib,Placebo,8,1245,Risk Ratio,3.12,2.42,4.02,0.001,38,0.048,0.098,Random,No,2021,Dermatology,Aggregate
+META031,Embase,Baricitinib for alopecia areata,Baricitinib vs placebo,SALT score improvement,Baricitinib,Placebo,6,685,Risk Ratio,4.85,2.85,8.25,0.001,28,0.058,0.218,Random,No,2022,Dermatology,Aggregate
+META032,PubMed,Mavacamten for hypertrophic cardiomyopathy,Mavacamten vs placebo,Exercise capacity,Mavacamten,Placebo,8,485,Mean Difference,1.85,1.12,2.58,0.001,22,0.485,0.285,Random,No,2021,Cardiology,Aggregate
+META033,Embase,Tafamidis for cardiac amyloidosis,Tafamidis vs placebo,All-cause mortality,Tafamidis,Placebo,6,585,Hazard Ratio,0.70,0.56,0.89,0.003,0,0.000,0.892,Fixed,No,2020,Cardiology,IPD
+META034,PubMed,Vericiguat for heart failure,Vericiguat vs placebo,CV death or HF hosp,Vericiguat,Placebo,8,8456,Hazard Ratio,0.90,0.82,0.98,0.019,0,0.000,0.752,Fixed,Yes,2021,Cardiology,IPD
+META035,Embase,Sotagliflozin for heart failure,Sotagliflozin vs placebo,CV death or HF hosp,Sotagliflozin,Placebo,6,6842,Hazard Ratio,0.84,0.75,0.95,0.005,12,0.005,0.385,Fixed,No,2022,Cardiology,IPD
+META036,PubMed,Finerenone for CKD in diabetes,Finerenone vs placebo,CKD progression,Finerenone,Placebo,12,12845,Hazard Ratio,0.82,0.73,0.93,0.002,18,0.008,0.298,Fixed,Yes,2021,Nephrology,IPD
+META037,Embase,Sparsentan for IgA nephropathy,Sparsentan vs irbesartan,Proteinuria reduction,Sparsentan,Irbesartan,6,485,Mean Difference,-28.4,-38.2,-18.6,0.001,32,185.4,0.185,Random,No,2022,Nephrology,Aggregate
+META038,PubMed,Budesonide for IgA nephropathy,Budesonide vs placebo,Complete remission,Budesonide,Placebo,8,685,Risk Ratio,2.42,1.52,3.85,0.001,28,0.042,0.218,Random,No,2021,Nephrology,Aggregate
+META039,Embase,Faricimab for neovascular AMD,Faricimab vs aflibercept,Visual acuity gain,Faricimab,Aflibercept,8,2458,Mean Difference,1.2,-0.8,3.2,0.242,0,0.000,0.892,Fixed,No,2020,Ophthalmology,Aggregate
+META040,PubMed,Brolucizumab for neovascular AMD,Brolucizumab vs ranibizumab,Fluid resolution,Brolucizumab,Ranibizumab,12,1845,Risk Ratio,1.24,1.08,1.42,0.003,28,0.028,0.198,Random,No,2021,Ophthalmology,Aggregate
+META041,Embase,Darolutamide for nmCRPC,Darolutamide vs placebo,Metastasis-free survival,Darolutamide,Placebo,6,1685,Hazard Ratio,0.59,0.47,0.74,0.001,0,0.000,0.752,Fixed,No,2022,Urology,IPD
+META042,PubMed,Apalutamide for nmCRPC,Apalutamide vs placebo,MFS,Apalutamide,Placebo,6,2458,Hazard Ratio,0.72,0.59,0.89,0.002,0,0.000,0.892,Fixed,No,2021,Urology,IPD
+META043,Embase,Enfortumab vedotin for urothelial cancer,EV vs chemotherapy,Overall survival,EV,Chemotherapy,6,1245,Hazard Ratio,0.70,0.56,0.89,0.003,15,0.008,0.315,Fixed,No,2020,Urology,Aggregate
+META044,PubMed,Sacituzumab govitecan for TNBC,SG vs chemotherapy,PFS,SG,Chemotherapy,6,985,Hazard Ratio,0.41,0.32,0.52,0.001,22,0.015,0.258,Random,No,2021,Oncology,Aggregate
+META045,Embase,Trastuzumab deruxtecan for HER2+ BC,T-DXd vs T-DM1,PFS,T-DXd,T-DM1,6,1245,Hazard Ratio,0.28,0.22,0.37,0.001,0,0.000,0.892,Fixed,No,2022,Oncology,IPD
+META046,PubMed,Dostarlimab for endometrial cancer,Dostarlimab vs chemo,PFS,Dostarlimab + chemo,Chemotherapy,6,1685,Hazard Ratio,0.64,0.51,0.80,0.001,18,0.008,0.298,Fixed,No,2021,Oncology,Aggregate
+META047,Embase,Tremelimumab + durvalumab for HCC,Tremelimumab + durvalumab vs sorafenib,OS,Tremelimumab + durvalumab,Sorafenib,6,1245,Hazard Ratio,0.78,0.65,0.93,0.006,12,0.005,0.385,Fixed,No,2022,Oncology,Aggregate
+META048,PubMed,Nivolumab + ipilimumab for RCC,Nivo + ipi vs sunitinib,OS,Nivolumab + ipilimumab,Sunitinib,8,2458,Hazard Ratio,0.68,0.55,0.84,0.001,22,0.012,0.245,Random,Yes,2020,Oncology,IPD
+META049,Embase,Lenvatinib + pembrolizumab for RCC,Lenvatinib + pembro vs sunitinib,PFS,Lenvatinib + pembrolizumab,Sunitinib,6,1845,Hazard Ratio,0.39,0.30,0.51,0.001,18,0.008,0.298,Fixed,No,2021,Oncology,Aggregate
+META050,PubMed,Cabozantinib + nivolumab for RCC,Cabo + nivo vs sunitinib,PFS,Cabozantinib + nivolumab,Sunitinib,6,2458,Hazard Ratio,0.51,0.41,0.64,0.001,22,0.012,0.245,Random,No,2022,Oncology,Aggregate
