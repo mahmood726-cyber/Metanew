@@ -1,0 +1,73 @@
+{
+  "version": "FIXED_V2",
+  "fixes_applied": [
+    "Increased calibration set from 20% to 30%",
+    "Replaced normal approximation with empirical method",
+    "Removed HRS as novel innovation (now exploratory)",
+    "Corrected calibration slope interpretation",
+    "More realistic utility claims"
+  ],
+  "best_model": "Random Forest",
+  "point_prediction": {
+    "r2": 0.42317019876340534,
+    "rmse": 24.58350684959129,
+    "mae": 17.47220285476039
+  },
+  "conformal_intervals": {
+    "90": {
+      "coverage": 0.9081632653061225,
+      "width": 60.294728372620625,
+      "quantile": 41.52864764998491,
+      "theoretical_minimum": 0.8939597315436242,
+      "meets_guarantee": true
+    },
+    "95": {
+      "coverage": 0.9489795918367347,
+      "width": 66.43745565331676,
+      "quantile": 47.176996994599065,
+      "theoretical_minimum": 0.9436241610738255,
+      "meets_guarantee": true
+    },
+    "99": {
+      "coverage": 0.9591836734693877,
+      "width": 78.71625434173212,
+      "quantile": 60.26041171869462,
+      "theoretical_minimum": 0.9833557046979866,
+      "meets_guarantee": false
+    }
+  },
+  "calibration": {
+    "slope": 1.1196220538316888,
+    "intercept": 2.46844000120515,
+    "mean_calibration_error": 5.840970424564043,
+    "interpretation": "underprediction"
+  },
+  "heterogeneity_risk_score": {
+    "status": "exploratory",
+    "caveat": "Weights and thresholds not validated",
+    "low": 0,
+    "moderate": 64,
+    "high": 33,
+    "very_high": 1
+  },
+  "n_train": 243,
+  "n_cal": 147,
+  "n_test": 98,
+  "features": [
+    "n_studies",
+    "log_n_studies",
+    "total_participants",
+    "log_total_participants",
+    "mean_sample_size",
+    "sd_sample_size",
+    "range_sample_size",
+    "cv_sample_size",
+    "mean_events_exp",
+    "sd_events_exp",
+    "mean_events_con",
+    "sd_events_con",
+    "mean_baseline_risk",
+    "mean_allocation_ratio",
+    "sd_allocation_ratio"
+  ]
+}
