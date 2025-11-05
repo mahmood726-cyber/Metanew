@@ -1,313 +1,332 @@
 """
 Comprehensive Tests for Cache Manager
-Tests for caching functionality and cache operations
+Tests for Parquet-based caching functionality
 """
 import pytest
-import time
-from datetime import datetime, timedelta
-from unittest.mock import patch, MagicMock
+import pandas as pd
+import numpy as np
+import tempfile
+import shutil
+from pathlib import Path
 
 
 class TestCacheManager:
     """Test cache manager functionality"""
 
     @pytest.fixture
-    def cache_manager(self):
+    def temp_cache_dir(self):
+        """Create temporary cache directory"""
+        temp_dir = tempfile.mkdtemp()
+        yield temp_dir
+        shutil.rmtree(temp_dir)
+
+    @pytest.fixture
+    def cache_manager(self, temp_cache_dir):
         """Create cache manager instance"""
         from cache.cache_manager import CacheManager
-        return CacheManager()
+        return CacheManager(cache_dir=temp_cache_dir)
+
+    @pytest.fixture
+    def sample_dataframe(self):
+        """Create sample DataFrame for caching"""
+        return pd.DataFrame({
+            'study_id': [1, 2, 3, 4, 5],
+            'effect_size': [0.5, 0.6, 0.4, 0.55, 0.45],
+            'std_error': [0.1, 0.12, 0.09, 0.11, 0.10],
+            'sample_size': [100, 150, 200, 120, 180]
+        })
 
     def test_cache_manager_initialization(self, cache_manager):
         """Test cache manager can be initialized"""
         assert cache_manager is not None
+        assert cache_manager.cache_dir.exists()
 
-    def test_set_and_get_value(self, cache_manager):
-        """Test setting and getting cache values"""
-        key = "test_key"
-        value = "test_value"
+    def test_put_and_get_dataframe(self, cache_manager, sample_dataframe):
+        """Test caching and retrieving DataFrames"""
+        analysis_type = "meta_analysis"
+        parameters = {"model": "random_effects", "method": "DL"}
 
-        cache_manager.set(key, value)
-        retrieved = cache_manager.get(key)
+        # Cache the data
+        cache_key = cache_manager.put(analysis_type, parameters, sample_dataframe)
 
-        assert retrieved == value
+        # Retrieve it
+        retrieved = cache_manager.get(analysis_type, parameters)
 
-    def test_get_nonexistent_key_returns_none(self, cache_manager):
-        """Test getting nonexistent key returns None"""
-        result = cache_manager.get("nonexistent_key_12345")
+        assert retrieved is not None
+        assert isinstance(retrieved, pd.DataFrame)
+        assert len(retrieved) == len(sample_dataframe)
+        pd.testing.assert_frame_equal(retrieved, sample_dataframe)
 
+    def test_get_nonexistent_returns_none(self, cache_manager):
+        """Test getting nonexistent cache returns None"""
+        result = cache_manager.get("nonexistent_type", {"param": "value"})
         assert result is None
 
-    def test_cache_expiration(self, cache_manager):
-        """Test cache entries expire after TTL"""
-        key = "expiring_key"
-        value = "expiring_value"
-        ttl = 1  # 1 second
+    def test_cache_key_generation_deterministic(self, cache_manager, sample_dataframe):
+        """Test cache key generation is deterministic"""
+        analysis_type = "meta_analysis"
+        parameters = {"model": "random_effects", "method": "DL"}
 
-        cache_manager.set(key, value, ttl=ttl)
+        key1 = cache_manager.put(analysis_type, parameters, sample_dataframe)
 
-        # Should exist immediately
-        assert cache_manager.get(key) == value
+        # Same parameters should generate same key
+        key2 = cache_manager._generate_cache_key(analysis_type, parameters)
 
-        # Wait for expiration
-        time.sleep(ttl + 0.5)
+        assert key1 == key2
 
-        # Should be None after expiration
-        assert cache_manager.get(key) is None
+    def test_different_parameters_different_keys(self, cache_manager, sample_dataframe):
+        """Test different parameters generate different cache keys"""
+        analysis_type = "meta_analysis"
 
-    def test_delete_key(self, cache_manager):
-        """Test deleting cache keys"""
-        key = "delete_key"
-        value = "delete_value"
+        key1 = cache_manager.put(analysis_type, {"model": "fixed"}, sample_dataframe)
+        key2 = cache_manager.put(analysis_type, {"model": "random"}, sample_dataframe)
 
-        cache_manager.set(key, value)
-        assert cache_manager.get(key) == value
+        assert key1 != key2
 
-        cache_manager.delete(key)
-        assert cache_manager.get(key) is None
+    def test_invalidate_cache(self, cache_manager, sample_dataframe):
+        """Test invalidating cached entries"""
+        analysis_type = "meta_analysis"
+        parameters = {"model": "random_effects"}
 
-    def test_clear_all_cache(self, cache_manager):
-        """Test clearing all cache entries"""
-        cache_manager.set("key1", "value1")
-        cache_manager.set("key2", "value2")
+        # Cache data
+        cache_manager.put(analysis_type, parameters, sample_dataframe)
+        assert cache_manager.get(analysis_type, parameters) is not None
 
-        cache_manager.clear()
+        # Invalidate
+        result = cache_manager.invalidate(analysis_type, parameters)
+        assert result is True
 
-        assert cache_manager.get("key1") is None
-        assert cache_manager.get("key2") is None
+        # Should be None after invalidation
+        assert cache_manager.get(analysis_type, parameters) is None
 
-    def test_cache_hit_tracking(self, cache_manager):
-        """Test cache hit/miss tracking"""
-        key = "tracked_key"
-        value = "tracked_value"
+    def test_invalidate_nonexistent_returns_false(self, cache_manager):
+        """Test invalidating nonexistent cache returns False"""
+        result = cache_manager.invalidate("nonexistent", {"param": "value"})
+        assert result is False
 
-        cache_manager.set(key, value)
+    def test_cache_with_metadata(self, cache_manager, sample_dataframe):
+        """Test caching with metadata"""
+        analysis_type = "meta_analysis"
+        parameters = {"model": "random_effects"}
+        metadata = {"computation_time": 1.5, "n_studies": 5}
 
-        # Hit
-        cache_manager.get(key)
+        cache_manager.put(analysis_type, parameters, sample_dataframe, metadata)
 
-        # Miss
-        cache_manager.get("nonexistent")
+        # Verify it was cached
+        retrieved = cache_manager.get(analysis_type, parameters)
+        assert retrieved is not None
 
-        stats = cache_manager.get_stats()
-        assert "hits" in stats or "hit_count" in stats
-        assert "misses" in stats or "miss_count" in stats
-
-    def test_cache_with_complex_objects(self, cache_manager):
-        """Test caching complex Python objects"""
-        key = "complex_key"
-        value = {
-            "nested": {
-                "data": [1, 2, 3],
-                "string": "test"
-            },
-            "number": 42
-        }
-
-        cache_manager.set(key, value)
-        retrieved = cache_manager.get(key)
-
-        assert retrieved == value
-        assert retrieved["nested"]["data"] == [1, 2, 3]
-
-
-class TestCacheDecorator:
-    """Test cache decorator functionality"""
-
-    def test_cache_decorator_basic(self):
-        """Test basic cache decorator usage"""
-        from cache.cache_manager import cache_result
-
-        call_count = 0
-
-        @cache_result(ttl=60)
-        def expensive_function(x):
-            nonlocal call_count
-            call_count += 1
-            return x * 2
-
-        # First call - should execute function
-        result1 = expensive_function(5)
-        assert result1 == 10
-        assert call_count == 1
-
-        # Second call - should use cache
-        result2 = expensive_function(5)
-        assert result2 == 10
-        assert call_count == 1  # Not incremented
-
-    def test_cache_decorator_with_different_args(self):
-        """Test cache decorator with different arguments"""
-        from cache.cache_manager import cache_result
-
-        @cache_result(ttl=60)
-        def add(a, b):
-            return a + b
-
-        result1 = add(1, 2)
-        result2 = add(3, 4)
-
-        assert result1 == 3
-        assert result2 == 7
-        # Different args should give different results
-
-
-class TestCacheStatistics:
-    """Test cache statistics tracking"""
-
-    @pytest.fixture
-    def cache_manager(self):
-        """Create fresh cache manager"""
-        from cache.cache_manager import CacheManager
-        manager = CacheManager()
-        manager.clear()
-        return manager
-
-    def test_get_cache_statistics(self, cache_manager):
+    def test_get_stats(self, cache_manager, sample_dataframe):
         """Test retrieving cache statistics"""
+        # Add some cached data
+        cache_manager.put("meta_analysis", {"model": "fixed"}, sample_dataframe)
+        cache_manager.put("nma", {"model": "random"}, sample_dataframe)
+
         stats = cache_manager.get_stats()
 
         assert stats is not None
         assert isinstance(stats, dict)
+        assert "total_entries" in stats
+        assert "total_size_mb" in stats
+        assert stats["total_entries"] >= 2
 
-    def test_cache_size_tracking(self, cache_manager):
-        """Test cache size is tracked"""
-        cache_manager.set("key1", "value1")
-        cache_manager.set("key2", "value2")
+    def test_cache_access_tracking(self, cache_manager, sample_dataframe):
+        """Test that cache access is tracked"""
+        analysis_type = "meta_analysis"
+        parameters = {"model": "random_effects"}
 
+        # Cache data
+        cache_manager.put(analysis_type, parameters, sample_dataframe)
+
+        # Access multiple times
+        cache_manager.get(analysis_type, parameters)
+        cache_manager.get(analysis_type, parameters)
+        cache_manager.get(analysis_type, parameters)
+
+        # Check stats
         stats = cache_manager.get_stats()
+        assert stats["total_entries"] >= 1
 
-        assert "size" in stats or "total_keys" in stats
-        size = stats.get("size") or stats.get("total_keys")
-        assert size >= 2
+    def test_list_cached_analyses(self, cache_manager, sample_dataframe):
+        """Test listing cached analyses"""
+        cache_manager.put("meta_analysis", {"model": "fixed"}, sample_dataframe)
+        cache_manager.put("meta_analysis", {"model": "random"}, sample_dataframe)
+        cache_manager.put("nma", {"model": "random"}, sample_dataframe)
 
-    def test_hit_rate_calculation(self, cache_manager):
-        """Test hit rate calculation"""
-        # Set values
-        cache_manager.set("key1", "value1")
-        cache_manager.set("key2", "value2")
+        # List all
+        all_analyses = cache_manager.list_cached_analyses()
+        assert len(all_analyses) >= 3
 
-        # Create hits and misses
-        cache_manager.get("key1")  # Hit
-        cache_manager.get("key2")  # Hit
-        cache_manager.get("nonexistent1")  # Miss
-        cache_manager.get("nonexistent2")  # Miss
+        # List filtered by type
+        meta_analyses = cache_manager.list_cached_analyses("meta_analysis")
+        assert len(meta_analyses) >= 2
 
-        stats = cache_manager.get_stats()
+    def test_clear_old_entries(self, cache_manager, sample_dataframe):
+        """Test clearing old cache entries"""
+        # Add entry
+        cache_manager.put("meta_analysis", {"model": "fixed"}, sample_dataframe)
 
-        assert "hit_rate" in stats or ("hits" in stats and "misses" in stats)
+        # Clear entries older than 365 days (should keep current entry)
+        cleared = cache_manager.clear_old(days=365)
+
+        # Nothing should be cleared since entry is fresh
+        assert cleared == 0
+
+        # Entry should still exist
+        result = cache_manager.get("meta_analysis", {"model": "fixed"})
+        assert result is not None
 
 
-class TestCachePatternsMatching:
-    """Test cache pattern matching and bulk operations"""
+class TestCacheWrapperIntegration:
+    """Test cache wrapper for meta-analysis"""
 
     @pytest.fixture
-    def cache_manager(self):
-        """Create cache manager"""
+    def temp_cache_dir(self):
+        """Create temporary cache directory"""
+        temp_dir = tempfile.mkdtemp()
+        yield temp_dir
+        shutil.rmtree(temp_dir)
+
+    @pytest.fixture
+    def cache_wrapper(self, temp_cache_dir):
+        """Create cache wrapper instance"""
+        from cache.cache_manager import CacheManager, MetaAnalysisCacheWrapper
+        cache_manager = CacheManager(cache_dir=temp_cache_dir)
+        return MetaAnalysisCacheWrapper(cache_manager)
+
+    def test_wrapper_initialization(self, cache_wrapper):
+        """Test wrapper can be initialized"""
+        assert cache_wrapper is not None
+        assert cache_wrapper.cache is not None
+
+    def test_run_with_cache_first_run(self, cache_wrapper):
+        """Test first run computes result"""
+        call_count = 0
+
+        def analysis_func():
+            nonlocal call_count
+            call_count += 1
+            return pd.DataFrame({'result': [1, 2, 3]})
+
+        result = cache_wrapper.run_with_cache(
+            analysis_func,
+            "test_analysis",
+            {"param": "value"}
+        )
+
+        assert call_count == 1
+        assert len(result) == 3
+
+    def test_run_with_cache_second_run_uses_cache(self, cache_wrapper):
+        """Test second run uses cached result"""
+        call_count = 0
+
+        def analysis_func():
+            nonlocal call_count
+            call_count += 1
+            return pd.DataFrame({'result': [1, 2, 3]})
+
+        # First run
+        result1 = cache_wrapper.run_with_cache(
+            analysis_func,
+            "test_analysis",
+            {"param": "value"}
+        )
+
+        # Second run - should use cache
+        result2 = cache_wrapper.run_with_cache(
+            analysis_func,
+            "test_analysis",
+            {"param": "value"}
+        )
+
+        # Function should only be called once
+        assert call_count == 1
+        pd.testing.assert_frame_equal(result1, result2)
+
+    def test_force_refresh(self, cache_wrapper):
+        """Test force refresh bypasses cache"""
+        call_count = 0
+
+        def analysis_func():
+            nonlocal call_count
+            call_count += 1
+            return pd.DataFrame({'result': [call_count]})
+
+        # First run
+        result1 = cache_wrapper.run_with_cache(
+            analysis_func,
+            "test_analysis",
+            {"param": "value"}
+        )
+
+        # Second run with force_refresh
+        result2 = cache_wrapper.run_with_cache(
+            analysis_func,
+            "test_analysis",
+            {"param": "value"},
+            force_refresh=True
+        )
+
+        # Function should be called twice
+        assert call_count == 2
+        assert result1.iloc[0]['result'] == 1
+        assert result2.iloc[0]['result'] == 2
+
+
+class TestCacheCompression:
+    """Test cache compression and storage"""
+
+    @pytest.fixture
+    def temp_cache_dir(self):
+        """Create temporary cache directory"""
+        temp_dir = tempfile.mkdtemp()
+        yield temp_dir
+        shutil.rmtree(temp_dir)
+
+    @pytest.fixture
+    def cache_manager(self, temp_cache_dir):
+        """Create cache manager instance"""
         from cache.cache_manager import CacheManager
-        return CacheManager()
+        return CacheManager(cache_dir=temp_cache_dir)
 
-    def test_delete_by_pattern(self, cache_manager):
-        """Test deleting cache keys by pattern"""
-        # Set keys with pattern
-        cache_manager.set("user:1:profile", "data1")
-        cache_manager.set("user:2:profile", "data2")
-        cache_manager.set("product:1:info", "data3")
+    def test_large_dataframe_caching(self, cache_manager):
+        """Test caching large DataFrames"""
+        # Create large DataFrame
+        large_df = pd.DataFrame({
+            'study_id': range(1000),
+            'effect_size': np.random.randn(1000),
+            'std_error': np.random.uniform(0.1, 0.5, 1000),
+            'sample_size': np.random.randint(50, 500, 1000)
+        })
 
-        # Delete all user keys
-        cache_manager.delete_pattern("user:*")
+        analysis_type = "large_meta_analysis"
+        parameters = {"n_studies": 1000}
 
-        # User keys should be gone
-        assert cache_manager.get("user:1:profile") is None
-        assert cache_manager.get("user:2:profile") is None
+        # Cache it
+        cache_manager.put(analysis_type, parameters, large_df)
 
-        # Product key should remain
-        assert cache_manager.get("product:1:info") == "data3"
+        # Retrieve it
+        retrieved = cache_manager.get(analysis_type, parameters)
 
-    def test_get_keys_by_pattern(self, cache_manager):
-        """Test getting keys by pattern"""
-        cache_manager.set("ml:model:1", "data1")
-        cache_manager.set("ml:model:2", "data2")
-        cache_manager.set("api:route:1", "data3")
+        assert retrieved is not None
+        assert len(retrieved) == 1000
+        pd.testing.assert_frame_equal(retrieved, large_df)
 
-        keys = cache_manager.keys("ml:model:*")
+    def test_compression_reduces_size(self, cache_manager, temp_cache_dir):
+        """Test that Parquet compression reduces file size"""
+        # Create DataFrame with repetitive data (compresses well)
+        df = pd.DataFrame({
+            'category': ['A'] * 500 + ['B'] * 500,
+            'value': [1.0] * 500 + [2.0] * 500
+        })
 
-        assert len(keys) == 2
-        assert "ml:model:1" in keys
-        assert "ml:model:2" in keys
+        cache_manager.put("test_analysis", {"param": "value"}, df)
 
+        stats = cache_manager.get_stats()
 
-class TestCacheEviction:
-    """Test cache eviction policies"""
-
-    def test_lru_eviction(self):
-        """Test LRU cache eviction"""
-        from cache.cache_manager import LRUCache
-
-        cache = LRUCache(max_size=2)
-
-        cache.set("key1", "value1")
-        cache.set("key2", "value2")
-        cache.set("key3", "value3")  # Should evict key1
-
-        assert cache.get("key1") is None  # Evicted
-        assert cache.get("key2") == "value2"
-        assert cache.get("key3") == "value3"
-
-    def test_ttl_eviction(self):
-        """Test TTL-based eviction"""
-        from cache.cache_manager import CacheManager
-
-        cache = CacheManager()
-        cache.set("key1", "value1", ttl=1)
-
-        assert cache.get("key1") == "value1"
-
-        time.sleep(1.5)
-
-        assert cache.get("key1") is None
-
-
-class TestCacheNamespacing:
-    """Test cache namespacing"""
-
-    def test_namespaced_cache(self):
-        """Test cache with namespaces"""
-        from cache.cache_manager import CacheManager
-
-        cache = CacheManager(namespace="test_namespace")
-
-        cache.set("key1", "value1")
-
-        # Should be accessible in this namespace
-        assert cache.get("key1") == "value1"
-
-
-class TestConcurrentCacheAccess:
-    """Test concurrent cache access"""
-
-    def test_thread_safe_operations(self):
-        """Test cache operations are thread-safe"""
-        from cache.cache_manager import CacheManager
-        import threading
-
-        cache = CacheManager()
-        results = []
-
-        def write_to_cache(i):
-            cache.set(f"key{i}", f"value{i}")
-            results.append(cache.get(f"key{i}"))
-
-        threads = [threading.Thread(target=write_to_cache, args=(i,)) for i in range(10)]
-
-        for thread in threads:
-            thread.start()
-
-        for thread in threads:
-            thread.join()
-
-        # All operations should have succeeded
-        assert len(results) == 10
-        assert None not in results
+        # Compressed size should be relatively small
+        assert stats["total_size_mb"] < 1.0  # Should be much less than 1 MB
 
 
 if __name__ == "__main__":
