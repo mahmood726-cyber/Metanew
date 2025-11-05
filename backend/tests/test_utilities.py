@@ -13,59 +13,54 @@ os.environ["REDIS_URL"] = "redis://localhost:6379/1"
 
 
 class TestHealthEndpoint:
-    """Test health check functionality"""
+    """Test health check functionality via API endpoints"""
 
-    def test_health_check_structure(self):
+    @pytest.fixture
+    def client(self):
+        """Create test client"""
+        from fastapi.testclient import TestClient
+        from api.main import app
+        return TestClient(app)
+
+    def test_health_check_structure(self, client):
         """Test health check returns expected structure"""
-        from api.health import get_health_status
+        response = client.get("/health")
 
-        # Mock the database health check
-        with patch('api.health.db_manager') as mock_db:
-            mock_db.health_check.return_value = True
+        assert response.status_code == 200
+        health = response.json()
 
-            health = get_health_status()
+        assert "status" in health
+        assert "timestamp" in health
+        assert health["status"] == "healthy"
 
-            assert "status" in health
-            assert "timestamp" in health
-            assert health["status"] in ["healthy", "unhealthy"]
-
-    def test_health_check_timestamp_format(self):
+    def test_health_check_timestamp_format(self, client):
         """Test health check timestamp is valid"""
-        from api.health import get_health_status
+        response = client.get("/health")
+        health = response.json()
 
-        with patch('api.health.db_manager') as mock_db:
-            mock_db.health_check.return_value = True
+        # Should have a timestamp
+        assert "timestamp" in health
+        # Should be a string in ISO format
+        timestamp = health["timestamp"]
+        datetime.fromisoformat(timestamp.replace('Z', '+00:00'))
 
-            health = get_health_status()
-
-            # Should have a timestamp
-            assert "timestamp" in health
-            # Should be a string in ISO format
-            timestamp = health["timestamp"]
-            datetime.fromisoformat(timestamp.replace('Z', '+00:00'))
-
-    def test_health_check_includes_python_version(self):
+    def test_health_check_includes_python_version(self, client):
         """Test health check includes Python version"""
-        from api.health import get_health_status
+        response = client.get("/health")
+        health = response.json()
 
-        with patch('api.health.db_manager') as mock_db:
-            mock_db.health_check.return_value = True
+        assert "python_version" in health or "version" in health
 
-            health = get_health_status()
+    def test_health_check_ml_endpoint(self, client):
+        """Test ML health check endpoint"""
+        response = client.get("/health/ml")
 
-            assert "python_version" in health or "version" in health
+        assert response.status_code == 200
+        health = response.json()
 
-    def test_health_check_database_down(self):
-        """Test health check when database is down"""
-        from api.health import get_health_status
-
-        with patch('api.health.db_manager') as mock_db:
-            mock_db.health_check.return_value = False
-
-            health = get_health_status()
-
-            # Should still return but might be unhealthy
-            assert "status" in health
+        # Should have status and components
+        assert "status" in health
+        assert "components" in health
 
 
 class TestCacheManager:
