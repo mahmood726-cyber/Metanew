@@ -1,0 +1,20 @@
+{
+  "features": [
+    "effect_size",
+    "icer_per_qaly",
+    "serious_adverse_events_rate",
+    "discontinuation_rate",
+    "n_rcts",
+    "n_observational_studies",
+    "total_patients_evidence",
+    "cost_effectiveness_score",
+    "clinical_benefit_score",
+    "innovation_score",
+    "time_to_decision_months",
+    "market_exclusivity_years",
+    "certainty_score",
+    "icer_ratio",
+    "total_studies",
+    "composite_score"
+  ]
+}

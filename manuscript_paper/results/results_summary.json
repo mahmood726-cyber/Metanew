@@ -1,0 +1,49 @@
+{
+  "best_model": "Gradient Boosting",
+  "rmse": 0.055401925497792194,
+  "mae": 0.027138871031769447,
+  "r2": 0.9945339279353202,
+  "n_train": 56199,
+  "n_test": 24086,
+  "n_features": 9,
+  "feature_importance": [
+    {
+      "feature": "event_rate_diff",
+      "importance": 0.7358997559121702
+    },
+    {
+      "feature": "allocation_ratio",
+      "importance": 0.08562245001385095
+    },
+    {
+      "feature": "exp_event_rate",
+      "importance": 0.0810272292484364
+    },
+    {
+      "feature": "con_event_rate",
+      "importance": 0.07453370669746655
+    },
+    {
+      "feature": "log_total_events",
+      "importance": 0.010565928075539717
+    },
+    {
+      "feature": "total_events",
+      "importance": 0.0048872964346412615
+    },
+    {
+      "feature": "log_total_n",
+      "importance": 0.004105222657923898
+    },
+    {
+      "feature": "total_n",
+      "importance": 0.00326135783595109
+    },
+    {
+      "feature": "years_since_2000",
+      "importance": 9.705312401997172e-05
+    }
+  ],
+  "data_source": "Pairwise70 - Real Cochrane Reviews",
+  "n_cochrane_reviews": 501
+}
