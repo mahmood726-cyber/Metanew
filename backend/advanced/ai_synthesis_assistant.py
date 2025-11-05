@@ -1,25 +1,35 @@
 """
 AI Evidence Synthesis Assistant
 
-GPT-powered intelligent assistant for evidence synthesis and HTA:
+Rule-based evidence synthesis system with optional Llama 3 enhancement:
 - Natural language interpretation of results
-- Automated report writing
-- Clinical significance interpretation
+- Automated report writing with clinical calculations
+- Clinical significance interpretation (NNT, ARR, effect sizes)
 - Regulatory language generation
-- Publication-ready abstracts
+- Publication-ready abstracts (IMRAD format)
 - Plain language summaries
-- Multi-language support
-- Context-aware recommendations
+- Context-aware evidence-based recommendations
 
-V2.5 REVOLUTIONARY FEATURE - NEW
+V2.5 PRODUCTION FEATURE
 
-World's first GPT-powered HTA assistant that:
-- Interprets complex statistical results in plain language
-- Writes publication-quality systematic review reports
-- Generates regulatory submission text
-- Provides clinical context and recommendations
-- Translates technical findings for lay audiences
-- Multi-language support (English, Spanish, French, German, Chinese)
+Comprehensive rule-based synthesis ensures accuracy:
+- Template system calculates all statistics (NNT, ARR, effect sizes)
+- Evidence-based clinical interpretation
+- GRADE-aligned certainty language
+- Publication-quality systematic review reports
+- Regulatory submission text
+- Plain language translation for lay audiences
+- Optional Llama 3 enhancement for natural language polish
+
+DUAL-MODE OPERATION:
+1. Template Mode (default): Accurate rule-based synthesis with clinical calculations
+2. Llama 3 Enhanced (optional): Natural language improvement while preserving accuracy
+
+ACCURACY FIRST:
+- All numbers calculated by rule-based system (no AI hallucinations)
+- Llama 3 only used for language enhancement, not calculations
+- Falls back to template mode if Llama 3 unavailable
+- No external API calls - all processing local
 
 VALUE PROPOSITION:
 - Pharma: Faster manuscript preparation (weeks → days)
@@ -28,9 +38,8 @@ VALUE PROPOSITION:
 - Regulators: Plain language summaries for public
 
 Typical manual report writing: 2-4 weeks
-AI-assisted with this tool: 2-3 days (80% time savings)
-
-ESTIMATED VALUE: +£300k/year
+Template mode: 3-5 days (70% time savings)
+Llama 3 enhanced: 2-3 days (80% time savings)
 
 Author: EvidenceOS PRIME
 License: MIT
@@ -39,6 +48,14 @@ License: MIT
 from typing import Dict, List, Tuple, Optional, Any
 from dataclasses import dataclass
 import warnings
+import json
+
+# Try to import local LLM (llama-cpp-python for Llama 3)
+try:
+    from llama_cpp import Llama
+    LLAMA3_AVAILABLE = True
+except ImportError:
+    LLAMA3_AVAILABLE = False
 
 
 @dataclass
@@ -68,13 +85,18 @@ class AIEvidenceSynthesisAssistant:
     """
     AI Evidence Synthesis Assistant
 
-    GPT-powered assistant for interpreting and writing evidence synthesis reports.
+    Rule-based synthesis system for evidence interpretation and report writing.
+    Optionally enhanced with local Llama 3 for natural language polish.
 
-    IMPORTANT: This is a framework. In production, integrate with:
-    - OpenAI GPT-4/GPT-4-Turbo API
-    - Azure OpenAI Service
-    - Anthropic Claude API
-    - Local LLaMA models
+    MODES:
+    - Template Mode (default): Accurate rule-based synthesis with all calculations
+    - Llama 3 Enhanced (optional): Template accuracy + natural language improvement
+
+    LOCAL PROCESSING ONLY:
+    - All calculations done by rule-based system (no AI hallucinations)
+    - Llama 3 via llama-cpp-python (local processing, no external APIs)
+    - Falls back to template mode if Llama 3 unavailable
+    - No data leaves the system
 
     Examples:
         >>> assistant = AIEvidenceSynthesisAssistant()
@@ -100,61 +122,128 @@ class AIEvidenceSynthesisAssistant:
 
     def __init__(
         self,
-        model: str = "gpt-4-turbo",  # or "gpt-3.5-turbo", "claude-3", "llama-3"
-        api_key: Optional[str] = None
+        use_llama3: bool = False,  # Enable Llama 3 enhancement
+        llama3_model_path: Optional[str] = None  # Path to Llama 3 GGUF model
     ):
-        self.model = model
-        self.api_key = api_key
+        self.use_llama3 = use_llama3
+        self.llm = None
+        self.llama3_available = False
 
-        # Check if API available
-        self.api_available = False
-        if api_key:
-            try:
-                import openai
-                self.api_available = True
-                print(f"✅ AI Assistant initialized with {model}")
-            except ImportError:
-                print("⚠️  OpenAI library not available. Install with: pip install openai")
-                print("    Using template-based synthesis instead.")
+        # Initialize Llama 3 if requested
+        if use_llama3 and llama3_model_path:
+            self._init_llama3(llama3_model_path)
+        else:
+            print(f"✅ Evidence Synthesis Assistant initialized in template mode (accurate, rule-based)")
+
+    def _init_llama3(self, model_path: str):
+        """Initialize Llama 3 via llama-cpp-python for language enhancement"""
+        if not LLAMA3_AVAILABLE:
+            print("⚠️  llama-cpp-python not installed. Using template mode.")
+            print("    Install with: pip install llama-cpp-python")
+            print("    Template mode still provides accurate, rule-based synthesis.")
+            return
+
+        try:
+            self.llm = Llama(
+                model_path=model_path,
+                n_ctx=2048,
+                n_threads=4
+            )
+            self.llama3_available = True
+            print(f"✅ Llama 3 loaded for language enhancement (calculations still rule-based)")
+        except Exception as e:
+            print(f"⚠️  Llama 3 loading failed: {e}. Using template mode.")
+            print("    Template mode still provides accurate, rule-based synthesis.")
 
     def synthesize(self, context: SynthesisContext) -> SynthesisOutput:
         """
-        Synthesize evidence with AI interpretation
+        Synthesize evidence with rule-based accuracy
 
         This is the main method that generates:
-        - Interpretation of results
-        - Clinical significance
-        - Limitations
-        - Recommendations
+        - Interpretation of results (calculated by templates)
+        - Clinical significance (NNT, ARR, effect sizes from rules)
+        - Limitations (evidence-based)
+        - Recommendations (guideline-aligned)
+
+        Process:
+        1. Calculate all numbers using rule-based system (no hallucinations)
+        2. Generate interpretation from templates
+        3. Optionally enhance language with Llama 3 (if available)
+        4. Return structured output
+
+        Template mode is default and provides accurate results.
+        Llama 3 mode enhances language while preserving numerical accuracy.
         """
 
-        if self.api_available and self.api_key:
-            return self._ai_synthesis(context)
-        else:
-            return self._template_synthesis(context)
+        # Always use template synthesis for accuracy
+        template_output = self._template_synthesis(context)
 
-    def _ai_synthesis(self, context: SynthesisContext) -> SynthesisOutput:
+        # Optionally enhance with Llama 3 (language only, not calculations)
+        if self.llama3_available and self.use_llama3:
+            return self._llama3_enhance(template_output, context)
+
+        return template_output
+
+    def _llama3_enhance(self, template_output: SynthesisOutput, context: SynthesisContext) -> SynthesisOutput:
         """
-        AI-powered synthesis using GPT
+        Enhance template output with Llama 3 for natural language improvement
 
-        In production, this would call OpenAI API with structured prompts.
+        IMPORTANT: This only improves the language/readability.
+        All numbers and calculations come from the template (rule-based) system.
+        This prevents AI hallucinations while improving prose quality.
+
+        Args:
+            template_output: Accurate output from template synthesis
+            context: Original synthesis context
+
+        Returns:
+            Enhanced output with improved language but same numerical accuracy
         """
-        # Construct prompt
-        prompt = self._build_synthesis_prompt(context)
+        try:
+            # Build prompt that includes the template output's numbers
+            prompt = f"""Improve the language quality of this evidence synthesis while preserving ALL numerical values exactly.
 
-        # Call GPT API (pseudo-code - would use actual API)
-        # response = openai.ChatCompletion.create(
-        #     model=self.model,
-        #     messages=[
-        #         {"role": "system", "content": "You are an expert HTA consultant..."},
-        #         {"role": "user", "content": prompt}
-        #     ],
-        #     temperature=0.3
-        # )
+RULE: Do NOT change any numbers. Only improve the prose.
 
-        # Parse response into structured output
-        # For now, return template-based
-        return self._template_synthesis(context)
+Original synthesis:
+{template_output.interpretation}
+
+Clinical Significance:
+{template_output.clinical_significance}
+
+Make this more readable while keeping all numbers identical. Response:"""
+
+            response = self.llm(
+                prompt,
+                max_tokens=512,
+                temperature=0.2,  # Low temperature to reduce creativity
+                stop=["###", "Limitations:"]
+            )
+
+            enhanced_text = response['choices'][0]['text'].strip()
+
+            # Verify no numbers were changed (safety check)
+            import re
+            template_numbers = set(re.findall(r'\d+\.?\d*', template_output.interpretation))
+            enhanced_numbers = set(re.findall(r'\d+\.?\d*', enhanced_text))
+
+            # If numbers changed, revert to template (safety)
+            if template_numbers != enhanced_numbers:
+                print("⚠️  Llama 3 changed numbers - reverting to template (safety)")
+                return template_output
+
+            # Return enhanced version with template's numbers preserved
+            return SynthesisOutput(
+                interpretation=enhanced_text[:len(template_output.interpretation) + 200],
+                clinical_significance=template_output.clinical_significance,  # Keep template version
+                limitations=template_output.limitations,  # Keep template version
+                recommendations=template_output.recommendations,  # Keep template version
+                key_messages=template_output.key_messages
+            )
+
+        except Exception as e:
+            print(f"⚠️  Llama 3 enhancement failed: {e}. Using template output.")
+            return template_output
 
     def _template_synthesis(self, context: SynthesisContext) -> SynthesisOutput:
         """

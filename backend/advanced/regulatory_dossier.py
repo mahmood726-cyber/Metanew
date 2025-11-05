@@ -45,6 +45,16 @@ from dataclasses import dataclass, field
 from datetime import datetime
 import json
 
+try:
+    from docx import Document
+    from docx.shared import Inches, Pt, RGBColor
+    from docx.enum.text import WD_ALIGN_PARAGRAPH
+    from docx.enum.style import WD_STYLE_TYPE
+    DOCX_AVAILABLE = True
+except ImportError:
+    DOCX_AVAILABLE = False
+    print("⚠️  python-docx not available. Install with: pip install python-docx")
+
 
 @dataclass
 class DossierSection:
@@ -568,16 +578,115 @@ Total 5-year budget impact: £{sum([budget_impact.get(f'year{i}', 0) for i in ra
         """
         Export dossier to Word document
 
-        In production: Use python-docx
+        Creates a properly formatted Word document with all sections,
+        tables, and figures.
         """
-        print(f"📝 Exporting to Word: {filename}")
-        print("⚠️  Word export requires python-docx library")
-        print("    Install with: pip install python-docx")
+        if not DOCX_AVAILABLE:
+            print("❌ python-docx not installed. Install with: pip install python-docx")
+            return
 
-        # Would use python-docx here
-        # doc = Document()
-        # doc.add_heading(self.drug_name, 0)
-        # etc.
+        print(f"📝 Exporting to Word: {filename}")
+
+        # Create document
+        doc = Document()
+
+        # Add title page
+        self._add_title_page_to_doc(doc)
+        doc.add_page_break()
+
+        # Add table of contents
+        doc.add_heading('Table of Contents', level=1)
+        for section in self.sections:
+            p = doc.add_paragraph(f"{section.section_id}. {section.title}")
+            p.style = 'List Bullet'
+            for subsection in section.subsections:
+                p = doc.add_paragraph(f"  {subsection.section_id}. {subsection.title}")
+                p.style = 'List Bullet 2'
+        doc.add_page_break()
+
+        # Add all sections
+        for section in self.sections:
+            self._add_section_to_doc(doc, section)
+
+        # Save document
+        doc.save(filename)
+        print(f"✅ Word document created: {filename}")
+
+    def _add_title_page_to_doc(self, doc: 'Document'):
+        """Add title page to Word document"""
+        # Title
+        title = doc.add_heading(f'{self.agency.upper()} SUBMISSION DOSSIER', level=0)
+        title.alignment = WD_ALIGN_PARAGRAPH.CENTER
+
+        # Drug name
+        drug_heading = doc.add_heading(self.drug_name, level=1)
+        drug_heading.alignment = WD_ALIGN_PARAGRAPH.CENTER
+
+        # Indication
+        doc.add_paragraph(f'for the treatment of').alignment = WD_ALIGN_PARAGRAPH.CENTER
+        indication = doc.add_heading(self.indication, level=2)
+        indication.alignment = WD_ALIGN_PARAGRAPH.CENTER
+
+        # Metadata
+        doc.add_paragraph()
+        metadata_table = doc.add_table(rows=4, cols=2)
+        metadata_table.style = 'Light Grid Accent 1'
+
+        cells = metadata_table.rows[0].cells
+        cells[0].text = 'Submitted by:'
+        cells[1].text = self.manufacturer
+
+        cells = metadata_table.rows[1].cells
+        cells[0].text = 'Submission Date:'
+        cells[1].text = self.metadata.submission_date.strftime('%B %d, %Y')
+
+        cells = metadata_table.rows[2].cells
+        cells[0].text = 'Submission Type:'
+        cells[1].text = self.metadata.submission_type
+
+        cells = metadata_table.rows[3].cells
+        cells[0].text = 'Regulatory Agency:'
+        cells[1].text = self.agency
+
+    def _add_section_to_doc(self, doc: 'Document', section: DossierSection, level: int = 1):
+        """Add a section to Word document"""
+        # Add section heading
+        doc.add_heading(f"{section.section_id}. {section.title}", level=level)
+
+        # Add content
+        if section.content:
+            doc.add_paragraph(section.content)
+
+        # Add tables
+        for table_df in section.tables:
+            self._add_table_to_doc(doc, table_df)
+
+        # Add subsections
+        for subsection in section.subsections:
+            self._add_section_to_doc(doc, subsection, level + 1)
+
+    def _add_table_to_doc(self, doc: 'Document', df: pd.DataFrame):
+        """Add a pandas DataFrame as a table in Word"""
+        # Create table
+        table = doc.add_table(rows=len(df) + 1, cols=len(df.columns))
+        table.style = 'Light Grid Accent 1'
+
+        # Add header row
+        header_cells = table.rows[0].cells
+        for idx, column in enumerate(df.columns):
+            header_cells[idx].text = str(column)
+            # Bold header
+            for paragraph in header_cells[idx].paragraphs:
+                for run in paragraph.runs:
+                    run.bold = True
+
+        # Add data rows
+        for row_idx, row in enumerate(df.itertuples(index=False), start=1):
+            row_cells = table.rows[row_idx].cells
+            for col_idx, value in enumerate(row):
+                row_cells[col_idx].text = str(value)
+
+        doc.add_paragraph()  # Add spacing after table
 
     def export_to_pdf(self, filename: str):
         """
@@ -624,3 +733,13 @@ if __name__ == "__main__":
         print(f"Recommendations:")
         for rec in compliance.recommendations:
             print(f"  - {rec}")
+
+    # Export to Word
+    print(f"\n📝 WORD EXPORT TEST")
+    generator.export_to_word("NICE_Pembrolizumab_Dossier.docx")
+
+    # Verify file created
+    import os
+    if os.path.exists("NICE_Pembrolizumab_Dossier.docx"):
+        file_size = os.path.getsize("NICE_Pembrolizumab_Dossier.docx")
+        print(f"✅ Word file created successfully ({file_size:,} bytes)")

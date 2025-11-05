@@ -40,6 +40,14 @@ import hashlib
 import json
 import warnings
 
+try:
+    from Bio import Entrez
+    Entrez.email = "evidenceos@example.com"  # Required by NCBI
+    ENTREZ_AVAILABLE = True
+except ImportError:
+    ENTREZ_AVAILABLE = False
+    print("⚠️  Biopython not available for PubMed queries. Install with: pip install biopython")
+
 
 @dataclass
 class LivingNMAConfig:
@@ -191,17 +199,85 @@ class LivingNMAEngine:
 
         return new_studies
 
-    def _query_pubmed(self) -> List[Dict[str, Any]]:
+    def _query_pubmed(self, days_back: int = 7) -> List[Dict[str, Any]]:
         """
-        Query PubMed API
+        Query PubMed API for recent studies
 
-        In production: Use Biopython Entrez
+        Uses Biopython Entrez to query PubMed for studies matching
+        the search query published in the last N days.
+
+        Args:
+            days_back: Number of days to look back (default: 7)
+
+        Returns:
+            List of study dictionaries with PubMed IDs and metadata
         """
-        # Placeholder - in production would query real API
-        print(f"📚 Querying PubMed: {self.config.search_query}")
+        if not ENTREZ_AVAILABLE:
+            print(f"⚠️  Biopython not available - skipping PubMed query")
+            return []
 
-        # Simulated result
-        return []
+        print(f"📚 Querying PubMed: {self.config.search_query} (last {days_back} days)")
+
+        try:
+            # Calculate date range
+            end_date = datetime.now()
+            start_date = end_date - timedelta(days=days_back)
+
+            # Format dates for PubMed (YYYY/MM/DD)
+            date_query = f"{start_date.strftime('%Y/%m/%d')}:{end_date.strftime('%Y/%m/%d')}[pdat]"
+            full_query = f"({self.config.search_query}) AND {date_query}"
+
+            # Search PubMed
+            handle = Entrez.esearch(
+                db="pubmed",
+                term=full_query,
+                retmax=100,
+                sort="pub_date"
+            )
+            results = Entrez.read(handle)
+            handle.close()
+
+            pmids = results.get('IdList', [])
+            print(f"   Found {len(pmids)} new studies")
+
+            if len(pmids) == 0:
+                return []
+
+            # Fetch details for each PMID
+            studies = []
+            handle = Entrez.efetch(
+                db="pubmed",
+                id=pmids,
+                rettype="abstract",
+                retmode="xml"
+            )
+            records = Entrez.read(handle)
+            handle.close()
+
+            for record in records['PubmedArticle']:
+                try:
+                    article = record['MedlineCitation']['Article']
+                    pmid = str(record['MedlineCitation']['PMID'])
+
+                    study = {
+                        'id': f"PMID{pmid}",
+                        'pmid': pmid,
+                        'title': article.get('ArticleTitle', ''),
+                        'abstract': article.get('Abstract', {}).get('AbstractText', [''])[0] if 'Abstract' in article else '',
+                        'journal': article.get('Journal', {}).get('Title', ''),
+                        'year': article.get('Journal', {}).get('JournalIssue', {}).get('PubDate', {}).get('Year', ''),
+                        'source': 'PubMed'
+                    }
+                    studies.append(study)
+                except Exception as e:
+                    print(f"   Warning: Error parsing PMID {pmid}: {e}")
+                    continue
+
+            return studies
+
+        except Exception as e:
+            print(f"   Error querying PubMed: {e}")
+            return []
 
     def _query_embase(self) -> List[Dict[str, Any]]:
         """Query Embase API"""
