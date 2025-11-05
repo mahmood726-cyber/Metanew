@@ -131,94 +131,203 @@ class IPDMetaAnalyzer:
     ) -> IPDMetaAnalysisResult:
         """One-stage IPD meta-analysis using mixed effects model"""
 
+        try:
+            # Try statsmodels first (preferred)
+            import statsmodels.api as sm
+            from statsmodels.regression.mixed_linear_model import MixedLM
+            use_statsmodels = True
+        except ImportError:
+            # Fallback to sklearn if statsmodels not available
+            from sklearn.linear_model import LinearRegression
+            use_statsmodels = False
+            warnings.warn("statsmodels not available - using simplified OLS. Install statsmodels for proper mixed models.")
+
         # Prepare data
-        y = ipd_data[outcome_var].values
-        trt = ipd_data[treatment_var].values
-        study_ids = ipd_data[study_var].values
-        unique_studies = ipd_data[study_var].unique()
+        data = ipd_data.copy()
+        unique_studies = data[study_var].unique()
 
-        # Create study indicators
-        study_dummies = pd.get_dummies(ipd_data[study_var], prefix='study', drop_first=True)
-
-        # Build design matrix
-        X = trt.reshape(-1, 1)
-
-        # Add covariates if specified
+        # Build formula components
+        formula_parts = [treatment_var]
         if covariates:
-            X_cov = ipd_data[covariates].values
-            X = np.column_stack([X, X_cov])
+            formula_parts.extend(covariates)
 
-        # Simplified mixed effects estimation
-        # In production, use statsmodels or lme4 via rpy2
-        from sklearn.linear_model import LinearRegression
+        if use_statsmodels and random_effects:
+            # PRODUCTION: Use statsmodels MixedLM with random intercepts
+            # Formula: outcome ~ treatment + covariates + (1 | study)
 
-        model = LinearRegression()
-        model.fit(X, y)
+            # Prepare exog (fixed effects)
+            exog_vars = formula_parts
+            exog = data[exog_vars].copy()
+            exog = sm.add_constant(exog)  # Add intercept
 
-        pooled_estimate = model.coef_[0]  # Treatment effect
-        residuals = y - model.predict(X)
-        residual_var = np.var(residuals)
-        n = len(y)
-        p = X.shape[1]
+            # Fit mixed model with random intercepts for study
+            model = MixedLM(
+                endog=data[outcome_var],
+                exog=exog,
+                groups=data[study_var]
+            )
 
-        # Approximate SE
-        pooled_se = np.sqrt(residual_var / n)
+            result = model.fit(reml=True, method='lbfgs')
 
-        ci_lower = pooled_estimate - 1.96 * pooled_se
-        ci_upper = pooled_estimate + 1.96 * pooled_se
-        p_value = 2 * (1 - norm.cdf(abs(pooled_estimate / pooled_se)))
+            # Extract treatment effect (first variable after intercept)
+            pooled_estimate = result.params[treatment_var]
+            pooled_se = result.bse[treatment_var]
+            ci_lower, ci_upper = result.conf_int().loc[treatment_var]
+            p_value = result.pvalues[treatment_var]
 
-        # Heterogeneity (simplified)
-        study_estimates = {}
-        study_ses = {}
+            # Between-study variance (tau-squared)
+            tau_squared = float(result.cov_re.iloc[0, 0]) if hasattr(result, 'cov_re') else 0.0
 
-        for study in unique_studies:
-            study_mask = study_ids == study
-            X_study = X[study_mask]
-            y_study = y[study_mask]
+            # Model fit statistics
+            log_likelihood = result.llf
+            aic = result.aic
+            bic = result.bic
 
-            if len(y_study) > 5:
-                model_study = LinearRegression()
-                model_study.fit(X_study, y_study)
-                study_estimates[study] = model_study.coef_[0]
-                study_ses[study] = pooled_se  # Simplified
+            # Covariate effects
+            covariate_effects = None
+            if covariates:
+                covariate_effects = {
+                    cov: float(result.params[cov])
+                    for cov in covariates
+                }
 
-        # Q statistic
+            # Study-specific estimates (BLUPs - Best Linear Unbiased Predictors)
+            study_estimates = {}
+            study_ses = {}
+
+            # Get random effects
+            random_effects = result.random_effects
+
+            for study in unique_studies:
+                # Study-specific intercept adjustment
+                study_re = random_effects.get(study, {}).get('Group', 0.0)
+
+                # Treatment effect is fixed + random component
+                study_estimates[study] = pooled_estimate + study_re
+                study_ses[study] = pooled_se  # Approximate
+
+        else:
+            # FALLBACK: Use OLS (not ideal but better than nothing)
+            y = data[outcome_var].values
+            X_vars = formula_parts
+            X = data[X_vars].values
+
+            # Add intercept
+            X = np.column_stack([np.ones(len(X)), X])
+
+            if use_statsmodels:
+                # Use statsmodels OLS
+                model = sm.OLS(y, X)
+                result = model.fit()
+
+                pooled_estimate = result.params[1]  # Treatment effect
+                pooled_se = result.bse[1]
+                ci_lower, ci_upper = result.conf_int()[1]
+                p_value = result.pvalues[1]
+
+                log_likelihood = result.llf
+                aic = result.aic
+                bic = result.bic
+
+                # Covariate effects
+                covariate_effects = None
+                if covariates:
+                    covariate_effects = {
+                        cov: float(result.params[i + 2])
+                        for i, cov in enumerate(covariates)
+                    }
+
+            else:
+                # Sklearn LinearRegression fallback
+                from sklearn.linear_model import LinearRegression
+                model = LinearRegression()
+                model.fit(X, y)
+
+                pooled_estimate = model.coef_[1]  # Treatment effect
+                residuals = y - model.predict(X)
+                residual_var = np.var(residuals)
+                n = len(y)
+
+                pooled_se = np.sqrt(residual_var / n)
+                ci_lower = pooled_estimate - 1.96 * pooled_se
+                ci_upper = pooled_estimate + 1.96 * pooled_se
+                p_value = 2 * (1 - norm.cdf(abs(pooled_estimate / pooled_se)))
+
+                log_likelihood = 0.0
+                aic = 0.0
+                bic = 0.0
+
+                covariate_effects = None
+                if covariates:
+                    covariate_effects = {
+                        cov: model.coef_[i + 2]
+                        for i, cov in enumerate(covariates)
+                    }
+
+            # Study-specific estimates (separate regressions)
+            study_estimates = {}
+            study_ses = {}
+            tau_squared = 0.0
+
+            for study in unique_studies:
+                study_data = data[data[study_var] == study]
+                if len(study_data) > 5:
+                    y_study = study_data[outcome_var].values
+                    X_study = study_data[X_vars].values
+                    X_study = np.column_stack([np.ones(len(X_study)), X_study])
+
+                    if use_statsmodels:
+                        model_study = sm.OLS(y_study, X_study)
+                        result_study = model_study.fit()
+                        study_estimates[study] = result_study.params[1]
+                        study_ses[study] = result_study.bse[1]
+                    else:
+                        model_study = LinearRegression()
+                        model_study.fit(X_study, y_study)
+                        study_estimates[study] = model_study.coef_[1]
+                        study_ses[study] = pooled_se
+
+        # Calculate heterogeneity statistics
         k = len(study_estimates)
-        estimates_array = np.array(list(study_estimates.values()))
-        Q = np.sum((estimates_array - pooled_estimate) ** 2 / (pooled_se ** 2))
-        Q_p = 1 - chi2.cdf(Q, k - 1) if k > 1 else 1.0
+        if k > 1:
+            estimates_array = np.array(list(study_estimates.values()))
+            ses_array = np.array(list(study_ses.values()))
+            vars_array = ses_array ** 2
 
-        # I-squared
-        I_squared = max(0, (Q - (k - 1)) / Q) * 100 if Q > 0 else 0
+            # Q statistic (properly weighted)
+            weights = 1 / vars_array
+            pooled_weighted = np.sum(weights * estimates_array) / np.sum(weights)
+            Q = np.sum(weights * (estimates_array - pooled_weighted) ** 2)
+            Q_p = 1 - chi2.cdf(Q, k - 1)
 
-        # Tau-squared
-        tau_squared = max(0, (Q - (k - 1)) / k) if k > 1 else 0
+            # I-squared
+            I_squared = max(0, (Q - (k - 1)) / Q) * 100
 
-        # Covariate effects
-        covariate_effects = None
-        if covariates:
-            covariate_effects = {
-                cov: model.coef_[i + 1]
-                for i, cov in enumerate(covariates)
-            }
+            # Update tau-squared if not from mixed model
+            if not (use_statsmodels and random_effects):
+                C = np.sum(weights) - np.sum(weights ** 2) / np.sum(weights)
+                tau_squared = max(0, (Q - (k - 1)) / C) if C > 0 else 0
+        else:
+            Q = 0.0
+            Q_p = 1.0
+            I_squared = 0.0
 
         return IPDMetaAnalysisResult(
-            pooled_estimate=pooled_estimate,
-            pooled_se=pooled_se,
-            ci_lower=ci_lower,
-            ci_upper=ci_upper,
-            p_value=p_value,
-            tau_squared=tau_squared,
-            i_squared=I_squared,
-            q_statistic=Q,
-            q_p_value=Q_p,
+            pooled_estimate=float(pooled_estimate),
+            pooled_se=float(pooled_se),
+            ci_lower=float(ci_lower),
+            ci_upper=float(ci_upper),
+            p_value=float(p_value),
+            tau_squared=float(tau_squared),
+            i_squared=float(I_squared),
+            q_statistic=float(Q),
+            q_p_value=float(Q_p),
             study_estimates=study_estimates,
             study_ses=study_ses,
             covariate_effects=covariate_effects,
-            log_likelihood=0.0,
-            aic=0.0,
-            bic=0.0
+            log_likelihood=float(log_likelihood),
+            aic=float(aic),
+            bic=float(bic)
         )
 
     def _two_stage_analysis(

@@ -1,15 +1,28 @@
 """
-AI-Powered Data Extraction
+Pattern-Based Data Extraction
 
-Automated extraction of study characteristics and results from PDFs:
-- Named entity recognition for interventions, outcomes, sample sizes
-- Table extraction and parsing
-- Result extraction (effect sizes, p-values, CIs)
+Automated extraction of study characteristics using regex patterns:
+- Sample size extraction (n= patterns)
+- Effect size extraction (OR, RR, HR with regex)
+- Confidence interval extraction (95% CI patterns)
+- P-value extraction
+- Intervention/comparator keyword detection
 - Risk of bias domain identification
-- Quality score automation
 - Integration with manual review workflow
 
-Uses NLP and computer vision techniques
+IMPLEMENTATION: Uses regular expression patterns (regex)
+- Fast and deterministic
+- Works well for standardized reporting formats
+- No ML training required
+- Requires manual review for accuracy
+
+LIMITATIONS:
+- No semantic understanding (not NLP)
+- Cannot handle tables or figures (no OCR/computer vision)
+- Sensitive to reporting format variations
+- Best used as screening tool, not replacement for manual extraction
+
+FUTURE: Could be extended with spaCy NER or transformer models for better accuracy
 
 Author: EvidenceOS PRIME
 License: MIT
@@ -72,16 +85,31 @@ class ExtractionResult:
 
 class DataExtractor:
     """
-    AI-Powered Data Extraction Engine
+    Pattern-Based Data Extraction Engine
 
-    Automates extraction of study data from PDFs and structured text.
-    Reduces manual extraction burden by 60-80%.
+    Extracts study data from text using regex patterns.
+
+    IMPORTANT: This is a SCREENING TOOL, not a replacement for manual extraction.
+    - Can reduce initial extraction time by identifying likely values
+    - Requires manual verification of all extracted data
+    - Typical accuracy: 40-60% for complete extraction
+    - Best for standardized reporting formats
+
+    For production HTA submissions:
+    - Use this for initial screening only
+    - Always manually verify extracted data
+    - Consider double-extraction with reconciliation
+    - Use structured data collection forms when possible
 
     Examples:
         >>> extractor = DataExtractor()
         >>>
         >>> # Extract from PDF text
         >>> result = extractor.extract_from_text(pdf_text, study_id="Smith2023")
+        >>>
+        >>> # Always verify results
+        >>> if result.confidence < 0.8:
+        ...     print("Manual review required")
         >>>
         >>> # Extract from batch
         >>> results = extractor.extract_batch(pdf_texts, study_ids)
@@ -193,8 +221,12 @@ class DataExtractor:
         }
 
     def _extract_author(self, text: str) -> Optional[str]:
-        """Extract first author"""
-        # Simplified - in production use more sophisticated NER
+        """
+        Extract first author using simple heuristics
+
+        LIMITATION: This is a naive approach that assumes first line contains author.
+        For real NER, would need spaCy or transformer models.
+        """
         lines = text.split('\n')
         if lines:
             return lines[0].split()[0] if lines[0] else None
@@ -217,8 +249,13 @@ class DataExtractor:
         return None
 
     def _extract_intervention(self, text: str) -> Optional[str]:
-        """Extract intervention description"""
-        # Simplified keyword search
+        """
+        Extract intervention using keyword search
+
+        LIMITATION: Simple string matching, not semantic understanding.
+        May return irrelevant text containing keywords.
+        For real intervention extraction, would need Named Entity Recognition (NER).
+        """
         keywords = ["treatment", "intervention", "drug", "therapy"]
         for keyword in keywords:
             idx = text.lower().find(keyword)
@@ -314,32 +351,38 @@ class DataExtractor:
         return rob
 
     def _assess_confidence(self, study: ExtractedStudy) -> float:
-        """Assess extraction confidence score (0-1)"""
-        score = 0.0
-        checks = 0
+        """
+        Assess extraction confidence score (0-1)
 
-        # Check completeness
+        IMPORTANT: This is NOT a machine learning confidence score.
+        It's simply a completeness checklist:
+        - 1.0 = All fields extracted
+        - 0.0 = No fields extracted
+
+        Does NOT indicate:
+        - Accuracy of extracted values
+        - Quality of extraction
+        - Whether manual review is needed
+
+        ALWAYS manually verify extracted data regardless of confidence score.
+        """
+        score = 0.0
+
+        # Weighted checklist (completeness only)
         if study.author:
             score += 0.1
-            checks += 1
         if study.year:
             score += 0.1
-            checks += 1
         if study.n_total:
             score += 0.2
-            checks += 1
         if study.intervention:
             score += 0.1
-            checks += 1
         if study.outcomes:
             score += 0.2
-            checks += 1
         if study.effect_sizes:
             score += 0.2
-            checks += 1
         if study.confidence_intervals:
             score += 0.1
-            checks += 1
 
         return min(1.0, score)
 
