@@ -3,64 +3,49 @@ Integration Tests for API Workflows
 End-to-end API workflow tests including authentication
 """
 import pytest
-import os
-from fastapi.testclient import TestClient
-
-# Set test environment
-os.environ["ENVIRONMENT"] = "test"
-os.environ["JWT_SECRET_KEY"] = "test-secret-key-for-integration"
-os.environ["ADMIN_INITIAL_PASSWORD"] = "test-admin-pass"
-os.environ["ANALYST_INITIAL_PASSWORD"] = "test-analyst-pass"
-os.environ["DATABASE_URL"] = "sqlite:///:memory:"
-
-from api.main import app
 
 
-@pytest.fixture(scope="module")
-def client():
-    """Create test client"""
-    return TestClient(app)
+# Use session-scoped fixtures from conftest.py to prevent rate limiting
+@pytest.fixture
+def client(session_client):
+    """Use session-scoped client"""
+    return session_client
 
 
-@pytest.fixture(scope="module")
-def admin_token(client):
-    """Get admin authentication token (module-scoped to avoid rate limiting)"""
-    response = client.post(
-        "/api/auth/login/oauth",
-        data={"username": "admin", "password": "test-admin-pass"}
-    )
-    assert response.status_code == 200
-    return response.json()["access_token"]
+@pytest.fixture
+def admin_token(session_admin_token):
+    """Use session-scoped admin token"""
+    return session_admin_token
 
 
-@pytest.fixture(scope="module")
-def admin_headers(admin_token):
-    """Get admin authentication headers"""
-    return {"Authorization": f"Bearer {admin_token}"}
+@pytest.fixture
+def admin_headers(session_auth_headers):
+    """Use session-scoped admin headers"""
+    return session_auth_headers
 
 
 class TestAuthenticationWorkflow:
     """Test complete authentication workflows"""
 
-    def test_login_get_user_logout_workflow(self, client):
+    def test_login_get_user_logout_workflow(self, session_client):
         """Test complete auth workflow: login -> get user -> logout"""
-        # Step 1: Login
-        login_response = client.post(
+        # Step 1: Login (use session_client to avoid rate limit conflicts)
+        login_response = session_client.post(
             "/api/auth/login/oauth",
-            data={"username": "admin", "password": "test-admin-pass"}
+            data={"username": "admin", "password": "test-admin-password"}
         )
         assert login_response.status_code == 200
         token = login_response.json()["access_token"]
         headers = {"Authorization": f"Bearer {token}"}
 
         # Step 2: Get current user
-        user_response = client.get("/api/auth/me", headers=headers)
+        user_response = session_client.get("/api/auth/me", headers=headers)
         assert user_response.status_code == 200
         user_data = user_response.json()
         assert user_data["username"] == "admin"
 
         # Step 3: Logout
-        logout_response = client.post("/api/auth/logout", headers=headers)
+        logout_response = session_client.post("/api/auth/logout", headers=headers)
         assert logout_response.status_code in [200, 204]
 
     def test_unauthorized_access_blocked(self, client):

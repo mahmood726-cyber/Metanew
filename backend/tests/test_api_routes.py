@@ -3,38 +3,20 @@ Tests for API Routes
 Tests for health endpoints, auth routes, and basic API functionality
 """
 import pytest
-import os
-from fastapi.testclient import TestClient
 from datetime import datetime
 
-# Set test environment
-os.environ["ENVIRONMENT"] = "test"
-os.environ["JWT_SECRET_KEY"] = "test-secret-key-for-testing"
-os.environ["ADMIN_INITIAL_PASSWORD"] = "test-admin-password"
-os.environ["ANALYST_INITIAL_PASSWORD"] = "test-analyst-password"
-os.environ["DATABASE_URL"] = "sqlite:///:memory:"
 
-# Import after environment is set
-from api.main import app
+# Use session-scoped fixtures from conftest.py to prevent rate limiting
+@pytest.fixture
+def client(session_client):
+    """Use session-scoped client"""
+    return session_client
 
 
-@pytest.fixture(scope="module")
-def client():
-    """Create test client (module-scoped to prevent rate limiting)"""
-    return TestClient(app)
-
-
-@pytest.fixture(scope="module")
-def auth_headers(client):
-    """Get authentication headers for testing (module-scoped to prevent rate limiting)"""
-    # Login as admin using OAuth2 endpoint
-    response = client.post(
-        "/api/auth/login/oauth",
-        data={"username": "admin", "password": "test-admin-password"}
-    )
-    assert response.status_code == 200
-    token = response.json()["access_token"]
-    return {"Authorization": f"Bearer {token}"}
+@pytest.fixture
+def auth_headers(session_auth_headers):
+    """Use session-scoped auth headers"""
+    return session_auth_headers
 
 
 class TestHealthEndpoint:
