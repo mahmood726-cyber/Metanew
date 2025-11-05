@@ -49,3 +49,253 @@ DTA047,Upton_V,2019,J Orthop Res,31789014,Anterior cruciate ligament tear,Imagin
 DTA048,Vincent_W,2022,J Am Soc Nephrol,34890125,Glomerulonephritis,Test,Kidney biopsy,Clinical outcome,320,0.38,112,28,6,174,0.949,0.861,0.800,0.967,6.8,0.059,0.940,unclear,low,low,low,unclear,48.6,54,Nephrology,1250,Germany
 DTA049,Wang_X,2020,J Clin Endocrinol Metab,32901236,Hyperthyroidism,Biomarker,TSH <0.4mIU/L,Clinical + additional tests,920,0.24,212,68,9,631,0.959,0.903,0.757,0.986,9.9,0.045,0.958,low,low,unclear,low,low,44.8,28,Endocrinology,45,China
 DTA050,Xavier_Y,2021,Arch Ophthalmol,33012347,Glaucoma,Test,OCT RNFL thickness,Visual field + IOP,680,0.28,182,58,9,431,0.953,0.882,0.758,0.979,8.1,0.053,0.948,low,low,low,low,low,64.2,52,Ophthalmology,420,Japan
+DTA051,,,,,Pneumonia,Clinical test,Test 51,Gold standard imaging,286,0.17,36,33,12,205,0.766,0.864,0.522,0.945,5.6,0.271,0.948,low,low,low,low,unclear,47.3,70,Emergency,1078,UK
+DTA052,,,,,Colorectal cancer,Clinical test,Test 52,Biopsy,1659,0.14,200,290,32,1137,0.866,0.797,0.408,0.973,4.3,0.168,0.869,low,low,low,unclear,low,67.9,54,Hospital,177,USA
+DTA053,,,,,Depression,Clinical test,Test 53,Gold standard imaging,1674,0.13,209,327,8,1130,0.967,0.776,0.39,0.993,4.3,0.043,0.826,unclear,low,low,unclear,unclear,68.9,57,Hospital,1927,USA
+DTA054,,,,,Colorectal cancer,Imaging,Test 54,PCR,838,0.05,33,91,8,706,0.808,0.887,0.266,0.989,7.2,0.216,0.968,low,low,low,low,low,49.5,61,Emergency,1929,France
+DTA055,,,,,Heart failure,Antibody test,Test 55,Culture,1778,0.26,444,19,18,1297,0.963,0.986,0.959,0.986,68.8,0.038,0.909,low,low,low,low,unclear,63.6,61,Outpatient,1733,China
+DTA056,,,,,HIV,Antigen test,Test 56,Clinical diagnosis,854,0.1,69,121,16,648,0.812,0.843,0.363,0.976,5.2,0.223,0.833,low,unclear,low,low,low,48.9,36,Hospital,1020,UK
+DTA057,,,,,Stroke,Antibody test,Test 57,Culture,1819,0.18,268,224,59,1268,0.82,0.85,0.545,0.956,5.5,0.212,0.819,unclear,low,low,low,low,64.4,35,Emergency,815,France
+DTA058,,,,,Lung cancer,Molecular,Test 58,Culture,1296,0.24,269,141,42,844,0.868,0.857,0.656,0.953,6.1,0.154,0.976,low,low,low,low,unclear,61.0,51,Hospital,188,China
+DTA059,,,,,Epilepsy,Imaging,Test 59,Gold standard imaging,1604,0.06,86,162,10,1346,0.906,0.893,0.347,0.993,8.5,0.105,0.807,low,unclear,low,low,low,48.1,64,Hospital,1420,China
+DTA060,,,,,Breast cancer,Antigen test,Test 60,Biopsy,462,0.07,23,55,9,375,0.733,0.874,0.295,0.977,5.8,0.305,0.97,low,low,low,unclear,unclear,56.5,40,Hospital,173,China
+DTA061,,,,,Depression,Biomarker,Test 61,PCR,1883,0.16,235,43,66,1539,0.781,0.973,0.845,0.959,28.9,0.225,0.971,low,low,low,low,low,46.9,40,Emergency,1438,Canada
+DTA062,,,,,Stroke,Antibody test,Test 62,Culture,1657,0.14,225,140,6,1286,0.978,0.902,0.616,0.995,10.0,0.024,0.879,low,unclear,unclear,low,low,63.2,49,Emergency,776,USA
+DTA063,,,,,PE,PCR,Test 63,Clinical diagnosis,871,0.05,40,96,3,732,0.937,0.885,0.294,0.996,8.1,0.071,0.822,low,unclear,low,low,low,53.9,35,Outpatient,751,USA
+DTA064,,,,,TB,Biomarker,Test 64,PCR,455,0.17,58,70,19,308,0.761,0.815,0.453,0.942,4.1,0.293,0.925,low,unclear,low,low,low,56.4,56,Primary care,1525,Germany
+DTA065,,,,,Lung cancer,Biomarker,Test 65,Clinical diagnosis,1407,0.22,229,265,80,833,0.743,0.759,0.464,0.912,3.1,0.339,0.905,low,low,low,unclear,low,64.0,59,Primary care,288,UK
+DTA066,,,,,Epilepsy,Imaging,Test 66,Culture,1523,0.07,103,178,3,1239,0.977,0.875,0.367,0.998,7.8,0.026,0.877,low,low,unclear,low,high,50.2,64,Primary care,1655,Germany
+DTA067,,,,,PE,Antibody test,Test 67,Culture,228,0.05,10,26,1,191,0.929,0.884,0.278,0.995,8.0,0.08,0.937,low,low,low,unclear,low,67.2,60,Emergency,637,China
+DTA068,,,,,AFib,Imaging,Test 68,PCR,1855,0.2,347,367,24,1117,0.937,0.753,0.486,0.979,3.8,0.084,0.855,unclear,low,unclear,low,low,55.1,43,Hospital,1468,China
+DTA069,,,,,PE,Antibody test,Test 69,PCR,515,0.26,126,61,7,321,0.95,0.841,0.674,0.979,6.0,0.059,0.827,low,unclear,unclear,low,high,65.4,57,Hospital,110,Canada
+DTA070,,,,,AFib,Clinical test,Test 70,Biopsy,1455,0.14,146,34,57,1218,0.722,0.973,0.811,0.955,26.7,0.286,0.847,unclear,low,low,unclear,unclear,58.8,67,Emergency,1778,France
+DTA071,,,,,Schizophrenia,Molecular,Test 71,Culture,1700,0.15,200,125,55,1320,0.787,0.914,0.615,0.96,9.2,0.233,0.854,low,low,unclear,unclear,high,46.4,69,Emergency,931,China
+DTA072,,,,,Epilepsy,Imaging,Test 72,Biopsy,1857,0.22,296,86,112,1363,0.727,0.941,0.775,0.924,12.3,0.29,0.822,low,low,low,unclear,high,54.8,70,Primary care,1644,Japan
+DTA073,,,,,Heart failure,Molecular,Test 73,Gold standard imaging,736,0.18,108,102,24,502,0.82,0.832,0.514,0.954,4.9,0.216,0.859,low,low,low,unclear,low,69.4,63,Outpatient,1439,Canada
+DTA074,,,,,COVID-19,Biomarker,Test 74,Gold standard imaging,355,0.27,83,27,12,233,0.881,0.898,0.755,0.951,8.6,0.133,0.917,low,low,low,low,high,60.3,63,Hospital,1757,Germany
+DTA075,,,,,Lung cancer,Antibody test,Test 75,Gold standard imaging,1708,0.25,417,243,10,1038,0.978,0.811,0.632,0.99,5.2,0.027,0.874,low,low,unclear,low,low,49.1,53,Outpatient,234,China
+DTA076,,,,,COVID-19,Imaging,Test 76,Gold standard imaging,1529,0.16,224,139,20,1146,0.921,0.892,0.617,0.983,8.5,0.089,0.935,low,low,low,unclear,high,45.7,35,Hospital,1647,UK
+DTA077,,,,,DVT,Imaging,Test 77,Culture,420,0.13,52,75,2,291,0.972,0.796,0.409,0.993,4.8,0.035,0.971,low,low,unclear,low,low,56.6,55,Hospital,1984,France
+DTA078,,,,,COVID-19,Biomarker,Test 78,Biopsy,1736,0.18,290,59,22,1365,0.93,0.959,0.831,0.984,22.7,0.073,0.929,unclear,unclear,low,low,low,63.9,53,Primary care,700,UK
+DTA079,,,,,HIV,Clinical test,Test 79,Biopsy,962,0.23,202,61,19,680,0.917,0.918,0.768,0.973,11.2,0.09,0.813,unclear,low,unclear,unclear,high,52.3,59,Outpatient,641,Germany
+DTA080,,,,,TB,PCR,Test 80,Culture,957,0.17,115,89,47,706,0.712,0.889,0.564,0.938,6.4,0.324,0.882,low,low,low,low,high,67.5,68,Outpatient,477,Germany
+DTA081,,,,,Depression,Antibody test,Test 81,PCR,1679,0.2,317,193,18,1151,0.949,0.857,0.622,0.985,6.6,0.06,0.935,low,unclear,low,unclear,low,69.9,57,Primary care,1225,Japan
+DTA082,,,,,Schizophrenia,Biomarker,Test 82,Gold standard imaging,1748,0.21,300,230,67,1151,0.818,0.834,0.566,0.945,4.9,0.218,0.888,low,unclear,low,low,low,59.3,66,Hospital,1514,Canada
+DTA083,,,,,Breast cancer,Clinical test,Test 83,Culture,1529,0.29,411,251,32,835,0.93,0.769,0.621,0.963,4.0,0.091,0.817,low,unclear,low,low,low,64.9,55,Hospital,352,UK
+DTA084,,,,,Colorectal cancer,Clinical test,Test 84,Gold standard imaging,924,0.17,114,58,43,709,0.73,0.925,0.663,0.943,9.7,0.292,0.903,low,unclear,low,unclear,high,57.0,38,Emergency,895,USA
+DTA085,,,,,Alzheimer disease,PCR,Test 85,Clinical diagnosis,334,0.26,83,56,3,192,0.971,0.778,0.597,0.985,4.4,0.037,0.971,low,low,low,low,low,63.3,46,Outpatient,1821,Canada
+DTA086,,,,,Depression,Antibody test,Test 86,Gold standard imaging,1963,0.25,369,202,121,1271,0.754,0.863,0.646,0.913,5.5,0.285,0.831,low,low,low,low,low,60.7,67,Hospital,327,Canada
+DTA087,,,,,HIV,Clinical test,Test 87,Culture,1335,0.18,197,31,43,1064,0.823,0.972,0.864,0.961,29.4,0.182,0.978,low,unclear,low,unclear,low,45.4,44,Primary care,1017,Germany
+DTA088,,,,,Sepsis,Antibody test,Test 88,Culture,1553,0.21,272,102,54,1125,0.837,0.917,0.727,0.954,10.1,0.178,0.82,low,low,low,unclear,unclear,47.3,35,Outpatient,1169,Germany
+DTA089,,,,,Pneumonia,Clinical test,Test 89,Biopsy,903,0.17,138,177,15,573,0.903,0.764,0.438,0.974,3.8,0.127,0.959,unclear,low,unclear,low,unclear,53.7,56,Primary care,1902,Germany
+DTA090,,,,,PE,Clinical test,Test 90,Gold standard imaging,351,0.15,44,38,8,261,0.858,0.874,0.537,0.97,6.8,0.162,0.831,unclear,low,low,unclear,low,69.7,65,Emergency,458,Germany
+DTA091,,,,,Prostate cancer,Biomarker,Test 91,Gold standard imaging,296,0.18,45,14,8,229,0.867,0.945,0.763,0.966,15.8,0.141,0.84,low,low,unclear,low,unclear,69.6,40,Primary care,722,USA
+DTA092,,,,,DVT,Antibody test,Test 92,PCR,955,0.28,195,51,72,637,0.732,0.927,0.793,0.898,10.0,0.289,0.821,low,low,low,low,low,54.8,42,Emergency,1598,Japan
+DTA093,,,,,Breast cancer,PCR,Test 93,Biopsy,865,0.23,168,139,30,528,0.853,0.793,0.547,0.946,4.1,0.185,0.9,low,unclear,low,low,low,46.9,62,Outpatient,595,Germany
+DTA094,,,,,Pneumonia,Imaging,Test 94,Gold standard imaging,1689,0.16,244,171,26,1248,0.905,0.88,0.588,0.98,7.5,0.108,0.926,low,low,low,low,low,50.8,60,Emergency,397,France
+DTA095,,,,,TB,Antigen test,Test 95,Clinical diagnosis,918,0.22,181,38,20,679,0.903,0.948,0.826,0.971,17.4,0.102,0.942,low,low,low,low,unclear,61.0,59,Emergency,1324,Canada
+DTA096,,,,,Parkinson disease,Molecular,Test 96,Culture,466,0.07,23,56,9,378,0.744,0.872,0.291,0.977,5.8,0.294,0.823,unclear,unclear,unclear,low,unclear,55.4,61,Emergency,1326,Canada
+DTA097,,,,,Pneumonia,PCR,Test 97,Biopsy,1467,0.18,232,258,32,945,0.882,0.786,0.473,0.967,4.1,0.15,0.867,low,low,low,low,low,69.3,46,Outpatient,891,France
+DTA098,,,,,Heart failure,Molecular,Test 98,Clinical diagnosis,1817,0.18,267,157,60,1333,0.819,0.895,0.63,0.957,7.8,0.202,0.943,low,unclear,low,unclear,low,67.2,56,Primary care,1078,Canada
+DTA099,,,,,PE,Imaging,Test 99,PCR,1689,0.06,89,245,12,1343,0.887,0.846,0.266,0.991,5.8,0.134,0.829,unclear,low,low,low,low,50.0,59,Primary care,1630,Japan
+DTA100,,,,,PE,PCR,Test 100,Biopsy,1695,0.22,263,75,109,1248,0.709,0.944,0.778,0.92,12.7,0.308,0.81,low,low,low,unclear,low,51.7,42,Primary care,1845,Canada
+DTA101,,,,,Prostate cancer,Clinical test,Test 101,Clinical diagnosis,638,0.18,102,65,12,459,0.896,0.877,0.611,0.975,7.3,0.119,0.949,low,low,low,low,low,50.4,58,Hospital,1651,USA
+DTA102,,,,,CAD,Antibody test,Test 102,PCR,608,0.07,33,7,9,559,0.806,0.989,0.825,0.984,73.3,0.196,0.846,low,low,unclear,low,low,59.4,65,Hospital,373,Canada
+DTA103,,,,,Heart failure,PCR,Test 103,Gold standard imaging,1641,0.08,98,145,33,1365,0.755,0.904,0.403,0.976,7.9,0.271,0.817,unclear,low,low,unclear,high,45.4,69,Outpatient,981,USA
+DTA104,,,,,Schizophrenia,PCR,Test 104,Gold standard imaging,677,0.17,86,57,29,505,0.75,0.9,0.601,0.946,7.5,0.278,0.935,low,unclear,unclear,low,high,57.8,51,Primary care,770,USA
+DTA105,,,,,MI,Imaging,Test 105,Biopsy,1715,0.2,332,275,11,1097,0.97,0.8,0.547,0.99,4.9,0.038,0.95,unclear,low,low,low,low,48.7,45,Hospital,1528,France
+DTA106,,,,,TB,Antibody test,Test 106,Culture,1166,0.05,53,55,5,1053,0.922,0.951,0.491,0.995,18.8,0.082,0.923,low,low,low,low,low,55.4,51,Primary care,396,China
+DTA107,,,,,Sepsis,Molecular,Test 107,Clinical diagnosis,1195,0.11,109,264,22,800,0.834,0.752,0.292,0.973,3.4,0.221,0.855,low,low,unclear,unclear,low,56.7,39,Outpatient,114,Germany
+DTA108,,,,,Pneumonia,Imaging,Test 108,Culture,443,0.09,30,5,9,399,0.783,0.988,0.857,0.978,65.2,0.22,0.86,low,unclear,unclear,low,high,63.4,42,Primary care,839,Japan
+DTA109,,,,,Colorectal cancer,PCR,Test 109,Culture,1489,0.11,127,251,36,1075,0.785,0.811,0.336,0.968,4.2,0.265,0.922,low,unclear,low,low,low,67.3,42,Emergency,913,Canada
+DTA110,,,,,COVID-19,Molecular,Test 110,Gold standard imaging,1478,0.26,294,127,90,967,0.767,0.884,0.698,0.915,6.6,0.264,0.828,low,unclear,low,low,low,48.0,40,Outpatient,1710,USA
+DTA111,,,,,AFib,Biomarker,Test 111,PCR,1482,0.12,134,307,43,998,0.759,0.765,0.304,0.959,3.2,0.315,0.936,low,unclear,low,unclear,low,45.3,50,Outpatient,994,UK
+DTA112,,,,,Epilepsy,Clinical test,Test 112,Biopsy,1318,0.09,96,30,22,1170,0.82,0.975,0.762,0.982,32.8,0.185,0.943,low,low,low,low,high,68.0,59,Primary care,1731,France
+DTA113,,,,,Schizophrenia,Antibody test,Test 113,Culture,649,0.19,106,27,17,499,0.866,0.949,0.797,0.967,17.0,0.141,0.826,low,low,low,low,low,48.4,37,Emergency,966,China
+DTA114,,,,,Prostate cancer,Biomarker,Test 114,Biopsy,1629,0.12,174,237,21,1197,0.894,0.835,0.423,0.983,5.4,0.127,0.827,low,unclear,low,unclear,unclear,63.6,66,Primary care,263,Canada
+DTA115,,,,,Lung cancer,Biomarker,Test 115,PCR,1014,0.08,69,166,12,767,0.861,0.823,0.294,0.985,4.9,0.169,0.883,low,low,unclear,unclear,low,45.6,70,Primary care,478,China
+DTA116,,,,,AFib,Clinical test,Test 116,Biopsy,1751,0.15,233,181,29,1308,0.893,0.879,0.563,0.978,7.4,0.122,0.828,low,low,low,unclear,low,52.2,39,Primary care,50,China
+DTA117,,,,,Sepsis,Biomarker,Test 117,Gold standard imaging,378,0.12,43,16,2,317,0.975,0.953,0.729,0.994,20.7,0.026,0.872,low,low,low,unclear,unclear,52.1,60,Primary care,440,UK
+DTA118,,,,,TB,Molecular,Test 118,PCR,893,0.25,184,98,39,572,0.827,0.854,0.652,0.936,5.7,0.203,0.853,low,low,low,low,low,61.5,35,Emergency,73,USA
+DTA119,,,,,Lung cancer,Imaging,Test 119,Culture,646,0.13,63,92,20,471,0.771,0.837,0.406,0.959,4.7,0.274,0.847,low,unclear,unclear,low,low,45.3,44,Primary care,196,UK
+DTA120,,,,,MS,Antigen test,Test 120,PCR,851,0.17,113,78,31,629,0.789,0.891,0.592,0.953,7.2,0.237,0.971,unclear,low,low,unclear,high,62.6,65,Outpatient,1754,UK
+DTA121,,,,,Schizophrenia,Molecular,Test 121,Gold standard imaging,1731,0.07,86,387,35,1223,0.719,0.76,0.182,0.972,3.0,0.37,0.933,low,unclear,low,low,low,63.8,35,Emergency,179,China
+DTA122,,,,,Lung cancer,Antigen test,Test 122,Culture,694,0.05,26,18,8,642,0.787,0.974,0.591,0.988,30.3,0.219,0.928,unclear,low,low,unclear,low,61.0,51,Emergency,1992,Germany
+DTA123,,,,,Prostate cancer,Antibody test,Test 123,Biopsy,1150,0.06,48,195,21,886,0.705,0.82,0.198,0.977,3.9,0.36,0.889,low,low,unclear,unclear,low,68.0,41,Primary care,1136,Germany
+DTA124,,,,,Heart failure,Molecular,Test 124,Biopsy,1123,0.22,225,191,22,685,0.912,0.783,0.541,0.969,4.2,0.112,0.814,low,low,low,unclear,low,49.8,64,Emergency,744,France
+DTA125,,,,,Pneumonia,Biomarker,Test 125,Gold standard imaging,426,0.28,106,32,13,275,0.899,0.898,0.768,0.955,8.8,0.112,0.925,low,unclear,unclear,low,low,69.5,37,Emergency,303,France
+DTA126,,,,,Schizophrenia,Antigen test,Test 126,PCR,1891,0.14,217,394,47,1233,0.823,0.758,0.355,0.963,3.4,0.234,0.858,low,low,low,low,low,49.0,68,Hospital,1672,France
+DTA127,,,,,HIV,PCR,Test 127,Clinical diagnosis,1197,0.1,87,122,32,956,0.739,0.887,0.416,0.968,6.5,0.294,0.9,low,low,low,low,high,47.3,56,Hospital,958,UK
+DTA128,,,,,AFib,Clinical test,Test 128,Biopsy,502,0.16,74,15,6,407,0.933,0.965,0.831,0.985,26.7,0.069,0.893,unclear,low,low,low,unclear,60.9,47,Emergency,620,Germany
+DTA129,,,,,Epilepsy,Antibody test,Test 129,Biopsy,972,0.12,88,130,28,726,0.766,0.849,0.404,0.963,5.1,0.276,0.954,low,low,low,low,low,66.9,49,Hospital,1388,Japan
+DTA130,,,,,Heart failure,Molecular,Test 130,Gold standard imaging,1217,0.19,174,132,57,854,0.757,0.867,0.569,0.937,5.7,0.28,0.928,low,unclear,low,unclear,low,63.8,54,Outpatient,1609,Japan
+DTA131,,,,,Parkinson disease,Antibody test,Test 131,Clinical diagnosis,1870,0.23,306,51,124,1389,0.713,0.965,0.857,0.918,20.4,0.297,0.959,low,low,low,low,low,67.0,52,Emergency,721,Japan
+DTA132,,,,,DVT,Clinical test,Test 132,Biopsy,1501,0.19,211,283,74,933,0.741,0.768,0.427,0.927,3.2,0.337,0.912,unclear,low,low,unclear,unclear,54.9,43,Emergency,1030,France
+DTA133,,,,,Epilepsy,Clinical test,Test 133,Gold standard imaging,1948,0.08,114,363,41,1430,0.737,0.798,0.239,0.972,3.6,0.33,0.93,unclear,low,low,low,low,47.6,47,Hospital,1284,Canada
+DTA134,,,,,Prostate cancer,Biomarker,Test 134,Culture,258,0.08,16,38,4,200,0.83,0.844,0.296,0.98,5.3,0.201,0.924,low,low,low,low,low,58.4,42,Hospital,1878,Canada
+DTA135,,,,,DVT,Antibody test,Test 135,PCR,867,0.14,109,161,12,585,0.907,0.785,0.404,0.98,4.2,0.118,0.952,low,low,low,unclear,high,48.4,62,Emergency,313,UK
+DTA136,,,,,Colorectal cancer,Antigen test,Test 136,Clinical diagnosis,1624,0.18,264,330,28,1002,0.907,0.753,0.444,0.973,3.7,0.124,0.819,low,unclear,low,low,low,62.8,53,Emergency,366,UK
+DTA137,,,,,Sepsis,Imaging,Test 137,Culture,1344,0.14,160,144,28,1012,0.855,0.876,0.526,0.973,6.9,0.166,0.904,low,low,low,low,low,58.1,35,Emergency,792,Canada
+DTA138,,,,,Depression,Antibody test,Test 138,Culture,1813,0.11,194,115,5,1499,0.976,0.929,0.628,0.997,13.7,0.026,0.954,low,unclear,unclear,low,low,64.2,50,Hospital,1884,Japan
+DTA139,,,,,Depression,PCR,Test 139,Clinical diagnosis,726,0.25,170,8,11,537,0.944,0.986,0.955,0.98,67.4,0.057,0.855,unclear,low,low,low,unclear,60.1,45,Outpatient,1208,UK
+DTA140,,,,,Lung cancer,Molecular,Test 140,Biopsy,807,0.19,140,40,13,614,0.919,0.94,0.778,0.979,15.3,0.086,0.964,low,unclear,low,unclear,low,53.4,69,Outpatient,331,France
+DTA141,,,,,HIV,PCR,Test 141,PCR,1690,0.3,406,202,101,981,0.802,0.83,0.668,0.907,4.7,0.239,0.929,low,unclear,unclear,low,low,47.7,67,Emergency,1109,China
+DTA142,,,,,CAD,Molecular,Test 142,Culture,1855,0.2,334,241,37,1243,0.901,0.838,0.581,0.971,5.6,0.118,0.943,low,low,unclear,low,high,67.1,48,Outpatient,768,China
+DTA143,,,,,COVID-19,Antigen test,Test 143,PCR,1406,0.15,150,228,60,968,0.717,0.81,0.397,0.942,3.8,0.349,0.86,low,unclear,low,low,high,65.2,63,Primary care,1395,USA
+DTA144,,,,,Depression,PCR,Test 144,Gold standard imaging,570,0.14,77,50,2,441,0.976,0.9,0.606,0.995,9.8,0.027,0.924,low,unclear,unclear,low,low,49.9,45,Outpatient,1963,France
+DTA145,,,,,Pneumonia,Molecular,Test 145,Biopsy,1300,0.29,346,25,31,898,0.918,0.973,0.933,0.967,34.0,0.084,0.876,low,low,unclear,unclear,low,46.6,55,Outpatient,849,USA
+DTA146,,,,,AFib,Imaging,Test 146,Gold standard imaging,1241,0.22,203,25,70,943,0.746,0.975,0.89,0.931,29.8,0.261,0.835,low,low,low,low,low,57.8,67,Outpatient,1719,China
+DTA147,,,,,Depression,PCR,Test 147,Biopsy,1846,0.14,195,158,63,1430,0.759,0.901,0.552,0.958,7.7,0.267,0.824,low,low,low,low,low,50.8,45,Emergency,1766,France
+DTA148,,,,,Parkinson disease,Clinical test,Test 148,Biopsy,1701,0.3,362,18,148,1173,0.711,0.985,0.953,0.888,47.4,0.293,0.939,low,low,low,low,high,45.9,63,Emergency,689,France
+DTA149,,,,,Heart failure,Antibody test,Test 149,Clinical diagnosis,447,0.07,22,7,9,409,0.723,0.984,0.759,0.978,45.2,0.282,0.936,unclear,low,low,unclear,low,69.6,47,Primary care,1695,Canada
+DTA150,,,,,HIV,Antibody test,Test 150,Gold standard imaging,950,0.24,173,172,55,550,0.761,0.762,0.501,0.909,3.2,0.314,0.905,low,unclear,low,low,low,65.2,38,Hospital,1333,Japan
+DTA151,,,,,Schizophrenia,Imaging,Test 151,Biopsy,292,0.28,67,25,14,186,0.832,0.882,0.728,0.93,7.1,0.19,0.896,low,low,low,low,low,68.7,40,Primary care,650,UK
+DTA152,,,,,MI,Antigen test,Test 152,Culture,1278,0.28,252,81,105,840,0.706,0.913,0.757,0.889,8.1,0.322,0.968,low,low,unclear,low,low,48.9,42,Outpatient,235,UK
+DTA153,,,,,Schizophrenia,Antigen test,Test 153,Culture,1899,0.28,387,118,144,1250,0.73,0.914,0.766,0.897,8.5,0.295,0.934,low,low,unclear,unclear,unclear,69.7,51,Emergency,1493,China
+DTA154,,,,,Sepsis,Clinical test,Test 154,PCR,1834,0.06,90,394,20,1330,0.819,0.772,0.186,0.985,3.6,0.234,0.853,unclear,unclear,low,low,low,62.6,69,Hospital,1983,China
+DTA155,,,,,Prostate cancer,Molecular,Test 155,Culture,1708,0.19,311,132,13,1252,0.961,0.905,0.702,0.99,10.1,0.043,0.947,low,unclear,low,unclear,low,68.0,51,Outpatient,1672,Canada
+DTA156,,,,,Stroke,Biomarker,Test 156,Clinical diagnosis,1261,0.1,96,62,30,1073,0.768,0.946,0.608,0.973,14.2,0.245,0.947,low,unclear,unclear,low,high,63.5,46,Primary care,1191,Canada
+DTA157,,,,,Heart failure,PCR,Test 157,Gold standard imaging,1883,0.25,348,297,122,1116,0.741,0.79,0.54,0.901,3.5,0.328,0.944,low,low,low,low,unclear,45.2,54,Emergency,590,Canada
+DTA158,,,,,Alzheimer disease,Biomarker,Test 158,Clinical diagnosis,1073,0.13,112,114,27,820,0.812,0.878,0.496,0.968,6.7,0.214,0.971,low,low,low,low,low,61.1,60,Primary care,1196,Japan
+DTA159,,,,,Prostate cancer,Imaging,Test 159,Clinical diagnosis,1032,0.16,140,25,25,842,0.849,0.972,0.848,0.971,30.3,0.155,0.856,unclear,low,low,low,unclear,52.7,46,Outpatient,1169,Germany
+DTA160,,,,,DVT,Biomarker,Test 160,PCR,1206,0.2,231,44,10,921,0.96,0.955,0.84,0.989,21.3,0.042,0.898,low,low,low,low,high,54.0,69,Hospital,290,UK
+DTA161,,,,,AFib,Antigen test,Test 161,Gold standard imaging,1083,0.17,129,113,55,786,0.704,0.875,0.533,0.935,5.6,0.338,0.865,low,low,low,low,high,53.3,52,Outpatient,771,UK
+DTA162,,,,,Epilepsy,Clinical test,Test 162,Biopsy,617,0.19,111,12,6,488,0.949,0.977,0.902,0.988,41.3,0.052,0.803,unclear,low,low,low,high,49.6,44,Hospital,1761,Canada
+DTA163,,,,,CAD,Clinical test,Test 163,Clinical diagnosis,1562,0.25,332,93,58,1079,0.853,0.921,0.781,0.949,10.8,0.16,0.871,low,low,unclear,low,unclear,51.6,61,Outpatient,398,France
+DTA164,,,,,Colorectal cancer,Antibody test,Test 164,Clinical diagnosis,1972,0.23,438,154,15,1365,0.969,0.899,0.74,0.989,9.6,0.034,0.893,unclear,unclear,low,low,low,45.0,57,Outpatient,166,China
+DTA165,,,,,Colorectal cancer,Clinical test,Test 165,Biopsy,1768,0.28,393,160,102,1113,0.795,0.875,0.711,0.916,6.4,0.234,0.948,unclear,low,low,low,unclear,57.0,46,Hospital,1894,China
+DTA166,,,,,AFib,Biomarker,Test 166,Gold standard imaging,1071,0.08,62,26,23,960,0.73,0.974,0.705,0.977,28.1,0.277,0.949,unclear,low,unclear,low,unclear,49.3,41,Emergency,1667,China
+DTA167,,,,,Breast cancer,PCR,Test 167,Culture,545,0.29,117,60,41,327,0.741,0.847,0.661,0.889,4.8,0.306,0.924,low,unclear,low,unclear,low,45.0,46,Emergency,1132,China
+DTA168,,,,,Lung cancer,Imaging,Test 168,Biopsy,1616,0.13,151,29,59,1377,0.723,0.98,0.839,0.959,36.1,0.283,0.923,low,low,low,low,low,55.2,58,Outpatient,1581,Germany
+DTA169,,,,,COVID-19,Molecular,Test 169,PCR,1515,0.12,170,201,11,1133,0.943,0.85,0.458,0.99,6.3,0.067,0.814,low,low,low,unclear,high,57.2,50,Primary care,134,UK
+DTA170,,,,,Heart failure,Clinical test,Test 170,Gold standard imaging,360,0.14,41,8,9,302,0.829,0.976,0.837,0.971,34.5,0.175,0.862,low,low,unclear,low,high,69.6,62,Outpatient,117,Japan
+DTA171,,,,,Lung cancer,Biomarker,Test 171,Gold standard imaging,947,0.06,43,55,13,836,0.775,0.939,0.439,0.985,12.7,0.24,0.826,low,unclear,low,unclear,high,48.5,65,Primary care,593,Canada
+DTA172,,,,,Prostate cancer,Clinical test,Test 172,Biopsy,865,0.1,79,89,7,690,0.92,0.887,0.47,0.99,8.1,0.09,0.831,low,low,low,low,low,65.0,61,Primary care,922,Germany
+DTA173,,,,,Schizophrenia,Antibody test,Test 173,Gold standard imaging,412,0.27,81,12,30,289,0.733,0.963,0.871,0.906,19.8,0.277,0.915,low,low,low,low,unclear,64.4,68,Primary care,1061,China
+DTA174,,,,,Pneumonia,Antibody test,Test 174,Clinical diagnosis,1453,0.12,124,311,50,968,0.713,0.757,0.285,0.951,2.9,0.379,0.95,unclear,low,low,low,low,63.7,43,Hospital,569,Japan
+DTA175,,,,,COVID-19,Clinical test,Test 175,Biopsy,1103,0.14,108,104,46,845,0.702,0.891,0.509,0.948,6.4,0.334,0.833,low,unclear,low,low,low,48.1,47,Outpatient,1623,USA
+DTA176,,,,,Alzheimer disease,Molecular,Test 176,Culture,675,0.3,157,38,45,435,0.779,0.92,0.805,0.906,9.7,0.24,0.974,low,unclear,low,low,unclear,60.2,49,Hospital,1268,UK
+DTA177,,,,,CAD,Biomarker,Test 177,PCR,866,0.16,110,39,28,689,0.8,0.947,0.738,0.961,15.1,0.211,0.928,low,unclear,low,low,high,69.2,62,Primary care,471,Japan
+DTA178,,,,,PE,Molecular,Test 178,Gold standard imaging,377,0.1,33,14,4,326,0.918,0.96,0.702,0.988,22.9,0.085,0.94,unclear,low,low,unclear,unclear,56.0,64,Primary care,274,UK
+DTA179,,,,,AFib,Antigen test,Test 179,Gold standard imaging,849,0.07,56,154,3,636,0.955,0.806,0.267,0.995,4.9,0.056,0.94,low,low,unclear,low,low,54.8,56,Emergency,470,Japan
+DTA180,,,,,Breast cancer,Imaging,Test 180,Biopsy,1459,0.1,118,60,27,1254,0.815,0.955,0.663,0.979,18.1,0.194,0.826,low,unclear,low,low,high,66.3,48,Hospital,1832,France
+DTA181,,,,,Pneumonia,Antibody test,Test 181,Clinical diagnosis,576,0.23,112,42,20,402,0.856,0.906,0.727,0.953,9.1,0.159,0.857,low,unclear,unclear,low,low,45.1,64,Emergency,687,USA
+DTA182,,,,,Alzheimer disease,Imaging,Test 182,Biopsy,485,0.15,56,65,16,348,0.779,0.845,0.463,0.956,5.0,0.262,0.881,unclear,low,low,unclear,high,64.7,60,Primary care,340,USA
+DTA183,,,,,Schizophrenia,Biomarker,Test 183,PCR,908,0.06,50,135,4,719,0.93,0.842,0.27,0.994,5.9,0.083,0.974,low,unclear,low,low,unclear,53.3,43,Primary care,375,UK
+DTA184,,,,,Heart failure,Imaging,Test 184,Culture,1243,0.19,178,50,58,957,0.755,0.951,0.781,0.943,15.4,0.258,0.82,low,low,low,unclear,unclear,53.0,37,Primary care,1597,France
+DTA185,,,,,Pneumonia,Molecular,Test 185,PCR,961,0.21,189,34,12,726,0.944,0.956,0.848,0.984,21.5,0.059,0.817,low,unclear,low,unclear,high,55.4,66,Hospital,96,Japan
+DTA186,,,,,Sepsis,Clinical test,Test 186,Culture,1645,0.14,203,97,27,1318,0.886,0.932,0.677,0.98,13.0,0.122,0.862,unclear,low,low,low,high,45.8,54,Outpatient,464,Germany
+DTA187,,,,,COVID-19,Antibody test,Test 187,Gold standard imaging,369,0.26,92,65,3,209,0.976,0.763,0.586,0.986,4.1,0.031,0.898,unclear,unclear,low,low,unclear,45.2,38,Emergency,519,UK
+DTA188,,,,,Sepsis,Biomarker,Test 188,PCR,1725,0.09,115,117,40,1453,0.744,0.926,0.496,0.973,10.1,0.276,0.916,low,unclear,low,low,low,54.3,53,Hospital,1574,France
+DTA189,,,,,CAD,Antibody test,Test 189,Biopsy,445,0.22,72,37,25,311,0.747,0.896,0.661,0.926,7.2,0.282,0.946,unclear,unclear,low,low,low,49.6,54,Outpatient,1607,Japan
+DTA190,,,,,HIV,Imaging,Test 190,PCR,1662,0.18,228,118,71,1245,0.764,0.914,0.659,0.946,8.9,0.258,0.865,low,low,low,low,unclear,59.2,38,Outpatient,1727,France
+DTA191,,,,,TB,Antigen test,Test 191,Gold standard imaging,1729,0.1,157,86,15,1471,0.913,0.945,0.646,0.99,16.6,0.092,0.939,unclear,low,low,unclear,low,64.0,63,Hospital,1669,UK
+DTA192,,,,,Heart failure,PCR,Test 192,Culture,971,0.21,192,46,11,722,0.947,0.941,0.807,0.985,16.1,0.056,0.866,low,low,low,low,high,49.6,60,Hospital,1618,UK
+DTA193,,,,,MS,Molecular,Test 193,Biopsy,1648,0.25,301,234,111,1002,0.732,0.811,0.563,0.9,3.9,0.33,0.955,low,low,low,low,low,64.8,56,Outpatient,1311,China
+DTA194,,,,,Lung cancer,Molecular,Test 194,Culture,1788,0.28,362,164,138,1124,0.725,0.873,0.688,0.891,5.7,0.315,0.976,low,unclear,low,unclear,low,60.5,49,Hospital,80,Japan
+DTA195,,,,,Prostate cancer,Imaging,Test 195,Culture,992,0.13,118,62,10,802,0.926,0.929,0.656,0.988,13.0,0.08,0.951,low,low,unclear,unclear,high,66.2,59,Outpatient,595,China
+DTA196,,,,,DVT,Biomarker,Test 196,Biopsy,201,0.28,46,34,10,111,0.834,0.772,0.575,0.917,3.7,0.215,0.86,low,low,unclear,low,low,54.9,54,Hospital,127,UK
+DTA197,,,,,Depression,Biomarker,Test 197,PCR,407,0.23,81,42,12,272,0.874,0.869,0.659,0.958,6.7,0.145,0.833,low,low,unclear,low,low,56.8,48,Primary care,1139,Japan
+DTA198,,,,,PE,PCR,Test 198,PCR,904,0.11,87,170,12,635,0.88,0.79,0.339,0.981,4.2,0.152,0.86,low,low,low,low,low,52.9,60,Primary care,1312,Japan
+DTA199,,,,,Breast cancer,Antigen test,Test 199,PCR,1696,0.23,324,44,66,1262,0.832,0.967,0.88,0.95,25.2,0.174,0.905,low,low,low,low,low,46.2,59,Outpatient,1190,China
+DTA200,,,,,Parkinson disease,Clinical test,Test 200,Clinical diagnosis,1458,0.27,363,22,30,1043,0.926,0.98,0.943,0.972,46.3,0.076,0.9,unclear,low,unclear,unclear,high,48.7,36,Hospital,1733,Germany
+DTA201,,,,,Schizophrenia,PCR,Test 201,Culture,264,0.22,49,10,9,196,0.858,0.955,0.831,0.956,19.1,0.149,0.802,low,low,low,low,high,65.3,39,Emergency,395,France
+DTA202,,,,,Prostate cancer,Molecular,Test 202,Clinical diagnosis,240,0.27,54,12,10,164,0.849,0.937,0.818,0.943,13.5,0.161,0.909,low,unclear,low,low,low,51.1,47,Hospital,148,Germany
+DTA203,,,,,COVID-19,Imaging,Test 203,PCR,1818,0.09,135,237,28,1418,0.829,0.857,0.363,0.981,5.8,0.2,0.81,unclear,low,low,unclear,low,56.7,49,Outpatient,282,Canada
+DTA204,,,,,PE,Imaging,Test 204,PCR,1669,0.27,393,87,57,1132,0.875,0.929,0.819,0.952,12.3,0.135,0.946,low,low,low,low,high,55.3,37,Emergency,1367,China
+DTA205,,,,,Pneumonia,Biomarker,Test 205,PCR,1244,0.13,143,208,18,875,0.89,0.808,0.407,0.98,4.6,0.136,0.863,low,low,low,low,low,62.8,43,Primary care,1953,Japan
+DTA206,,,,,HIV,Antigen test,Test 206,PCR,983,0.21,185,160,21,617,0.9,0.795,0.536,0.967,4.4,0.126,0.899,low,low,low,low,unclear,56.8,48,Outpatient,1171,USA
+DTA207,,,,,Prostate cancer,Molecular,Test 207,Biopsy,674,0.12,75,27,5,567,0.948,0.955,0.735,0.991,21.1,0.054,0.899,unclear,low,low,low,low,51.3,64,Hospital,709,China
+DTA208,,,,,Alzheimer disease,Molecular,Test 208,Clinical diagnosis,259,0.1,17,32,8,202,0.703,0.864,0.347,0.962,5.2,0.344,0.972,low,low,unclear,unclear,low,60.2,67,Primary care,789,Germany
+DTA209,,,,,Heart failure,Molecular,Test 209,Biopsy,764,0.27,187,92,19,466,0.91,0.836,0.67,0.961,5.5,0.108,0.972,low,low,low,low,unclear,65.2,70,Hospital,1455,Japan
+DTA210,,,,,TB,Imaging,Test 210,Gold standard imaging,846,0.07,55,196,4,591,0.941,0.752,0.219,0.993,3.8,0.078,0.918,low,low,low,low,low,46.1,49,Hospital,775,USA
+DTA211,,,,,Depression,Imaging,Test 211,Biopsy,1509,0.26,377,157,15,960,0.962,0.86,0.706,0.985,6.9,0.044,0.956,low,low,low,unclear,low,69.4,50,Hospital,1780,USA
+DTA212,,,,,CAD,Molecular,Test 212,PCR,802,0.29,177,76,55,494,0.763,0.867,0.7,0.9,5.7,0.273,0.88,low,low,low,unclear,unclear,59.3,42,Hospital,151,China
+DTA213,,,,,Schizophrenia,Clinical test,Test 213,Gold standard imaging,1066,0.16,128,223,42,673,0.756,0.752,0.365,0.941,3.0,0.324,0.884,low,low,low,unclear,low,45.5,54,Emergency,1619,China
+DTA214,,,,,HIV,Biomarker,Test 214,Clinical diagnosis,1820,0.23,325,155,93,1247,0.779,0.89,0.677,0.931,7.1,0.248,0.957,unclear,unclear,unclear,low,low,56.7,53,Outpatient,846,China
+DTA215,,,,,Prostate cancer,Molecular,Test 215,Clinical diagnosis,203,0.14,26,20,2,155,0.947,0.891,0.565,0.987,8.7,0.059,0.901,low,low,unclear,unclear,low,46.7,45,Hospital,922,UK
+DTA216,,,,,DVT,Imaging,Test 216,Gold standard imaging,1131,0.19,193,40,21,877,0.902,0.957,0.828,0.977,21.0,0.102,0.913,low,low,low,low,low,45.5,57,Primary care,1563,USA
+DTA217,,,,,Colorectal cancer,Imaging,Test 217,Culture,1987,0.28,452,121,104,1310,0.814,0.916,0.789,0.926,9.7,0.203,0.88,low,unclear,low,unclear,low,60.4,37,Primary care,1145,Canada
+DTA218,,,,,COVID-19,Clinical test,Test 218,Clinical diagnosis,475,0.08,31,46,7,391,0.819,0.896,0.403,0.982,7.9,0.202,0.922,low,low,low,unclear,low,61.6,42,Emergency,1642,Germany
+DTA219,,,,,Pneumonia,Biomarker,Test 219,Clinical diagnosis,1795,0.3,402,306,136,951,0.748,0.757,0.568,0.875,3.1,0.333,0.898,low,unclear,low,low,low,52.1,43,Outpatient,303,China
+DTA220,,,,,Lung cancer,Biomarker,Test 220,Biopsy,213,0.07,10,5,4,194,0.735,0.976,0.667,0.98,30.6,0.272,0.867,low,low,low,unclear,low,50.7,65,Outpatient,1185,Germany
+DTA221,,,,,Colorectal cancer,Imaging,Test 221,PCR,1430,0.11,135,226,22,1047,0.866,0.823,0.374,0.979,4.9,0.163,0.95,unclear,low,unclear,low,low,57.7,38,Outpatient,1465,France
+DTA222,,,,,Lung cancer,Antigen test,Test 222,Gold standard imaging,1369,0.27,280,90,89,910,0.759,0.91,0.757,0.911,8.4,0.265,0.88,low,low,low,low,low,68.9,50,Emergency,659,France
+DTA223,,,,,Epilepsy,Antigen test,Test 223,PCR,1770,0.3,414,105,117,1134,0.78,0.916,0.798,0.906,9.3,0.24,0.893,unclear,low,low,low,low,67.2,64,Primary care,1424,Germany
+DTA224,,,,,Depression,Antigen test,Test 224,Biopsy,1736,0.25,338,153,96,1149,0.779,0.883,0.688,0.923,6.7,0.25,0.863,low,low,low,low,unclear,61.6,48,Outpatient,1830,USA
+DTA225,,,,,Pneumonia,Antibody test,Test 225,Biopsy,541,0.16,68,82,18,373,0.801,0.821,0.453,0.954,4.5,0.242,0.873,low,low,unclear,unclear,high,67.2,55,Emergency,391,France
+DTA226,,,,,Alzheimer disease,Antigen test,Test 226,Culture,777,0.28,171,36,46,524,0.789,0.936,0.826,0.919,12.3,0.225,0.856,low,unclear,low,unclear,low,48.7,39,Outpatient,592,Japan
+DTA227,,,,,MS,Antibody test,Test 227,Clinical diagnosis,255,0.07,13,31,4,207,0.809,0.873,0.295,0.981,6.4,0.219,0.805,low,low,unclear,low,low,49.5,39,Outpatient,1261,China
+DTA228,,,,,CAD,Molecular,Test 228,Clinical diagnosis,1368,0.24,320,201,8,839,0.977,0.807,0.614,0.991,5.1,0.029,0.903,unclear,unclear,low,unclear,unclear,55.7,59,Outpatient,1996,Canada
+DTA229,,,,,MS,Antigen test,Test 229,Gold standard imaging,1328,0.19,237,47,15,1029,0.944,0.957,0.835,0.986,22.0,0.059,0.874,low,unclear,low,unclear,low,69.8,59,Outpatient,194,Canada
+DTA230,,,,,AFib,Clinical test,Test 230,Culture,789,0.25,142,59,55,533,0.724,0.901,0.706,0.906,7.3,0.306,0.851,low,low,unclear,low,high,68.9,59,Outpatient,424,UK
+DTA231,,,,,PE,Molecular,Test 231,Biopsy,960,0.15,112,195,32,621,0.783,0.762,0.365,0.951,3.3,0.285,0.904,low,low,unclear,unclear,low,56.8,37,Hospital,65,China
+DTA232,,,,,Colorectal cancer,PCR,Test 232,PCR,622,0.1,44,82,18,478,0.725,0.854,0.349,0.964,5.0,0.322,0.827,unclear,unclear,low,unclear,low,55.9,59,Primary care,269,Japan
+DTA233,,,,,Stroke,Biomarker,Test 233,PCR,1767,0.06,74,339,32,1322,0.703,0.796,0.179,0.976,3.4,0.373,0.823,low,low,low,low,low,47.7,58,Hospital,1953,France
+DTA234,,,,,Epilepsy,PCR,Test 234,Biopsy,1273,0.25,261,206,57,749,0.821,0.785,0.559,0.929,3.8,0.228,0.927,low,unclear,unclear,unclear,high,65.0,36,Outpatient,323,Japan
+DTA235,,,,,Parkinson disease,PCR,Test 235,Culture,1035,0.29,212,84,88,651,0.707,0.887,0.716,0.881,6.3,0.33,0.961,low,low,low,low,low,50.3,37,Outpatient,1560,Canada
+DTA236,,,,,Pneumonia,Clinical test,Test 236,Gold standard imaging,478,0.13,57,7,5,409,0.934,0.985,0.891,0.988,62.3,0.067,0.91,low,unclear,low,low,low,51.9,70,Emergency,1309,Canada
+DTA237,,,,,Colorectal cancer,Clinical test,Test 237,Culture,1152,0.15,124,107,48,873,0.721,0.891,0.537,0.948,6.6,0.313,0.936,low,low,low,low,low,66.0,37,Hospital,1472,USA
+DTA238,,,,,Heart failure,Clinical test,Test 238,PCR,1142,0.08,72,247,19,804,0.794,0.765,0.226,0.977,3.4,0.269,0.82,low,unclear,low,low,low,51.1,47,Primary care,606,USA
+DTA239,,,,,Colorectal cancer,Antibody test,Test 239,Gold standard imaging,1561,0.2,265,245,47,1004,0.851,0.804,0.52,0.955,4.3,0.185,0.975,low,low,low,low,low,65.6,65,Emergency,1491,Germany
+DTA240,,,,,Breast cancer,Clinical test,Test 240,Clinical diagnosis,1577,0.06,86,224,8,1259,0.923,0.849,0.277,0.994,6.1,0.091,0.922,low,unclear,low,low,low,51.8,58,Emergency,1708,UK
+DTA241,,,,,Colorectal cancer,Antigen test,Test 241,Gold standard imaging,918,0.05,36,171,9,702,0.813,0.805,0.174,0.987,4.2,0.232,0.813,unclear,low,low,unclear,low,49.2,60,Outpatient,1924,Germany
+DTA242,,,,,MS,PCR,Test 242,Culture,1747,0.16,265,203,14,1265,0.951,0.862,0.566,0.989,6.9,0.057,0.91,unclear,unclear,low,unclear,low,66.5,70,Emergency,529,UK
+DTA243,,,,,DVT,PCR,Test 243,PCR,728,0.11,61,87,19,561,0.771,0.867,0.412,0.967,5.8,0.264,0.807,low,low,low,low,low,60.5,67,Hospital,1441,Canada
+DTA244,,,,,MS,Molecular,Test 244,Biopsy,1308,0.07,71,195,20,1022,0.785,0.84,0.267,0.981,4.9,0.256,0.884,unclear,low,low,low,high,50.4,50,Emergency,234,Germany
+DTA245,,,,,Heart failure,Molecular,Test 245,Gold standard imaging,1618,0.12,154,171,40,1253,0.796,0.88,0.474,0.969,6.6,0.232,0.84,unclear,unclear,low,unclear,low,60.4,57,Emergency,1829,Canada
+DTA246,,,,,Heart failure,Biomarker,Test 246,Biopsy,1572,0.08,106,336,19,1111,0.848,0.768,0.24,0.983,3.7,0.198,0.932,low,low,unclear,low,low,50.8,70,Hospital,1878,Japan
+DTA247,,,,,Sepsis,PCR,Test 247,PCR,1027,0.13,105,85,28,809,0.791,0.906,0.553,0.967,8.4,0.231,0.844,low,low,unclear,low,low,56.8,62,Hospital,1123,Canada
+DTA248,,,,,AFib,Antibody test,Test 248,Biopsy,1498,0.15,161,239,63,1035,0.72,0.813,0.403,0.943,3.9,0.344,0.843,unclear,unclear,unclear,unclear,high,58.4,40,Outpatient,91,Germany
+DTA249,,,,,DVT,Molecular,Test 249,Clinical diagnosis,273,0.21,54,23,3,193,0.956,0.896,0.701,0.985,9.2,0.049,0.849,unclear,unclear,unclear,low,low,57.9,61,Primary care,968,Germany
+DTA250,,,,,Colorectal cancer,Imaging,Test 250,Biopsy,572,0.25,125,43,18,386,0.877,0.901,0.744,0.955,8.9,0.137,0.893,low,unclear,low,low,high,54.4,49,Hospital,1089,France
+DTA251,,,,,CAD,Antigen test,Test 251,Gold standard imaging,376,0.14,43,5,9,319,0.84,0.987,0.896,0.973,64.6,0.162,0.921,low,low,unclear,low,low,51.0,62,Primary care,484,China
+DTA252,,,,,COVID-19,Biomarker,Test 252,Biopsy,1620,0.09,138,188,7,1287,0.953,0.873,0.423,0.995,7.5,0.054,0.915,low,low,low,low,low,59.8,67,Outpatient,1029,USA
+DTA253,,,,,PE,Molecular,Test 253,Gold standard imaging,1413,0.1,134,120,7,1152,0.955,0.906,0.528,0.994,10.2,0.05,0.852,low,unclear,low,low,low,53.7,55,Primary care,1068,China
+DTA254,,,,,Sepsis,PCR,Test 254,PCR,1176,0.06,58,22,12,1084,0.834,0.981,0.725,0.989,43.9,0.169,0.802,low,low,unclear,unclear,low,49.3,46,Emergency,633,Canada
+DTA255,,,,,Breast cancer,PCR,Test 255,Gold standard imaging,323,0.23,63,29,11,220,0.864,0.884,0.685,0.952,7.4,0.154,0.923,unclear,low,low,low,low,63.4,66,Primary care,1029,Japan
+DTA256,,,,,MS,Biomarker,Test 256,Biopsy,1139,0.21,197,207,42,693,0.828,0.77,0.488,0.943,3.6,0.223,0.86,unclear,low,low,low,low,55.4,48,Outpatient,408,Japan
+DTA257,,,,,Parkinson disease,PCR,Test 257,PCR,747,0.29,175,120,41,411,0.811,0.775,0.593,0.909,3.6,0.244,0.811,low,low,low,unclear,unclear,51.2,46,Emergency,563,USA
+DTA258,,,,,COVID-19,Molecular,Test 258,Culture,290,0.2,45,53,13,179,0.792,0.774,0.459,0.932,3.5,0.269,0.84,unclear,low,unclear,unclear,low,59.8,56,Primary care,465,Japan
+DTA259,,,,,Stroke,Antigen test,Test 259,Culture,1300,0.26,290,16,48,946,0.86,0.984,0.948,0.952,53.7,0.142,0.888,low,low,low,low,unclear,49.7,40,Outpatient,753,Japan
+DTA260,,,,,Depression,Biomarker,Test 260,Culture,533,0.3,132,88,27,286,0.835,0.767,0.6,0.914,3.6,0.215,0.921,low,low,unclear,low,low,68.4,54,Hospital,226,Germany
+DTA261,,,,,TB,Molecular,Test 261,Biopsy,484,0.25,96,56,25,307,0.801,0.846,0.632,0.925,5.2,0.235,0.818,low,low,low,low,low,57.3,67,Outpatient,1043,China
+DTA262,,,,,Stroke,Antibody test,Test 262,Biopsy,1632,0.12,189,36,6,1401,0.97,0.975,0.84,0.996,38.8,0.031,0.819,low,unclear,low,low,low,67.1,39,Hospital,1071,USA
+DTA263,,,,,Prostate cancer,Clinical test,Test 263,Clinical diagnosis,917,0.27,216,50,31,620,0.876,0.926,0.812,0.952,11.8,0.134,0.864,low,unclear,low,low,unclear,51.3,57,Emergency,1502,France
+DTA264,,,,,Pneumonia,PCR,Test 264,Culture,312,0.12,30,60,7,215,0.837,0.782,0.333,0.968,3.8,0.208,0.943,low,low,low,low,unclear,69.7,68,Emergency,1855,China
+DTA265,,,,,Stroke,Antigen test,Test 265,Clinical diagnosis,1462,0.23,278,79,58,1047,0.829,0.93,0.779,0.948,11.8,0.184,0.969,low,low,low,low,low,58.0,45,Emergency,1460,UK
+DTA266,,,,,MI,Biomarker,Test 266,Gold standard imaging,1146,0.3,281,60,62,743,0.822,0.926,0.824,0.923,11.1,0.192,0.902,low,low,low,low,low,59.5,43,Emergency,367,Japan
+DTA267,,,,,Lung cancer,PCR,Test 267,PCR,352,0.29,92,27,10,223,0.903,0.892,0.773,0.957,8.4,0.109,0.83,unclear,unclear,low,low,low,57.3,57,Outpatient,281,France
+DTA268,,,,,Prostate cancer,Antigen test,Test 268,Clinical diagnosis,632,0.15,77,77,17,461,0.823,0.857,0.5,0.964,5.8,0.207,0.912,unclear,unclear,low,low,low,59.0,55,Primary care,531,Canada
+DTA269,,,,,Prostate cancer,Clinical test,Test 269,PCR,499,0.14,56,7,13,423,0.814,0.984,0.889,0.97,50.9,0.189,0.944,unclear,unclear,low,low,low,64.0,64,Primary care,1283,UK
+DTA270,,,,,Schizophrenia,Antibody test,Test 270,Biopsy,1709,0.14,218,125,21,1345,0.913,0.915,0.636,0.985,10.7,0.095,0.838,low,low,unclear,unclear,unclear,63.2,66,Hospital,806,UK
+DTA271,,,,,Pneumonia,Molecular,Test 271,Biopsy,792,0.28,168,94,53,477,0.763,0.836,0.641,0.9,4.7,0.283,0.865,low,low,low,unclear,low,68.1,49,Hospital,473,UK
+DTA272,,,,,Lung cancer,Molecular,Test 272,Gold standard imaging,487,0.19,66,14,26,381,0.726,0.967,0.825,0.936,22.0,0.283,0.976,low,low,unclear,low,high,50.5,47,Outpatient,1166,China
+DTA273,,,,,MS,Biomarker,Test 273,Biopsy,1947,0.29,548,335,16,1048,0.972,0.758,0.621,0.985,4.0,0.037,0.88,unclear,unclear,unclear,low,unclear,57.7,61,Hospital,1298,Canada
+DTA274,,,,,AFib,Antigen test,Test 274,Clinical diagnosis,255,0.17,41,51,2,161,0.97,0.762,0.446,0.988,4.1,0.039,0.83,low,low,low,low,low,53.3,52,Outpatient,1432,UK
+DTA275,,,,,Prostate cancer,Molecular,Test 275,Culture,1734,0.25,422,14,11,1287,0.976,0.99,0.968,0.992,97.6,0.024,0.907,unclear,low,low,low,low,60.1,40,Emergency,1951,UK
+DTA276,,,,,Pneumonia,PCR,Test 276,Biopsy,1026,0.19,153,52,41,780,0.79,0.938,0.746,0.95,12.7,0.224,0.973,unclear,unclear,low,low,unclear,59.9,56,Hospital,1533,Germany
+DTA277,,,,,Colorectal cancer,Biomarker,Test 277,Clinical diagnosis,483,0.25,117,46,3,317,0.979,0.874,0.718,0.991,7.8,0.024,0.81,low,low,low,low,high,51.9,56,Hospital,342,Japan
+DTA278,,,,,Colorectal cancer,Molecular,Test 278,PCR,1586,0.1,123,302,35,1126,0.779,0.789,0.289,0.97,3.7,0.28,0.903,low,low,low,low,low,51.9,66,Outpatient,287,UK
+DTA279,,,,,Prostate cancer,Clinical test,Test 279,PCR,1227,0.2,233,217,12,765,0.952,0.78,0.518,0.985,4.3,0.062,0.89,low,low,low,unclear,unclear,58.0,41,Outpatient,893,Germany
+DTA280,,,,,HIV,Biomarker,Test 280,PCR,1171,0.26,235,155,69,712,0.776,0.822,0.603,0.912,4.4,0.273,0.881,unclear,low,low,unclear,high,69.0,70,Hospital,54,Canada
+DTA281,,,,,Heart failure,Antigen test,Test 281,Gold standard imaging,948,0.07,51,68,15,814,0.775,0.924,0.429,0.982,10.2,0.244,0.856,low,unclear,low,low,unclear,59.0,67,Hospital,568,Germany
+DTA282,,,,,Prostate cancer,PCR,Test 282,PCR,907,0.06,51,146,3,707,0.953,0.829,0.259,0.996,5.6,0.057,0.927,unclear,unclear,unclear,low,low,45.9,38,Hospital,543,Canada
+DTA283,,,,,Depression,Imaging,Test 283,Biopsy,595,0.09,43,51,10,491,0.813,0.906,0.457,0.98,8.6,0.206,0.882,low,low,low,unclear,low,61.6,59,Primary care,260,Germany
+DTA284,,,,,TB,Biomarker,Test 284,PCR,208,0.28,52,34,6,116,0.91,0.775,0.605,0.951,4.0,0.116,0.855,low,low,low,low,unclear,66.9,69,Primary care,193,China
+DTA285,,,,,COVID-19,Clinical test,Test 285,Clinical diagnosis,1574,0.23,335,177,27,1035,0.928,0.854,0.654,0.975,6.4,0.084,0.841,low,low,low,unclear,high,49.0,52,Primary care,282,China
+DTA286,,,,,Stroke,Molecular,Test 286,Clinical diagnosis,1967,0.07,130,61,7,1769,0.952,0.967,0.681,0.996,28.8,0.05,0.903,low,low,low,unclear,high,69.8,59,Emergency,386,USA
+DTA287,,,,,Epilepsy,Imaging,Test 287,Gold standard imaging,1586,0.23,295,82,69,1140,0.811,0.933,0.782,0.943,12.1,0.203,0.864,low,low,low,unclear,high,58.1,46,Outpatient,1720,UK
+DTA288,,,,,Parkinson disease,Molecular,Test 288,Gold standard imaging,1925,0.17,291,165,36,1433,0.891,0.897,0.638,0.975,8.7,0.122,0.931,low,low,low,low,low,51.4,51,Primary care,1253,Germany
+DTA289,,,,,Alzheimer disease,Imaging,Test 289,Biopsy,1251,0.24,220,186,80,765,0.735,0.805,0.542,0.905,3.8,0.329,0.925,low,low,low,low,low,62.7,42,Emergency,109,USA
+DTA290,,,,,MI,Clinical test,Test 290,Culture,768,0.26,158,77,41,492,0.796,0.866,0.672,0.923,5.9,0.236,0.876,low,low,low,unclear,low,66.4,38,Outpatient,1518,UK
+DTA291,,,,,Alzheimer disease,Biomarker,Test 291,Biopsy,860,0.24,176,129,30,525,0.855,0.803,0.577,0.946,4.3,0.181,0.897,low,low,low,unclear,low,48.9,41,Hospital,1437,Japan
+DTA292,,,,,Depression,PCR,Test 292,PCR,253,0.26,60,21,5,167,0.931,0.892,0.741,0.971,8.6,0.077,0.9,low,low,low,low,unclear,56.2,35,Hospital,590,France
+DTA293,,,,,AFib,Imaging,Test 293,Culture,839,0.18,114,159,37,529,0.76,0.77,0.418,0.935,3.3,0.312,0.84,low,unclear,unclear,low,high,61.7,52,Primary care,482,France
+DTA294,,,,,Parkinson disease,Biomarker,Test 294,Biopsy,1956,0.15,238,109,55,1554,0.815,0.935,0.686,0.966,12.5,0.198,0.84,unclear,unclear,low,low,high,64.5,48,Outpatient,965,France
+DTA295,,,,,TB,Imaging,Test 295,Gold standard imaging,637,0.28,137,19,41,440,0.77,0.96,0.878,0.915,19.2,0.24,0.893,unclear,low,unclear,low,low,63.0,55,Hospital,1652,France
+DTA296,,,,,Prostate cancer,Biomarker,Test 296,Gold standard imaging,399,0.2,55,36,24,284,0.701,0.889,0.604,0.922,6.3,0.336,0.967,unclear,unclear,low,low,high,56.9,55,Outpatient,395,Canada
+DTA297,,,,,Heart failure,Biomarker,Test 297,Clinical diagnosis,1990,0.09,139,261,40,1550,0.778,0.856,0.347,0.975,5.4,0.259,0.871,low,low,low,unclear,high,64.7,53,Outpatient,203,UK
+DTA298,,,,,MI,Biomarker,Test 298,Clinical diagnosis,932,0.22,183,176,22,551,0.895,0.758,0.51,0.962,3.7,0.139,0.943,unclear,low,unclear,low,low,67.7,50,Outpatient,1685,Germany
+DTA299,,,,,HIV,PCR,Test 299,Biopsy,1707,0.13,206,57,15,1429,0.934,0.962,0.783,0.99,24.6,0.069,0.927,low,low,unclear,unclear,high,64.8,44,Emergency,719,Japan
+DTA300,,,,,AFib,Molecular,Test 300,Clinical diagnosis,331,0.1,28,21,5,277,0.871,0.93,0.571,0.982,12.4,0.139,0.87,low,low,low,unclear,low,64.0,48,Hospital,200,Japan

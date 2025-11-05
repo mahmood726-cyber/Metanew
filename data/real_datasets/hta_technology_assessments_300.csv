@@ -49,3 +49,253 @@ HTA047,Baricitinib,Lilly,Rheumatology,Rheumatoid arthritis - 2nd line,Adalimumab
 HTA048,Upadacitinib,AbbVie,Rheumatology,Rheumatoid arthritis - 2nd line,Adalimumab,FDA,2020,ACR50 Response,1.24,1.05,1.47,0.012,0.65,42300,168,Approved,High,7,Moderate,295000,10500,B,High,USA
 HTA049,Filgotinib,Gilead,Rheumatology,Rheumatoid arthritis - 2nd line,Methotrexate,CADTH,2021,ACR20 Response,1.42,1.18,1.71,0.001,0.58,48900,135,Approved,High,7,Moderate,285000,9800,B,High,Canada
 HTA050,Peficitinib,Astellas,Rheumatology,Rheumatoid arthritis - 2nd line,Placebo,PBAC,2020,ACR50 Response,2.85,2.12,3.83,0.001,0.72,52600,95,Conditional,Moderate,6,Moderate,275000,8900,C,Moderate,Australia
+HTA051,Technology 51,AstraZeneca,Endocrinology,Indication 51,Best supportive care,AIFA,2022,Clinical response,0.61,0.5,0.72,0.033,1.04,34111,288,Approved,High,9,High,218431,39958,A,Low,France
+HTA052,Technology 52,Merck,Rheumatology,Indication 52,Standard care,AIFA,2022,Disease control,0.69,0.57,0.81,0.041,2.99,26418,361,Approved,High,8,High,20394,211912,A,Moderate,Canada
+HTA053,Technology 53,Merck,Rheumatology,Indication 53,Active comparator,FDA,2022,Overall survival,0.81,0.66,0.96,0.025,1.68,42089,422,Approved,Moderate,6,Low,318569,294444,A,Low,Australia
+HTA054,Technology 54,Roche,Endocrinology,Indication 54,Active comparator,PBAC,2022,Overall survival,0.88,0.72,1.04,0.034,2.86,89665,757,Approved,Moderate,8,Low,439351,136686,A,High,Spain
+HTA055,Technology 55,Sanofi,Hematology,Indication 55,Best supportive care,FDA,2024,Overall survival,0.66,0.54,0.78,0.045,0.87,67188,122,Conditional approval,High,8,High,236478,296079,B,High,UK
+HTA056,Technology 56,GSK,Infectious disease,Indication 56,Active comparator,EMA,2020,Clinical response,0.65,0.53,0.77,0.046,2.04,76376,167,Conditional approval,Moderate,7,Low,218382,61266,C,Low,Canada
+HTA057,Technology 57,Sanofi,Dermatology,Indication 57,Best supportive care,EMA,2021,Progression-free survival,0.73,0.6,0.86,0.001,0.32,51264,613,Conditional approval,Low,5,High,193072,212994,C,High,Australia
+HTA058,Technology 58,Sanofi,Cardiology,Indication 58,Standard care,FDA,2024,Clinical response,0.58,0.48,0.68,0.044,3.04,15297,285,Approved,Moderate,7,Moderate,119452,183270,A,Low,Australia
+HTA059,Technology 59,Bayer,Oncology,Indication 59,Active comparator,PBAC,2019,Overall survival,0.86,0.71,1.01,0.032,2.98,81338,599,Approved,Moderate,8,High,65899,107958,B,Low,UK
+HTA060,Technology 60,Novartis,Pulmonology,Indication 60,Active comparator,G-BA,2022,Overall survival,0.68,0.56,0.8,0.04,1.47,122404,221,Approved,Moderate,5,Low,469173,140135,B,High,UK
+HTA061,Technology 61,AbbVie,Dermatology,Indication 61,Active comparator,NICE,2023,Overall survival,0.7,0.57,0.83,0.045,3.11,142587,422,Approved,High,5,High,296817,132336,B,High,USA
+HTA062,Technology 62,Bayer,Endocrinology,Indication 62,Active comparator,G-BA,2020,Overall survival,0.87,0.71,1.03,0.028,1.66,125439,726,Approved,High,5,Low,160023,243083,A,Low,Canada
+HTA063,Technology 63,Novartis,Rheumatology,Indication 63,Best supportive care,NICE,2020,Disease control,0.77,0.63,0.91,0.037,0.76,20807,761,Conditional approval,Low,8,Moderate,205678,27364,C,High,Canada
+HTA064,Technology 64,Gilead,Endocrinology,Indication 64,Active comparator,EMA,2019,Clinical response,0.65,0.53,0.77,0.024,2.59,141259,275,Approved,Moderate,7,Low,312277,241943,C,High,Canada
+HTA065,Technology 65,Pfizer,Dermatology,Indication 65,Standard care,G-BA,2024,Disease control,0.75,0.61,0.89,0.043,0.4,38127,111,Rejected,Moderate,8,Low,329688,35537,C,Moderate,USA
+HTA066,Technology 66,Sanofi,Pulmonology,Indication 66,Best supportive care,NICE,2021,Clinical response,0.8,0.66,0.94,0.032,2.4,86258,198,Rejected,High,7,Moderate,222044,107205,B,High,USA
+HTA067,Technology 67,Gilead,Pulmonology,Indication 67,Active comparator,EMA,2022,Overall survival,0.79,0.65,0.93,0.017,1.08,53607,671,Approved,Low,6,Low,116903,179183,A,Low,UK
+HTA068,Technology 68,Gilead,Hematology,Indication 68,Active comparator,G-BA,2019,Overall survival,0.92,0.75,1.09,0.05,1.36,56453,351,Rejected,Moderate,8,High,480219,86084,B,High,USA
+HTA069,Technology 69,Lilly,Gastroenterology,Indication 69,Best supportive care,NICE,2023,Disease control,0.67,0.55,0.79,0.032,2.1,58371,614,Approved,High,8,Moderate,496007,171855,B,Moderate,France
+HTA070,Technology 70,Bayer,Gastroenterology,Indication 70,Best supportive care,CADTH,2021,Progression-free survival,0.81,0.66,0.96,0.01,2.24,148877,42,Approved,High,6,Moderate,352306,241803,B,High,Australia
+HTA071,Technology 71,Lilly,Infectious disease,Indication 71,Active comparator,PBAC,2022,Progression-free survival,0.85,0.7,1.0,0.011,2.35,96316,564,Conditional approval,High,8,Moderate,51807,138973,B,High,Australia
+HTA072,Technology 72,AstraZeneca,Neurology,Indication 72,Best supportive care,FDA,2021,Overall survival,0.65,0.53,0.77,0.006,1.13,43199,559,Approved,High,10,Moderate,453224,138789,A,High,Spain
+HTA073,Technology 73,Bayer,Gastroenterology,Indication 73,Standard care,CADTH,2023,Disease control,0.69,0.57,0.81,0.013,2.83,71169,574,Approved,High,10,Moderate,384090,83410,B,Low,Germany
+HTA074,Technology 74,J&J,Oncology,Indication 74,Standard care,AIFA,2024,Progression-free survival,0.88,0.72,1.04,0.035,0.46,77911,357,Approved,Low,10,High,252720,140926,A,High,USA
+HTA075,Technology 75,Merck,Hematology,Indication 75,Best supportive care,G-BA,2023,Overall survival,0.87,0.71,1.03,0.024,0.56,90304,774,Rejected,Moderate,7,Moderate,387727,49513,B,Low,USA
+HTA076,Technology 76,Gilead,Dermatology,Indication 76,Best supportive care,FDA,2019,Clinical response,0.87,0.71,1.03,0.025,1.84,147972,632,Approved,Moderate,6,High,146165,256908,C,Moderate,France
+HTA077,Technology 77,Pfizer,Cardiology,Indication 77,Active comparator,FDA,2023,Overall survival,0.61,0.5,0.72,0.026,3.04,57469,359,Approved,Low,5,Low,339863,136559,C,High,UK
+HTA078,Technology 78,Sanofi,Pulmonology,Indication 78,Active comparator,HAS,2019,Progression-free survival,0.56,0.46,0.66,0.007,0.34,135162,299,Approved,Low,5,Low,57307,80569,A,High,USA
+HTA079,Technology 79,Roche,Dermatology,Indication 79,Active comparator,G-BA,2018,Progression-free survival,0.56,0.46,0.66,0.027,3.22,95502,162,Approved,Low,6,Low,318223,80424,A,Moderate,Germany
+HTA080,Technology 80,J&J,Dermatology,Indication 80,Best supportive care,FDA,2020,Progression-free survival,0.81,0.66,0.96,0.047,0.38,16384,674,Approved,Low,6,Low,280076,140518,B,High,France
+HTA081,Technology 81,Roche,Gastroenterology,Indication 81,Standard care,CADTH,2018,Overall survival,0.81,0.66,0.96,0.018,2.17,44680,207,Conditional approval,High,7,Low,293980,280218,C,High,Spain
+HTA082,Technology 82,Lilly,Oncology,Indication 82,Active comparator,NICE,2020,Progression-free survival,0.55,0.45,0.65,0.002,0.47,32151,524,Conditional approval,Moderate,5,High,336230,260842,A,Moderate,USA
+HTA083,Technology 83,Bayer,Infectious disease,Indication 83,Best supportive care,G-BA,2019,Progression-free survival,0.67,0.55,0.79,0.012,2.61,106621,741,Conditional approval,High,7,High,209689,194960,A,Low,Canada
+HTA084,Technology 84,Takeda,Oncology,Indication 84,Best supportive care,AIFA,2022,Overall survival,0.69,0.57,0.81,0.021,1.91,57870,384,Conditional approval,High,7,High,325821,49069,A,Moderate,USA
+HTA085,Technology 85,Lilly,Endocrinology,Indication 85,Active comparator,FDA,2019,Clinical response,0.58,0.48,0.68,0.001,1.33,47403,262,Conditional approval,High,8,High,267007,133679,B,Low,UK
+HTA086,Technology 86,Novartis,Dermatology,Indication 86,Standard care,AIFA,2018,Clinical response,0.58,0.48,0.68,0.045,1.95,115805,317,Conditional approval,Moderate,10,Low,117575,127004,A,Moderate,USA
+HTA087,Technology 87,Pfizer,Gastroenterology,Indication 87,Active comparator,G-BA,2022,Disease control,0.76,0.62,0.9,0.011,2.53,58011,385,Approved,High,7,High,344406,28648,C,Moderate,Spain
+HTA088,Technology 88,Amgen,Dermatology,Indication 88,Active comparator,EMA,2019,Progression-free survival,0.92,0.75,1.09,0.044,1.88,89838,722,Rejected,Moderate,5,Moderate,188375,101715,A,Moderate,Spain
+HTA089,Technology 89,Amgen,Gastroenterology,Indication 89,Active comparator,EMA,2019,Overall survival,0.65,0.53,0.77,0.038,0.34,22347,165,Approved,High,5,Low,240136,253911,A,Low,Canada
+HTA090,Technology 90,J&J,Neurology,Indication 90,Standard care,HAS,2021,Disease control,0.63,0.52,0.74,0.01,1.79,22272,186,Rejected,High,8,Moderate,456814,199999,B,Moderate,Spain
+HTA091,Technology 91,Roche,Neurology,Indication 91,Active comparator,FDA,2020,Disease control,0.76,0.62,0.9,0.004,2.38,106026,512,Conditional approval,Moderate,8,Low,100252,23923,A,High,USA
+HTA092,Technology 92,Takeda,Endocrinology,Indication 92,Best supportive care,CADTH,2021,Overall survival,0.75,0.61,0.89,0.049,1.67,116540,32,Conditional approval,High,10,High,405113,266585,A,High,Spain
+HTA093,Technology 93,Gilead,Rheumatology,Indication 93,Standard care,HAS,2022,Disease control,0.9,0.74,1.06,0.049,2.11,64966,796,Approved,Low,5,Low,458697,265419,C,Low,UK
+HTA094,Technology 94,Merck,Oncology,Indication 94,Standard care,G-BA,2019,Disease control,0.64,0.52,0.76,0.042,0.39,28959,774,Approved,Moderate,6,Low,61839,275835,B,High,Germany
+HTA095,Technology 95,BMS,Cardiology,Indication 95,Standard care,NICE,2024,Clinical response,0.83,0.68,0.98,0.007,0.66,122089,266,Rejected,Moderate,10,Low,84882,80707,B,Low,Spain
+HTA096,Technology 96,AbbVie,Pulmonology,Indication 96,Active comparator,NICE,2019,Disease control,0.78,0.64,0.92,0.044,1.65,77630,435,Rejected,High,9,Moderate,18535,32764,A,Low,France
+HTA097,Technology 97,J&J,Endocrinology,Indication 97,Best supportive care,HAS,2021,Disease control,0.67,0.55,0.79,0.02,0.96,87273,638,Rejected,High,7,Moderate,196856,223273,A,High,USA
+HTA098,Technology 98,Roche,Pulmonology,Indication 98,Standard care,PBAC,2023,Overall survival,0.83,0.68,0.98,0.008,3.36,107680,392,Conditional approval,High,7,Moderate,228289,215604,B,Low,Germany
+HTA099,Technology 99,Novartis,Hematology,Indication 99,Standard care,PBAC,2024,Progression-free survival,0.82,0.67,0.97,0.003,1.24,138078,92,Approved,High,7,High,221600,143339,A,Moderate,Spain
+HTA100,Technology 100,Gilead,Infectious disease,Indication 100,Standard care,NICE,2020,Clinical response,0.77,0.63,0.91,0.012,1.52,53866,507,Conditional approval,High,8,Low,90297,103364,B,Moderate,Spain
+HTA101,Technology 101,GSK,Infectious disease,Indication 101,Active comparator,HAS,2022,Progression-free survival,0.86,0.71,1.01,0.038,1.46,35806,57,Approved,High,7,Moderate,74199,20428,A,Moderate,Germany
+HTA102,Technology 102,Novartis,Pulmonology,Indication 102,Best supportive care,G-BA,2019,Disease control,0.73,0.6,0.86,0.021,3.02,125302,585,Rejected,High,6,Low,301183,114564,A,Low,Australia
+HTA103,Technology 103,Pfizer,Cardiology,Indication 103,Active comparator,HAS,2024,Disease control,0.9,0.74,1.06,0.049,0.75,64997,118,Approved,High,10,Low,484885,130897,A,High,France
+HTA104,Technology 104,GSK,Dermatology,Indication 104,Active comparator,EMA,2024,Overall survival,0.87,0.71,1.03,0.046,2.93,38930,604,Approved,High,8,Moderate,290817,39241,A,Moderate,USA
+HTA105,Technology 105,Lilly,Rheumatology,Indication 105,Active comparator,FDA,2019,Overall survival,0.76,0.62,0.9,0.015,0.42,17166,68,Approved,High,7,Moderate,302655,23437,B,Moderate,Canada
+HTA106,Technology 106,Pfizer,Dermatology,Indication 106,Active comparator,PBAC,2021,Disease control,0.62,0.51,0.73,0.035,2.83,52250,474,Rejected,Moderate,6,Low,184123,74363,C,Low,Australia
+HTA107,Technology 107,Bayer,Gastroenterology,Indication 107,Active comparator,FDA,2019,Progression-free survival,0.92,0.75,1.09,0.002,2.32,24518,113,Conditional approval,Moderate,6,Low,493726,28140,B,High,Spain
+HTA108,Technology 108,Roche,Hematology,Indication 108,Best supportive care,FDA,2020,Progression-free survival,0.55,0.45,0.65,0.006,0.98,34490,215,Rejected,High,9,Low,338722,251463,A,High,Australia
+HTA109,Technology 109,Bayer,Rheumatology,Indication 109,Standard care,AIFA,2021,Progression-free survival,0.79,0.65,0.93,0.005,1.83,17066,535,Rejected,Moderate,8,Low,89646,265316,C,Low,Australia
+HTA110,Technology 110,Pfizer,Gastroenterology,Indication 110,Best supportive care,NICE,2024,Overall survival,0.62,0.51,0.73,0.029,1.35,16471,323,Conditional approval,Moderate,5,Low,57226,30427,B,Moderate,Australia
+HTA111,Technology 111,GSK,Oncology,Indication 111,Active comparator,EMA,2024,Overall survival,0.8,0.66,0.94,0.022,0.34,143845,201,Approved,High,8,High,16254,122094,B,High,Canada
+HTA112,Technology 112,Gilead,Neurology,Indication 112,Best supportive care,PBAC,2019,Overall survival,0.64,0.52,0.76,0.036,1.58,118540,752,Approved,Moderate,7,High,314667,31866,B,Moderate,Canada
+HTA113,Technology 113,Pfizer,Neurology,Indication 113,Best supportive care,FDA,2018,Clinical response,0.64,0.52,0.76,0.031,2.42,96033,551,Approved,Moderate,9,High,378255,85272,B,Low,Spain
+HTA114,Technology 114,Amgen,Infectious disease,Indication 114,Best supportive care,EMA,2019,Progression-free survival,0.74,0.61,0.87,0.035,3.06,28690,653,Rejected,Low,7,High,328377,49524,C,Moderate,France
+HTA115,Technology 115,J&J,Hematology,Indication 115,Active comparator,NICE,2023,Clinical response,0.78,0.64,0.92,0.046,3.45,92287,505,Approved,Moderate,7,Moderate,75679,106741,B,Moderate,UK
+HTA116,Technology 116,Merck,Pulmonology,Indication 116,Active comparator,PBAC,2022,Disease control,0.69,0.57,0.81,0.028,1.41,48731,114,Approved,Moderate,10,Moderate,382175,133813,B,Moderate,USA
+HTA117,Technology 117,J&J,Dermatology,Indication 117,Best supportive care,NICE,2019,Clinical response,0.81,0.66,0.96,0.046,1.69,26120,298,Approved,Moderate,9,Moderate,404774,244684,A,Low,USA
+HTA118,Technology 118,AbbVie,Rheumatology,Indication 118,Active comparator,CADTH,2020,Progression-free survival,0.79,0.65,0.93,0.007,0.4,125736,409,Approved,Low,5,Low,14657,179434,C,Low,Canada
+HTA119,Technology 119,Pfizer,Gastroenterology,Indication 119,Best supportive care,EMA,2020,Progression-free survival,0.75,0.61,0.89,0.025,3.39,132480,173,Rejected,Moderate,8,Moderate,239191,254526,A,High,France
+HTA120,Technology 120,Merck,Neurology,Indication 120,Best supportive care,AIFA,2018,Overall survival,0.74,0.61,0.87,0.036,0.68,56009,462,Rejected,High,9,Low,54921,237613,B,Low,Canada
+HTA121,Technology 121,Lilly,Hematology,Indication 121,Active comparator,EMA,2018,Progression-free survival,0.71,0.58,0.84,0.018,2.13,27991,92,Conditional approval,High,5,High,255815,281811,A,Low,Canada
+HTA122,Technology 122,AstraZeneca,Dermatology,Indication 122,Best supportive care,HAS,2023,Clinical response,0.82,0.67,0.97,0.042,1.76,92209,606,Approved,Low,6,Low,104992,275125,A,High,Canada
+HTA123,Technology 123,Roche,Dermatology,Indication 123,Active comparator,EMA,2022,Progression-free survival,0.7,0.57,0.83,0.031,3.2,109191,339,Approved,High,8,Low,93108,51236,C,Moderate,Canada
+HTA124,Technology 124,Sanofi,Endocrinology,Indication 124,Active comparator,PBAC,2024,Disease control,0.87,0.71,1.03,0.033,1.59,74277,374,Conditional approval,High,5,Moderate,216553,254767,B,Low,Spain
+HTA125,Technology 125,Gilead,Pulmonology,Indication 125,Best supportive care,G-BA,2019,Overall survival,0.6,0.49,0.71,0.038,3.06,103373,644,Rejected,High,7,High,177902,216786,B,High,UK
+HTA126,Technology 126,AstraZeneca,Oncology,Indication 126,Active comparator,AIFA,2022,Clinical response,0.83,0.68,0.98,0.023,2.57,114240,291,Conditional approval,High,6,Low,76699,160867,C,High,Australia
+HTA127,Technology 127,Lilly,Endocrinology,Indication 127,Best supportive care,HAS,2018,Progression-free survival,0.72,0.59,0.85,0.04,2.72,142227,390,Conditional approval,Moderate,7,High,450868,220813,A,Moderate,Canada
+HTA128,Technology 128,Pfizer,Gastroenterology,Indication 128,Standard care,FDA,2019,Overall survival,0.6,0.49,0.71,0.039,1.09,45981,131,Rejected,High,8,Low,461188,41657,B,High,UK
+HTA129,Technology 129,Pfizer,Gastroenterology,Indication 129,Best supportive care,HAS,2022,Overall survival,0.61,0.5,0.72,0.02,2.04,43355,554,Approved,Low,6,Moderate,200992,294261,B,Moderate,France
+HTA130,Technology 130,Takeda,Infectious disease,Indication 130,Best supportive care,NICE,2020,Clinical response,0.77,0.63,0.91,0.048,0.94,81375,343,Approved,High,6,High,232346,31785,A,High,Australia
+HTA131,Technology 131,BMS,Cardiology,Indication 131,Standard care,CADTH,2022,Disease control,0.56,0.46,0.66,0.014,3.1,110024,504,Approved,High,10,Low,453967,257059,B,Moderate,Canada
+HTA132,Technology 132,Takeda,Neurology,Indication 132,Active comparator,PBAC,2021,Disease control,0.68,0.56,0.8,0.018,0.92,119323,420,Approved,Moderate,8,High,29200,243846,A,High,Australia
+HTA133,Technology 133,AstraZeneca,Endocrinology,Indication 133,Best supportive care,AIFA,2018,Clinical response,0.81,0.66,0.96,0.007,2.97,21190,705,Approved,High,6,Low,26417,248605,C,High,Australia
+HTA134,Technology 134,GSK,Oncology,Indication 134,Active comparator,G-BA,2022,Overall survival,0.62,0.51,0.73,0.019,1.33,129367,713,Approved,High,6,Low,400422,270376,B,Moderate,UK
+HTA135,Technology 135,Merck,Rheumatology,Indication 135,Best supportive care,AIFA,2018,Disease control,0.86,0.71,1.01,0.023,3.43,137442,346,Approved,High,7,High,202408,96074,B,Moderate,Spain
+HTA136,Technology 136,Lilly,Endocrinology,Indication 136,Active comparator,G-BA,2018,Overall survival,0.56,0.46,0.66,0.001,1.33,42535,127,Approved,Moderate,9,Moderate,304571,110157,B,Moderate,Australia
+HTA137,Technology 137,Novartis,Rheumatology,Indication 137,Best supportive care,NICE,2022,Overall survival,0.57,0.47,0.67,0.03,1.12,74431,529,Approved,Low,10,Low,237640,91381,B,Low,Australia
+HTA138,Technology 138,AbbVie,Hematology,Indication 138,Best supportive care,AIFA,2022,Clinical response,0.7,0.57,0.83,0.037,2.87,81294,118,Approved,High,9,Moderate,104745,282332,A,Low,France
+HTA139,Technology 139,BMS,Rheumatology,Indication 139,Best supportive care,FDA,2019,Overall survival,0.9,0.74,1.06,0.023,0.94,71500,409,Rejected,High,5,Moderate,477392,154854,A,Moderate,Germany
+HTA140,Technology 140,Takeda,Hematology,Indication 140,Best supportive care,G-BA,2024,Clinical response,0.63,0.52,0.74,0.022,0.44,47898,761,Rejected,High,10,Moderate,470753,192882,C,Low,USA
+HTA141,Technology 141,AstraZeneca,Infectious disease,Indication 141,Active comparator,G-BA,2021,Overall survival,0.59,0.48,0.7,0.004,3.02,130395,709,Conditional approval,High,10,Low,178925,180126,A,Low,Australia
+HTA142,Technology 142,Merck,Hematology,Indication 142,Standard care,NICE,2020,Clinical response,0.58,0.48,0.68,0.046,0.4,64778,776,Approved,Moderate,6,Moderate,458699,194719,B,Moderate,Germany
+HTA143,Technology 143,Takeda,Cardiology,Indication 143,Standard care,AIFA,2021,Progression-free survival,0.8,0.66,0.94,0.035,1.53,61773,553,Conditional approval,High,9,Moderate,275906,250827,A,Low,UK
+HTA144,Technology 144,Sanofi,Neurology,Indication 144,Active comparator,NICE,2019,Clinical response,0.6,0.49,0.71,0.01,1.71,125545,401,Approved,Low,9,Moderate,55946,69422,C,High,Germany
+HTA145,Technology 145,Amgen,Hematology,Indication 145,Best supportive care,NICE,2018,Overall survival,0.73,0.6,0.86,0.039,1.72,114778,560,Rejected,High,9,Moderate,38216,64070,B,Moderate,Germany
+HTA146,Technology 146,AstraZeneca,Rheumatology,Indication 146,Best supportive care,FDA,2020,Clinical response,0.62,0.51,0.73,0.038,1.73,83455,148,Approved,High,5,Moderate,278831,100865,A,High,UK
+HTA147,Technology 147,Roche,Dermatology,Indication 147,Best supportive care,AIFA,2024,Overall survival,0.74,0.61,0.87,0.02,2.03,50223,657,Approved,High,5,Moderate,294230,187527,B,Low,Germany
+HTA148,Technology 148,J&J,Dermatology,Indication 148,Active comparator,CADTH,2023,Overall survival,0.64,0.52,0.76,0.007,1.97,63514,347,Conditional approval,High,10,High,357030,57625,B,Moderate,Canada
+HTA149,Technology 149,AstraZeneca,Endocrinology,Indication 149,Standard care,NICE,2019,Overall survival,0.76,0.62,0.9,0.04,2.57,35884,773,Approved,Moderate,5,High,69437,26054,B,Low,USA
+HTA150,Technology 150,Bayer,Dermatology,Indication 150,Active comparator,EMA,2023,Overall survival,0.92,0.75,1.09,0.012,1.53,95221,350,Approved,Low,5,Low,144231,150325,A,Low,Germany
+HTA151,Technology 151,GSK,Hematology,Indication 151,Best supportive care,EMA,2019,Disease control,0.73,0.6,0.86,0.001,2.8,122308,795,Approved,Moderate,10,High,332546,34590,A,Low,Germany
+HTA152,Technology 152,Novartis,Oncology,Indication 152,Active comparator,AIFA,2022,Overall survival,0.61,0.5,0.72,0.012,2.12,56852,790,Rejected,High,8,Moderate,110809,160452,A,Moderate,Australia
+HTA153,Technology 153,GSK,Neurology,Indication 153,Active comparator,G-BA,2019,Overall survival,0.77,0.63,0.91,0.044,2.86,94938,110,Approved,Moderate,10,High,182363,38808,B,High,Germany
+HTA154,Technology 154,Gilead,Hematology,Indication 154,Active comparator,G-BA,2021,Overall survival,0.8,0.66,0.94,0.013,0.91,28077,386,Approved,Moderate,9,Moderate,310830,262016,B,High,USA
+HTA155,Technology 155,Novartis,Dermatology,Indication 155,Active comparator,G-BA,2021,Overall survival,0.8,0.66,0.94,0.04,0.35,68731,346,Conditional approval,Low,7,High,128372,221708,A,Moderate,Australia
+HTA156,Technology 156,Gilead,Gastroenterology,Indication 156,Standard care,FDA,2024,Disease control,0.65,0.53,0.77,0.027,2.63,96366,268,Approved,High,6,Low,346479,137652,A,Low,USA
+HTA157,Technology 157,Bayer,Dermatology,Indication 157,Standard care,FDA,2018,Disease control,0.6,0.49,0.71,0.041,2.07,115601,37,Rejected,High,5,Low,447742,248887,A,High,France
+HTA158,Technology 158,Roche,Rheumatology,Indication 158,Active comparator,PBAC,2024,Disease control,0.7,0.57,0.83,0.018,0.91,56247,740,Approved,Moderate,9,Low,70716,297031,B,High,Canada
+HTA159,Technology 159,Lilly,Dermatology,Indication 159,Best supportive care,G-BA,2022,Disease control,0.61,0.5,0.72,0.036,1.48,99824,357,Conditional approval,Low,5,Moderate,59655,158714,B,Low,USA
+HTA160,Technology 160,AbbVie,Pulmonology,Indication 160,Active comparator,NICE,2022,Overall survival,0.72,0.59,0.85,0.025,2.07,136491,252,Rejected,High,6,Low,48692,218722,C,Low,Canada
+HTA161,Technology 161,Amgen,Dermatology,Indication 161,Standard care,AIFA,2020,Clinical response,0.82,0.67,0.97,0.002,2.16,39907,157,Conditional approval,Low,5,Moderate,54554,32006,B,Moderate,UK
+HTA162,Technology 162,Sanofi,Neurology,Indication 162,Best supportive care,CADTH,2023,Progression-free survival,0.65,0.53,0.77,0.049,2.71,28867,287,Rejected,Low,6,Low,352814,273042,A,High,Germany
+HTA163,Technology 163,Roche,Endocrinology,Indication 163,Active comparator,HAS,2019,Overall survival,0.78,0.64,0.92,0.002,2.22,99800,293,Conditional approval,High,10,Low,391037,55491,C,High,Australia
+HTA164,Technology 164,Novartis,Dermatology,Indication 164,Active comparator,G-BA,2021,Overall survival,0.75,0.61,0.89,0.044,1.13,92067,714,Rejected,Low,10,Moderate,461913,295334,A,High,UK
+HTA165,Technology 165,GSK,Dermatology,Indication 165,Standard care,HAS,2020,Progression-free survival,0.76,0.62,0.9,0.01,2.69,64729,302,Conditional approval,High,8,Low,102766,260741,A,High,Germany
+HTA166,Technology 166,Pfizer,Rheumatology,Indication 166,Standard care,G-BA,2024,Disease control,0.76,0.62,0.9,0.037,1.08,45750,684,Approved,High,6,High,462176,173047,A,Low,Spain
+HTA167,Technology 167,J&J,Rheumatology,Indication 167,Active comparator,G-BA,2024,Overall survival,0.82,0.67,0.97,0.023,2.5,87109,393,Conditional approval,High,5,Low,372103,37596,B,Moderate,France
+HTA168,Technology 168,Pfizer,Cardiology,Indication 168,Standard care,NICE,2024,Clinical response,0.83,0.68,0.98,0.012,0.64,115998,412,Approved,Moderate,9,Low,144134,231114,A,Low,France
+HTA169,Technology 169,Novartis,Gastroenterology,Indication 169,Standard care,NICE,2024,Progression-free survival,0.74,0.61,0.87,0.038,2.89,58543,601,Rejected,Low,10,Low,448928,176193,B,Moderate,Spain
+HTA170,Technology 170,GSK,Neurology,Indication 170,Active comparator,G-BA,2021,Disease control,0.8,0.66,0.94,0.04,3.34,95832,298,Rejected,Moderate,10,High,435990,262289,B,Moderate,USA
+HTA171,Technology 171,Novartis,Endocrinology,Indication 171,Best supportive care,CADTH,2018,Clinical response,0.56,0.46,0.66,0.006,0.46,131351,549,Approved,Moderate,7,Low,215988,159653,A,Moderate,Canada
+HTA172,Technology 172,BMS,Oncology,Indication 172,Active comparator,NICE,2021,Disease control,0.59,0.48,0.7,0.014,1.11,29608,595,Approved,High,5,High,306019,202466,B,High,USA
+HTA173,Technology 173,AstraZeneca,Endocrinology,Indication 173,Standard care,AIFA,2022,Overall survival,0.6,0.49,0.71,0.008,2.05,95081,425,Approved,Moderate,10,Moderate,307996,33596,B,Low,Germany
+HTA174,Technology 174,Takeda,Hematology,Indication 174,Standard care,AIFA,2020,Overall survival,0.88,0.72,1.04,0.004,1.0,101818,332,Rejected,Moderate,8,Low,323406,222260,A,Moderate,USA
+HTA175,Technology 175,AbbVie,Endocrinology,Indication 175,Active comparator,PBAC,2024,Progression-free survival,0.84,0.69,0.99,0.002,2.48,131713,91,Approved,High,5,Moderate,427694,237078,A,High,Germany
+HTA176,Technology 176,Roche,Infectious disease,Indication 176,Active comparator,FDA,2019,Disease control,0.91,0.75,1.07,0.012,1.62,90426,55,Approved,Moderate,5,Moderate,487385,91760,B,High,UK
+HTA177,Technology 177,Bayer,Oncology,Indication 177,Best supportive care,CADTH,2020,Clinical response,0.74,0.61,0.87,0.009,1.55,20255,169,Approved,Low,9,Low,308842,153734,C,High,Germany
+HTA178,Technology 178,Amgen,Rheumatology,Indication 178,Active comparator,FDA,2023,Clinical response,0.86,0.71,1.01,0.03,2.2,37267,798,Approved,High,7,High,167262,266230,A,Moderate,France
+HTA179,Technology 179,Bayer,Cardiology,Indication 179,Active comparator,HAS,2018,Disease control,0.76,0.62,0.9,0.019,3.08,32772,31,Approved,Moderate,9,Low,23019,168347,A,Moderate,Australia
+HTA180,Technology 180,Roche,Dermatology,Indication 180,Active comparator,PBAC,2024,Disease control,0.77,0.63,0.91,0.031,0.64,100395,799,Approved,Moderate,8,Moderate,133180,106236,B,Low,USA
+HTA181,Technology 181,AstraZeneca,Hematology,Indication 181,Active comparator,NICE,2024,Progression-free survival,0.86,0.71,1.01,0.015,1.43,106372,174,Approved,Moderate,9,Moderate,156520,163775,C,Moderate,Spain
+HTA182,Technology 182,Amgen,Oncology,Indication 182,Standard care,CADTH,2020,Progression-free survival,0.63,0.52,0.74,0.038,0.96,146174,175,Conditional approval,High,6,Moderate,299027,138489,B,High,Canada
+HTA183,Technology 183,Amgen,Infectious disease,Indication 183,Best supportive care,G-BA,2022,Overall survival,0.74,0.61,0.87,0.046,1.45,51260,212,Approved,Low,7,Low,42122,64189,A,High,Germany
+HTA184,Technology 184,J&J,Gastroenterology,Indication 184,Best supportive care,NICE,2021,Disease control,0.88,0.72,1.04,0.009,2.53,125033,277,Conditional approval,Moderate,7,Low,69258,40532,A,Moderate,France
+HTA185,Technology 185,Roche,Neurology,Indication 185,Standard care,CADTH,2020,Disease control,0.72,0.59,0.85,0.022,0.44,145130,564,Approved,Moderate,8,High,476737,235815,A,Moderate,USA
+HTA186,Technology 186,J&J,Oncology,Indication 186,Best supportive care,HAS,2023,Clinical response,0.58,0.48,0.68,0.015,2.42,34998,193,Conditional approval,Moderate,5,Low,420045,84528,A,Moderate,France
+HTA187,Technology 187,Merck,Pulmonology,Indication 187,Standard care,G-BA,2021,Clinical response,0.84,0.69,0.99,0.024,0.82,119644,525,Approved,High,6,Moderate,113448,212210,C,Moderate,Germany
+HTA188,Technology 188,GSK,Cardiology,Indication 188,Standard care,CADTH,2022,Progression-free survival,0.84,0.69,0.99,0.034,1.82,37750,286,Conditional approval,High,10,Low,366997,281194,A,Moderate,USA
+HTA189,Technology 189,Merck,Dermatology,Indication 189,Best supportive care,AIFA,2024,Progression-free survival,0.82,0.67,0.97,0.038,1.18,48408,375,Approved,Low,10,Low,443686,141505,A,Low,Spain
+HTA190,Technology 190,Sanofi,Infectious disease,Indication 190,Standard care,G-BA,2018,Clinical response,0.79,0.65,0.93,0.011,3.42,67295,359,Conditional approval,Low,7,Low,94188,114250,B,Low,UK
+HTA191,Technology 191,Bayer,Endocrinology,Indication 191,Active comparator,PBAC,2022,Disease control,0.68,0.56,0.8,0.02,1.32,62950,449,Approved,Moderate,9,Moderate,357457,169688,A,High,Germany
+HTA192,Technology 192,Merck,Neurology,Indication 192,Best supportive care,AIFA,2022,Clinical response,0.66,0.54,0.78,0.011,1.18,46337,639,Conditional approval,Moderate,8,Low,314730,32583,A,Low,USA
+HTA193,Technology 193,Bayer,Pulmonology,Indication 193,Standard care,EMA,2023,Progression-free survival,0.62,0.51,0.73,0.039,2.33,57236,403,Conditional approval,High,7,Moderate,280247,217299,B,Moderate,Canada
+HTA194,Technology 194,BMS,Hematology,Indication 194,Active comparator,G-BA,2024,Overall survival,0.82,0.67,0.97,0.03,2.63,46112,394,Approved,Moderate,6,Low,299205,34271,B,Low,Australia
+HTA195,Technology 195,Gilead,Rheumatology,Indication 195,Active comparator,HAS,2021,Clinical response,0.92,0.75,1.09,0.041,1.71,147502,379,Approved,Moderate,7,Moderate,43079,137977,C,Moderate,Australia
+HTA196,Technology 196,Merck,Oncology,Indication 196,Active comparator,HAS,2022,Progression-free survival,0.82,0.67,0.97,0.03,3.04,113546,558,Approved,Low,8,Moderate,287153,276953,B,Moderate,Germany
+HTA197,Technology 197,Gilead,Rheumatology,Indication 197,Active comparator,FDA,2024,Disease control,0.6,0.49,0.71,0.037,3.14,46331,128,Approved,Low,9,Moderate,8340,187013,B,Low,USA
+HTA198,Technology 198,Novartis,Dermatology,Indication 198,Standard care,AIFA,2024,Clinical response,0.71,0.58,0.84,0.025,1.39,103959,464,Conditional approval,High,6,Low,24257,78761,A,Low,Germany
+HTA199,Technology 199,Bayer,Rheumatology,Indication 199,Standard care,FDA,2018,Clinical response,0.59,0.48,0.7,0.002,1.73,20159,292,Approved,Moderate,8,Moderate,24816,218823,B,Moderate,Spain
+HTA200,Technology 200,Takeda,Hematology,Indication 200,Active comparator,EMA,2018,Clinical response,0.73,0.6,0.86,0.011,3.4,49227,688,Approved,High,10,High,266125,214214,B,Moderate,Spain
+HTA201,Technology 201,Roche,Cardiology,Indication 201,Standard care,AIFA,2018,Disease control,0.71,0.58,0.84,0.022,1.92,88251,630,Rejected,Low,8,Low,454117,24828,C,Low,Spain
+HTA202,Technology 202,Bayer,Oncology,Indication 202,Standard care,G-BA,2023,Overall survival,0.86,0.71,1.01,0.013,0.97,40639,630,Approved,High,6,High,317142,181983,A,Moderate,UK
+HTA203,Technology 203,AstraZeneca,Endocrinology,Indication 203,Active comparator,HAS,2020,Disease control,0.83,0.68,0.98,0.017,2.2,66332,681,Approved,Low,10,Moderate,92785,42160,B,Moderate,Germany
+HTA204,Technology 204,AbbVie,Endocrinology,Indication 204,Best supportive care,EMA,2023,Clinical response,0.66,0.54,0.78,0.046,2.47,85588,613,Conditional approval,High,8,High,111744,104075,A,Moderate,Spain
+HTA205,Technology 205,Merck,Infectious disease,Indication 205,Best supportive care,FDA,2024,Progression-free survival,0.67,0.55,0.79,0.028,0.82,70317,786,Approved,Moderate,10,Moderate,179303,38974,C,Moderate,Canada
+HTA206,Technology 206,J&J,Pulmonology,Indication 206,Best supportive care,EMA,2018,Clinical response,0.59,0.48,0.7,0.019,2.68,54646,477,Conditional approval,Low,5,Moderate,270716,27243,B,Moderate,Canada
+HTA207,Technology 207,Amgen,Infectious disease,Indication 207,Best supportive care,AIFA,2022,Disease control,0.84,0.69,0.99,0.049,2.29,20828,607,Approved,Moderate,9,Moderate,21187,291343,B,High,Canada
+HTA208,Technology 208,Takeda,Oncology,Indication 208,Best supportive care,HAS,2020,Overall survival,0.62,0.51,0.73,0.04,2.09,78660,542,Conditional approval,Moderate,8,Moderate,115382,255096,A,High,UK
+HTA209,Technology 209,Sanofi,Endocrinology,Indication 209,Active comparator,G-BA,2023,Disease control,0.8,0.66,0.94,0.006,2.05,37960,512,Conditional approval,Low,6,Moderate,186122,170689,A,Low,Australia
+HTA210,Technology 210,AbbVie,Oncology,Indication 210,Best supportive care,HAS,2024,Overall survival,0.71,0.58,0.84,0.027,0.43,130694,201,Approved,High,6,High,338241,280854,B,Low,Canada
+HTA211,Technology 211,AbbVie,Endocrinology,Indication 211,Active comparator,FDA,2022,Progression-free survival,0.74,0.61,0.87,0.037,2.73,77777,351,Conditional approval,Low,6,Low,175706,248576,B,Moderate,UK
+HTA212,Technology 212,Bayer,Neurology,Indication 212,Active comparator,FDA,2022,Clinical response,0.88,0.72,1.04,0.041,1.92,144788,40,Approved,Moderate,8,Low,495458,135443,A,Moderate,France
+HTA213,Technology 213,Amgen,Dermatology,Indication 213,Standard care,PBAC,2018,Overall survival,0.81,0.66,0.96,0.01,0.37,50460,26,Approved,Moderate,10,Low,463049,92354,A,Low,UK
+HTA214,Technology 214,Takeda,Endocrinology,Indication 214,Best supportive care,G-BA,2019,Disease control,0.79,0.65,0.93,0.011,0.38,54752,98,Rejected,Moderate,7,High,320121,296777,A,Moderate,Australia
+HTA215,Technology 215,Pfizer,Cardiology,Indication 215,Standard care,AIFA,2019,Progression-free survival,0.75,0.61,0.89,0.047,1.21,65984,37,Approved,Moderate,8,Low,463689,25309,B,Low,Spain
+HTA216,Technology 216,Lilly,Neurology,Indication 216,Active comparator,NICE,2022,Disease control,0.64,0.52,0.76,0.044,0.73,100121,657,Approved,High,9,Moderate,379590,207651,C,Moderate,Spain
+HTA217,Technology 217,Takeda,Oncology,Indication 217,Best supportive care,NICE,2024,Disease control,0.89,0.73,1.05,0.043,3.23,77798,728,Approved,High,7,High,85931,49923,B,Moderate,UK
+HTA218,Technology 218,AbbVie,Neurology,Indication 218,Active comparator,AIFA,2021,Clinical response,0.89,0.73,1.05,0.028,2.56,62520,330,Approved,Moderate,10,High,470209,214302,A,Low,Germany
+HTA219,Technology 219,Bayer,Cardiology,Indication 219,Best supportive care,G-BA,2018,Progression-free survival,0.65,0.53,0.77,0.006,0.42,135180,634,Approved,High,6,High,76897,101418,A,High,France
+HTA220,Technology 220,AstraZeneca,Gastroenterology,Indication 220,Active comparator,EMA,2020,Progression-free survival,0.65,0.53,0.77,0.01,2.37,123185,288,Approved,Low,6,Low,123779,231183,A,Low,France
+HTA221,Technology 221,Merck,Endocrinology,Indication 221,Standard care,G-BA,2022,Progression-free survival,0.83,0.68,0.98,0.002,0.35,56477,598,Approved,Moderate,10,Low,389670,179544,B,Low,Canada
+HTA222,Technology 222,BMS,Dermatology,Indication 222,Active comparator,HAS,2018,Clinical response,0.62,0.51,0.73,0.026,0.52,145139,265,Rejected,Low,9,Low,75046,255890,B,Moderate,Spain
+HTA223,Technology 223,AbbVie,Cardiology,Indication 223,Standard care,CADTH,2019,Clinical response,0.6,0.49,0.71,0.049,2.2,41897,150,Approved,Moderate,5,High,101493,85526,A,High,USA
+HTA224,Technology 224,AbbVie,Hematology,Indication 224,Standard care,EMA,2019,Disease control,0.9,0.74,1.06,0.016,1.33,99342,256,Approved,Low,9,Moderate,334372,118807,B,Low,Canada
+HTA225,Technology 225,GSK,Pulmonology,Indication 225,Standard care,NICE,2023,Overall survival,0.74,0.61,0.87,0.032,1.41,24976,557,Approved,High,7,High,156811,181086,A,Low,Germany
+HTA226,Technology 226,Novartis,Oncology,Indication 226,Best supportive care,EMA,2020,Overall survival,0.8,0.66,0.94,0.015,0.4,127331,506,Conditional approval,Moderate,9,Moderate,96477,57486,A,Moderate,Germany
+HTA227,Technology 227,Lilly,Neurology,Indication 227,Standard care,FDA,2020,Clinical response,0.58,0.48,0.68,0.015,3.19,108227,669,Approved,High,10,Moderate,190518,34341,C,High,Canada
+HTA228,Technology 228,Bayer,Rheumatology,Indication 228,Best supportive care,NICE,2022,Progression-free survival,0.85,0.7,1.0,0.036,2.95,95819,570,Approved,Moderate,6,High,95604,99675,B,High,Canada
+HTA229,Technology 229,BMS,Gastroenterology,Indication 229,Best supportive care,G-BA,2021,Progression-free survival,0.8,0.66,0.94,0.038,3.37,109119,273,Rejected,Low,7,Moderate,420942,275418,B,Low,France
+HTA230,Technology 230,Gilead,Infectious disease,Indication 230,Active comparator,FDA,2018,Overall survival,0.86,0.71,1.01,0.03,1.81,15001,412,Rejected,High,8,Low,230581,207849,A,High,UK
+HTA231,Technology 231,Amgen,Infectious disease,Indication 231,Best supportive care,FDA,2024,Disease control,0.6,0.49,0.71,0.044,0.82,29477,545,Approved,High,9,Low,391363,78791,A,Moderate,USA
+HTA232,Technology 232,J&J,Rheumatology,Indication 232,Best supportive care,CADTH,2022,Clinical response,0.91,0.75,1.07,0.001,2.94,107364,334,Approved,Moderate,5,Low,290978,161232,B,Moderate,Canada
+HTA233,Technology 233,AbbVie,Cardiology,Indication 233,Best supportive care,HAS,2023,Overall survival,0.58,0.48,0.68,0.003,1.12,129428,418,Conditional approval,Moderate,7,Moderate,67724,273233,B,Moderate,Canada
+HTA234,Technology 234,Sanofi,Gastroenterology,Indication 234,Standard care,EMA,2021,Disease control,0.75,0.61,0.89,0.041,1.35,122363,586,Conditional approval,Moderate,10,Moderate,138553,197082,A,High,USA
+HTA235,Technology 235,GSK,Cardiology,Indication 235,Active comparator,PBAC,2018,Progression-free survival,0.72,0.59,0.85,0.01,3.03,140408,259,Approved,Moderate,8,Low,250510,243907,A,Low,Germany
+HTA236,Technology 236,GSK,Oncology,Indication 236,Active comparator,FDA,2023,Overall survival,0.85,0.7,1.0,0.018,0.72,74511,466,Approved,High,10,High,250566,177664,B,Low,Australia
+HTA237,Technology 237,Roche,Neurology,Indication 237,Standard care,AIFA,2021,Progression-free survival,0.62,0.51,0.73,0.032,2.21,66292,366,Approved,Moderate,10,Moderate,239406,152254,A,Low,USA
+HTA238,Technology 238,AbbVie,Oncology,Indication 238,Active comparator,EMA,2018,Clinical response,0.82,0.67,0.97,0.034,2.06,63591,414,Rejected,High,8,Moderate,338939,287509,B,Moderate,Australia
+HTA239,Technology 239,BMS,Dermatology,Indication 239,Standard care,NICE,2020,Clinical response,0.6,0.49,0.71,0.015,2.51,129695,116,Approved,Low,7,Moderate,447885,238718,A,Moderate,Canada
+HTA240,Technology 240,AbbVie,Hematology,Indication 240,Best supportive care,EMA,2022,Clinical response,0.87,0.71,1.03,0.013,0.74,125599,226,Approved,High,5,Low,202495,105554,B,High,USA
+HTA241,Technology 241,Novartis,Infectious disease,Indication 241,Active comparator,HAS,2023,Disease control,0.78,0.64,0.92,0.008,1.81,44534,439,Conditional approval,High,5,Low,257945,253277,A,Moderate,France
+HTA242,Technology 242,Amgen,Infectious disease,Indication 242,Active comparator,EMA,2022,Progression-free survival,0.84,0.69,0.99,0.039,2.27,63016,29,Approved,Moderate,6,Low,287207,265620,C,Low,USA
+HTA243,Technology 243,Lilly,Rheumatology,Indication 243,Active comparator,AIFA,2020,Clinical response,0.73,0.6,0.86,0.019,1.69,113828,649,Approved,High,6,Moderate,357001,87674,B,Moderate,UK
+HTA244,Technology 244,AbbVie,Endocrinology,Indication 244,Best supportive care,G-BA,2019,Progression-free survival,0.9,0.74,1.06,0.038,1.23,129099,215,Approved,Moderate,6,High,32304,29876,C,Low,UK
+HTA245,Technology 245,Amgen,Rheumatology,Indication 245,Active comparator,NICE,2023,Disease control,0.61,0.5,0.72,0.043,1.43,91031,524,Approved,Moderate,6,High,306201,276515,A,Moderate,USA
+HTA246,Technology 246,BMS,Hematology,Indication 246,Active comparator,G-BA,2020,Clinical response,0.85,0.7,1.0,0.031,1.48,112612,193,Approved,High,10,High,486108,168333,A,Low,Australia
+HTA247,Technology 247,AbbVie,Dermatology,Indication 247,Standard care,AIFA,2022,Overall survival,0.6,0.49,0.71,0.044,0.7,117533,265,Approved,High,10,Moderate,194728,83509,A,High,Spain
+HTA248,Technology 248,Pfizer,Hematology,Indication 248,Standard care,NICE,2020,Clinical response,0.79,0.65,0.93,0.012,2.16,141934,734,Approved,High,6,Low,198345,113795,A,High,Canada
+HTA249,Technology 249,Takeda,Infectious disease,Indication 249,Active comparator,G-BA,2020,Overall survival,0.91,0.75,1.07,0.027,2.69,26158,31,Conditional approval,High,9,High,444290,182989,B,Moderate,Germany
+HTA250,Technology 250,GSK,Neurology,Indication 250,Active comparator,HAS,2023,Disease control,0.63,0.52,0.74,0.005,1.03,49417,417,Approved,High,5,High,195100,133590,A,Moderate,UK
+HTA251,Technology 251,AstraZeneca,Dermatology,Indication 251,Active comparator,EMA,2023,Clinical response,0.85,0.7,1.0,0.048,2.13,73485,67,Approved,High,7,High,441574,134165,A,Moderate,USA
+HTA252,Technology 252,AbbVie,Dermatology,Indication 252,Standard care,PBAC,2019,Overall survival,0.78,0.64,0.92,0.036,2.11,124540,646,Approved,Moderate,7,Moderate,76702,144844,A,Low,Spain
+HTA253,Technology 253,Pfizer,Cardiology,Indication 253,Active comparator,HAS,2023,Disease control,0.72,0.59,0.85,0.041,2.0,77880,73,Approved,High,6,Low,13457,155820,B,Moderate,USA
+HTA254,Technology 254,Lilly,Gastroenterology,Indication 254,Standard care,CADTH,2018,Progression-free survival,0.55,0.45,0.65,0.009,3.21,17373,700,Conditional approval,Low,7,Moderate,415924,211151,C,Moderate,UK
+HTA255,Technology 255,Roche,Pulmonology,Indication 255,Standard care,FDA,2018,Clinical response,0.6,0.49,0.71,0.019,0.72,40778,507,Approved,Low,7,Low,283132,237463,C,Low,Germany
+HTA256,Technology 256,J&J,Gastroenterology,Indication 256,Active comparator,EMA,2024,Overall survival,0.77,0.63,0.91,0.038,1.45,66676,162,Conditional approval,Low,8,Moderate,423778,284686,B,Low,France
+HTA257,Technology 257,Bayer,Gastroenterology,Indication 257,Standard care,HAS,2019,Clinical response,0.79,0.65,0.93,0.01,2.97,85932,175,Approved,Moderate,5,Low,57250,69064,A,Low,Spain
+HTA258,Technology 258,Takeda,Rheumatology,Indication 258,Standard care,PBAC,2024,Progression-free survival,0.85,0.7,1.0,0.032,1.4,136487,173,Conditional approval,High,7,Low,402737,106222,B,High,Germany
+HTA259,Technology 259,Novartis,Hematology,Indication 259,Active comparator,HAS,2023,Disease control,0.85,0.7,1.0,0.032,2.24,20079,495,Approved,High,7,Moderate,343580,235668,B,Low,Australia
+HTA260,Technology 260,Merck,Neurology,Indication 260,Best supportive care,NICE,2021,Disease control,0.65,0.53,0.77,0.006,2.57,48443,753,Approved,Moderate,9,High,333028,223991,C,Low,USA
+HTA261,Technology 261,Takeda,Dermatology,Indication 261,Best supportive care,CADTH,2023,Clinical response,0.69,0.57,0.81,0.012,3.38,85126,102,Approved,High,10,High,476185,178912,C,Low,USA
+HTA262,Technology 262,AbbVie,Neurology,Indication 262,Standard care,AIFA,2023,Disease control,0.81,0.66,0.96,0.041,1.46,17670,753,Approved,Moderate,7,High,438321,54355,B,Moderate,UK
+HTA263,Technology 263,Pfizer,Dermatology,Indication 263,Active comparator,EMA,2023,Clinical response,0.55,0.45,0.65,0.029,1.19,77591,58,Rejected,Low,8,Moderate,80657,44331,B,Low,USA
+HTA264,Technology 264,BMS,Oncology,Indication 264,Standard care,AIFA,2018,Progression-free survival,0.68,0.56,0.8,0.017,2.42,85190,218,Rejected,High,8,High,473050,165060,B,Moderate,Australia
+HTA265,Technology 265,Novartis,Rheumatology,Indication 265,Active comparator,EMA,2020,Overall survival,0.55,0.45,0.65,0.043,2.2,25003,115,Conditional approval,High,10,Low,383476,299546,A,Low,Spain
+HTA266,Technology 266,Novartis,Dermatology,Indication 266,Active comparator,HAS,2022,Disease control,0.75,0.61,0.89,0.03,2.76,22852,78,Approved,Moderate,10,Moderate,86979,261083,B,Low,Germany
+HTA267,Technology 267,Lilly,Infectious disease,Indication 267,Best supportive care,FDA,2024,Clinical response,0.65,0.53,0.77,0.04,2.62,148414,393,Approved,Low,10,Low,362475,95002,C,High,USA
+HTA268,Technology 268,Merck,Rheumatology,Indication 268,Best supportive care,PBAC,2021,Clinical response,0.91,0.75,1.07,0.032,3.06,90510,561,Approved,Moderate,10,Low,85231,230799,A,High,Germany
+HTA269,Technology 269,Lilly,Infectious disease,Indication 269,Standard care,HAS,2018,Progression-free survival,0.76,0.62,0.9,0.024,1.64,41826,686,Rejected,Moderate,7,Low,311640,294836,A,High,UK
+HTA270,Technology 270,Novartis,Hematology,Indication 270,Active comparator,NICE,2019,Progression-free survival,0.85,0.7,1.0,0.01,2.37,135823,597,Approved,Moderate,5,High,333798,215129,A,Moderate,UK
+HTA271,Technology 271,AstraZeneca,Neurology,Indication 271,Active comparator,NICE,2022,Progression-free survival,0.75,0.61,0.89,0.013,1.91,99172,609,Approved,High,8,High,65732,273622,A,High,France
+HTA272,Technology 272,BMS,Infectious disease,Indication 272,Active comparator,AIFA,2024,Progression-free survival,0.63,0.52,0.74,0.032,2.31,90111,331,Rejected,Moderate,7,Low,130727,122375,A,High,Spain
+HTA273,Technology 273,Bayer,Hematology,Indication 273,Active comparator,EMA,2018,Progression-free survival,0.71,0.58,0.84,0.031,1.04,33565,449,Approved,High,10,Low,155600,297922,B,Moderate,Germany
+HTA274,Technology 274,GSK,Hematology,Indication 274,Standard care,FDA,2024,Clinical response,0.66,0.54,0.78,0.024,1.99,29019,643,Rejected,High,9,High,488769,226007,A,Low,UK
+HTA275,Technology 275,Lilly,Pulmonology,Indication 275,Active comparator,NICE,2024,Clinical response,0.86,0.71,1.01,0.016,2.94,110602,272,Conditional approval,High,7,High,436273,78628,B,Low,Canada
+HTA276,Technology 276,Roche,Cardiology,Indication 276,Best supportive care,AIFA,2023,Clinical response,0.82,0.67,0.97,0.007,1.47,115633,179,Conditional approval,Moderate,8,Moderate,499311,114625,C,Low,Australia
+HTA277,Technology 277,Lilly,Endocrinology,Indication 277,Standard care,NICE,2024,Disease control,0.77,0.63,0.91,0.038,0.52,20561,380,Approved,Moderate,6,Low,410591,209764,B,Low,Canada
+HTA278,Technology 278,Novartis,Rheumatology,Indication 278,Standard care,FDA,2021,Disease control,0.6,0.49,0.71,0.035,1.92,103244,178,Rejected,Low,6,Low,496730,232056,B,Low,USA
+HTA279,Technology 279,Novartis,Neurology,Indication 279,Standard care,EMA,2023,Clinical response,0.57,0.47,0.67,0.029,2.9,121412,794,Rejected,Moderate,10,High,489620,249046,A,High,France
+HTA280,Technology 280,Lilly,Cardiology,Indication 280,Standard care,EMA,2023,Overall survival,0.74,0.61,0.87,0.016,0.92,73276,704,Approved,High,10,High,220547,281933,C,Low,Canada
+HTA281,Technology 281,Lilly,Cardiology,Indication 281,Standard care,G-BA,2021,Disease control,0.76,0.62,0.9,0.015,1.15,107053,374,Approved,High,6,Low,114355,284233,B,Moderate,Australia
+HTA282,Technology 282,Pfizer,Rheumatology,Indication 282,Active comparator,G-BA,2022,Overall survival,0.92,0.75,1.09,0.002,2.9,52426,165,Rejected,Moderate,8,Low,123604,176167,A,Low,USA
+HTA283,Technology 283,Sanofi,Pulmonology,Indication 283,Standard care,EMA,2023,Progression-free survival,0.66,0.54,0.78,0.008,2.38,118208,512,Approved,High,10,Moderate,154386,50159,A,Low,Canada
+HTA284,Technology 284,Pfizer,Pulmonology,Indication 284,Standard care,G-BA,2022,Clinical response,0.89,0.73,1.05,0.007,2.96,71852,167,Conditional approval,Moderate,6,Low,56664,210916,B,Moderate,Spain
+HTA285,Technology 285,Lilly,Pulmonology,Indication 285,Best supportive care,AIFA,2019,Clinical response,0.77,0.63,0.91,0.005,1.86,47190,121,Approved,High,10,Moderate,83089,107115,B,Low,UK
+HTA286,Technology 286,Bayer,Cardiology,Indication 286,Best supportive care,AIFA,2018,Progression-free survival,0.6,0.49,0.71,0.001,2.13,20015,354,Approved,Moderate,6,Low,21428,158676,B,High,Germany
+HTA287,Technology 287,Merck,Oncology,Indication 287,Active comparator,HAS,2024,Clinical response,0.87,0.71,1.03,0.034,2.96,106580,473,Rejected,Moderate,10,High,72168,88967,A,Moderate,Spain
+HTA288,Technology 288,J&J,Endocrinology,Indication 288,Standard care,NICE,2024,Overall survival,0.71,0.58,0.84,0.021,1.69,31067,382,Approved,Low,8,Low,42142,195533,C,High,Spain
+HTA289,Technology 289,Roche,Gastroenterology,Indication 289,Standard care,HAS,2020,Overall survival,0.74,0.61,0.87,0.039,3.34,104944,514,Approved,High,10,High,155503,215608,A,High,Australia
+HTA290,Technology 290,Roche,Pulmonology,Indication 290,Standard care,FDA,2020,Disease control,0.71,0.58,0.84,0.036,2.49,27348,339,Approved,High,10,Moderate,213700,251622,C,Low,Australia
+HTA291,Technology 291,GSK,Dermatology,Indication 291,Standard care,EMA,2020,Clinical response,0.75,0.61,0.89,0.01,2.89,18850,441,Approved,High,8,High,295536,152576,A,High,France
+HTA292,Technology 292,J&J,Rheumatology,Indication 292,Standard care,G-BA,2021,Overall survival,0.87,0.71,1.03,0.006,2.12,89216,455,Approved,Moderate,6,High,398171,145144,C,High,Germany
+HTA293,Technology 293,GSK,Pulmonology,Indication 293,Active comparator,AIFA,2020,Progression-free survival,0.87,0.71,1.03,0.023,0.83,21651,673,Rejected,High,7,Moderate,121093,140164,B,Moderate,France
+HTA294,Technology 294,Bayer,Oncology,Indication 294,Standard care,FDA,2022,Progression-free survival,0.88,0.72,1.04,0.008,1.63,146371,602,Approved,Moderate,6,High,115160,185035,A,Moderate,Australia
+HTA295,Technology 295,Bayer,Dermatology,Indication 295,Standard care,EMA,2023,Clinical response,0.61,0.5,0.72,0.028,1.4,94801,135,Approved,High,10,Moderate,423977,155235,C,Low,UK
+HTA296,Technology 296,BMS,Dermatology,Indication 296,Standard care,CADTH,2022,Disease control,0.66,0.54,0.78,0.002,3.28,57645,122,Approved,High,6,Low,461533,128648,B,High,Australia
+HTA297,Technology 297,GSK,Gastroenterology,Indication 297,Best supportive care,FDA,2018,Clinical response,0.7,0.57,0.83,0.005,0.55,57443,648,Approved,Moderate,8,Moderate,42020,256067,A,Low,Germany
+HTA298,Technology 298,Sanofi,Gastroenterology,Indication 298,Best supportive care,EMA,2018,Overall survival,0.76,0.62,0.9,0.017,0.56,29525,523,Conditional approval,Low,8,High,334835,120302,B,Moderate,Spain
+HTA299,Technology 299,Merck,Hematology,Indication 299,Active comparator,EMA,2018,Overall survival,0.56,0.46,0.66,0.045,3.49,77845,403,Conditional approval,High,9,Low,61519,218853,A,Low,Australia
+HTA300,Technology 300,AbbVie,Gastroenterology,Indication 300,Best supportive care,AIFA,2024,Disease control,0.79,0.65,0.93,0.017,2.22,16058,166,Approved,High,7,Moderate,435190,256121,A,High,Spain
