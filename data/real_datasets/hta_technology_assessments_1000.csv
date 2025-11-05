@@ -1,0 +1,1001 @@
+hta_id,agency,assessment_date,assessment_year,technology_category,therapeutic_area,n_rcts,n_observational_studies,total_patients_evidence,primary_endpoint_met,effect_size,serious_adverse_events_rate,discontinuation_rate,icer_per_qaly,willingness_to_pay_threshold,budget_impact_annual,certainty_of_evidence,cost_effectiveness_score,clinical_benefit_score,innovation_score,decision,reimbursement_rate,time_to_decision_months,market_exclusivity_years,managed_entry_agreement,manufacturer_appeals
+HTA0001,IQWIG (Germany),2022-05-07,2022,Surgical Procedures,Gastroenterology,19,6,4526,True,0.501,0.0443,0.2778,13179.68,100000,72477878.45,Very Low,1.01,9.93,6.56,Restricted,0.683,14,16,True,False
+HTA0002,CVZ (Netherlands),2021-09-03,2021,Diagnostic Tests,Respiratory,5,2,8938,True,-0.305,0.2377,0.388,122217.62,100000,31156763.15,High,7.16,4.96,2.1,Conditional,0.498,17,2,True,False
+HTA0003,CADTH (Canada),2021-02-06,2021,Medical Devices,Gastroenterology,22,9,3943,True,2.409,0.196,0.3788,134749.97,100000,60192097.9,Very Low,1.8,2.76,1.41,Not Recommended,0.0,10,15,False,True
+HTA0004,PBAC (Australia),2018-12-28,2018,Screening Programs,Immunology,13,8,5376,False,-0.425,0.2469,0.3203,33813.77,100000,1546689.6,Low,7.36,7.56,7.94,Recommended,0.815,9,8,False,False
+HTA0005,IQWIG (Germany),2021-02-01,2021,Preventive Interventions,Gastroenterology,16,6,2554,False,0.166,0.1519,0.1462,86380.3,100000,38909760.6,Very Low,8.64,7.5,3.12,Restricted,0.577,11,14,False,False
+HTA0006,CVZ (Netherlands),2018-04-04,2018,Diagnostic Tests,Respiratory,5,6,6474,True,1.767,0.0649,0.0769,47013.96,100000,16960907.44,Very Low,8.27,6.7,8.84,Recommended,0.961,14,19,False,False
+HTA0007,CVZ (Netherlands),2024-01-01,2024,Immunotherapy,Hematology,20,12,5964,True,-0.006,0.1382,0.2197,105403.22,100000,27671821.05,Moderate,2.51,2.97,6.02,Conditional,0.462,19,19,False,False
+HTA0008,IQWIG (Germany),2018-05-17,2018,Medical Devices,Neurology,24,0,798,True,1.008,0.0224,0.1475,136698.55,100000,24716627.18,High,5.41,9.87,3.18,Restricted,0.702,13,16,True,False
+HTA0009,NCPE (Ireland),2019-06-22,2019,Digital Health,Endocrinology,11,14,6387,False,-0.179,0.0548,0.0643,90679.48,100000,68078871.82,High,5.61,3.04,6.81,Restricted,0.552,3,7,False,False
+HTA0010,HAS (France),2020-12-25,2020,Screening Programs,Oncology,18,6,5634,False,-0.242,0.1684,0.336,85504.12,100000,53435407.26,Moderate,1.84,9.07,9.1,Restricted,0.69,11,8,False,False
+HTA0011,G-BA (Germany),2023-08-01,2023,Surgical Procedures,Gastroenterology,24,3,1748,True,2.196,0.1555,0.0532,19713.37,100000,66686675.14,High,2.45,5.94,7.23,Restricted,0.696,11,3,True,False
+HTA0012,NICE (UK),2024-03-17,2024,Digital Health,Endocrinology,1,11,9246,True,0.296,0.0686,0.3906,61999.17,50000,89312608.96,Low,8.15,5.52,6.19,Restricted,0.648,7,15,False,False
+HTA0013,G-BA (Germany),2021-12-14,2021,Pharmaceuticals,Oncology,21,5,1160,False,-0.072,0.242,0.3873,128686.37,100000,30150440.31,Moderate,8.66,3.85,2.53,Restricted,0.667,5,7,False,False
+HTA0014,HAS (France),2019-11-10,2019,Gene Therapy,Respiratory,2,9,884,False,-0.363,0.1801,0.2435,47993.97,100000,42558304.79,Moderate,6.5,1.73,1.05,Conditional,0.551,22,0,False,False
+HTA0015,G-BA (Germany),2019-07-22,2019,Immunotherapy,Cardiology,19,8,3869,True,0.36,0.1518,0.0607,10415.49,100000,82437455.51,Moderate,2.14,5.7,7.93,Restricted,0.565,7,6,False,False
+HTA0016,CADTH (Canada),2021-02-28,2021,Diagnostic Tests,Respiratory,10,13,9974,False,-0.229,0.1154,0.0775,8675.86,100000,96302193.05,Low,7.26,4.68,2.56,Conditional,0.363,4,15,False,False
+HTA0017,PBAC (Australia),2024-05-22,2024,Pharmaceuticals,Respiratory,23,2,3247,True,-0.024,0.0388,0.1697,18310.86,100000,10321541.84,Moderate,9.82,2.58,1.15,Conditional,0.605,23,6,False,False
+HTA0018,PBAC (Australia),2019-06-05,2019,Immunotherapy,Immunology,4,1,7490,True,2.3,0.1302,0.2388,104174.75,100000,61969265.27,Very Low,9.5,8.8,6.73,Recommended,0.96,14,17,False,False
+HTA0019,G-BA (Germany),2022-03-11,2022,Pharmaceuticals,Oncology,5,11,8102,False,0.151,0.0596,0.1459,36115.42,100000,38348649.24,High,6.56,4.03,6.9,Restricted,0.616,12,1,False,False
+HTA0020,IQWIG (Germany),2022-02-13,2022,Surgical Procedures,Immunology,11,12,7643,False,0.303,0.0777,0.1121,113839.14,100000,80876639.19,Very Low,4.71,4.35,7.99,Restricted,0.602,7,11,False,False
+HTA0021,IQWIG (Germany),2018-01-17,2018,Preventive Interventions,Neurology,20,8,1465,True,-0.2,0.0228,0.3855,127835.76,100000,36135613.86,Very Low,7.09,5.34,5.44,Restricted,0.525,7,2,True,False
+HTA0022,CADTH (Canada),2022-07-16,2022,Digital Health,Endocrinology,7,12,7960,True,-0.327,0.1419,0.2045,133717.11,100000,35740586.24,High,2.29,7.85,6.56,Restricted,0.53,9,13,True,False
+HTA0023,CVZ (Netherlands),2020-10-02,2020,Preventive Interventions,Cardiology,5,12,5641,False,-0.126,0.099,0.3345,142351.04,100000,98614105.32,Low,4.39,1.75,7.99,Conditional,0.523,12,18,False,False
+HTA0024,G-BA (Germany),2021-12-08,2021,Medical Devices,Immunology,9,6,3172,False,-0.262,0.1061,0.2172,17019.24,100000,53308642.01,Moderate,8.22,9.8,6.0,Recommended,0.865,18,10,False,False
+HTA0025,PBAC (Australia),2020-04-25,2020,Surgical Procedures,Neurology,18,14,1356,True,0.383,0.249,0.2939,60709.27,100000,73972969.88,Very Low,9.63,1.52,4.55,Restricted,0.532,23,7,False,False
+HTA0026,CADTH (Canada),2019-12-18,2019,Rehabilitation Technologies,Gastroenterology,5,8,4935,False,0.198,0.1387,0.1583,123000.28,100000,68788386.08,Moderate,9.2,8.4,9.55,Recommended,0.945,17,1,False,False
+HTA0027,CVZ (Netherlands),2020-05-23,2020,Screening Programs,Cardiology,24,0,2293,False,-0.35,0.1526,0.1833,145637.59,100000,84369773.39,Low,5.22,4.73,3.46,Conditional,0.323,8,16,True,False
+HTA0028,PBAC (Australia),2022-07-05,2022,Gene Therapy,Neurology,21,4,4909,False,-0.253,0.1181,0.0952,143337.4,100000,61011288.81,Moderate,7.05,6.56,4.22,Restricted,0.534,4,2,True,False
+HTA0029,NICE (UK),2023-11-25,2023,Gene Therapy,Infectious Disease,17,14,3474,True,1.854,0.1634,0.3318,135956.9,50000,62109107.5,Very Low,6.47,6.73,5.99,Restricted,0.527,4,19,True,False
+HTA0030,NICE (UK),2019-03-17,2019,Screening Programs,Respiratory,5,12,7143,True,2.026,0.1945,0.0732,11649.88,50000,62459762.76,Moderate,2.88,6.22,4.07,Conditional,0.515,18,10,False,False
+HTA0031,NCPE (Ireland),2021-08-25,2021,Surgical Procedures,Gastroenterology,3,2,766,False,-0.328,0.0561,0.0643,29495.58,100000,28580443.56,Moderate,1.8,2.09,5.15,Conditional,0.383,4,16,True,False
+HTA0032,TLV (Sweden),2024-09-22,2024,Rehabilitation Technologies,Hematology,15,7,6593,True,0.632,0.0106,0.3539,17254.97,100000,60130530.14,Very Low,5.83,9.32,3.13,Restricted,0.728,16,1,True,False
+HTA0033,NCPE (Ireland),2020-07-14,2020,Diagnostic Tests,Respiratory,11,14,1631,True,0.842,0.1378,0.1349,44040.27,100000,38351132.15,High,3.9,2.9,3.95,Conditional,0.348,19,12,True,False
+HTA0034,CADTH (Canada),2018-02-15,2018,Rehabilitation Technologies,Neurology,4,14,9785,True,1.736,0.1136,0.0947,46147.51,100000,36945147.34,Low,6.14,4.2,9.88,Restricted,0.682,3,5,False,False
+HTA0035,CADTH (Canada),2018-07-03,2018,Screening Programs,Respiratory,19,14,1163,False,0.497,0.2252,0.2516,138022.36,100000,1524700.63,Very Low,5.42,7.51,8.39,Restricted,0.716,13,7,False,False
+HTA0036,PBAC (Australia),2023-04-19,2023,Gene Therapy,Immunology,20,0,4308,True,1.622,0.1943,0.0806,78385.07,100000,93269419.88,Moderate,6.34,4.32,5.09,Restricted,0.665,12,11,False,False
+HTA0037,NCPE (Ireland),2018-05-09,2018,Medical Devices,Endocrinology,17,8,2094,True,1.318,0.2006,0.0873,128355.48,100000,74851478.03,Moderate,9.4,9.92,2.85,Restricted,0.614,3,7,True,False
+HTA0038,NCPE (Ireland),2023-12-03,2023,Preventive Interventions,Infectious Disease,21,4,2998,False,0.023,0.0961,0.357,61904.54,100000,81843344.51,Moderate,4.39,5.16,3.71,Conditional,0.599,17,0,False,False
+HTA0039,NICE (UK),2023-05-08,2023,Immunotherapy,Cardiology,8,2,2070,True,0.498,0.1853,0.2928,29175.96,50000,87984282.42,Moderate,7.67,6.16,9.98,Recommended,0.95,7,0,False,False
+HTA0040,CADTH (Canada),2019-05-27,2019,Gene Therapy,Cardiology,10,0,6128,True,2.039,0.0406,0.1891,120607.83,100000,15841825.31,Moderate,7.5,7.48,6.77,Restricted,0.708,6,10,True,False
+HTA0041,CADTH (Canada),2023-06-08,2023,Rehabilitation Technologies,Gastroenterology,23,14,445,False,-0.347,0.1507,0.2271,93660.86,100000,2792908.2,Low,9.39,6.09,7.27,Recommended,0.984,10,9,False,False
+HTA0042,NICE (UK),2023-03-14,2023,Rehabilitation Technologies,Hematology,8,8,3897,False,-0.377,0.0666,0.1079,32016.53,50000,83911588.11,Moderate,3.8,3.05,6.47,Conditional,0.452,23,8,False,False
+HTA0043,TLV (Sweden),2018-03-20,2018,Digital Health,Immunology,11,5,8677,True,0.943,0.2304,0.2555,9762.77,100000,91362196.83,Moderate,6.2,2.49,1.3,Conditional,0.425,13,17,True,False
+HTA0044,IQWIG (Germany),2018-01-20,2018,Pharmaceuticals,Endocrinology,22,5,5282,False,0.002,0.1529,0.0735,113744.27,100000,21780653.72,Low,2.85,2.72,1.33,Not Recommended,0.0,18,7,False,False
+HTA0045,NICE (UK),2019-06-28,2019,Diagnostic Tests,Cardiology,17,1,5897,False,-0.397,0.0902,0.0764,114220.7,50000,27957883.62,Low,5.74,8.21,9.81,Recommended,0.968,9,7,False,False
+HTA0046,NICE (UK),2020-08-23,2020,Preventive Interventions,Respiratory,8,5,3410,True,2.162,0.1436,0.3023,121770.67,50000,98884149.41,Low,8.26,9.66,9.5,Recommended,0.828,16,15,False,False
+HTA0047,HAS (France),2024-01-23,2024,Immunotherapy,Immunology,21,2,3795,True,1.249,0.1111,0.3624,123529.32,100000,34839917.82,Moderate,4.42,6.31,3.41,Conditional,0.55,8,8,False,False
+HTA0048,G-BA (Germany),2023-12-24,2023,Surgical Procedures,Immunology,17,9,2779,False,-0.029,0.0537,0.2197,79306.36,100000,74427007.48,Low,4.62,2.96,6.81,Conditional,0.469,15,1,False,False
+HTA0049,SMC (Scotland),2019-04-09,2019,Medical Devices,Infectious Disease,6,1,7284,True,0.992,0.1828,0.0873,25302.69,100000,27104696.46,Moderate,7.59,3.26,6.7,Restricted,0.648,12,12,True,False
+HTA0050,PBAC (Australia),2021-06-11,2021,Rehabilitation Technologies,Cardiology,1,2,4888,True,0.236,0.1034,0.151,56572.54,100000,72185544.61,Moderate,6.1,5.28,6.97,Restricted,0.781,7,0,False,False
+HTA0051,CADTH (Canada),2021-11-17,2021,Diagnostic Tests,Neurology,13,10,581,True,0.923,0.0927,0.173,64855.06,100000,70787629.42,Low,5.14,1.68,1.7,Not Recommended,0.0,14,11,False,True
+HTA0052,SMC (Scotland),2022-12-27,2022,Medical Devices,Neurology,17,12,5236,False,-0.054,0.0544,0.2397,131577.15,100000,73490263.75,Low,6.93,7.23,8.64,Recommended,0.85,14,14,False,False
+HTA0053,CVZ (Netherlands),2024-10-16,2024,Preventive Interventions,Immunology,7,0,6013,True,2.246,0.0181,0.2941,48115.61,100000,92515223.34,Very Low,9.5,5.27,8.76,Recommended,0.969,20,9,False,False
+HTA0054,IQWIG (Germany),2020-12-28,2020,Pharmaceuticals,Gastroenterology,13,1,230,False,-0.16,0.1839,0.0729,50717.1,100000,54409637.95,Low,3.87,6.63,8.97,Restricted,0.685,4,2,True,False
+HTA0055,IQWIG (Germany),2020-07-14,2020,Medical Devices,Neurology,20,12,2132,True,0.94,0.1606,0.3558,147692.1,100000,77059067.97,Moderate,4.79,7.64,3.15,Restricted,0.533,16,17,False,False
+HTA0056,PBAC (Australia),2022-09-15,2022,Preventive Interventions,Oncology,17,8,7611,True,2.369,0.2015,0.1406,90340.36,100000,98250720.99,Low,6.41,9.13,9.9,Recommended,0.949,6,7,False,False
+HTA0057,CADTH (Canada),2020-10-11,2020,Gene Therapy,Infectious Disease,2,8,2365,True,2.372,0.2083,0.3303,96317.8,100000,22416078.28,Moderate,6.38,5.73,3.34,Restricted,0.655,20,16,False,False
+HTA0058,G-BA (Germany),2022-09-09,2022,Gene Therapy,Gastroenterology,4,13,1480,True,2.132,0.0737,0.0953,133868.47,100000,95609498.32,Low,8.29,6.9,5.96,Restricted,0.526,17,5,False,False
+HTA0059,PBAC (Australia),2023-05-28,2023,Rehabilitation Technologies,Cardiology,16,12,9087,True,2.054,0.1288,0.2182,90899.13,100000,82643415.63,Moderate,7.1,6.09,3.4,Restricted,0.764,21,15,True,False
+HTA0060,NICE (UK),2022-10-04,2022,Preventive Interventions,Hematology,6,11,6250,False,0.461,0.1217,0.3577,5746.05,50000,82174744.82,Moderate,9.18,1.01,6.01,Restricted,0.727,14,6,False,False
+HTA0061,NICE (UK),2024-02-28,2024,Preventive Interventions,Oncology,24,12,1107,True,1.783,0.1399,0.387,54571.46,50000,63629567.42,Very Low,1.92,9.44,7.19,Restricted,0.52,19,11,False,False
+HTA0062,CVZ (Netherlands),2023-10-24,2023,Gene Therapy,Oncology,18,1,7537,False,0.469,0.1899,0.0955,114948.16,100000,3434104.73,High,3.91,5.4,7.93,Restricted,0.705,4,13,False,False
+HTA0063,CADTH (Canada),2022-09-07,2022,Pharmaceuticals,Neurology,15,6,2944,False,-0.279,0.0298,0.2882,99904.13,100000,28052693.17,Very Low,2.36,4.89,9.49,Restricted,0.626,22,5,True,False
+HTA0064,PBAC (Australia),2019-12-06,2019,Diagnostic Tests,Oncology,15,1,2080,True,2.104,0.1816,0.247,73372.21,100000,54780047.77,Moderate,2.83,1.82,2.38,Not Recommended,0.0,16,17,False,True
+HTA0065,G-BA (Germany),2021-10-03,2021,Digital Health,Gastroenterology,20,13,626,True,-0.148,0.04,0.2899,67394.35,100000,20851947.94,Moderate,1.58,6.24,3.42,Conditional,0.619,13,12,False,False
+HTA0066,PBAC (Australia),2023-06-11,2023,Medical Devices,Cardiology,13,8,2143,False,-0.46,0.1253,0.0867,40096.53,100000,98679596.73,High,5.49,6.56,7.32,Restricted,0.668,20,0,True,False
+HTA0067,NICE (UK),2022-04-26,2022,Preventive Interventions,Oncology,22,6,7114,True,1.58,0.2071,0.0644,102205.89,50000,95203447.46,High,9.07,6.35,6.55,Restricted,0.684,11,17,True,False
+HTA0068,NCPE (Ireland),2023-11-07,2023,Medical Devices,Endocrinology,11,3,307,True,1.952,0.1186,0.2753,81328.39,100000,73427362.65,High,1.54,3.22,2.44,Not Recommended,0.0,15,18,False,False
+HTA0069,IQWIG (Germany),2022-07-21,2022,Surgical Procedures,Gastroenterology,23,2,8079,True,1.658,0.0648,0.3987,146345.01,100000,65382242.95,Moderate,7.12,1.65,1.28,Conditional,0.403,14,16,True,False
+HTA0070,CVZ (Netherlands),2022-04-28,2022,Screening Programs,Endocrinology,12,13,6775,True,1.13,0.1334,0.2558,9262.19,100000,40156001.82,Low,6.38,8.14,6.9,Restricted,0.798,14,2,True,False
+HTA0071,NCPE (Ireland),2020-10-08,2020,Digital Health,Oncology,4,13,9231,True,1.038,0.1091,0.0742,68388.98,100000,10641945.86,Moderate,6.34,6.21,6.96,Restricted,0.529,19,1,True,False
+HTA0072,PBAC (Australia),2021-08-04,2021,Pharmaceuticals,Gastroenterology,13,6,3474,True,2.151,0.1161,0.1658,70072.75,100000,67269649.74,High,5.04,6.29,9.54,Restricted,0.576,22,10,True,False
+HTA0073,PBAC (Australia),2018-08-12,2018,Digital Health,Oncology,24,11,1490,False,-0.294,0.0369,0.1444,13277.59,100000,53585783.27,Very Low,1.35,2.1,5.07,Not Recommended,0.0,23,4,False,False
+HTA0074,G-BA (Germany),2022-02-24,2022,Rehabilitation Technologies,Endocrinology,11,13,7573,False,0.08,0.071,0.2326,54684.76,100000,53692253.89,High,2.19,2.29,9.46,Conditional,0.593,10,17,False,False
+HTA0075,IQWIG (Germany),2022-06-15,2022,Screening Programs,Rheumatology,2,0,5338,False,0.183,0.1293,0.2662,130991.22,100000,57490364.92,High,9.38,7.21,7.09,Recommended,0.843,18,13,False,False
+HTA0076,PBAC (Australia),2019-12-02,2019,Digital Health,Hematology,18,5,674,False,-0.093,0.219,0.3238,87217.36,100000,74106471.72,Low,4.64,3.94,7.01,Restricted,0.742,20,12,True,False
+HTA0077,G-BA (Germany),2023-06-07,2023,Pharmaceuticals,Gastroenterology,21,14,7332,True,0.689,0.1769,0.186,70060.58,100000,24516868.96,Moderate,3.05,1.66,6.43,Conditional,0.567,12,1,False,False
+HTA0078,G-BA (Germany),2019-06-28,2019,Digital Health,Immunology,21,12,1277,True,-0.053,0.1364,0.1361,74120.84,100000,40042167.06,Moderate,7.72,7.44,5.69,Restricted,0.747,13,15,True,False
+HTA0079,TLV (Sweden),2024-04-21,2024,Surgical Procedures,Neurology,13,5,4982,True,0.958,0.0716,0.1497,49557.04,100000,80499563.89,Moderate,3.8,6.49,7.45,Restricted,0.582,6,10,False,False
+HTA0080,CVZ (Netherlands),2024-08-17,2024,Immunotherapy,Respiratory,10,12,6541,False,-0.075,0.0309,0.3355,59158.9,100000,53123420.22,High,1.02,6.74,5.64,Conditional,0.537,11,14,True,False
+HTA0081,CVZ (Netherlands),2018-10-27,2018,Preventive Interventions,Immunology,5,3,6907,False,-0.076,0.1702,0.0834,95459.6,100000,45725000.19,Low,2.51,7.63,8.77,Restricted,0.565,19,15,False,False
+HTA0082,G-BA (Germany),2018-09-25,2018,Immunotherapy,Immunology,2,2,4458,False,-0.096,0.1128,0.3012,105403.24,100000,99134343.38,High,1.94,7.52,6.21,Restricted,0.582,16,3,False,False
+HTA0083,NICE (UK),2018-08-01,2018,Surgical Procedures,Neurology,6,8,807,True,1.996,0.1707,0.0745,97824.39,50000,27843596.21,Low,7.12,3.08,5.11,Restricted,0.557,4,11,True,False
+HTA0084,NICE (UK),2024-04-08,2024,Diagnostic Tests,Cardiology,22,11,3474,True,1.107,0.0332,0.2076,114643.68,50000,35409580.9,Low,8.16,9.34,3.11,Restricted,0.62,10,4,True,False
+HTA0085,NCPE (Ireland),2023-05-20,2023,Pharmaceuticals,Hematology,6,5,7221,False,0.365,0.156,0.2274,28099.08,100000,7247794.27,High,3.05,4.08,4.43,Conditional,0.439,11,0,False,False
+HTA0086,CADTH (Canada),2021-02-23,2021,Immunotherapy,Immunology,6,2,8697,True,2.476,0.2143,0.123,139936.31,100000,12520273.39,Low,4.43,8.9,8.81,Restricted,0.742,18,6,False,False
+HTA0087,TLV (Sweden),2019-11-02,2019,Digital Health,Neurology,3,1,7473,False,0.141,0.2074,0.0964,129992.1,100000,92352961.86,Moderate,6.46,7.88,2.57,Restricted,0.651,11,5,False,False
+HTA0088,PBAC (Australia),2022-02-04,2022,Medical Devices,Gastroenterology,15,3,7440,True,2.397,0.1138,0.1591,78390.57,100000,44511657.17,High,6.77,2.94,6.58,Restricted,0.695,21,18,True,False
+HTA0089,HAS (France),2019-11-18,2019,Rehabilitation Technologies,Hematology,24,14,8748,True,0.012,0.0279,0.3239,43481.17,100000,18598872.4,Low,6.56,6.7,3.06,Restricted,0.57,22,19,True,False
+HTA0090,SMC (Scotland),2024-05-20,2024,Immunotherapy,Cardiology,3,6,1649,True,0.661,0.2413,0.137,24401.54,100000,42439481.54,Low,6.24,7.13,2.71,Restricted,0.686,15,17,True,False
+HTA0091,PBAC (Australia),2022-04-17,2022,Medical Devices,Infectious Disease,3,0,4895,True,0.998,0.0738,0.1022,23443.97,100000,86601378.82,Moderate,6.87,8.3,6.53,Restricted,0.758,12,9,True,False
+HTA0092,TLV (Sweden),2018-09-01,2018,Pharmaceuticals,Gastroenterology,2,11,3731,True,2.023,0.0192,0.3656,71914.23,100000,64082946.2,Low,9.06,6.73,6.53,Restricted,0.52,15,18,False,False
+HTA0093,NICE (UK),2022-08-25,2022,Immunotherapy,Infectious Disease,23,10,3556,True,-0.286,0.0129,0.3848,111938.71,50000,35971889.44,Moderate,4.15,7.97,6.95,Restricted,0.556,13,4,True,False
+HTA0094,SMC (Scotland),2023-12-17,2023,Screening Programs,Immunology,8,7,2476,True,0.117,0.0391,0.2653,117321.9,100000,64746521.1,Moderate,1.38,9.72,8.19,Restricted,0.588,10,1,True,False
+HTA0095,PBAC (Australia),2024-01-08,2024,Medical Devices,Immunology,18,6,5884,True,1.15,0.1033,0.1073,44699.74,100000,92903435.75,Low,5.46,1.11,9.93,Restricted,0.701,9,16,False,False
+HTA0096,HAS (France),2023-08-14,2023,Digital Health,Infectious Disease,8,13,746,True,-0.338,0.0868,0.3136,44053.04,100000,54416065.83,Low,1.97,7.17,1.83,Conditional,0.686,17,18,False,False
+HTA0097,SMC (Scotland),2020-06-19,2020,Digital Health,Oncology,23,12,6026,True,2.131,0.1141,0.1063,85916.14,100000,81363469.47,Low,8.93,3.5,2.75,Restricted,0.764,4,10,False,False
+HTA0098,PBAC (Australia),2018-09-20,2018,Immunotherapy,Cardiology,4,5,2749,False,0.333,0.0126,0.3123,115008.08,100000,68159503.46,Low,8.58,5.23,5.52,Restricted,0.537,17,3,True,False
+HTA0099,NCPE (Ireland),2019-05-06,2019,Gene Therapy,Neurology,21,5,2123,True,-0.413,0.0501,0.1135,61212.67,100000,40830385.34,Low,5.59,7.51,1.94,Restricted,0.568,22,3,False,False
+HTA0100,NCPE (Ireland),2020-12-28,2020,Medical Devices,Cardiology,19,0,3490,True,-0.324,0.0902,0.3247,107613.74,100000,79072881.5,Moderate,4.96,2.33,3.95,Conditional,0.474,20,19,False,False
+HTA0101,TLV (Sweden),2018-06-04,2018,Gene Therapy,Oncology,20,14,2110,False,0.491,0.1893,0.309,142795.35,100000,21090700.39,Low,9.82,2.49,7.3,Restricted,0.676,15,5,True,False
+HTA0102,G-BA (Germany),2019-03-14,2019,Digital Health,Neurology,19,4,8099,True,1.908,0.12,0.219,24354.6,100000,8979549.86,Low,5.47,4.93,7.57,Restricted,0.73,16,11,False,False
+HTA0103,CADTH (Canada),2021-05-24,2021,Screening Programs,Hematology,12,9,9657,True,0.241,0.2275,0.1373,44432.71,100000,76180427.98,Moderate,7.99,1.59,5.39,Conditional,0.313,22,17,True,False
+HTA0104,TLV (Sweden),2019-01-27,2019,Digital Health,Endocrinology,7,5,9714,True,1.491,0.2412,0.2461,140839.26,100000,6173530.05,Moderate,3.34,7.58,9.83,Restricted,0.577,5,4,True,False
+HTA0105,G-BA (Germany),2022-12-25,2022,Diagnostic Tests,Hematology,9,0,7445,False,-0.082,0.0313,0.2893,84040.3,100000,98071165.38,Moderate,4.64,5.88,8.13,Restricted,0.665,4,5,False,False
+HTA0106,HAS (France),2022-05-02,2022,Pharmaceuticals,Immunology,22,8,3237,True,2.086,0.1204,0.3122,47135.2,100000,78910043.36,High,4.2,9.8,8.15,Restricted,0.649,9,19,True,False
+HTA0107,CADTH (Canada),2024-08-08,2024,Surgical Procedures,Rheumatology,21,14,1849,True,0.266,0.2372,0.2461,113855.78,100000,56240093.14,Low,1.85,4.09,3.54,Conditional,0.456,5,5,False,False
+HTA0108,IQWIG (Germany),2020-03-05,2020,Preventive Interventions,Cardiology,19,10,2651,True,-0.218,0.0956,0.3151,45084.05,100000,31922561.09,Low,2.76,9.07,5.68,Restricted,0.634,8,11,False,False
+HTA0109,G-BA (Germany),2020-08-06,2020,Diagnostic Tests,Cardiology,1,11,3300,True,0.591,0.1858,0.3371,50408.49,100000,80060733.97,Very Low,8.71,2.06,7.66,Restricted,0.596,3,12,True,False
+HTA0110,PBAC (Australia),2021-06-26,2021,Medical Devices,Endocrinology,23,10,8104,True,1.082,0.1826,0.3616,16513.95,100000,73418152.54,Moderate,8.72,8.37,5.87,Recommended,0.942,14,10,False,False
+HTA0111,HAS (France),2019-06-03,2019,Preventive Interventions,Infectious Disease,12,11,9277,True,-0.161,0.0309,0.3017,65917.22,100000,90630627.55,Low,2.72,6.52,4.92,Conditional,0.531,19,4,True,False
+HTA0112,G-BA (Germany),2022-02-02,2022,Pharmaceuticals,Endocrinology,3,7,255,False,-0.333,0.1673,0.3971,15537.28,100000,8630723.18,Moderate,8.8,2.94,4.24,Restricted,0.521,23,13,True,False
+HTA0113,CADTH (Canada),2018-03-28,2018,Pharmaceuticals,Respiratory,13,14,1238,False,0.171,0.1445,0.0888,69823.05,100000,46575468.85,Low,5.92,4.42,9.79,Restricted,0.533,22,16,False,False
+HTA0114,NCPE (Ireland),2024-06-16,2024,Rehabilitation Technologies,Rheumatology,19,13,3046,False,0.305,0.0143,0.387,110367.29,100000,31170358.44,Low,3.53,8.85,2.01,Conditional,0.581,6,7,False,False
+HTA0115,TLV (Sweden),2021-09-14,2021,Pharmaceuticals,Gastroenterology,11,4,1862,True,1.691,0.1537,0.0726,132199.72,100000,87848914.52,Moderate,4.06,9.9,6.64,Restricted,0.659,19,15,False,False
+HTA0116,G-BA (Germany),2024-05-05,2024,Medical Devices,Infectious Disease,16,3,7951,True,-0.218,0.2283,0.2842,125246.59,100000,88018911.13,Low,5.66,4.87,3.85,Conditional,0.474,17,14,True,False
+HTA0117,CVZ (Netherlands),2022-03-06,2022,Surgical Procedures,Rheumatology,20,8,3840,True,1.529,0.0416,0.132,119078.8,100000,97105854.44,Moderate,3.44,5.26,9.85,Restricted,0.581,8,5,True,False
+HTA0118,HAS (France),2019-11-08,2019,Pharmaceuticals,Rheumatology,19,11,7716,True,0.919,0.1594,0.2144,69882.88,100000,47954553.62,Low,5.83,8.69,1.45,Restricted,0.75,22,0,False,False
+HTA0119,PBAC (Australia),2023-10-11,2023,Digital Health,Oncology,22,13,6476,True,-0.239,0.1581,0.0898,55057.36,100000,51233781.93,Low,5.44,7.32,9.94,Recommended,0.826,16,12,False,False
+HTA0120,NICE (UK),2021-08-08,2021,Screening Programs,Neurology,21,12,6688,True,1.971,0.2392,0.3374,5226.94,50000,64003735.65,High,3.32,1.54,6.43,Conditional,0.575,4,3,False,False
+HTA0121,CADTH (Canada),2020-12-08,2020,Medical Devices,Infectious Disease,20,0,3908,True,0.463,0.19,0.1944,98683.95,100000,64998558.92,Low,6.39,5.52,2.25,Conditional,0.346,9,2,True,False
+HTA0122,PBAC (Australia),2020-08-02,2020,Medical Devices,Rheumatology,17,8,2566,True,-0.247,0.1058,0.3685,122163.28,100000,22389085.14,Moderate,8.35,1.61,4.49,Conditional,0.641,6,2,False,False
+HTA0123,TLV (Sweden),2019-12-12,2019,Digital Health,Rheumatology,2,2,2342,False,0.417,0.1134,0.1616,89418.82,100000,37746069.92,Low,7.35,7.2,4.37,Restricted,0.55,7,6,False,False
+HTA0124,NCPE (Ireland),2024-04-19,2024,Pharmaceuticals,Oncology,10,11,1013,True,0.522,0.0272,0.1934,50126.54,100000,68034943.33,Low,4.28,2.96,9.89,Restricted,0.636,6,16,False,False
+HTA0125,PBAC (Australia),2020-03-11,2020,Screening Programs,Gastroenterology,13,3,7933,True,-0.407,0.1031,0.106,8386.05,100000,75865147.78,Moderate,3.6,9.1,2.05,Conditional,0.682,7,2,True,False
+HTA0126,CADTH (Canada),2018-11-15,2018,Medical Devices,Hematology,20,0,3907,True,1.124,0.047,0.2438,83547.2,100000,76428279.45,Low,4.96,3.72,3.33,Conditional,0.378,19,13,True,False
+HTA0127,PBAC (Australia),2020-01-28,2020,Immunotherapy,Endocrinology,24,12,6726,True,1.95,0.0598,0.3238,111513.8,100000,30748449.17,Moderate,8.13,5.15,7.58,Restricted,0.544,7,16,True,False
+HTA0128,SMC (Scotland),2019-11-22,2019,Diagnostic Tests,Infectious Disease,13,14,3311,True,1.738,0.1418,0.0702,103709.6,100000,47211425.65,High,9.73,9.54,5.62,Recommended,0.819,22,5,False,False
+HTA0129,IQWIG (Germany),2023-11-01,2023,Rehabilitation Technologies,Endocrinology,24,6,4594,True,2.256,0.0969,0.304,134695.62,100000,46141948.3,Moderate,6.42,6.32,8.26,Restricted,0.643,11,7,True,False
+HTA0130,NICE (UK),2018-08-19,2018,Pharmaceuticals,Oncology,6,2,2590,True,2.415,0.063,0.3069,115576.48,50000,92996482.4,High,8.85,5.75,6.69,Restricted,0.693,14,1,False,False
+HTA0131,G-BA (Germany),2023-03-19,2023,Screening Programs,Hematology,18,7,2941,False,-0.205,0.0134,0.3083,125950.97,100000,74307137.06,High,7.78,7.92,6.93,Recommended,0.953,6,2,False,False
+HTA0132,HAS (France),2018-02-14,2018,Screening Programs,Respiratory,14,3,8705,True,0.418,0.1418,0.2712,88670.9,100000,70077871.33,High,1.91,8.82,7.14,Restricted,0.534,4,9,False,False
+HTA0133,SMC (Scotland),2019-08-15,2019,Medical Devices,Cardiology,2,6,3051,True,-0.043,0.0739,0.0577,89572.34,100000,84380843.89,Moderate,2.97,1.3,2.93,Not Recommended,0.0,21,16,False,True
+HTA0134,CVZ (Netherlands),2023-04-20,2023,Rehabilitation Technologies,Endocrinology,18,13,6655,True,0.41,0.0796,0.2472,22393.29,100000,91762377.38,Low,4.61,2.43,8.94,Restricted,0.747,13,8,True,False
+HTA0135,TLV (Sweden),2022-10-18,2022,Pharmaceuticals,Immunology,22,5,6452,True,2.018,0.0109,0.1364,112431.09,100000,32310744.82,High,4.24,3.43,8.58,Restricted,0.594,6,17,True,False
+HTA0136,G-BA (Germany),2021-03-05,2021,Pharmaceuticals,Rheumatology,17,9,8762,True,0.663,0.1619,0.2963,5632.67,100000,17528355.79,Low,7.0,9.69,7.85,Recommended,0.99,17,8,False,False
+HTA0137,PBAC (Australia),2020-12-05,2020,Surgical Procedures,Neurology,10,0,1224,True,0.655,0.2178,0.2166,21091.74,100000,63807990.38,Low,1.03,8.73,2.67,Conditional,0.521,6,1,False,False
+HTA0138,TLV (Sweden),2023-01-04,2023,Gene Therapy,Rheumatology,13,6,9488,True,0.684,0.2334,0.094,111879.0,100000,97484589.32,High,7.14,5.21,6.21,Restricted,0.526,13,2,True,False
+HTA0139,NICE (UK),2019-05-12,2019,Gene Therapy,Rheumatology,15,4,3848,False,0.338,0.1803,0.3821,9556.16,50000,73883842.08,Moderate,9.15,3.4,7.52,Restricted,0.763,8,0,False,False
+HTA0140,NICE (UK),2021-11-22,2021,Screening Programs,Immunology,21,9,5918,True,0.603,0.0536,0.2024,53154.41,50000,34838566.84,Low,3.01,6.78,6.14,Restricted,0.67,23,3,True,False
+HTA0141,CADTH (Canada),2020-08-01,2020,Diagnostic Tests,Hematology,23,8,8935,False,0.21,0.235,0.2612,73643.13,100000,6911932.41,Low,6.24,9.91,3.15,Restricted,0.659,22,17,True,False
+HTA0142,SMC (Scotland),2020-10-12,2020,Preventive Interventions,Oncology,7,9,125,False,-0.185,0.0763,0.3936,81453.45,100000,90735675.43,Moderate,6.79,8.29,9.53,Recommended,0.867,17,8,False,False
+HTA0143,HAS (France),2019-05-20,2019,Rehabilitation Technologies,Oncology,20,8,2395,True,2.374,0.1371,0.1347,77587.52,100000,68282412.94,High,3.47,8.26,5.14,Restricted,0.664,15,2,False,False
+HTA0144,NCPE (Ireland),2020-02-11,2020,Pharmaceuticals,Oncology,12,5,9567,False,0.212,0.2455,0.2493,42633.56,100000,44262592.68,Low,1.66,6.6,9.83,Restricted,0.557,21,1,True,False
+HTA0145,PBAC (Australia),2024-08-13,2024,Medical Devices,Cardiology,10,7,3523,True,0.196,0.12,0.3235,144224.33,100000,76594327.82,Low,6.43,8.52,8.06,Recommended,0.875,12,10,False,False
+HTA0146,PBAC (Australia),2021-08-02,2021,Screening Programs,Immunology,23,7,9235,True,0.786,0.017,0.2183,101052.93,100000,12731759.74,Moderate,4.58,9.28,9.94,Recommended,0.809,9,16,False,False
+HTA0147,G-BA (Germany),2022-03-03,2022,Surgical Procedures,Endocrinology,17,6,3774,True,1.366,0.2482,0.1852,88206.98,100000,42144785.69,Low,9.12,8.9,9.77,Recommended,0.806,13,8,False,False
+HTA0148,TLV (Sweden),2018-01-22,2018,Digital Health,Immunology,2,7,1872,True,0.794,0.1826,0.2472,66987.77,100000,33307504.66,Low,2.29,4.87,9.13,Restricted,0.754,7,13,True,False
+HTA0149,CVZ (Netherlands),2021-08-09,2021,Surgical Procedures,Cardiology,16,2,714,True,1.408,0.0974,0.1533,132527.0,100000,46540237.16,High,8.44,1.43,7.54,Restricted,0.732,12,3,False,False
+HTA0150,TLV (Sweden),2022-08-20,2022,Pharmaceuticals,Respiratory,23,12,680,True,1.14,0.1377,0.2567,13892.99,100000,36855449.23,Low,2.81,2.83,1.09,Not Recommended,0.0,22,2,False,True
+HTA0151,SMC (Scotland),2020-04-15,2020,Surgical Procedures,Rheumatology,9,4,6128,True,0.409,0.0881,0.2994,123433.02,100000,18979782.81,Moderate,9.12,8.26,9.86,Recommended,0.951,23,7,False,False
+HTA0152,NICE (UK),2019-11-02,2019,Immunotherapy,Immunology,9,0,3822,True,0.946,0.0968,0.3822,96663.13,50000,13864195.85,Low,8.03,7.38,2.55,Restricted,0.792,4,7,False,False
+HTA0153,IQWIG (Germany),2024-07-26,2024,Gene Therapy,Oncology,7,12,1761,True,-0.407,0.0225,0.0998,35942.04,100000,66849473.23,Moderate,2.07,7.88,7.04,Restricted,0.631,3,16,False,False
+HTA0154,CADTH (Canada),2018-03-11,2018,Surgical Procedures,Cardiology,20,2,2635,False,0.116,0.2124,0.0841,86052.19,100000,50607700.15,Low,5.81,5.87,4.87,Restricted,0.593,18,5,False,False
+HTA0155,G-BA (Germany),2018-04-04,2018,Diagnostic Tests,Immunology,12,6,9829,False,0.173,0.2012,0.1377,95606.74,100000,57602852.33,Low,9.15,1.11,7.07,Restricted,0.516,19,11,False,False
+HTA0156,PBAC (Australia),2018-05-25,2018,Pharmaceuticals,Rheumatology,14,4,6361,True,0.568,0.0301,0.1667,103243.44,100000,8138998.2,Moderate,4.43,9.84,8.06,Restricted,0.72,16,18,True,False
+HTA0157,NCPE (Ireland),2019-10-09,2019,Surgical Procedures,Gastroenterology,8,9,5793,True,0.038,0.243,0.0897,63522.15,100000,74050613.5,Low,4.8,4.12,4.58,Conditional,0.406,12,1,False,False
+HTA0158,HAS (France),2023-06-26,2023,Screening Programs,Immunology,11,6,1618,False,-0.203,0.0321,0.2597,95429.07,100000,65201977.19,Moderate,1.14,9.69,3.26,Conditional,0.57,3,15,True,False
+HTA0159,CADTH (Canada),2018-03-26,2018,Medical Devices,Endocrinology,10,4,4857,False,-0.493,0.1954,0.2688,59165.45,100000,5998405.5,Low,4.47,9.43,5.88,Restricted,0.782,12,3,True,False
+HTA0160,CVZ (Netherlands),2018-10-18,2018,Gene Therapy,Rheumatology,22,1,3590,False,-0.416,0.2037,0.3515,123501.59,100000,51759913.03,Moderate,9.97,3.06,5.92,Restricted,0.701,20,19,False,False
+HTA0161,IQWIG (Germany),2024-04-15,2024,Pharmaceuticals,Infectious Disease,1,8,5585,True,0.243,0.025,0.2106,111246.35,100000,61066440.75,Low,1.73,9.56,8.55,Restricted,0.742,21,3,True,False
+HTA0162,NCPE (Ireland),2023-01-23,2023,Diagnostic Tests,Immunology,24,10,790,False,-0.073,0.0595,0.3299,53372.98,100000,86654141.39,Very Low,8.74,1.32,8.09,Restricted,0.623,13,5,False,False
+HTA0163,CADTH (Canada),2024-12-18,2024,Medical Devices,Infectious Disease,2,14,7929,False,0.099,0.0583,0.2566,64106.76,100000,47483028.66,High,2.89,3.53,7.42,Conditional,0.305,3,5,False,False
+HTA0164,PBAC (Australia),2021-05-18,2021,Pharmaceuticals,Immunology,7,2,2768,False,-0.054,0.2034,0.0528,139061.35,100000,44887344.44,Low,3.29,7.68,1.69,Conditional,0.649,15,13,True,False
+HTA0165,PBAC (Australia),2018-10-26,2018,Surgical Procedures,Immunology,7,0,7124,True,0.678,0.1428,0.2261,33110.14,100000,86022860.35,Low,8.54,8.73,7.74,Recommended,0.888,11,14,False,False
+HTA0166,PBAC (Australia),2024-07-13,2024,Immunotherapy,Endocrinology,17,6,3787,False,0.032,0.1995,0.1539,83498.59,100000,35177765.41,Moderate,7.59,8.93,2.09,Restricted,0.69,21,3,False,False
+HTA0167,CVZ (Netherlands),2024-06-19,2024,Immunotherapy,Respiratory,22,14,3553,False,0.116,0.1437,0.1955,67196.93,100000,54549595.38,Low,7.32,2.55,5.5,Restricted,0.624,3,1,False,False
+HTA0168,NICE (UK),2019-01-07,2019,Digital Health,Respiratory,13,4,5226,False,0.451,0.1964,0.264,129309.79,50000,67651397.5,Moderate,8.97,3.0,7.43,Restricted,0.764,11,0,False,False
+HTA0169,SMC (Scotland),2021-03-22,2021,Preventive Interventions,Neurology,9,6,817,True,1.962,0.1071,0.2195,6938.31,100000,41564184.41,Low,1.14,3.53,2.87,Not Recommended,0.0,10,5,False,False
+HTA0170,TLV (Sweden),2024-12-20,2024,Screening Programs,Endocrinology,17,12,4277,True,1.911,0.114,0.399,86063.6,100000,32795053.11,Moderate,4.15,4.35,1.62,Conditional,0.448,22,10,True,False
+HTA0171,HAS (France),2021-12-02,2021,Pharmaceuticals,Hematology,24,14,5267,True,1.8,0.1501,0.3237,114003.31,100000,80497205.12,Moderate,2.26,7.04,6.58,Restricted,0.723,9,8,False,False
+HTA0172,SMC (Scotland),2024-03-21,2024,Rehabilitation Technologies,Oncology,4,9,5976,True,-0.031,0.1237,0.3007,44286.69,100000,21023163.87,Moderate,3.17,2.93,4.82,Conditional,0.663,14,10,False,False
+HTA0173,NICE (UK),2019-12-19,2019,Rehabilitation Technologies,Cardiology,23,1,7585,False,-0.228,0.1762,0.1424,141164.93,50000,64001053.87,Moderate,3.43,2.72,7.25,Conditional,0.387,6,6,False,False
+HTA0174,IQWIG (Germany),2024-07-06,2024,Digital Health,Endocrinology,24,3,4040,False,-0.349,0.0621,0.2124,43280.63,100000,42108856.26,Low,8.42,6.67,8.72,Recommended,0.957,16,7,False,False
+HTA0175,IQWIG (Germany),2019-02-08,2019,Screening Programs,Rheumatology,11,0,1305,False,0.467,0.2084,0.3661,140367.81,100000,80333451.2,Low,1.05,5.19,6.14,Conditional,0.422,15,16,True,False
+HTA0176,PBAC (Australia),2020-12-16,2020,Diagnostic Tests,Rheumatology,21,2,265,True,2.25,0.1795,0.1581,24233.46,100000,51651936.07,High,9.45,4.73,4.62,Restricted,0.617,6,18,False,False
+HTA0177,CVZ (Netherlands),2020-07-24,2020,Preventive Interventions,Endocrinology,11,13,6938,True,1.399,0.1226,0.2051,76651.41,100000,86243484.65,Moderate,9.46,5.54,9.54,Recommended,0.967,20,10,False,False
+HTA0178,PBAC (Australia),2018-11-25,2018,Digital Health,Respiratory,9,5,2605,True,1.743,0.2045,0.1948,34604.15,100000,5191885.6,Low,5.08,9.54,1.55,Restricted,0.706,3,10,False,False
+HTA0179,NCPE (Ireland),2023-06-03,2023,Gene Therapy,Endocrinology,24,9,5313,False,0.084,0.2101,0.2749,16390.89,100000,74315907.6,High,6.35,7.32,1.6,Restricted,0.569,19,19,True,False
+HTA0180,IQWIG (Germany),2024-08-09,2024,Screening Programs,Infectious Disease,3,2,2359,True,1.574,0.1547,0.2666,141412.13,100000,77815241.75,High,4.13,4.92,4.56,Conditional,0.568,12,18,True,False
+HTA0181,HAS (France),2021-10-02,2021,Medical Devices,Respiratory,20,1,2875,True,0.002,0.0453,0.3906,115097.41,100000,96808385.06,Moderate,3.51,8.18,3.94,Restricted,0.59,12,6,False,False
+HTA0182,CADTH (Canada),2019-06-04,2019,Surgical Procedures,Infectious Disease,18,5,2530,False,-0.229,0.0337,0.3403,107467.95,100000,62104661.78,Moderate,5.31,8.03,3.73,Restricted,0.594,14,15,False,False
+HTA0183,IQWIG (Germany),2024-10-25,2024,Pharmaceuticals,Oncology,23,9,6424,True,0.875,0.184,0.251,101745.79,100000,77927879.28,Low,3.82,5.84,8.56,Restricted,0.797,11,7,False,False
+HTA0184,PBAC (Australia),2024-12-12,2024,Medical Devices,Hematology,6,2,6687,True,2.079,0.1076,0.1649,70828.54,100000,76482248.91,High,2.77,9.56,2.58,Conditional,0.527,16,3,True,False
+HTA0185,NCPE (Ireland),2024-06-24,2024,Preventive Interventions,Rheumatology,21,13,5670,True,0.049,0.2082,0.15,139432.95,100000,97022726.01,Low,2.29,4.37,8.18,Conditional,0.447,14,16,True,False
+HTA0186,PBAC (Australia),2024-09-21,2024,Surgical Procedures,Hematology,20,6,4578,True,-0.498,0.219,0.3274,95962.7,100000,75276310.63,Moderate,5.12,4.16,1.84,Conditional,0.494,20,12,True,False
+HTA0187,NCPE (Ireland),2024-11-13,2024,Screening Programs,Immunology,7,4,9812,False,0.202,0.1577,0.3161,79373.71,100000,70704243.86,Very Low,4.38,7.37,5.28,Restricted,0.702,23,15,False,False
+HTA0188,NCPE (Ireland),2024-09-20,2024,Diagnostic Tests,Endocrinology,10,11,6722,True,1.379,0.0768,0.3485,139615.61,100000,99643431.07,Low,7.78,2.94,4.02,Conditional,0.486,15,13,True,False
+HTA0189,NCPE (Ireland),2020-08-10,2020,Screening Programs,Oncology,19,10,7950,False,-0.289,0.1435,0.3498,126084.56,100000,92808162.88,Moderate,3.86,7.74,4.88,Restricted,0.526,19,2,False,False
+HTA0190,NCPE (Ireland),2020-02-08,2020,Pharmaceuticals,Infectious Disease,19,6,4863,True,1.46,0.0562,0.1535,94844.31,100000,60363129.28,Moderate,4.15,9.22,4.06,Restricted,0.637,19,8,False,False
+HTA0191,G-BA (Germany),2023-08-24,2023,Rehabilitation Technologies,Neurology,1,9,2963,False,0.435,0.0546,0.1804,139651.43,100000,7119037.61,High,2.47,6.36,2.35,Conditional,0.687,4,2,False,False
+HTA0192,SMC (Scotland),2019-04-08,2019,Rehabilitation Technologies,Hematology,10,2,8102,True,-0.156,0.236,0.3245,72046.72,100000,86631297.91,Moderate,7.45,8.71,4.21,Restricted,0.727,6,15,True,False
+HTA0193,NICE (UK),2019-03-26,2019,Gene Therapy,Hematology,21,8,5652,False,-0.327,0.1266,0.0909,103912.21,50000,95040067.16,High,7.6,6.69,6.25,Restricted,0.617,8,16,False,False
+HTA0194,IQWIG (Germany),2022-12-03,2022,Surgical Procedures,Cardiology,22,7,9978,False,-0.089,0.1445,0.3799,16996.44,100000,26139839.42,Low,1.89,1.68,4.25,Not Recommended,0.0,15,5,False,False
+HTA0195,TLV (Sweden),2021-03-11,2021,Medical Devices,Oncology,12,11,4106,True,1.204,0.0811,0.3784,123717.33,100000,98373153.44,Moderate,9.73,4.88,4.13,Restricted,0.515,22,11,True,False
+HTA0196,SMC (Scotland),2024-01-01,2024,Screening Programs,Infectious Disease,10,5,1549,False,0.321,0.1246,0.1728,57571.17,100000,80765738.04,Moderate,2.88,1.76,5.2,Conditional,0.493,8,2,False,False
+HTA0197,NCPE (Ireland),2024-05-24,2024,Gene Therapy,Oncology,3,11,8084,True,1.305,0.2349,0.1591,41216.96,100000,65761855.27,Low,3.99,9.35,8.6,Restricted,0.567,14,14,True,False
+HTA0198,G-BA (Germany),2020-04-04,2020,Pharmaceuticals,Neurology,3,9,1995,True,0.815,0.2258,0.3868,69396.71,100000,75252812.8,Moderate,5.84,3.5,2.95,Conditional,0.415,10,15,True,False
+HTA0199,CADTH (Canada),2024-03-22,2024,Rehabilitation Technologies,Cardiology,8,7,3954,False,0.458,0.0629,0.3602,140474.1,100000,91725633.91,Low,6.67,4.63,7.77,Restricted,0.659,7,6,True,False
+HTA0200,IQWIG (Germany),2019-12-04,2019,Digital Health,Rheumatology,23,5,8579,True,0.249,0.1414,0.146,135729.54,100000,22305243.49,Low,6.03,8.46,7.42,Restricted,0.709,6,16,True,False
+HTA0201,PBAC (Australia),2023-03-22,2023,Gene Therapy,Gastroenterology,1,3,2297,False,-0.234,0.2477,0.059,92511.68,100000,66291092.18,Low,2.08,9.45,2.63,Conditional,0.549,17,4,False,False
+HTA0202,IQWIG (Germany),2022-08-16,2022,Preventive Interventions,Cardiology,15,8,1709,False,-0.416,0.1043,0.0851,7405.91,100000,66510149.58,Low,2.47,3.1,1.21,Not Recommended,0.0,23,12,False,False
+HTA0203,NICE (UK),2019-02-22,2019,Medical Devices,Hematology,11,0,5974,True,-0.414,0.15,0.054,119168.93,50000,31336849.45,High,6.3,4.58,9.76,Restricted,0.663,17,7,True,False
+HTA0204,IQWIG (Germany),2024-01-24,2024,Screening Programs,Oncology,4,4,8811,False,-0.405,0.118,0.1681,131249.83,100000,9268966.55,Moderate,7.77,1.46,5.43,Conditional,0.477,5,14,False,False
+HTA0205,CADTH (Canada),2022-05-27,2022,Diagnostic Tests,Immunology,23,3,8576,True,0.305,0.0967,0.193,103556.1,100000,6611362.78,High,4.53,7.27,2.74,Conditional,0.557,6,19,True,False
+HTA0206,CADTH (Canada),2020-03-06,2020,Preventive Interventions,Respiratory,6,3,6482,False,-0.359,0.1409,0.087,11567.72,100000,65982200.08,Moderate,1.74,1.31,9.91,Conditional,0.312,11,9,True,False
+HTA0207,CADTH (Canada),2023-03-25,2023,Diagnostic Tests,Immunology,21,12,2562,True,0.903,0.1587,0.1939,66985.54,100000,33698182.08,Low,8.66,2.81,9.41,Restricted,0.707,3,10,True,False
+HTA0208,CADTH (Canada),2024-02-12,2024,Immunotherapy,Immunology,17,0,1471,True,1.456,0.1974,0.327,92358.13,100000,51652219.67,High,3.59,1.84,9.67,Restricted,0.541,5,9,True,False
+HTA0209,SMC (Scotland),2019-12-22,2019,Medical Devices,Oncology,20,5,3967,False,-0.274,0.1762,0.1317,95672.87,100000,74960748.45,Moderate,1.54,2.18,6.45,Conditional,0.64,13,8,True,False
+HTA0210,CVZ (Netherlands),2021-08-09,2021,Preventive Interventions,Cardiology,12,9,8813,True,0.276,0.0167,0.271,66827.76,100000,55266375.07,Moderate,3.66,6.97,9.69,Restricted,0.515,14,4,True,False
+HTA0211,IQWIG (Germany),2019-05-18,2019,Screening Programs,Infectious Disease,24,13,4869,False,-0.093,0.0444,0.3002,47536.25,100000,53021560.43,Low,9.1,8.13,7.09,Recommended,0.936,20,5,False,False
+HTA0212,G-BA (Germany),2021-05-08,2021,Immunotherapy,Infectious Disease,19,13,2114,True,1.554,0.2266,0.343,23468.57,100000,13500842.57,Low,9.32,5.15,5.49,Restricted,0.595,22,7,False,False
+HTA0213,NICE (UK),2018-12-19,2018,Digital Health,Neurology,14,5,2337,True,2.053,0.2398,0.248,79596.89,50000,9420582.16,Moderate,4.42,6.46,4.5,Restricted,0.572,3,19,False,False
+HTA0214,IQWIG (Germany),2020-06-26,2020,Gene Therapy,Gastroenterology,16,2,1681,True,0.46,0.1244,0.1614,75910.19,100000,86096083.29,Low,7.25,4.28,7.65,Restricted,0.7,14,11,True,False
+HTA0215,CADTH (Canada),2021-03-22,2021,Preventive Interventions,Respiratory,19,5,7230,True,0.06,0.0162,0.1496,69239.89,100000,62093488.5,Low,2.77,2.13,9.67,Conditional,0.343,13,12,True,False
+HTA0216,CADTH (Canada),2024-03-12,2024,Screening Programs,Neurology,15,14,6682,True,1.413,0.2068,0.0646,77228.84,100000,69241730.8,Moderate,3.77,6.52,9.08,Restricted,0.743,22,14,False,False
+HTA0217,IQWIG (Germany),2021-10-06,2021,Surgical Procedures,Hematology,14,11,8206,False,0.03,0.1858,0.3734,146401.1,100000,83487231.3,Moderate,9.7,6.65,9.38,Recommended,0.935,13,8,False,False
+HTA0218,IQWIG (Germany),2021-11-15,2021,Immunotherapy,Cardiology,22,12,7108,True,-0.014,0.1679,0.3992,70502.22,100000,36118127.12,Moderate,2.04,8.95,4.73,Restricted,0.616,17,19,False,False
+HTA0219,IQWIG (Germany),2024-06-17,2024,Preventive Interventions,Immunology,18,0,1292,True,0.287,0.1361,0.0889,130884.55,100000,30438791.6,Moderate,7.08,1.34,6.58,Restricted,0.709,6,0,False,False
+HTA0220,HAS (France),2022-08-19,2022,Preventive Interventions,Neurology,4,1,9047,True,1.198,0.2279,0.1887,47967.24,100000,15203476.24,Moderate,4.89,6.36,1.73,Conditional,0.676,18,6,True,False
+HTA0221,SMC (Scotland),2019-10-21,2019,Medical Devices,Endocrinology,7,12,8548,True,2.463,0.0882,0.1879,92483.46,100000,80366745.03,Moderate,4.8,9.96,1.09,Restricted,0.769,12,4,True,False
+HTA0222,IQWIG (Germany),2022-12-23,2022,Preventive Interventions,Rheumatology,1,10,1825,True,1.331,0.0158,0.0908,23428.95,100000,19739080.95,Moderate,7.77,9.15,8.52,Recommended,0.839,13,3,False,False
+HTA0223,HAS (France),2019-08-22,2019,Surgical Procedures,Oncology,2,11,2281,True,0.836,0.0135,0.1366,130612.4,100000,17298214.4,Moderate,1.13,5.31,1.19,Not Recommended,0.0,7,4,False,True
+HTA0224,CVZ (Netherlands),2024-07-27,2024,Immunotherapy,Immunology,15,2,2495,True,1.294,0.1024,0.3492,143100.22,100000,88472908.11,Moderate,2.75,5.27,1.07,Conditional,0.31,10,15,True,False
+HTA0225,TLV (Sweden),2024-07-06,2024,Digital Health,Hematology,2,8,1913,True,1.437,0.0209,0.3811,127113.98,100000,30364635.73,High,2.53,2.14,2.11,Not Recommended,0.0,18,13,False,False
+HTA0226,TLV (Sweden),2024-05-11,2024,Immunotherapy,Rheumatology,18,13,9456,True,0.358,0.1714,0.1095,13035.3,100000,33783502.43,Low,4.72,6.88,6.22,Restricted,0.507,4,15,True,False
+HTA0227,NCPE (Ireland),2024-05-25,2024,Gene Therapy,Gastroenterology,20,5,9141,False,0.178,0.1413,0.2163,138752.97,100000,8200759.83,Moderate,4.15,8.04,9.93,Restricted,0.572,16,13,True,False
+HTA0228,NCPE (Ireland),2020-11-23,2020,Preventive Interventions,Oncology,22,6,7707,False,-0.166,0.1854,0.197,88862.17,100000,83428565.56,Low,8.8,1.54,7.23,Restricted,0.542,5,7,True,False
+HTA0229,IQWIG (Germany),2021-03-28,2021,Gene Therapy,Rheumatology,13,13,2987,True,2.348,0.2211,0.3675,148772.25,100000,21623223.61,Moderate,7.02,5.35,4.77,Restricted,0.607,13,17,True,False
+HTA0230,NICE (UK),2024-07-27,2024,Digital Health,Hematology,13,11,5685,True,1.982,0.0711,0.2156,11280.71,50000,70234607.16,Moderate,7.7,4.71,2.76,Restricted,0.654,15,12,False,False
+HTA0231,CADTH (Canada),2022-12-17,2022,Digital Health,Rheumatology,9,1,9813,True,2.224,0.0682,0.082,51209.99,100000,11362921.08,High,6.16,1.55,1.28,Not Recommended,0.0,19,19,False,False
+HTA0232,G-BA (Germany),2018-01-28,2018,Pharmaceuticals,Endocrinology,11,1,320,False,-0.07,0.19,0.3696,87957.83,100000,18897729.91,Moderate,2.79,3.22,3.76,Conditional,0.522,8,5,True,False
+HTA0233,IQWIG (Germany),2023-09-20,2023,Rehabilitation Technologies,Immunology,18,11,4576,False,-0.486,0.1659,0.2841,120805.09,100000,93342540.97,High,2.38,8.98,5.13,Restricted,0.669,20,14,True,False
+HTA0234,CADTH (Canada),2022-09-08,2022,Rehabilitation Technologies,Immunology,3,14,7633,True,-0.087,0.0102,0.3661,8569.61,100000,21736121.18,Moderate,4.21,9.21,1.36,Conditional,0.505,9,7,True,False
+HTA0235,PBAC (Australia),2020-05-23,2020,Immunotherapy,Immunology,18,3,2895,True,0.047,0.2417,0.1999,96642.79,100000,72885014.68,Moderate,2.33,2.86,3.82,Conditional,0.554,21,14,True,False
+HTA0236,NCPE (Ireland),2024-09-12,2024,Preventive Interventions,Endocrinology,23,2,6426,True,1.473,0.164,0.0589,119255.67,100000,90421562.4,Moderate,8.31,1.74,6.4,Restricted,0.646,19,12,True,False
+HTA0237,CVZ (Netherlands),2018-06-24,2018,Medical Devices,Endocrinology,18,6,2281,False,-0.168,0.1301,0.276,79032.71,100000,12875341.23,Moderate,8.22,8.75,2.24,Restricted,0.786,23,6,True,False
+HTA0238,NCPE (Ireland),2023-11-07,2023,Diagnostic Tests,Endocrinology,9,12,4068,True,-0.254,0.1652,0.2687,97560.83,100000,31407419.16,Low,9.64,2.96,1.79,Conditional,0.378,13,9,True,False
+HTA0239,HAS (France),2018-11-17,2018,Surgical Procedures,Infectious Disease,3,4,9875,False,0.209,0.0353,0.3436,102296.88,100000,70005392.43,Moderate,8.91,7.53,2.01,Restricted,0.622,16,17,False,False
+HTA0240,SMC (Scotland),2024-08-15,2024,Medical Devices,Endocrinology,3,13,5168,True,1.827,0.1043,0.0987,6553.72,100000,54881476.36,Very Low,4.32,4.21,4.1,Conditional,0.508,9,5,False,False
+HTA0241,SMC (Scotland),2022-09-24,2022,Medical Devices,Oncology,20,4,1145,True,1.961,0.1657,0.1966,71414.15,100000,26408073.51,Low,5.62,3.89,6.36,Restricted,0.799,7,4,True,False
+HTA0242,G-BA (Germany),2018-05-10,2018,Preventive Interventions,Infectious Disease,2,8,8142,False,0.344,0.1882,0.1087,22452.72,100000,7692870.2,Low,9.36,4.87,2.07,Restricted,0.654,20,10,True,False
+HTA0243,NICE (UK),2024-04-28,2024,Rehabilitation Technologies,Hematology,6,13,5683,True,1.751,0.0759,0.2686,16768.81,50000,45768045.43,Low,7.18,8.34,8.9,Recommended,0.955,21,1,False,False
+HTA0244,CVZ (Netherlands),2024-08-18,2024,Surgical Procedures,Neurology,10,6,4665,False,0.387,0.1057,0.352,43725.88,100000,53931431.38,Low,3.93,9.59,2.1,Restricted,0.505,22,5,True,False
+HTA0245,SMC (Scotland),2024-07-19,2024,Pharmaceuticals,Oncology,22,14,3868,True,0.752,0.1004,0.3566,136268.35,100000,49802740.19,Moderate,1.96,9.58,1.54,Conditional,0.419,19,5,False,False
+HTA0246,TLV (Sweden),2020-08-23,2020,Screening Programs,Rheumatology,19,8,8207,True,1.783,0.0203,0.3526,22205.79,100000,18015774.7,Moderate,7.64,2.25,4.96,Conditional,0.493,18,0,True,False
+HTA0247,NICE (UK),2024-12-21,2024,Preventive Interventions,Respiratory,7,11,6066,False,0.453,0.1911,0.2059,90872.1,50000,70392601.14,Moderate,5.02,8.47,6.89,Restricted,0.623,3,14,True,False
+HTA0248,SMC (Scotland),2023-01-23,2023,Diagnostic Tests,Cardiology,23,9,6704,False,0.454,0.0946,0.0651,30968.77,100000,39829561.55,Very Low,2.27,7.87,1.98,Conditional,0.693,18,13,False,False
+HTA0249,G-BA (Germany),2022-02-01,2022,Diagnostic Tests,Respiratory,9,8,6826,False,0.125,0.204,0.0742,53544.41,100000,32056609.35,Low,4.2,2.34,6.37,Conditional,0.626,19,0,False,False
+HTA0250,CVZ (Netherlands),2018-11-28,2018,Diagnostic Tests,Gastroenterology,17,13,4693,True,0.635,0.1342,0.1946,33905.1,100000,41824282.24,High,6.18,8.68,7.53,Restricted,0.608,23,5,False,False
+HTA0251,NCPE (Ireland),2018-01-24,2018,Screening Programs,Gastroenterology,5,8,3301,True,0.237,0.205,0.17,21165.71,100000,57470539.65,Low,7.43,3.16,4.99,Restricted,0.585,12,12,True,False
+HTA0252,CVZ (Netherlands),2022-02-17,2022,Surgical Procedures,Infectious Disease,9,13,3604,True,-0.488,0.1305,0.2541,88949.97,100000,6396680.82,Moderate,5.49,2.95,8.85,Restricted,0.526,16,16,False,False
+HTA0253,PBAC (Australia),2018-10-19,2018,Diagnostic Tests,Cardiology,17,11,8196,True,0.437,0.184,0.3287,125775.92,100000,98591056.71,Low,6.41,4.05,5.9,Restricted,0.512,3,16,False,False
+HTA0254,SMC (Scotland),2022-07-28,2022,Rehabilitation Technologies,Gastroenterology,6,3,9649,True,0.112,0.0801,0.312,74977.18,100000,22387112.6,Very Low,7.44,9.61,4.84,Restricted,0.643,14,11,True,False
+HTA0255,NCPE (Ireland),2022-12-16,2022,Medical Devices,Immunology,4,7,1701,True,0.574,0.0901,0.1857,25063.39,100000,74078658.78,Low,9.45,5.43,7.31,Restricted,0.757,16,15,False,False
+HTA0256,SMC (Scotland),2019-12-20,2019,Surgical Procedures,Rheumatology,22,13,3222,True,1.166,0.1501,0.1224,128453.83,100000,9342172.25,Moderate,7.12,3.47,8.45,Restricted,0.722,23,4,False,False
+HTA0257,G-BA (Germany),2019-05-08,2019,Gene Therapy,Oncology,21,8,4617,False,0.167,0.1145,0.3836,109290.55,100000,93086355.08,Moderate,3.33,1.48,7.53,Conditional,0.349,21,0,True,False
+HTA0258,CADTH (Canada),2019-05-22,2019,Rehabilitation Technologies,Cardiology,4,1,2344,True,-0.136,0.1831,0.1143,52615.9,100000,49233988.69,High,3.24,4.67,3.52,Conditional,0.355,6,9,True,False
+HTA0259,NCPE (Ireland),2021-06-18,2021,Surgical Procedures,Immunology,21,5,3832,True,-0.291,0.2244,0.1857,46742.55,100000,72744929.17,Low,8.76,3.84,8.67,Restricted,0.512,8,16,True,False
+HTA0260,SMC (Scotland),2019-08-08,2019,Screening Programs,Neurology,21,7,169,True,0.21,0.126,0.2002,15859.9,100000,11509875.0,Low,3.16,2.75,5.54,Conditional,0.607,12,10,True,False
+HTA0261,TLV (Sweden),2023-07-07,2023,Surgical Procedures,Gastroenterology,8,0,6501,True,0.765,0.0196,0.2072,88753.9,100000,57519798.32,Moderate,3.84,1.96,4.3,Conditional,0.34,22,16,True,False
+HTA0262,CVZ (Netherlands),2018-08-25,2018,Rehabilitation Technologies,Endocrinology,4,9,6453,True,0.946,0.1919,0.1487,51115.74,100000,92539537.32,High,5.37,9.22,6.49,Restricted,0.664,15,18,False,False
+HTA0263,CVZ (Netherlands),2019-12-02,2019,Screening Programs,Immunology,11,11,4863,True,2.082,0.1768,0.0537,62143.07,100000,85244238.04,Moderate,1.32,7.72,8.22,Restricted,0.548,15,4,False,False
+HTA0264,CADTH (Canada),2023-02-15,2023,Preventive Interventions,Infectious Disease,10,7,6882,False,-0.098,0.0815,0.2689,27454.35,100000,37926983.72,Moderate,7.26,9.5,9.96,Recommended,0.89,15,12,False,False
+HTA0265,NICE (UK),2022-07-27,2022,Immunotherapy,Gastroenterology,16,13,8546,True,1.196,0.015,0.0621,69644.7,50000,81848869.08,Low,1.78,5.85,9.22,Restricted,0.616,5,4,True,False
+HTA0266,HAS (France),2022-10-14,2022,Immunotherapy,Immunology,11,9,8713,True,0.497,0.1782,0.3179,139763.51,100000,21275438.5,Low,7.65,1.57,4.49,Conditional,0.413,14,3,True,False
+HTA0267,NCPE (Ireland),2024-12-02,2024,Surgical Procedures,Hematology,4,4,672,False,0.241,0.1402,0.2788,44728.37,100000,59712562.81,Moderate,2.2,3.18,3.63,Conditional,0.67,22,4,False,False
+HTA0268,NICE (UK),2018-11-27,2018,Immunotherapy,Immunology,24,2,5389,False,-0.483,0.0913,0.3285,16235.03,50000,28949069.59,Low,3.31,9.41,2.18,Conditional,0.619,17,14,True,False
+HTA0269,G-BA (Germany),2018-12-26,2018,Medical Devices,Respiratory,16,8,5680,False,-0.043,0.124,0.1851,145172.39,100000,70019459.17,High,8.77,5.33,1.62,Restricted,0.665,6,11,False,False
+HTA0270,IQWIG (Germany),2021-07-28,2021,Gene Therapy,Infectious Disease,16,4,7160,True,0.908,0.2159,0.1567,32938.08,100000,13778053.45,Moderate,8.02,5.24,3.05,Restricted,0.55,6,1,True,False
+HTA0271,IQWIG (Germany),2018-07-05,2018,Rehabilitation Technologies,Immunology,10,9,1481,True,1.617,0.1352,0.0936,144405.11,100000,63955165.81,Low,1.71,1.42,1.18,Not Recommended,0.0,22,7,False,False
+HTA0272,G-BA (Germany),2018-08-01,2018,Surgical Procedures,Cardiology,11,0,3975,True,0.668,0.223,0.3629,53693.37,100000,61891905.65,Very Low,9.66,5.58,5.08,Restricted,0.584,7,17,False,False
+HTA0273,TLV (Sweden),2018-03-10,2018,Diagnostic Tests,Oncology,21,2,651,True,0.819,0.1325,0.1406,50886.28,100000,9609735.01,Moderate,9.7,9.5,4.01,Recommended,0.914,11,16,False,False
+HTA0274,HAS (France),2024-06-10,2024,Diagnostic Tests,Neurology,10,10,2476,True,0.273,0.118,0.2925,111308.25,100000,99546729.78,Moderate,5.84,5.8,4.65,Restricted,0.551,8,4,False,False
+HTA0275,CADTH (Canada),2021-03-24,2021,Screening Programs,Hematology,14,4,5276,False,-0.367,0.2144,0.336,6980.94,100000,89676909.2,High,3.16,1.29,4.02,Not Recommended,0.0,5,18,False,False
+HTA0276,CADTH (Canada),2018-01-10,2018,Pharmaceuticals,Infectious Disease,15,10,1950,True,0.046,0.1331,0.3457,16542.74,100000,70988675.53,Low,8.85,3.2,5.05,Restricted,0.778,4,6,False,False
+HTA0277,SMC (Scotland),2023-08-19,2023,Preventive Interventions,Hematology,3,1,2536,True,1.57,0.211,0.163,133906.77,100000,16902727.65,Moderate,3.4,2.08,3.07,Not Recommended,0.0,6,14,False,False
+HTA0278,NICE (UK),2024-12-10,2024,Immunotherapy,Hematology,5,11,4373,True,1.792,0.1334,0.3228,80762.04,50000,64461460.91,Low,4.65,1.02,8.65,Conditional,0.452,9,1,False,False
+HTA0279,SMC (Scotland),2023-02-12,2023,Rehabilitation Technologies,Neurology,15,13,4521,False,-0.04,0.0622,0.0968,143229.54,100000,8193893.17,Moderate,4.13,6.58,5.9,Restricted,0.538,9,16,False,False
+HTA0280,G-BA (Germany),2018-11-13,2018,Digital Health,Immunology,19,4,3657,False,0.455,0.202,0.1346,14865.41,100000,32373509.63,Moderate,5.55,8.0,8.72,Restricted,0.753,8,16,False,False
+HTA0281,NICE (UK),2018-02-25,2018,Diagnostic Tests,Oncology,13,3,8357,True,1.58,0.1939,0.1564,122685.92,50000,30097759.29,Moderate,7.54,7.24,9.89,Recommended,0.845,23,12,False,False
+HTA0282,NCPE (Ireland),2018-08-22,2018,Rehabilitation Technologies,Oncology,16,12,5766,True,0.501,0.149,0.3612,87549.22,100000,63540519.41,Moderate,1.46,3.1,5.43,Conditional,0.424,11,19,False,False
+HTA0283,HAS (France),2024-01-13,2024,Preventive Interventions,Respiratory,11,5,8160,True,1.363,0.0824,0.3649,96119.01,100000,44426252.83,High,5.5,7.88,3.39,Restricted,0.742,7,6,True,False
+HTA0284,SMC (Scotland),2023-03-10,2023,Digital Health,Infectious Disease,15,9,2835,False,-0.28,0.0348,0.2548,75838.66,100000,52895430.84,Low,3.4,9.2,4.92,Restricted,0.539,22,12,False,False
+HTA0285,IQWIG (Germany),2020-06-05,2020,Rehabilitation Technologies,Infectious Disease,23,11,6981,False,-0.046,0.1317,0.2503,140190.48,100000,85962472.31,Moderate,4.93,5.18,8.1,Restricted,0.681,13,0,True,False
+HTA0286,NICE (UK),2024-06-14,2024,Digital Health,Respiratory,2,10,4142,False,0.379,0.1334,0.2387,41988.55,50000,77019760.0,Low,6.3,2.91,1.87,Conditional,0.326,12,4,True,False
+HTA0287,HAS (France),2019-12-04,2019,Gene Therapy,Immunology,22,4,148,True,2.242,0.2455,0.2816,123449.09,100000,75205010.86,Low,3.76,1.51,4.09,Conditional,0.567,18,0,False,False
+HTA0288,G-BA (Germany),2024-11-21,2024,Surgical Procedures,Gastroenterology,2,5,3849,True,1.218,0.0429,0.3782,56029.82,100000,45168776.39,Low,4.01,3.29,6.68,Conditional,0.31,22,7,True,False
+HTA0289,HAS (France),2024-10-10,2024,Preventive Interventions,Hematology,22,3,7632,True,-0.329,0.1511,0.3441,7537.24,100000,5851459.85,Low,8.38,3.94,4.15,Restricted,0.679,15,18,False,False
+HTA0290,NCPE (Ireland),2019-07-10,2019,Immunotherapy,Infectious Disease,4,8,382,False,-0.194,0.1922,0.2669,16224.68,100000,51770700.88,Moderate,3.96,6.42,3.9,Conditional,0.611,20,1,False,False
+HTA0291,PBAC (Australia),2021-01-01,2021,Surgical Procedures,Respiratory,17,10,6116,True,2.362,0.0604,0.3261,117312.95,100000,22555161.07,Low,1.43,5.35,1.13,Not Recommended,0.0,12,2,False,True
+HTA0292,CADTH (Canada),2020-06-15,2020,Screening Programs,Oncology,16,14,4165,True,1.764,0.0843,0.2068,63793.39,100000,98424856.93,Moderate,3.65,4.19,6.08,Conditional,0.401,5,11,False,False
+HTA0293,CVZ (Netherlands),2024-02-09,2024,Pharmaceuticals,Infectious Disease,7,3,8967,True,1.063,0.1226,0.0749,123654.63,100000,34232557.66,Low,5.63,5.62,1.97,Conditional,0.469,13,12,False,False
+HTA0294,PBAC (Australia),2021-04-20,2021,Surgical Procedures,Endocrinology,21,1,1587,False,0.037,0.1725,0.2889,96166.43,100000,27344035.49,High,5.1,9.02,6.13,Restricted,0.75,16,16,False,False
+HTA0295,CADTH (Canada),2019-07-26,2019,Pharmaceuticals,Neurology,15,2,1637,True,1.842,0.2284,0.184,96442.12,100000,43584130.48,Moderate,3.79,7.86,9.43,Restricted,0.782,19,4,True,False
+HTA0296,TLV (Sweden),2021-04-18,2021,Pharmaceuticals,Oncology,9,13,9344,True,1.663,0.0717,0.3018,9077.62,100000,38156813.23,Low,2.31,8.41,3.12,Conditional,0.561,21,17,True,False
+HTA0297,SMC (Scotland),2019-04-26,2019,Rehabilitation Technologies,Cardiology,16,8,7241,True,0.741,0.1729,0.1329,17174.57,100000,77232101.62,Low,9.9,4.1,1.56,Restricted,0.72,5,17,False,False
+HTA0298,G-BA (Germany),2022-09-26,2022,Rehabilitation Technologies,Hematology,2,13,4775,True,-0.0,0.2467,0.3373,45814.21,100000,7936800.88,High,2.08,6.23,9.36,Restricted,0.649,16,4,False,False
+HTA0299,CVZ (Netherlands),2019-05-07,2019,Screening Programs,Hematology,6,5,7834,True,-0.397,0.1624,0.3506,54991.62,100000,39639259.17,Low,8.32,7.43,3.24,Restricted,0.773,20,3,False,False
+HTA0300,SMC (Scotland),2020-12-08,2020,Digital Health,Cardiology,2,8,3026,False,0.352,0.2173,0.1924,115542.38,100000,15243739.38,High,1.18,6.28,5.1,Conditional,0.507,12,6,True,False
+HTA0301,NICE (UK),2020-01-15,2020,Diagnostic Tests,Infectious Disease,16,6,4035,True,0.21,0.1607,0.3405,65266.03,50000,26571742.48,Low,7.02,5.03,5.39,Restricted,0.561,18,12,True,False
+HTA0302,CVZ (Netherlands),2023-02-17,2023,Pharmaceuticals,Oncology,6,13,777,True,1.282,0.1826,0.2666,16843.57,100000,22554764.98,Moderate,8.49,5.17,5.38,Restricted,0.78,16,18,False,False
+HTA0303,IQWIG (Germany),2018-05-09,2018,Screening Programs,Cardiology,10,4,3866,True,-0.006,0.1075,0.3743,108011.16,100000,42473438.85,Moderate,1.76,9.86,7.0,Restricted,0.586,19,18,False,False
+HTA0304,IQWIG (Germany),2021-05-03,2021,Preventive Interventions,Endocrinology,11,8,6849,True,2.419,0.0112,0.1944,19566.34,100000,51406638.59,High,4.66,2.99,5.8,Conditional,0.698,16,2,True,False
+HTA0305,CVZ (Netherlands),2018-03-02,2018,Preventive Interventions,Immunology,24,6,2006,True,2.441,0.166,0.3097,9569.39,100000,13038920.68,Low,9.09,6.61,2.21,Restricted,0.535,12,5,True,False
+HTA0306,CADTH (Canada),2019-04-03,2019,Pharmaceuticals,Gastroenterology,12,6,5935,True,1.126,0.2424,0.1017,141427.06,100000,19106412.25,Low,4.39,9.68,3.46,Restricted,0.62,21,10,False,False
+HTA0307,HAS (France),2020-03-02,2020,Screening Programs,Hematology,7,4,9704,False,0.403,0.1813,0.3364,101763.12,100000,13432628.17,Low,2.89,3.91,8.37,Restricted,0.661,7,12,False,False
+HTA0308,TLV (Sweden),2020-12-05,2020,Preventive Interventions,Neurology,2,5,9520,True,-0.142,0.1594,0.377,34947.49,100000,73767588.76,Low,5.69,7.02,8.34,Restricted,0.578,15,12,False,False
+HTA0309,TLV (Sweden),2019-07-18,2019,Screening Programs,Hematology,13,11,7235,False,-0.266,0.1634,0.1325,108480.74,100000,87494125.42,High,8.8,6.34,2.14,Restricted,0.628,20,13,True,False
+HTA0310,NICE (UK),2018-07-25,2018,Preventive Interventions,Infectious Disease,11,0,2333,True,0.683,0.2136,0.2225,73425.86,50000,49540936.45,Low,8.49,4.63,4.0,Restricted,0.648,19,18,False,False
+HTA0311,G-BA (Germany),2019-04-25,2019,Screening Programs,Infectious Disease,4,9,4539,False,-0.195,0.0505,0.2112,49527.72,100000,4480765.78,Moderate,5.9,5.97,4.21,Restricted,0.634,20,10,False,False
+HTA0312,NICE (UK),2020-04-25,2020,Preventive Interventions,Rheumatology,2,8,4632,True,0.757,0.1962,0.1686,86741.88,50000,21292944.05,Low,1.47,8.67,2.78,Conditional,0.65,16,9,False,False
+HTA0313,NCPE (Ireland),2022-06-27,2022,Surgical Procedures,Immunology,20,1,4049,True,1.607,0.1681,0.3962,43431.86,100000,67533890.76,High,2.02,1.04,10.0,Conditional,0.621,18,6,True,False
+HTA0314,IQWIG (Germany),2022-02-11,2022,Diagnostic Tests,Infectious Disease,12,1,4279,True,0.731,0.234,0.2731,121264.76,100000,47171084.86,Moderate,1.98,8.88,8.05,Restricted,0.55,20,13,False,False
+HTA0315,G-BA (Germany),2020-12-12,2020,Preventive Interventions,Neurology,3,4,9226,True,0.062,0.0178,0.3102,109882.89,100000,14469567.21,Low,2.39,3.71,3.24,Conditional,0.449,6,13,False,False
+HTA0316,TLV (Sweden),2022-05-26,2022,Diagnostic Tests,Neurology,18,0,7211,True,-0.336,0.2107,0.2292,81416.11,100000,56597856.26,Moderate,2.78,3.87,6.34,Conditional,0.384,9,13,False,False
+HTA0317,NICE (UK),2023-11-18,2023,Gene Therapy,Neurology,24,4,4059,True,1.848,0.235,0.2922,27598.47,50000,25100819.06,Low,2.88,1.65,7.33,Conditional,0.461,4,10,True,False
+HTA0318,G-BA (Germany),2021-11-18,2021,Surgical Procedures,Immunology,14,1,3903,True,0.99,0.0396,0.1903,55852.92,100000,77511168.26,Low,2.38,4.3,4.36,Conditional,0.361,4,6,True,False
+HTA0319,IQWIG (Germany),2019-06-04,2019,Immunotherapy,Infectious Disease,10,1,1487,True,1.236,0.2287,0.2439,30302.28,100000,38491632.2,Low,6.8,6.86,8.8,Restricted,0.768,9,13,False,False
+HTA0320,G-BA (Germany),2020-02-09,2020,Rehabilitation Technologies,Hematology,16,12,333,True,-0.226,0.1436,0.3622,46638.89,100000,33446975.36,High,4.5,1.33,9.26,Restricted,0.702,16,0,True,False
+HTA0321,G-BA (Germany),2022-09-18,2022,Gene Therapy,Neurology,11,1,3945,True,0.409,0.1632,0.1725,139614.02,100000,7496982.73,Moderate,6.32,6.87,3.3,Restricted,0.609,17,5,False,False
+HTA0322,NCPE (Ireland),2020-04-01,2020,Diagnostic Tests,Oncology,8,4,7877,True,1.734,0.2415,0.3013,148930.7,100000,70135459.16,Moderate,7.05,7.32,4.35,Restricted,0.505,18,7,False,False
+HTA0323,G-BA (Germany),2023-05-27,2023,Pharmaceuticals,Rheumatology,8,1,7346,False,-0.138,0.1358,0.2848,44068.72,100000,28474757.69,Very Low,7.51,6.19,6.83,Restricted,0.509,21,12,True,False
+HTA0324,TLV (Sweden),2018-01-09,2018,Screening Programs,Immunology,3,10,3183,False,-0.263,0.2449,0.1852,43752.51,100000,42729607.07,High,2.13,4.73,7.86,Conditional,0.66,14,2,True,False
+HTA0325,SMC (Scotland),2021-07-22,2021,Immunotherapy,Endocrinology,11,7,3741,False,-0.493,0.1344,0.0631,87538.38,100000,92156314.11,Very Low,5.86,5.12,9.51,Restricted,0.702,6,11,False,False
+HTA0326,HAS (France),2021-10-12,2021,Screening Programs,Oncology,5,8,8003,False,-0.291,0.0195,0.3095,125003.49,100000,96818592.03,Low,6.4,5.77,1.25,Conditional,0.399,9,6,True,False
+HTA0327,G-BA (Germany),2024-02-22,2024,Immunotherapy,Infectious Disease,8,0,1175,False,0.193,0.2478,0.1473,77237.45,100000,33623510.96,Moderate,8.71,7.16,8.94,Recommended,0.841,22,15,False,False
+HTA0328,NICE (UK),2023-06-21,2023,Diagnostic Tests,Gastroenterology,9,3,9917,True,0.116,0.0555,0.094,50096.02,50000,88706289.33,Low,7.62,8.18,3.42,Restricted,0.766,22,2,False,False
+HTA0329,NCPE (Ireland),2023-05-18,2023,Gene Therapy,Hematology,16,7,4028,True,1.272,0.1831,0.3794,132837.13,100000,52004030.39,Low,6.06,5.97,2.03,Conditional,0.35,18,13,True,False
+HTA0330,NCPE (Ireland),2023-07-05,2023,Surgical Procedures,Neurology,18,1,2009,True,-0.309,0.1424,0.3444,149543.15,100000,43603974.2,Moderate,9.16,2.72,6.54,Restricted,0.622,8,19,False,False
+HTA0331,NICE (UK),2021-02-13,2021,Rehabilitation Technologies,Neurology,12,10,4638,True,2.34,0.1843,0.1269,70117.09,50000,79848725.18,Moderate,6.85,7.78,6.6,Restricted,0.662,14,7,True,False
+HTA0332,HAS (France),2020-06-16,2020,Digital Health,Neurology,8,1,2839,True,0.773,0.1815,0.2613,48344.29,100000,41670823.16,Moderate,9.69,2.18,4.35,Restricted,0.508,12,16,True,False
+HTA0333,IQWIG (Germany),2019-08-11,2019,Pharmaceuticals,Respiratory,9,11,8326,False,0.271,0.2296,0.3491,104060.46,100000,6180952.87,Low,8.61,8.19,5.58,Restricted,0.57,15,1,False,False
+HTA0334,TLV (Sweden),2021-11-02,2021,Medical Devices,Respiratory,16,6,7856,False,0.23,0.1865,0.078,57122.37,100000,85978571.27,Moderate,2.04,3.93,2.98,Not Recommended,0.0,9,18,False,False
+HTA0335,IQWIG (Germany),2021-10-06,2021,Medical Devices,Neurology,17,8,4360,True,1.057,0.245,0.2937,102436.54,100000,24827477.38,Low,7.75,3.86,5.35,Restricted,0.588,5,17,False,False
+HTA0336,NICE (UK),2022-10-21,2022,Immunotherapy,Endocrinology,17,5,9824,True,1.231,0.0472,0.1747,106066.89,50000,56451482.32,Moderate,4.78,6.06,1.05,Conditional,0.331,6,16,False,False
+HTA0337,NCPE (Ireland),2020-09-19,2020,Surgical Procedures,Gastroenterology,1,1,1202,False,0.002,0.115,0.1689,109257.82,100000,29411693.15,Moderate,4.21,2.59,7.26,Conditional,0.546,19,2,False,False
+HTA0338,NICE (UK),2022-09-23,2022,Screening Programs,Oncology,20,10,3868,True,-0.15,0.041,0.2379,140802.68,50000,31526860.05,Low,7.88,3.23,1.33,Conditional,0.341,11,14,True,False
+HTA0339,G-BA (Germany),2022-06-22,2022,Screening Programs,Rheumatology,3,9,3364,False,-0.328,0.2039,0.2925,85601.27,100000,70253259.17,Moderate,2.25,6.99,5.72,Conditional,0.556,11,8,False,False
+HTA0340,HAS (France),2020-06-03,2020,Gene Therapy,Neurology,24,14,5422,True,2.196,0.2251,0.29,129552.18,100000,9788553.43,Low,3.89,2.6,3.15,Conditional,0.467,9,5,False,False
+HTA0341,PBAC (Australia),2018-03-02,2018,Pharmaceuticals,Cardiology,21,3,7840,False,0.257,0.0897,0.3106,27037.13,100000,13901480.82,Moderate,8.27,3.22,1.57,Conditional,0.353,15,15,True,False
+HTA0342,NCPE (Ireland),2019-06-14,2019,Gene Therapy,Immunology,1,0,1046,True,1.051,0.1371,0.1903,48122.03,100000,68490760.19,Moderate,8.19,8.23,4.74,Restricted,0.585,12,18,False,False
+HTA0343,CVZ (Netherlands),2018-08-07,2018,Rehabilitation Technologies,Cardiology,7,3,2238,True,0.878,0.2063,0.3755,84037.09,100000,66485154.33,Very Low,1.89,3.09,7.38,Conditional,0.629,13,6,False,False
+HTA0344,G-BA (Germany),2018-03-05,2018,Immunotherapy,Infectious Disease,7,2,3296,True,-0.231,0.091,0.0814,144423.84,100000,80918903.28,Moderate,3.01,9.4,4.1,Restricted,0.548,6,12,True,False
+HTA0345,HAS (France),2018-10-19,2018,Screening Programs,Cardiology,9,11,7814,False,-0.023,0.2487,0.2877,15740.86,100000,99290381.04,Moderate,3.59,6.02,3.74,Conditional,0.335,14,8,False,False
+HTA0346,HAS (France),2018-03-28,2018,Preventive Interventions,Oncology,6,4,4364,True,1.179,0.1348,0.2638,43323.46,100000,29436893.45,Moderate,8.26,1.45,6.43,Restricted,0.742,8,9,False,False
+HTA0347,HAS (France),2024-02-01,2024,Rehabilitation Technologies,Immunology,7,4,7332,True,0.323,0.106,0.3224,141476.13,100000,86326152.78,Low,4.69,4.0,2.12,Conditional,0.343,7,15,False,False
+HTA0348,IQWIG (Germany),2019-11-28,2019,Pharmaceuticals,Oncology,10,2,6560,True,1.899,0.1875,0.1992,53387.11,100000,32330409.62,Low,1.47,1.12,8.16,Conditional,0.491,7,0,False,False
+HTA0349,SMC (Scotland),2020-09-22,2020,Rehabilitation Technologies,Hematology,23,11,901,False,0.466,0.0617,0.3339,33600.19,100000,22140210.31,Low,4.65,9.38,1.8,Restricted,0.653,10,9,True,False
+HTA0350,HAS (France),2020-11-21,2020,Diagnostic Tests,Rheumatology,11,3,888,True,1.658,0.1889,0.2301,52993.83,100000,83907638.59,Moderate,5.57,4.61,8.7,Restricted,0.63,9,16,True,False
+HTA0351,G-BA (Germany),2024-11-16,2024,Pharmaceuticals,Rheumatology,8,10,5347,True,0.178,0.2195,0.3351,38918.81,100000,20862576.92,Low,3.83,3.76,2.37,Conditional,0.406,11,12,True,False
+HTA0352,SMC (Scotland),2020-09-16,2020,Medical Devices,Gastroenterology,2,5,3267,True,1.613,0.0171,0.0534,15892.82,100000,54030346.11,Low,1.04,9.43,1.96,Conditional,0.637,5,1,True,False
+HTA0353,TLV (Sweden),2021-02-17,2021,Diagnostic Tests,Cardiology,22,14,3275,True,0.46,0.1112,0.1304,33937.88,100000,4740666.15,Low,3.36,1.47,3.08,Not Recommended,0.0,19,13,False,True
+HTA0354,PBAC (Australia),2020-05-15,2020,Digital Health,Endocrinology,14,10,9239,True,2.233,0.1577,0.1942,140489.57,100000,5797959.02,Moderate,6.09,6.54,1.36,Conditional,0.461,14,8,True,False
+HTA0355,CVZ (Netherlands),2022-07-28,2022,Gene Therapy,Immunology,19,7,7124,True,0.452,0.1939,0.2243,49954.93,100000,81384806.5,Low,7.06,1.42,6.1,Conditional,0.605,15,14,False,False
+HTA0356,HAS (France),2021-03-12,2021,Pharmaceuticals,Gastroenterology,20,13,7731,True,0.378,0.1,0.2281,51261.37,100000,96927818.35,Very Low,8.84,4.8,7.22,Restricted,0.771,15,14,False,False
+HTA0357,CADTH (Canada),2023-08-25,2023,Rehabilitation Technologies,Rheumatology,22,11,1710,True,0.637,0.0949,0.0964,102480.98,100000,51360502.13,Low,4.17,3.93,5.25,Conditional,0.651,10,15,False,False
+HTA0358,CADTH (Canada),2020-06-22,2020,Pharmaceuticals,Rheumatology,14,3,8629,False,-0.154,0.1592,0.0636,32082.02,100000,83293334.7,Low,4.16,4.39,5.8,Conditional,0.3,14,19,False,False
+HTA0359,TLV (Sweden),2024-10-02,2024,Rehabilitation Technologies,Hematology,23,6,2910,False,-0.259,0.0288,0.1747,113409.51,100000,55518363.92,Low,9.64,8.13,6.43,Recommended,0.899,13,11,False,False
+HTA0360,CADTH (Canada),2021-03-09,2021,Pharmaceuticals,Gastroenterology,10,3,4343,True,0.863,0.2172,0.3709,149537.12,100000,16214729.44,Low,3.39,6.32,5.55,Restricted,0.505,20,2,True,False
+HTA0361,NICE (UK),2018-11-08,2018,Pharmaceuticals,Oncology,5,4,8908,False,-0.016,0.1277,0.0919,121385.16,50000,25449575.83,Low,9.2,9.49,5.68,Recommended,0.935,16,14,False,False
+HTA0362,IQWIG (Germany),2019-02-27,2019,Diagnostic Tests,Gastroenterology,10,2,596,True,-0.442,0.2435,0.1275,121813.2,100000,6769254.85,Very Low,8.87,6.14,1.08,Restricted,0.577,22,14,False,False
+HTA0363,HAS (France),2022-08-11,2022,Diagnostic Tests,Gastroenterology,22,14,2925,True,-0.227,0.2316,0.2912,23429.88,100000,36315593.76,Low,8.52,1.39,3.13,Conditional,0.656,10,11,False,False
+HTA0364,IQWIG (Germany),2021-07-26,2021,Rehabilitation Technologies,Rheumatology,9,9,7789,False,-0.084,0.1829,0.3714,64165.87,100000,19936459.73,Moderate,9.17,8.24,1.59,Restricted,0.708,15,7,True,False
+HTA0365,NCPE (Ireland),2019-01-16,2019,Diagnostic Tests,Immunology,22,0,7841,True,1.757,0.2288,0.2439,81436.36,100000,76632356.44,High,9.26,2.78,9.86,Restricted,0.721,5,2,False,False
+HTA0366,CADTH (Canada),2020-08-06,2020,Medical Devices,Hematology,13,4,452,True,1.467,0.0674,0.1482,123968.01,100000,58847653.44,Moderate,3.87,7.58,3.59,Restricted,0.721,8,17,True,False
+HTA0367,IQWIG (Germany),2020-05-24,2020,Diagnostic Tests,Hematology,6,13,1979,False,0.318,0.0931,0.3327,56676.62,100000,10993820.48,Very Low,6.87,5.1,4.58,Restricted,0.597,6,11,False,False
+HTA0368,CADTH (Canada),2024-03-15,2024,Rehabilitation Technologies,Hematology,2,8,3260,True,1.315,0.1444,0.2202,78215.26,100000,18464779.13,Low,5.88,2.18,7.9,Restricted,0.78,20,18,False,False
+HTA0369,CVZ (Netherlands),2023-01-09,2023,Immunotherapy,Immunology,19,13,9576,True,0.72,0.102,0.3281,71165.94,100000,17906057.74,Moderate,5.58,2.33,6.5,Conditional,0.526,19,19,False,False
+HTA0370,TLV (Sweden),2021-08-09,2021,Rehabilitation Technologies,Rheumatology,10,3,9361,True,1.185,0.0276,0.3176,46279.73,100000,88873224.62,Moderate,2.29,7.26,2.48,Conditional,0.601,4,13,True,False
+HTA0371,IQWIG (Germany),2020-05-06,2020,Surgical Procedures,Cardiology,7,14,4402,True,1.937,0.2148,0.37,43466.34,100000,90491353.45,Moderate,5.97,1.45,1.39,Not Recommended,0.0,18,12,False,True
+HTA0372,SMC (Scotland),2023-06-24,2023,Pharmaceuticals,Rheumatology,22,4,7102,True,0.955,0.0952,0.1622,144767.82,100000,64516388.44,High,4.87,8.88,3.71,Restricted,0.528,3,0,True,False
+HTA0373,SMC (Scotland),2022-11-28,2022,Preventive Interventions,Immunology,1,4,1932,True,1.135,0.078,0.3819,127157.3,100000,72514977.26,High,1.96,5.44,2.45,Conditional,0.691,19,18,False,False
+HTA0374,HAS (France),2018-12-14,2018,Medical Devices,Hematology,4,12,9876,True,2.241,0.2099,0.1541,119447.14,100000,4090142.47,Very Low,5.74,3.73,4.26,Conditional,0.327,18,1,False,False
+HTA0375,NCPE (Ireland),2021-01-25,2021,Preventive Interventions,Rheumatology,15,13,2208,False,-0.311,0.1476,0.1253,129935.62,100000,94276359.99,Moderate,4.17,3.11,1.45,Not Recommended,0.0,22,10,False,True
+HTA0376,CADTH (Canada),2024-01-13,2024,Gene Therapy,Rheumatology,11,13,3910,True,0.912,0.1796,0.3792,52751.59,100000,5177846.39,Moderate,5.9,2.52,7.84,Restricted,0.795,15,0,True,False
+HTA0377,PBAC (Australia),2023-05-09,2023,Medical Devices,Oncology,13,10,9504,True,1.582,0.1346,0.1543,66268.21,100000,30535436.62,Moderate,2.47,4.26,3.26,Conditional,0.573,21,12,True,False
+HTA0378,SMC (Scotland),2019-02-18,2019,Medical Devices,Respiratory,11,14,3972,False,-0.476,0.0937,0.3026,16612.98,100000,19133783.22,Low,6.04,7.65,8.31,Restricted,0.539,8,10,False,False
+HTA0379,HAS (France),2023-06-05,2023,Pharmaceuticals,Respiratory,11,3,7326,False,0.471,0.0522,0.259,66506.83,100000,45222183.45,Moderate,8.43,5.37,5.89,Restricted,0.591,19,11,False,False
+HTA0380,NCPE (Ireland),2019-12-21,2019,Digital Health,Endocrinology,20,2,9575,True,1.703,0.0232,0.3608,106933.8,100000,22396473.84,Moderate,4.88,8.36,8.59,Restricted,0.656,21,0,False,False
+HTA0381,CVZ (Netherlands),2018-02-27,2018,Rehabilitation Technologies,Endocrinology,1,5,4582,False,0.261,0.0504,0.3418,33290.78,100000,89368521.48,Moderate,7.09,5.48,1.85,Conditional,0.416,5,0,True,False
+HTA0382,SMC (Scotland),2023-01-25,2023,Diagnostic Tests,Oncology,14,11,4339,True,2.105,0.2103,0.3416,106235.21,100000,29850098.73,Moderate,3.78,1.18,6.24,Conditional,0.58,22,9,False,False
+HTA0383,TLV (Sweden),2021-02-17,2021,Diagnostic Tests,Cardiology,19,6,9283,True,2.133,0.2052,0.3852,133145.49,100000,93399612.49,Low,7.24,2.53,3.45,Conditional,0.385,23,6,True,False
+HTA0384,NICE (UK),2021-02-05,2021,Screening Programs,Endocrinology,1,8,8073,True,2.339,0.1096,0.1644,92969.95,50000,93114411.45,Low,9.96,1.2,2.02,Conditional,0.544,22,9,False,False
+HTA0385,CVZ (Netherlands),2021-03-26,2021,Preventive Interventions,Neurology,9,9,790,False,0.431,0.1995,0.3032,44736.03,100000,84750560.35,Moderate,3.45,4.46,8.52,Restricted,0.545,3,6,False,False
+HTA0386,NCPE (Ireland),2018-09-25,2018,Rehabilitation Technologies,Infectious Disease,1,1,4470,True,2.468,0.05,0.0663,118032.09,100000,26006014.66,Low,7.34,9.51,4.68,Restricted,0.699,10,16,True,False
+HTA0387,TLV (Sweden),2023-10-24,2023,Pharmaceuticals,Endocrinology,14,2,3972,True,0.678,0.0921,0.3413,44845.68,100000,73582149.29,High,9.56,6.6,7.36,Recommended,0.86,6,10,False,False
+HTA0388,CADTH (Canada),2022-06-09,2022,Pharmaceuticals,Neurology,9,8,6014,True,1.525,0.1102,0.3057,80670.03,100000,8343443.36,Moderate,8.56,7.52,9.05,Recommended,0.824,21,7,False,False
+HTA0389,G-BA (Germany),2019-05-23,2019,Rehabilitation Technologies,Hematology,8,2,3509,False,-0.187,0.2295,0.3442,127907.85,100000,77385402.88,Low,8.25,6.42,3.66,Restricted,0.766,8,15,False,False
+HTA0390,NICE (UK),2022-08-24,2022,Digital Health,Hematology,5,11,6412,False,-0.153,0.1735,0.1805,26107.29,50000,41204888.07,High,6.19,1.37,5.75,Conditional,0.655,7,13,True,False
+HTA0391,IQWIG (Germany),2020-06-10,2020,Medical Devices,Respiratory,13,8,5829,True,0.139,0.1914,0.2741,22383.76,100000,48868684.67,Low,8.01,1.18,9.01,Restricted,0.671,10,0,True,False
+HTA0392,CADTH (Canada),2020-07-23,2020,Digital Health,Hematology,24,14,6312,True,0.573,0.0766,0.275,105456.17,100000,87225792.39,Moderate,7.93,6.05,8.95,Recommended,0.906,6,9,False,False
+HTA0393,NICE (UK),2024-08-03,2024,Digital Health,Oncology,3,6,2887,True,0.947,0.0325,0.3188,113347.57,50000,31858628.83,Moderate,8.54,1.65,8.93,Restricted,0.577,6,10,True,False
+HTA0394,TLV (Sweden),2021-01-20,2021,Diagnostic Tests,Immunology,13,0,8808,False,0.145,0.0953,0.0672,9503.25,100000,55863944.29,Low,5.84,8.57,1.3,Restricted,0.61,16,9,False,False
+HTA0395,PBAC (Australia),2019-02-13,2019,Immunotherapy,Rheumatology,13,2,1429,True,0.032,0.0363,0.2485,139608.69,100000,6423917.74,Moderate,7.37,5.16,8.26,Restricted,0.554,13,7,False,False
+HTA0396,HAS (France),2022-10-27,2022,Gene Therapy,Infectious Disease,19,11,1195,True,1.311,0.0493,0.3076,48678.54,100000,46875709.87,Low,2.54,7.67,3.72,Conditional,0.565,14,8,True,False
+HTA0397,SMC (Scotland),2022-06-25,2022,Pharmaceuticals,Immunology,18,5,1461,True,1.342,0.0311,0.187,108431.65,100000,66282901.44,Low,3.54,4.4,1.93,Conditional,0.588,3,15,True,False
+HTA0398,G-BA (Germany),2020-05-07,2020,Immunotherapy,Immunology,14,2,784,True,0.867,0.0174,0.3577,6886.48,100000,94530257.94,Moderate,4.08,9.32,1.22,Conditional,0.533,21,0,False,False
+HTA0399,G-BA (Germany),2020-12-06,2020,Surgical Procedures,Hematology,6,6,6044,True,0.29,0.0191,0.0931,148020.74,100000,32206457.0,High,1.96,7.48,8.69,Restricted,0.577,5,6,False,False
+HTA0400,HAS (France),2024-05-27,2024,Pharmaceuticals,Hematology,2,0,9550,True,0.563,0.1015,0.1941,110499.0,100000,45712260.56,Low,9.5,4.02,6.05,Restricted,0.529,22,17,True,False
+HTA0401,SMC (Scotland),2024-01-03,2024,Gene Therapy,Infectious Disease,5,5,5620,True,0.733,0.0668,0.3055,24102.85,100000,68343537.63,Low,3.06,8.8,1.3,Conditional,0.665,11,9,True,False
+HTA0402,NCPE (Ireland),2019-10-16,2019,Diagnostic Tests,Infectious Disease,23,12,9547,True,0.09,0.0233,0.1193,6334.13,100000,63098581.66,Moderate,9.76,2.74,4.11,Restricted,0.607,9,17,True,False
+HTA0403,IQWIG (Germany),2020-01-02,2020,Preventive Interventions,Gastroenterology,15,13,7488,False,-0.113,0.1653,0.0657,12836.91,100000,46265811.54,Moderate,8.99,1.94,8.4,Restricted,0.563,13,17,False,False
+HTA0404,NICE (UK),2020-04-13,2020,Preventive Interventions,Respiratory,22,2,5503,False,0.483,0.1058,0.1954,64154.58,50000,33130856.86,Low,7.83,5.31,1.4,Conditional,0.424,18,14,True,False
+HTA0405,NCPE (Ireland),2024-01-07,2024,Gene Therapy,Neurology,1,0,9004,False,-0.379,0.0373,0.1938,98936.37,100000,71495127.23,Moderate,1.72,9.46,3.35,Conditional,0.641,23,14,False,False
+HTA0406,CADTH (Canada),2024-12-24,2024,Surgical Procedures,Infectious Disease,15,5,772,True,1.029,0.1505,0.1758,73927.06,100000,36987931.28,Low,9.11,2.48,4.43,Restricted,0.542,14,13,True,False
+HTA0407,G-BA (Germany),2020-07-26,2020,Medical Devices,Endocrinology,15,14,8841,False,0.03,0.1706,0.3411,26795.04,100000,4820564.63,Low,3.83,2.16,5.22,Conditional,0.539,7,18,True,False
+HTA0408,G-BA (Germany),2020-10-11,2020,Digital Health,Neurology,7,12,660,False,0.257,0.1856,0.2982,34049.27,100000,21889662.48,Low,2.98,4.95,8.04,Restricted,0.735,5,7,True,False
+HTA0409,TLV (Sweden),2021-11-02,2021,Gene Therapy,Infectious Disease,18,8,6437,True,0.129,0.1193,0.368,20149.65,100000,72306524.47,Low,1.86,9.3,6.12,Restricted,0.609,18,19,False,False
+HTA0410,NCPE (Ireland),2023-04-17,2023,Medical Devices,Hematology,13,3,2822,True,0.705,0.0821,0.3311,44440.37,100000,72571399.01,Moderate,3.25,4.03,6.3,Conditional,0.482,21,13,False,False
+HTA0411,CADTH (Canada),2023-11-12,2023,Screening Programs,Respiratory,18,2,8764,False,-0.401,0.0751,0.3493,55238.05,100000,97331489.6,Very Low,3.41,1.37,7.35,Conditional,0.48,7,14,False,False
+HTA0412,NICE (UK),2018-03-25,2018,Screening Programs,Rheumatology,12,14,3775,True,0.509,0.0663,0.2182,85015.17,50000,63545709.52,Moderate,9.54,2.53,9.69,Restricted,0.504,9,16,True,False
+HTA0413,CADTH (Canada),2019-11-02,2019,Rehabilitation Technologies,Respiratory,1,9,9893,False,0.333,0.07,0.2633,89853.24,100000,37604043.28,Moderate,3.82,2.28,2.92,Conditional,0.342,18,3,True,False
+HTA0414,NICE (UK),2019-04-22,2019,Immunotherapy,Rheumatology,22,12,8033,True,-0.097,0.0868,0.3697,64337.69,50000,75075137.93,High,3.23,8.27,7.87,Restricted,0.616,13,3,True,False
+HTA0415,CVZ (Netherlands),2019-04-02,2019,Diagnostic Tests,Hematology,21,1,2675,False,-0.482,0.1259,0.1659,112343.94,100000,31963312.01,Low,6.35,8.15,9.9,Recommended,0.936,9,8,False,False
+HTA0416,CADTH (Canada),2018-04-19,2018,Preventive Interventions,Immunology,2,8,6447,True,2.413,0.0997,0.2885,14212.68,100000,40228487.33,Very Low,5.85,3.59,2.08,Conditional,0.581,21,9,False,False
+HTA0417,NICE (UK),2023-11-24,2023,Digital Health,Immunology,15,8,6165,False,-0.397,0.2363,0.3283,31281.29,50000,71488788.16,Moderate,4.62,8.05,9.67,Restricted,0.538,19,8,True,False
+HTA0418,IQWIG (Germany),2024-03-03,2024,Gene Therapy,Respiratory,1,3,8053,True,0.221,0.1682,0.3684,147446.63,100000,20605063.72,High,1.51,8.81,3.65,Conditional,0.301,23,9,False,False
+HTA0419,NICE (UK),2018-10-28,2018,Screening Programs,Respiratory,10,14,5535,True,1.586,0.0389,0.1308,55856.91,50000,76015759.51,Low,7.2,6.1,7.15,Restricted,0.501,3,17,False,False
+HTA0420,CVZ (Netherlands),2023-01-01,2023,Digital Health,Immunology,2,6,8091,False,0.398,0.1856,0.1784,20388.19,100000,69175860.17,Very Low,7.54,9.36,8.24,Recommended,0.833,15,2,False,False
+HTA0421,NICE (UK),2018-10-27,2018,Rehabilitation Technologies,Neurology,15,5,4958,True,0.109,0.1184,0.3289,90611.78,50000,10594815.38,Moderate,7.32,8.13,6.66,Restricted,0.546,19,17,True,False
+HTA0422,NCPE (Ireland),2024-05-03,2024,Medical Devices,Rheumatology,5,4,8776,True,0.672,0.1998,0.3311,108841.57,100000,21219623.44,Moderate,9.96,1.93,2.63,Conditional,0.352,10,11,False,False
+HTA0423,G-BA (Germany),2021-04-05,2021,Rehabilitation Technologies,Respiratory,16,8,7594,True,1.946,0.1287,0.0968,133426.78,100000,65273649.17,Moderate,1.3,2.27,6.48,Conditional,0.372,11,6,True,False
+HTA0424,IQWIG (Germany),2020-11-12,2020,Gene Therapy,Cardiology,10,12,6498,True,0.811,0.1983,0.0827,80526.74,100000,83802039.33,Low,9.61,7.28,2.87,Restricted,0.506,12,8,True,False
+HTA0425,SMC (Scotland),2021-06-06,2021,Digital Health,Oncology,19,2,7987,True,1.026,0.1244,0.1447,9229.75,100000,60905060.6,Moderate,3.69,8.8,7.72,Restricted,0.757,22,6,False,False
+HTA0426,NCPE (Ireland),2023-05-21,2023,Screening Programs,Hematology,19,4,9651,False,0.059,0.2269,0.0888,30682.61,100000,43437817.61,High,6.1,4.59,3.56,Conditional,0.368,19,17,True,False
+HTA0427,CVZ (Netherlands),2022-01-16,2022,Immunotherapy,Immunology,15,5,207,False,-0.402,0.1147,0.3868,125950.11,100000,49480699.15,Low,8.5,4.13,9.03,Restricted,0.641,18,19,False,False
+HTA0428,PBAC (Australia),2019-12-06,2019,Digital Health,Endocrinology,9,11,8874,True,-0.031,0.1149,0.1889,112813.92,100000,58492976.84,Moderate,2.54,3.04,6.18,Conditional,0.469,20,12,False,False
+HTA0429,G-BA (Germany),2023-12-22,2023,Immunotherapy,Oncology,12,11,5411,True,0.911,0.2395,0.3183,145585.75,100000,74879180.17,Moderate,1.58,6.2,4.22,Conditional,0.41,18,4,False,False
+HTA0430,CVZ (Netherlands),2023-07-20,2023,Immunotherapy,Immunology,6,6,6808,True,-0.495,0.1356,0.1704,149584.12,100000,77468688.96,Low,9.6,8.99,3.86,Restricted,0.55,11,2,False,False
+HTA0431,CADTH (Canada),2020-10-04,2020,Rehabilitation Technologies,Rheumatology,8,2,2014,False,-0.191,0.0413,0.1197,90216.97,100000,7340308.86,Low,9.65,3.22,5.05,Restricted,0.507,22,14,False,False
+HTA0432,PBAC (Australia),2019-12-14,2019,Preventive Interventions,Hematology,1,13,6419,True,1.857,0.1716,0.0903,105749.01,100000,44713181.6,Very Low,2.27,6.79,4.44,Conditional,0.683,10,12,True,False
+HTA0433,NICE (UK),2023-11-21,2023,Gene Therapy,Respiratory,21,6,7650,True,0.385,0.0137,0.127,45880.85,50000,44916370.43,Moderate,8.86,7.34,1.77,Restricted,0.695,23,6,True,False
+HTA0434,SMC (Scotland),2024-04-13,2024,Preventive Interventions,Gastroenterology,12,4,7752,True,2.303,0.0307,0.3297,135299.4,100000,94172422.9,Low,3.59,4.0,4.84,Conditional,0.356,3,8,True,False
+HTA0435,G-BA (Germany),2023-11-27,2023,Gene Therapy,Immunology,6,12,884,True,2.248,0.0791,0.1149,99493.57,100000,71547539.32,Low,3.87,3.27,9.6,Restricted,0.777,22,14,True,False
+HTA0436,G-BA (Germany),2022-06-07,2022,Immunotherapy,Infectious Disease,10,7,9260,True,0.675,0.1593,0.389,18761.65,100000,39611590.01,Moderate,6.19,2.37,2.59,Conditional,0.414,23,19,True,False
+HTA0437,NICE (UK),2022-06-24,2022,Screening Programs,Endocrinology,11,7,8071,True,1.909,0.0997,0.1858,18875.07,50000,91543859.09,High,6.83,4.72,4.65,Restricted,0.704,17,9,True,False
+HTA0438,IQWIG (Germany),2021-09-21,2021,Preventive Interventions,Infectious Disease,24,3,7118,True,-0.262,0.1271,0.1601,34302.06,100000,95311570.95,Moderate,2.57,2.79,3.53,Not Recommended,0.0,20,5,False,False
+HTA0439,HAS (France),2021-12-26,2021,Digital Health,Hematology,18,2,7596,True,-0.444,0.2031,0.0983,117516.64,100000,79956705.42,Moderate,3.79,2.31,7.63,Conditional,0.541,15,12,True,False
+HTA0440,PBAC (Australia),2018-06-01,2018,Pharmaceuticals,Hematology,3,14,6013,True,1.758,0.2076,0.3578,75719.24,100000,63432982.86,High,5.39,2.39,4.33,Conditional,0.432,23,0,True,False
+HTA0441,G-BA (Germany),2021-10-27,2021,Screening Programs,Rheumatology,15,13,6744,True,2.034,0.1498,0.3951,97282.17,100000,83577046.74,Low,4.11,3.34,4.87,Conditional,0.487,12,0,True,False
+HTA0442,G-BA (Germany),2019-11-15,2019,Diagnostic Tests,Neurology,11,14,8381,False,-0.075,0.0761,0.1428,82747.88,100000,45465672.07,Moderate,1.82,7.47,2.92,Conditional,0.379,21,11,False,False
+HTA0443,HAS (France),2022-04-20,2022,Medical Devices,Hematology,23,9,5875,False,-0.015,0.2437,0.0529,135328.23,100000,93180924.74,Very Low,1.12,2.55,6.88,Conditional,0.31,21,9,True,False
+HTA0444,IQWIG (Germany),2024-07-16,2024,Medical Devices,Neurology,10,2,5704,False,0.499,0.2469,0.3586,62225.71,100000,68970854.92,Moderate,6.84,3.78,6.46,Restricted,0.657,12,7,True,False
+HTA0445,HAS (France),2018-10-03,2018,Rehabilitation Technologies,Rheumatology,7,11,6955,True,1.22,0.2327,0.3399,51831.92,100000,24488182.0,Moderate,5.54,7.7,5.53,Restricted,0.52,10,4,True,False
+HTA0446,HAS (France),2020-10-19,2020,Rehabilitation Technologies,Infectious Disease,8,6,143,False,0.383,0.129,0.1596,114281.59,100000,22786559.22,Moderate,8.79,7.52,4.63,Restricted,0.564,13,12,False,False
+HTA0447,CVZ (Netherlands),2018-07-14,2018,Screening Programs,Endocrinology,2,8,4715,True,0.363,0.0485,0.1488,38821.5,100000,73673279.57,High,6.56,7.85,5.33,Restricted,0.779,21,1,True,False
+HTA0448,SMC (Scotland),2019-03-04,2019,Pharmaceuticals,Rheumatology,6,7,2556,True,1.71,0.0373,0.3321,41715.08,100000,25643969.78,Low,1.63,1.24,3.35,Not Recommended,0.0,11,16,False,True
+HTA0449,IQWIG (Germany),2021-07-06,2021,Gene Therapy,Rheumatology,21,9,9576,True,1.819,0.0914,0.1001,129393.93,100000,31577229.02,Low,6.1,5.25,5.46,Restricted,0.72,23,2,True,False
+HTA0450,PBAC (Australia),2019-04-20,2019,Pharmaceuticals,Rheumatology,16,7,7735,True,-0.12,0.1244,0.3173,42448.33,100000,48597830.65,Very Low,7.18,8.57,4.73,Restricted,0.73,10,1,False,False
+HTA0451,IQWIG (Germany),2018-12-20,2018,Immunotherapy,Oncology,21,14,1283,True,0.21,0.1606,0.1555,145363.04,100000,70591807.31,High,4.75,4.47,5.81,Restricted,0.753,23,18,False,False
+HTA0452,SMC (Scotland),2024-05-08,2024,Medical Devices,Respiratory,21,0,7895,True,1.179,0.012,0.0789,23294.59,100000,19355769.96,Moderate,9.93,6.87,1.55,Restricted,0.658,15,16,True,False
+HTA0453,NCPE (Ireland),2020-12-14,2020,Immunotherapy,Infectious Disease,9,13,5162,True,2.007,0.1981,0.3385,109923.37,100000,83435639.14,Moderate,5.07,7.23,6.74,Restricted,0.715,14,14,False,False
+HTA0454,IQWIG (Germany),2024-01-13,2024,Rehabilitation Technologies,Immunology,10,8,2163,True,-0.478,0.0246,0.2001,62902.29,100000,19286677.05,Moderate,2.57,8.64,3.68,Conditional,0.539,11,7,True,False
+HTA0455,IQWIG (Germany),2021-09-02,2021,Digital Health,Respiratory,13,13,1886,True,0.591,0.1376,0.3552,104669.29,100000,12046649.0,High,4.85,2.76,1.25,Not Recommended,0.0,8,9,False,False
+HTA0456,NICE (UK),2022-03-12,2022,Preventive Interventions,Oncology,16,8,3998,True,1.984,0.0478,0.258,91073.53,50000,17254311.44,High,9.82,4.54,3.05,Restricted,0.551,8,17,True,False
+HTA0457,NCPE (Ireland),2018-02-12,2018,Screening Programs,Gastroenterology,15,3,7967,True,0.443,0.2044,0.1432,36192.49,100000,82712419.81,Very Low,6.01,3.5,4.59,Conditional,0.368,4,6,True,False
+HTA0458,CADTH (Canada),2023-05-18,2023,Medical Devices,Immunology,10,6,6745,True,1.059,0.1181,0.0541,85737.76,100000,66490908.09,Low,7.63,6.14,1.6,Restricted,0.535,17,0,False,False
+HTA0459,CADTH (Canada),2021-04-28,2021,Pharmaceuticals,Hematology,22,12,9962,True,0.287,0.1923,0.3208,71064.37,100000,61578504.39,Moderate,7.32,8.52,7.19,Recommended,0.903,5,0,False,False
+HTA0460,G-BA (Germany),2021-12-21,2021,Surgical Procedures,Respiratory,21,12,9076,True,1.188,0.0214,0.0644,41365.76,100000,69280462.59,Low,6.03,5.79,4.62,Restricted,0.548,7,0,False,False
+HTA0461,NICE (UK),2018-01-13,2018,Preventive Interventions,Neurology,14,10,1577,True,1.939,0.0193,0.2806,44520.87,50000,87283022.39,Moderate,3.75,5.66,4.44,Conditional,0.526,8,6,False,False
+HTA0462,IQWIG (Germany),2019-10-22,2019,Medical Devices,Endocrinology,19,8,5751,True,0.675,0.1485,0.2958,96943.33,100000,98479792.57,High,4.87,4.82,4.75,Conditional,0.566,23,3,True,False
+HTA0463,NCPE (Ireland),2020-02-22,2020,Rehabilitation Technologies,Respiratory,14,7,8372,True,2.325,0.1807,0.1535,89251.74,100000,94478728.36,Low,7.68,7.63,2.6,Restricted,0.747,15,11,False,False
+HTA0464,TLV (Sweden),2020-05-11,2020,Medical Devices,Oncology,22,2,2811,False,0.284,0.1932,0.3029,34653.13,100000,34459027.94,Moderate,3.98,7.79,3.96,Restricted,0.541,15,4,True,False
+HTA0465,G-BA (Germany),2021-02-21,2021,Digital Health,Gastroenterology,22,9,2811,False,-0.38,0.1183,0.3688,123073.64,100000,52447121.75,Low,5.7,2.42,2.12,Conditional,0.375,18,1,True,False
+HTA0466,NICE (UK),2018-12-23,2018,Gene Therapy,Infectious Disease,18,12,3439,True,0.883,0.0882,0.2165,92407.09,50000,98613165.64,Very Low,8.76,9.0,5.21,Recommended,0.931,15,0,False,False
+HTA0467,SMC (Scotland),2024-04-17,2024,Rehabilitation Technologies,Immunology,17,3,8721,True,1.83,0.1425,0.2813,51820.65,100000,48646121.23,Low,4.64,2.79,9.65,Restricted,0.653,8,2,False,False
+HTA0468,TLV (Sweden),2019-07-17,2019,Digital Health,Cardiology,10,11,4749,False,0.141,0.0845,0.2796,35516.95,100000,32507244.73,Moderate,6.01,1.97,9.4,Restricted,0.6,19,2,True,False
+HTA0469,NICE (UK),2022-05-04,2022,Screening Programs,Oncology,7,13,2024,True,1.812,0.1592,0.2605,84177.24,50000,59441004.06,Very Low,1.08,1.43,2.72,Not Recommended,0.0,11,16,False,False
+HTA0470,TLV (Sweden),2022-05-09,2022,Screening Programs,Neurology,13,0,6755,False,-0.484,0.2341,0.3334,126396.78,100000,10235451.09,Low,9.64,7.11,6.14,Recommended,0.989,9,3,False,False
+HTA0471,NCPE (Ireland),2022-02-03,2022,Diagnostic Tests,Oncology,22,2,1049,False,0.442,0.0254,0.1908,8401.56,100000,33612249.08,Moderate,9.2,8.62,2.15,Restricted,0.528,5,3,True,False
+HTA0472,NCPE (Ireland),2020-03-11,2020,Surgical Procedures,Rheumatology,12,10,7849,True,0.268,0.0389,0.0845,114832.07,100000,23129254.41,High,8.18,2.39,6.63,Restricted,0.602,23,11,False,False
+HTA0473,SMC (Scotland),2021-05-14,2021,Diagnostic Tests,Rheumatology,18,14,5329,True,1.103,0.2098,0.1906,108961.41,100000,87791737.13,Moderate,8.26,7.82,4.21,Restricted,0.797,10,5,False,False
+HTA0474,G-BA (Germany),2018-03-11,2018,Rehabilitation Technologies,Gastroenterology,16,4,424,True,0.368,0.0843,0.2327,101237.15,100000,38728950.85,Low,4.03,3.61,5.87,Conditional,0.309,8,15,False,False
+HTA0475,SMC (Scotland),2019-09-04,2019,Digital Health,Hematology,14,3,7522,True,1.036,0.1417,0.2384,86935.7,100000,94921786.91,Very Low,8.88,8.21,9.49,Recommended,0.82,6,0,False,False
+HTA0476,PBAC (Australia),2022-10-02,2022,Screening Programs,Gastroenterology,12,5,628,True,0.306,0.0934,0.2995,85475.82,100000,90514929.55,Low,5.44,8.07,9.53,Recommended,0.871,22,17,False,False
+HTA0477,SMC (Scotland),2019-03-27,2019,Medical Devices,Infectious Disease,22,0,7219,False,-0.292,0.0911,0.3334,105873.26,100000,76812644.98,Moderate,7.45,4.48,2.9,Conditional,0.553,23,5,False,False
+HTA0478,CADTH (Canada),2018-08-03,2018,Screening Programs,Hematology,16,10,1252,True,0.689,0.1076,0.2463,38119.3,100000,82398904.38,Moderate,7.35,5.62,6.27,Restricted,0.554,19,9,True,False
+HTA0479,G-BA (Germany),2022-08-24,2022,Preventive Interventions,Rheumatology,19,1,3026,False,-0.255,0.1577,0.2051,96740.93,100000,86425049.13,High,8.0,5.44,6.08,Restricted,0.696,20,12,False,False
+HTA0480,NICE (UK),2024-07-01,2024,Diagnostic Tests,Hematology,7,9,170,False,0.412,0.0738,0.2117,84625.88,50000,94962133.23,Very Low,3.12,7.54,4.4,Restricted,0.502,19,3,False,False
+HTA0481,G-BA (Germany),2020-03-28,2020,Rehabilitation Technologies,Neurology,17,14,4333,True,-0.212,0.0813,0.069,91511.43,100000,9599427.89,Low,1.47,1.53,3.75,Not Recommended,0.0,18,12,False,False
+HTA0482,SMC (Scotland),2022-08-07,2022,Gene Therapy,Respiratory,2,14,9859,True,2.347,0.1965,0.1499,127410.39,100000,43807239.66,Low,8.41,2.7,7.31,Restricted,0.587,19,15,False,False
+HTA0483,PBAC (Australia),2023-06-02,2023,Surgical Procedures,Rheumatology,14,6,9871,False,0.216,0.0876,0.1615,70038.67,100000,62998237.45,High,2.7,8.73,3.31,Conditional,0.452,23,16,True,False
+HTA0484,HAS (France),2022-04-01,2022,Rehabilitation Technologies,Immunology,4,3,957,False,0.455,0.2322,0.3682,79264.64,100000,36654069.3,Moderate,7.21,8.96,2.86,Restricted,0.775,18,4,True,False
+HTA0485,G-BA (Germany),2019-10-15,2019,Pharmaceuticals,Hematology,3,7,8767,True,1.913,0.2258,0.2683,5816.54,100000,19445360.88,High,4.27,5.51,1.39,Conditional,0.439,8,4,True,False
+HTA0486,SMC (Scotland),2023-05-08,2023,Medical Devices,Respiratory,5,10,8885,False,0.48,0.1409,0.3825,31019.56,100000,3516647.83,High,6.29,1.55,9.63,Restricted,0.543,20,16,True,False
+HTA0487,CADTH (Canada),2018-06-20,2018,Rehabilitation Technologies,Cardiology,10,12,1551,False,0.332,0.0783,0.1772,72354.28,100000,97914035.05,Moderate,4.22,7.56,9.68,Restricted,0.547,5,10,False,False
+HTA0488,G-BA (Germany),2024-03-19,2024,Preventive Interventions,Hematology,4,6,5903,True,-0.368,0.1046,0.1957,70381.56,100000,82863450.86,High,7.34,4.04,3.79,Restricted,0.78,7,0,False,False
+HTA0489,CVZ (Netherlands),2022-10-15,2022,Digital Health,Cardiology,20,7,3156,False,0.034,0.101,0.1691,95020.73,100000,89208542.09,Moderate,8.42,4.62,1.92,Conditional,0.325,14,15,False,False
+HTA0490,CVZ (Netherlands),2023-10-03,2023,Medical Devices,Oncology,21,5,2982,True,-0.098,0.2365,0.3315,31194.96,100000,41250212.98,Moderate,8.12,5.59,2.15,Restricted,0.722,19,5,False,False
+HTA0491,CVZ (Netherlands),2020-12-09,2020,Digital Health,Immunology,4,6,3040,True,0.971,0.096,0.3397,8277.64,100000,25140430.27,Moderate,8.73,5.21,4.64,Restricted,0.635,3,1,True,False
+HTA0492,SMC (Scotland),2024-12-21,2024,Rehabilitation Technologies,Hematology,15,2,5907,False,-0.113,0.145,0.331,66934.22,100000,24120638.39,Very Low,9.61,8.59,7.2,Recommended,0.859,15,9,False,False
+HTA0493,G-BA (Germany),2023-10-19,2023,Digital Health,Neurology,8,1,2054,True,1.003,0.0872,0.0963,59576.19,100000,67554031.05,Low,5.78,6.31,2.81,Conditional,0.415,10,11,False,False
+HTA0494,CVZ (Netherlands),2019-10-21,2019,Digital Health,Gastroenterology,7,9,9766,False,0.06,0.0712,0.1419,10691.69,100000,31238978.43,Low,1.43,2.97,7.36,Conditional,0.613,21,5,True,False
+HTA0495,CVZ (Netherlands),2021-08-02,2021,Gene Therapy,Infectious Disease,15,11,8062,True,0.487,0.132,0.0584,50388.68,100000,82166946.61,Low,5.06,3.57,3.68,Conditional,0.453,19,2,False,False
+HTA0496,HAS (France),2020-03-08,2020,Digital Health,Immunology,4,3,1942,True,1.927,0.1974,0.1253,108767.15,100000,80205386.39,Moderate,2.55,1.02,5.06,Not Recommended,0.0,12,13,False,False
+HTA0497,TLV (Sweden),2019-02-05,2019,Pharmaceuticals,Rheumatology,6,4,4502,True,0.009,0.1824,0.3195,72037.63,100000,71694615.25,Low,2.24,9.7,8.39,Restricted,0.561,8,15,False,False
+HTA0498,G-BA (Germany),2020-02-16,2020,Digital Health,Rheumatology,23,10,5606,True,-0.472,0.0179,0.3482,104183.6,100000,27271603.58,Low,8.13,3.76,1.32,Conditional,0.673,7,17,False,False
+HTA0499,G-BA (Germany),2021-06-12,2021,Rehabilitation Technologies,Neurology,19,9,5025,False,-0.303,0.1481,0.3738,26300.0,100000,97114565.59,Very Low,8.96,2.93,6.71,Restricted,0.728,22,6,False,False
+HTA0500,HAS (France),2018-05-27,2018,Pharmaceuticals,Cardiology,24,2,4522,True,1.113,0.2488,0.1897,94233.11,100000,37159175.96,Moderate,7.26,9.44,5.88,Recommended,0.954,6,7,False,False
+HTA0501,NICE (UK),2018-04-13,2018,Pharmaceuticals,Hematology,2,12,1665,False,0.369,0.2342,0.1646,24695.7,50000,24455666.15,Low,9.74,5.2,3.75,Restricted,0.629,5,6,True,False
+HTA0502,CADTH (Canada),2021-08-14,2021,Medical Devices,Hematology,18,7,1662,True,2.133,0.1936,0.0578,77748.36,100000,28194061.9,Low,7.49,8.77,5.28,Restricted,0.798,22,18,False,False
+HTA0503,TLV (Sweden),2024-07-28,2024,Pharmaceuticals,Cardiology,1,4,9593,True,-0.455,0.2236,0.1357,110806.45,100000,81290522.12,Low,9.92,3.65,7.39,Restricted,0.535,3,16,False,False
+HTA0504,IQWIG (Germany),2019-12-07,2019,Diagnostic Tests,Hematology,9,5,4847,True,2.089,0.1255,0.0775,86278.21,100000,33875315.19,Moderate,8.64,5.69,9.4,Recommended,0.961,9,8,False,False
+HTA0505,PBAC (Australia),2024-08-11,2024,Digital Health,Gastroenterology,18,8,3254,True,0.016,0.0728,0.2237,65664.33,100000,78077820.91,Low,6.17,8.4,6.06,Restricted,0.789,18,7,True,False
+HTA0506,CVZ (Netherlands),2024-07-16,2024,Surgical Procedures,Respiratory,12,13,4606,False,0.23,0.0341,0.3012,103573.63,100000,83261326.59,High,1.21,4.36,2.34,Not Recommended,0.0,23,5,False,True
+HTA0507,TLV (Sweden),2023-04-24,2023,Gene Therapy,Endocrinology,23,0,6921,False,-0.028,0.046,0.1424,142436.35,100000,37346150.7,Very Low,3.74,5.89,1.18,Conditional,0.509,5,15,False,False
+HTA0508,NICE (UK),2021-01-01,2021,Preventive Interventions,Endocrinology,7,1,5370,False,-0.114,0.1989,0.267,16996.59,50000,82574058.53,Low,2.79,1.72,8.53,Conditional,0.332,22,14,False,False
+HTA0509,CADTH (Canada),2021-02-02,2021,Gene Therapy,Cardiology,15,13,5398,True,0.254,0.0499,0.1723,112561.94,100000,75913786.1,Low,3.11,6.29,6.14,Restricted,0.645,4,5,False,False
+HTA0510,PBAC (Australia),2019-05-18,2019,Medical Devices,Respiratory,11,9,7182,False,0.432,0.19,0.345,73163.91,100000,39587756.64,Moderate,6.54,2.12,6.22,Conditional,0.566,9,16,True,False
+HTA0511,G-BA (Germany),2020-01-10,2020,Immunotherapy,Hematology,15,12,1065,True,2.073,0.2254,0.3813,62635.76,100000,22496900.0,Moderate,4.0,2.59,6.47,Conditional,0.491,16,8,True,False
+HTA0512,G-BA (Germany),2020-06-04,2020,Surgical Procedures,Hematology,17,7,5486,True,0.751,0.1445,0.2003,145078.14,100000,60806781.21,Low,9.43,6.32,1.11,Restricted,0.51,18,8,False,False
+HTA0513,SMC (Scotland),2020-02-13,2020,Preventive Interventions,Oncology,1,9,8872,True,1.188,0.0339,0.3727,25411.72,100000,23264783.77,Low,7.88,6.57,3.09,Restricted,0.5,21,3,True,False
+HTA0514,CADTH (Canada),2024-05-20,2024,Diagnostic Tests,Infectious Disease,24,3,9693,True,1.826,0.1364,0.1609,42432.93,100000,4736984.38,Low,3.07,2.33,6.88,Conditional,0.572,15,19,True,False
+HTA0515,IQWIG (Germany),2019-06-06,2019,Diagnostic Tests,Infectious Disease,14,3,1977,True,1.069,0.1619,0.2524,42589.82,100000,90973579.07,High,4.13,7.47,7.9,Restricted,0.625,8,13,True,False
+HTA0516,CADTH (Canada),2024-04-28,2024,Diagnostic Tests,Oncology,12,8,7550,False,-0.117,0.1514,0.3023,39974.98,100000,17645967.5,Very Low,6.56,9.83,4.04,Restricted,0.711,17,19,True,False
+HTA0517,G-BA (Germany),2018-01-13,2018,Diagnostic Tests,Cardiology,19,13,7098,True,1.375,0.0706,0.2841,113316.23,100000,91676846.86,Very Low,1.09,9.91,7.15,Restricted,0.693,13,14,True,False
+HTA0518,NCPE (Ireland),2023-09-28,2023,Medical Devices,Gastroenterology,7,1,6179,True,0.82,0.0396,0.2203,95656.47,100000,82911035.17,Low,1.59,3.77,3.59,Not Recommended,0.0,10,4,False,False
+HTA0519,CADTH (Canada),2018-04-04,2018,Medical Devices,Gastroenterology,21,1,1906,True,0.984,0.1276,0.2386,42360.27,100000,37257876.93,Moderate,2.18,5.1,8.29,Restricted,0.748,21,15,True,False
+HTA0520,NCPE (Ireland),2024-01-02,2024,Pharmaceuticals,Endocrinology,8,5,2172,True,-0.08,0.1332,0.1348,31728.05,100000,7418587.66,Low,4.85,6.64,7.55,Restricted,0.704,9,9,False,False
+HTA0521,IQWIG (Germany),2024-04-03,2024,Gene Therapy,Gastroenterology,19,14,6338,True,0.063,0.0152,0.232,103596.89,100000,9489354.04,Moderate,7.69,9.87,7.0,Recommended,0.849,20,18,False,False
+HTA0522,G-BA (Germany),2020-10-16,2020,Screening Programs,Endocrinology,5,3,7436,False,0.145,0.1848,0.2173,78257.84,100000,85269531.16,Low,9.08,9.02,9.79,Recommended,0.94,7,19,False,False
+HTA0523,NICE (UK),2019-03-05,2019,Medical Devices,Respiratory,24,12,4025,True,0.919,0.1713,0.2625,65281.47,50000,38583455.88,Moderate,6.3,6.83,5.07,Restricted,0.791,14,18,False,False
+HTA0524,NCPE (Ireland),2020-07-12,2020,Pharmaceuticals,Hematology,10,12,6210,True,0.455,0.074,0.3884,28210.75,100000,78945257.91,Very Low,1.18,7.29,3.28,Conditional,0.316,12,1,True,False
+HTA0525,HAS (France),2023-06-14,2023,Immunotherapy,Gastroenterology,11,6,9038,True,0.413,0.1335,0.2997,139300.19,100000,9755321.15,Very Low,9.29,1.49,4.24,Restricted,0.744,12,18,True,False
+HTA0526,PBAC (Australia),2020-04-17,2020,Preventive Interventions,Immunology,10,4,3684,False,0.085,0.2493,0.2096,113579.98,100000,67054115.88,Very Low,7.42,2.48,9.6,Restricted,0.7,13,5,True,False
+HTA0527,SMC (Scotland),2020-07-04,2020,Medical Devices,Infectious Disease,17,11,319,True,2.037,0.2287,0.3372,23552.74,100000,99793598.31,Moderate,7.52,9.17,3.12,Restricted,0.772,14,11,False,False
+HTA0528,NICE (UK),2022-08-08,2022,Digital Health,Oncology,11,7,6276,True,1.159,0.0708,0.3845,9151.52,50000,20773099.73,Moderate,4.73,3.09,5.42,Conditional,0.649,15,1,False,False
+HTA0529,TLV (Sweden),2021-04-23,2021,Medical Devices,Rheumatology,6,9,6849,False,-0.045,0.2091,0.3913,131653.61,100000,23487824.93,High,5.43,5.78,2.81,Conditional,0.414,16,7,False,False
+HTA0530,TLV (Sweden),2023-06-26,2023,Diagnostic Tests,Infectious Disease,8,5,6665,True,2.14,0.2231,0.3852,130817.29,100000,1211951.02,Moderate,8.37,4.3,6.41,Restricted,0.682,3,5,True,False
+HTA0531,G-BA (Germany),2022-04-26,2022,Diagnostic Tests,Cardiology,19,11,6022,False,-0.246,0.2169,0.3627,33152.14,100000,13915108.02,Very Low,8.81,9.04,8.98,Recommended,0.908,20,7,False,False
+HTA0532,CADTH (Canada),2020-09-25,2020,Medical Devices,Immunology,24,7,251,True,0.36,0.2426,0.263,62913.24,100000,64855971.73,Moderate,8.36,6.11,1.38,Restricted,0.553,11,14,True,False
+HTA0533,NICE (UK),2021-04-13,2021,Surgical Procedures,Endocrinology,2,11,5242,True,1.178,0.055,0.2069,92148.75,50000,33410291.33,Low,8.56,3.91,8.55,Restricted,0.531,7,3,False,False
+HTA0534,TLV (Sweden),2023-08-24,2023,Medical Devices,Rheumatology,7,9,9230,True,1.968,0.2335,0.2682,54828.86,100000,16247616.21,Moderate,3.3,6.52,9.51,Restricted,0.514,20,11,True,False
+HTA0535,IQWIG (Germany),2023-10-02,2023,Preventive Interventions,Immunology,14,12,5017,True,-0.439,0.1358,0.2268,81161.32,100000,97429091.27,Very Low,2.46,4.32,4.82,Conditional,0.444,9,18,True,False
+HTA0536,HAS (France),2020-03-22,2020,Screening Programs,Hematology,17,5,2303,True,2.376,0.1863,0.3117,41588.43,100000,42055113.71,High,6.46,1.93,8.52,Restricted,0.744,15,17,False,False
+HTA0537,CADTH (Canada),2022-03-27,2022,Pharmaceuticals,Endocrinology,15,9,2403,False,-0.037,0.1543,0.3264,36206.99,100000,7526960.05,Moderate,1.56,7.9,7.47,Restricted,0.765,23,15,False,False
+HTA0538,IQWIG (Germany),2018-09-15,2018,Preventive Interventions,Immunology,7,0,1700,True,1.173,0.2167,0.1284,141482.44,100000,60312749.8,Very Low,1.81,2.14,8.44,Conditional,0.646,14,5,True,False
+HTA0539,SMC (Scotland),2021-06-28,2021,Screening Programs,Cardiology,21,0,2124,True,1.188,0.125,0.0866,93810.98,100000,74057358.91,Low,9.15,4.69,9.58,Recommended,0.973,21,12,False,False
+HTA0540,IQWIG (Germany),2023-07-27,2023,Surgical Procedures,Neurology,7,3,9775,True,1.63,0.0148,0.2495,53505.54,100000,1874352.5,Moderate,9.47,5.69,9.98,Recommended,0.905,17,12,False,False
+HTA0541,SMC (Scotland),2023-11-06,2023,Medical Devices,Immunology,2,7,2961,True,1.458,0.2155,0.1505,31640.61,100000,38505899.02,Low,1.09,7.1,5.29,Conditional,0.364,23,5,False,False
+HTA0542,IQWIG (Germany),2020-05-03,2020,Gene Therapy,Endocrinology,9,5,7280,False,0.048,0.1563,0.0819,73718.37,100000,20176328.99,Moderate,6.95,9.2,4.63,Restricted,0.562,16,14,False,False
+HTA0543,IQWIG (Germany),2022-05-11,2022,Diagnostic Tests,Hematology,20,8,9863,False,0.433,0.1294,0.0523,20918.53,100000,57729768.06,High,4.57,3.73,7.43,Restricted,0.517,14,17,True,False
+HTA0544,PBAC (Australia),2021-12-25,2021,Digital Health,Cardiology,9,5,5886,False,0.265,0.0503,0.1968,75333.02,100000,26373023.07,Moderate,3.62,7.19,5.23,Restricted,0.638,7,1,False,False
+HTA0545,CVZ (Netherlands),2021-05-15,2021,Preventive Interventions,Respiratory,20,11,4429,True,1.692,0.2098,0.3002,110885.4,100000,51734995.71,Low,4.8,6.86,3.33,Conditional,0.328,9,15,False,False
+HTA0546,NCPE (Ireland),2024-11-08,2024,Pharmaceuticals,Endocrinology,7,11,950,False,0.067,0.2382,0.2592,7156.0,100000,35934857.7,High,9.32,1.94,4.49,Restricted,0.568,15,17,False,False
+HTA0547,SMC (Scotland),2019-11-14,2019,Rehabilitation Technologies,Cardiology,16,6,344,False,0.468,0.1247,0.3046,58753.05,100000,19252455.56,Moderate,2.49,9.84,1.87,Conditional,0.536,9,13,True,False
+HTA0548,NICE (UK),2024-07-27,2024,Screening Programs,Cardiology,9,5,8469,False,-0.257,0.0948,0.3826,88879.94,50000,37211380.38,Very Low,3.96,1.85,9.97,Restricted,0.58,4,7,True,False
+HTA0549,NICE (UK),2018-05-02,2018,Surgical Procedures,Respiratory,23,10,7100,False,-0.018,0.198,0.1008,76351.34,50000,40000482.2,Low,1.4,7.77,1.71,Conditional,0.563,8,11,True,False
+HTA0550,TLV (Sweden),2023-10-10,2023,Digital Health,Hematology,10,3,4659,True,1.44,0.0538,0.3127,54167.7,100000,71279647.9,High,4.67,7.35,3.04,Restricted,0.739,9,16,True,False
+HTA0551,TLV (Sweden),2019-11-25,2019,Gene Therapy,Immunology,16,5,904,True,2.166,0.0748,0.2838,121921.52,100000,17250626.32,Moderate,5.44,3.81,5.34,Conditional,0.427,13,9,True,False
+HTA0552,TLV (Sweden),2019-06-09,2019,Surgical Procedures,Infectious Disease,5,7,3812,True,0.523,0.108,0.172,115728.82,100000,10598187.87,Moderate,8.54,1.6,9.48,Restricted,0.796,4,11,False,False
+HTA0553,SMC (Scotland),2021-05-11,2021,Diagnostic Tests,Cardiology,3,2,5128,False,0.077,0.2235,0.2951,34246.49,100000,43544792.73,Moderate,1.5,9.59,2.16,Conditional,0.579,8,3,False,False
+HTA0554,TLV (Sweden),2020-05-15,2020,Gene Therapy,Infectious Disease,3,4,6741,True,2.399,0.148,0.3615,99377.43,100000,48049406.13,Low,5.24,8.82,3.62,Restricted,0.539,22,15,True,False
+HTA0555,HAS (France),2024-02-09,2024,Medical Devices,Cardiology,14,4,2891,True,0.361,0.0351,0.3172,79064.84,100000,56120103.27,Moderate,5.14,2.04,7.06,Conditional,0.473,20,18,False,False
+HTA0556,NCPE (Ireland),2019-01-07,2019,Medical Devices,Immunology,12,1,2669,False,-0.252,0.21,0.1918,144489.12,100000,9061341.18,Moderate,6.0,4.65,2.9,Conditional,0.537,21,18,True,False
+HTA0557,NICE (UK),2022-02-19,2022,Medical Devices,Immunology,22,7,2895,True,-0.301,0.0618,0.0947,50298.86,50000,51923941.4,Low,8.11,6.91,6.48,Restricted,0.624,14,7,True,False
+HTA0558,IQWIG (Germany),2024-02-19,2024,Screening Programs,Hematology,12,11,1461,True,-0.256,0.1643,0.2128,145791.69,100000,68174609.66,High,5.33,4.73,1.96,Conditional,0.669,3,5,False,False
+HTA0559,CADTH (Canada),2020-08-08,2020,Surgical Procedures,Respiratory,7,1,3277,True,-0.491,0.0683,0.1633,145069.2,100000,91265554.9,Very Low,8.43,4.16,9.15,Restricted,0.795,22,10,True,False
+HTA0560,NICE (UK),2019-02-04,2019,Digital Health,Immunology,2,1,2992,True,0.956,0.0949,0.362,29052.3,50000,15801355.31,Low,6.92,2.75,4.52,Conditional,0.679,21,16,True,False
+HTA0561,CVZ (Netherlands),2023-11-20,2023,Screening Programs,Immunology,4,11,5639,False,0.092,0.2209,0.1749,48483.43,100000,22170050.06,High,1.39,8.83,7.11,Restricted,0.698,10,8,False,False
+HTA0562,TLV (Sweden),2024-03-15,2024,Preventive Interventions,Respiratory,5,2,7913,True,2.253,0.1412,0.2271,37241.19,100000,54933878.75,High,8.83,7.08,9.94,Recommended,0.818,20,14,False,False
+HTA0563,IQWIG (Germany),2024-04-10,2024,Rehabilitation Technologies,Infectious Disease,13,14,5269,True,1.498,0.0272,0.2972,9925.84,100000,84403315.04,Moderate,1.84,7.36,5.4,Conditional,0.376,21,12,False,False
+HTA0564,SMC (Scotland),2021-11-06,2021,Gene Therapy,Endocrinology,10,3,6755,False,0.212,0.0984,0.2996,10840.33,100000,39255140.62,Moderate,2.5,1.21,2.2,Not Recommended,0.0,3,4,False,True
+HTA0565,CVZ (Netherlands),2018-07-08,2018,Rehabilitation Technologies,Endocrinology,5,1,8059,True,0.255,0.0753,0.3022,12039.81,100000,65468038.51,Moderate,1.74,3.71,3.02,Not Recommended,0.0,19,3,False,True
+HTA0566,HAS (France),2023-04-02,2023,Rehabilitation Technologies,Cardiology,4,2,2924,False,-0.283,0.0247,0.1046,69067.97,100000,51130770.65,Moderate,4.96,5.23,7.92,Restricted,0.532,10,16,True,False
+HTA0567,TLV (Sweden),2021-08-05,2021,Diagnostic Tests,Neurology,19,14,3239,True,2.125,0.194,0.1768,111448.06,100000,11303519.69,Low,5.79,3.63,6.9,Restricted,0.692,12,0,False,False
+HTA0568,PBAC (Australia),2021-09-16,2021,Preventive Interventions,Gastroenterology,13,4,8146,True,1.439,0.0183,0.3611,98031.61,100000,64711892.23,Very Low,5.58,4.69,8.8,Restricted,0.723,12,5,True,False
+HTA0569,CADTH (Canada),2019-10-24,2019,Digital Health,Cardiology,10,6,5183,True,1.814,0.0149,0.2848,73045.93,100000,35329247.12,Low,8.69,1.2,6.49,Restricted,0.61,20,18,True,False
+HTA0570,PBAC (Australia),2018-04-16,2018,Medical Devices,Endocrinology,23,14,6927,True,0.996,0.094,0.2531,37691.32,100000,7425022.51,Low,4.75,6.6,2.89,Conditional,0.435,16,9,True,False
+HTA0571,SMC (Scotland),2024-09-04,2024,Preventive Interventions,Neurology,21,6,6489,True,0.477,0.067,0.2374,138240.9,100000,68884602.09,Low,8.51,4.16,1.57,Conditional,0.549,8,14,True,False
+HTA0572,PBAC (Australia),2024-02-20,2024,Medical Devices,Gastroenterology,13,4,4481,False,0.488,0.0119,0.2031,42126.45,100000,12869445.33,Very Low,9.98,2.63,1.35,Conditional,0.41,15,16,False,False
+HTA0573,PBAC (Australia),2023-03-17,2023,Medical Devices,Gastroenterology,18,9,4797,True,1.59,0.0751,0.1538,127086.38,100000,2026008.51,Low,4.54,3.69,6.92,Restricted,0.75,15,2,False,False
+HTA0574,PBAC (Australia),2020-06-03,2020,Gene Therapy,Cardiology,5,8,7807,True,1.505,0.0648,0.1611,144599.53,100000,35458966.72,Moderate,6.36,9.74,9.85,Recommended,0.916,9,6,False,False
+HTA0575,PBAC (Australia),2020-09-08,2020,Pharmaceuticals,Hematology,5,13,2667,True,1.337,0.1152,0.3044,134762.04,100000,67745738.12,Moderate,9.39,3.38,2.35,Restricted,0.527,14,6,False,False
+HTA0576,IQWIG (Germany),2024-12-03,2024,Immunotherapy,Neurology,7,13,6545,False,-0.492,0.2211,0.1199,142356.23,100000,34888421.2,Moderate,7.36,6.29,3.86,Restricted,0.666,13,17,False,False
+HTA0577,TLV (Sweden),2024-09-22,2024,Preventive Interventions,Oncology,1,1,5351,True,-0.383,0.1839,0.2758,45943.08,100000,30264313.37,Very Low,9.89,5.26,8.22,Recommended,0.947,7,15,False,False
+HTA0578,NCPE (Ireland),2018-02-03,2018,Rehabilitation Technologies,Gastroenterology,17,3,2034,True,1.42,0.1953,0.3512,6918.54,100000,68763035.09,High,7.36,6.72,2.34,Restricted,0.73,16,13,True,False
+HTA0579,NICE (UK),2018-12-18,2018,Surgical Procedures,Oncology,8,1,7618,False,0.417,0.2142,0.2285,109257.49,50000,80277557.92,Moderate,2.04,4.94,8.58,Restricted,0.679,7,0,False,False
+HTA0580,CADTH (Canada),2021-12-23,2021,Diagnostic Tests,Gastroenterology,15,10,1026,False,-0.18,0.0189,0.1763,7532.88,100000,20044936.13,Low,9.43,1.79,6.02,Restricted,0.576,19,7,True,False
+HTA0581,SMC (Scotland),2022-10-28,2022,Rehabilitation Technologies,Immunology,12,3,6292,True,2.149,0.1799,0.354,60602.11,100000,32027923.12,Moderate,1.17,7.52,4.15,Conditional,0.425,6,1,False,False
+HTA0582,CVZ (Netherlands),2021-07-15,2021,Gene Therapy,Respiratory,3,6,4576,True,-0.058,0.1186,0.3584,66072.75,100000,84117103.94,Low,2.73,6.23,5.55,Conditional,0.459,6,5,False,False
+HTA0583,TLV (Sweden),2022-08-27,2022,Pharmaceuticals,Oncology,7,8,462,True,0.373,0.074,0.3169,42237.95,100000,45179962.93,Low,1.72,6.35,6.3,Conditional,0.574,7,19,True,False
+HTA0584,HAS (France),2018-06-15,2018,Pharmaceuticals,Hematology,2,3,5253,False,0.133,0.143,0.2969,65533.81,100000,76049276.64,Moderate,8.44,3.41,3.5,Restricted,0.657,22,7,True,False
+HTA0585,CADTH (Canada),2021-07-28,2021,Medical Devices,Oncology,9,11,116,False,-0.238,0.1648,0.347,63236.38,100000,83165793.41,Moderate,8.41,5.86,3.01,Restricted,0.622,19,6,True,False
+HTA0586,NICE (UK),2020-08-04,2020,Surgical Procedures,Infectious Disease,3,1,4503,True,1.221,0.2364,0.303,104973.72,50000,96847658.46,Low,2.23,4.13,9.69,Restricted,0.647,20,13,False,False
+HTA0587,PBAC (Australia),2020-04-28,2020,Pharmaceuticals,Oncology,15,3,402,True,2.022,0.222,0.1061,54238.11,100000,34187094.84,High,6.38,8.69,4.43,Restricted,0.722,5,6,True,False
+HTA0588,IQWIG (Germany),2019-04-23,2019,Digital Health,Oncology,13,14,4900,True,0.51,0.0706,0.2518,144757.21,100000,20806607.02,High,2.07,8.05,4.15,Conditional,0.39,12,3,True,False
+HTA0589,IQWIG (Germany),2024-10-25,2024,Surgical Procedures,Gastroenterology,4,6,7279,True,0.772,0.1322,0.3808,84489.55,100000,95364576.29,Moderate,7.52,8.31,7.11,Recommended,0.921,17,4,False,False
+HTA0590,HAS (France),2024-05-25,2024,Digital Health,Endocrinology,9,2,9154,True,1.925,0.0732,0.0514,76841.58,100000,10922597.41,Low,3.48,4.99,1.78,Conditional,0.415,5,2,False,False
+HTA0591,HAS (France),2023-03-28,2023,Surgical Procedures,Rheumatology,7,6,6312,True,1.491,0.1094,0.0656,118744.02,100000,68192610.39,Moderate,9.1,4.03,3.65,Restricted,0.762,6,10,True,False
+HTA0592,NICE (UK),2022-08-09,2022,Gene Therapy,Respiratory,11,10,4478,True,1.866,0.0943,0.1085,9842.01,50000,39185954.56,Very Low,3.15,2.86,9.73,Restricted,0.508,9,17,True,False
+HTA0593,IQWIG (Germany),2024-09-04,2024,Screening Programs,Oncology,24,14,8202,True,0.875,0.0765,0.2124,70254.13,100000,58791664.69,Moderate,1.7,2.31,7.29,Conditional,0.309,14,5,True,False
+HTA0594,CVZ (Netherlands),2023-08-24,2023,Pharmaceuticals,Oncology,11,13,2221,True,0.557,0.1067,0.0558,123144.84,100000,36560146.84,Low,1.67,2.57,9.01,Conditional,0.543,19,9,False,False
+HTA0595,TLV (Sweden),2018-12-26,2018,Digital Health,Immunology,6,2,6663,False,0.188,0.0151,0.1678,25948.98,100000,24064249.0,Very Low,1.33,2.98,3.79,Not Recommended,0.0,19,2,False,False
+HTA0596,TLV (Sweden),2019-09-20,2019,Medical Devices,Cardiology,21,12,2142,True,-0.324,0.185,0.1651,99755.9,100000,28679842.68,Low,7.95,9.35,3.35,Restricted,0.6,21,19,False,False
+HTA0597,PBAC (Australia),2024-06-10,2024,Diagnostic Tests,Oncology,23,14,2757,True,1.283,0.0267,0.1396,33537.7,100000,2573445.92,Moderate,6.05,4.46,3.42,Conditional,0.561,4,1,True,False
+HTA0598,PBAC (Australia),2019-12-03,2019,Surgical Procedures,Immunology,20,9,3351,True,0.731,0.0562,0.3108,23423.16,100000,11283505.24,Low,2.88,3.76,5.28,Conditional,0.48,6,12,True,False
+HTA0599,TLV (Sweden),2018-01-06,2018,Screening Programs,Neurology,19,3,1291,True,-0.483,0.0203,0.1354,21572.24,100000,53800473.37,Low,7.63,2.94,4.59,Restricted,0.652,20,14,True,False
+HTA0600,TLV (Sweden),2023-11-13,2023,Surgical Procedures,Respiratory,11,2,5547,True,1.402,0.0717,0.0683,6483.91,100000,3193794.02,High,1.99,3.16,2.99,Not Recommended,0.0,10,14,False,False
+HTA0601,PBAC (Australia),2019-06-12,2019,Surgical Procedures,Infectious Disease,23,13,6768,True,1.645,0.1847,0.2833,131267.51,100000,87140440.38,Low,4.87,6.77,8.36,Restricted,0.502,16,18,False,False
+HTA0602,G-BA (Germany),2019-10-04,2019,Pharmaceuticals,Immunology,17,0,7999,True,0.62,0.2484,0.3982,21644.01,100000,72870909.15,High,1.27,1.95,9.69,Conditional,0.676,14,15,True,False
+HTA0603,IQWIG (Germany),2018-05-20,2018,Medical Devices,Gastroenterology,16,3,1952,False,0.157,0.1147,0.3265,123597.62,100000,29757678.96,Moderate,9.42,2.48,1.38,Conditional,0.482,20,9,True,False
+HTA0604,CVZ (Netherlands),2024-07-05,2024,Immunotherapy,Immunology,1,13,6773,True,-0.207,0.1578,0.2021,66833.92,100000,53148037.39,Moderate,6.63,1.28,9.73,Restricted,0.777,10,15,True,False
+HTA0605,CVZ (Netherlands),2022-08-08,2022,Surgical Procedures,Cardiology,14,11,4142,False,0.258,0.2285,0.0552,122319.97,100000,93907743.26,Low,2.17,1.73,1.19,Not Recommended,0.0,4,19,False,False
+HTA0606,NICE (UK),2021-09-23,2021,Digital Health,Immunology,12,10,3044,False,-0.225,0.0432,0.0919,106498.53,50000,1602247.78,Moderate,2.07,8.65,9.63,Restricted,0.788,3,9,False,False
+HTA0607,PBAC (Australia),2018-07-09,2018,Screening Programs,Neurology,17,4,7920,True,2.187,0.176,0.0926,14431.66,100000,97512380.81,Low,4.76,7.32,7.81,Restricted,0.734,17,4,False,False
+HTA0608,PBAC (Australia),2019-12-27,2019,Digital Health,Immunology,5,14,367,True,1.703,0.1747,0.1613,30636.24,100000,11137634.63,Low,5.05,3.91,8.71,Restricted,0.678,20,2,True,False
+HTA0609,NCPE (Ireland),2022-11-16,2022,Screening Programs,Respiratory,5,3,4285,True,-0.22,0.1262,0.0818,23695.91,100000,24721373.37,Low,9.32,8.44,4.01,Restricted,0.582,14,7,True,False
+HTA0610,HAS (France),2019-03-04,2019,Diagnostic Tests,Infectious Disease,22,4,5869,False,0.011,0.2293,0.3887,127837.83,100000,31666097.76,Moderate,5.93,5.08,8.9,Restricted,0.53,19,9,False,False
+HTA0611,HAS (France),2021-03-11,2021,Medical Devices,Hematology,17,11,8489,True,1.586,0.2038,0.2822,26947.34,100000,11226053.29,Low,4.61,4.86,9.71,Restricted,0.717,11,6,False,False
+HTA0612,IQWIG (Germany),2022-06-16,2022,Digital Health,Cardiology,7,7,8809,False,-0.193,0.2353,0.1609,99874.42,100000,8923224.41,Moderate,7.96,5.76,9.35,Recommended,0.886,4,19,False,False
+HTA0613,PBAC (Australia),2023-10-18,2023,Diagnostic Tests,Oncology,16,8,3939,True,2.23,0.2297,0.1651,107287.96,100000,67898780.26,Low,3.67,5.59,7.01,Restricted,0.508,13,2,False,False
+HTA0614,NICE (UK),2021-05-27,2021,Screening Programs,Oncology,6,10,1103,False,0.252,0.0601,0.1189,98174.09,50000,46350186.28,Low,1.22,6.49,7.58,Restricted,0.798,5,9,False,False
+HTA0615,NCPE (Ireland),2024-10-20,2024,Medical Devices,Neurology,9,13,7066,True,0.713,0.0643,0.0561,88362.04,100000,22029058.52,Moderate,2.13,2.71,1.29,Not Recommended,0.0,13,11,False,False
+HTA0616,NCPE (Ireland),2018-06-18,2018,Gene Therapy,Respiratory,13,14,8918,True,0.93,0.2309,0.3034,100982.69,100000,44683341.77,Low,1.29,6.28,5.98,Conditional,0.439,4,2,False,False
+HTA0617,G-BA (Germany),2022-10-21,2022,Pharmaceuticals,Infectious Disease,14,12,2121,True,-0.089,0.2138,0.2658,32044.1,100000,18543728.6,Low,7.68,6.93,4.66,Restricted,0.579,3,13,True,False
+HTA0618,G-BA (Germany),2023-01-19,2023,Medical Devices,Endocrinology,21,9,9572,False,0.273,0.2338,0.2975,134859.56,100000,24410898.02,Moderate,7.78,4.82,8.54,Restricted,0.763,13,5,True,False
+HTA0619,NICE (UK),2019-03-20,2019,Diagnostic Tests,Respiratory,11,4,7350,False,-0.036,0.1572,0.1454,44755.21,50000,12241899.84,High,4.13,7.87,6.47,Restricted,0.531,5,8,True,False
+HTA0620,CVZ (Netherlands),2022-05-01,2022,Medical Devices,Immunology,3,4,7612,True,-0.455,0.0411,0.1381,67284.62,100000,49256606.9,High,7.06,6.37,3.65,Restricted,0.504,9,14,False,False
+HTA0621,HAS (France),2019-01-07,2019,Rehabilitation Technologies,Rheumatology,3,13,6159,False,0.112,0.1005,0.0505,69756.9,100000,28395279.76,High,1.68,4.13,6.53,Conditional,0.635,15,11,False,False
+HTA0622,IQWIG (Germany),2024-04-21,2024,Immunotherapy,Oncology,22,2,6536,True,1.642,0.1787,0.2649,78988.08,100000,43944655.82,Low,3.1,9.47,6.3,Restricted,0.593,10,4,False,False
+HTA0623,CVZ (Netherlands),2018-05-28,2018,Screening Programs,Gastroenterology,21,7,1204,True,2.195,0.1495,0.1731,38726.22,100000,62071692.54,Moderate,9.92,9.85,6.72,Recommended,0.889,20,14,False,False
+HTA0624,CVZ (Netherlands),2023-09-06,2023,Pharmaceuticals,Hematology,18,0,3873,True,0.638,0.1217,0.2133,42265.82,100000,85170887.18,Moderate,3.07,2.58,3.9,Conditional,0.327,13,3,True,False
+HTA0625,SMC (Scotland),2021-10-07,2021,Pharmaceuticals,Cardiology,4,13,1459,False,-0.409,0.0372,0.0616,20153.6,100000,21732561.86,Very Low,7.01,8.01,7.99,Recommended,0.907,3,15,False,False
+HTA0626,SMC (Scotland),2024-07-12,2024,Gene Therapy,Endocrinology,12,0,5720,True,0.81,0.1877,0.2063,14933.6,100000,17691762.48,Low,6.84,6.13,2.51,Restricted,0.751,22,10,False,False
+HTA0627,NICE (UK),2018-11-24,2018,Immunotherapy,Gastroenterology,23,2,4069,False,-0.286,0.1103,0.1521,115941.17,50000,76637249.94,Moderate,1.73,1.1,4.85,Not Recommended,0.0,23,9,False,False
+HTA0628,NCPE (Ireland),2020-02-19,2020,Rehabilitation Technologies,Oncology,19,11,4027,True,0.435,0.0839,0.1512,72938.02,100000,98928744.09,Low,3.95,4.81,7.03,Restricted,0.505,12,6,False,False
+HTA0629,PBAC (Australia),2024-10-05,2024,Digital Health,Neurology,23,14,8373,True,2.408,0.0437,0.2556,34141.23,100000,79217338.57,Low,2.01,9.21,2.75,Conditional,0.545,22,14,True,False
+HTA0630,NICE (UK),2021-01-24,2021,Immunotherapy,Neurology,7,1,6666,True,2.42,0.094,0.3461,142078.12,50000,86606682.32,High,6.85,2.08,1.05,Conditional,0.321,20,10,True,False
+HTA0631,SMC (Scotland),2019-07-20,2019,Preventive Interventions,Immunology,2,2,3459,False,-0.023,0.198,0.2011,41540.82,100000,33320800.25,High,5.48,2.33,8.3,Restricted,0.626,10,4,False,False
+HTA0632,PBAC (Australia),2018-10-20,2018,Surgical Procedures,Oncology,3,5,5060,True,-0.456,0.1895,0.082,42663.89,100000,55597539.24,Moderate,1.14,8.42,8.91,Restricted,0.705,3,18,True,False
+HTA0633,TLV (Sweden),2024-12-15,2024,Rehabilitation Technologies,Hematology,8,0,2600,True,0.191,0.1885,0.2348,64627.97,100000,27610912.52,Very Low,1.65,1.39,2.96,Not Recommended,0.0,13,6,False,True
+HTA0634,G-BA (Germany),2018-03-16,2018,Surgical Procedures,Cardiology,11,1,851,False,0.191,0.1412,0.2953,140674.81,100000,66901699.89,Moderate,6.14,4.98,6.01,Restricted,0.655,13,6,False,False
+HTA0635,CADTH (Canada),2018-04-16,2018,Digital Health,Immunology,15,14,6159,True,0.044,0.0687,0.3415,94089.45,100000,91411316.33,Moderate,2.09,1.05,5.57,Not Recommended,0.0,14,4,False,False
+HTA0636,HAS (France),2021-06-22,2021,Surgical Procedures,Cardiology,12,12,7445,True,-0.051,0.0643,0.214,66605.85,100000,29599842.64,Moderate,7.86,9.91,8.0,Recommended,0.859,8,0,False,False
+HTA0637,G-BA (Germany),2021-04-23,2021,Immunotherapy,Endocrinology,18,8,9959,True,0.792,0.0238,0.2092,120340.96,100000,39410661.53,Moderate,1.14,5.12,1.23,Not Recommended,0.0,4,2,False,True
+HTA0638,PBAC (Australia),2021-02-02,2021,Medical Devices,Neurology,22,7,1399,False,0.156,0.1401,0.3179,126811.19,100000,80864762.04,High,2.68,6.89,4.38,Conditional,0.693,17,10,True,False
+HTA0639,G-BA (Germany),2020-05-25,2020,Rehabilitation Technologies,Gastroenterology,21,14,7242,False,0.283,0.0271,0.3553,96828.98,100000,89168782.25,Moderate,5.18,9.07,3.45,Restricted,0.775,14,14,False,False
+HTA0640,TLV (Sweden),2018-10-27,2018,Surgical Procedures,Infectious Disease,16,13,784,False,0.221,0.0713,0.0812,16409.13,100000,43189003.3,Very Low,2.96,3.31,1.91,Not Recommended,0.0,7,12,False,False
+HTA0641,CADTH (Canada),2021-09-21,2021,Immunotherapy,Gastroenterology,19,14,800,False,-0.198,0.1624,0.2534,118838.37,100000,30089858.61,Low,4.44,4.7,7.05,Restricted,0.735,16,19,True,False
+HTA0642,SMC (Scotland),2024-06-14,2024,Digital Health,Oncology,14,8,1566,False,-0.39,0.0392,0.2581,55008.93,100000,4455680.05,Moderate,4.49,1.91,8.22,Conditional,0.666,22,2,False,False
+HTA0643,PBAC (Australia),2020-08-13,2020,Screening Programs,Gastroenterology,11,12,3755,True,0.673,0.0315,0.2689,76806.2,100000,28242228.66,Moderate,7.98,8.21,6.85,Recommended,0.894,5,5,False,False
+HTA0644,CADTH (Canada),2019-09-08,2019,Surgical Procedures,Endocrinology,19,0,3780,False,0.277,0.0465,0.111,19571.74,100000,74079990.99,Low,9.88,5.7,8.44,Recommended,0.915,11,11,False,False
+HTA0645,SMC (Scotland),2021-08-03,2021,Rehabilitation Technologies,Hematology,4,9,3417,True,0.937,0.1538,0.0776,46601.01,100000,32881188.39,Low,3.51,1.86,2.48,Not Recommended,0.0,12,6,False,True
+HTA0646,TLV (Sweden),2019-04-08,2019,Rehabilitation Technologies,Immunology,14,0,2224,True,-0.003,0.059,0.2927,137971.61,100000,40065890.21,Moderate,3.57,5.1,3.62,Conditional,0.393,21,12,True,False
+HTA0647,CADTH (Canada),2020-07-08,2020,Medical Devices,Neurology,11,12,5369,True,2.008,0.192,0.1624,19937.78,100000,8108947.0,High,6.25,1.46,4.03,Conditional,0.601,8,13,True,False
+HTA0648,PBAC (Australia),2024-07-15,2024,Rehabilitation Technologies,Neurology,13,5,338,True,2.038,0.1583,0.3131,36030.01,100000,71932496.47,Moderate,9.89,6.04,7.26,Recommended,0.824,17,12,False,False
+HTA0649,CADTH (Canada),2021-03-19,2021,Screening Programs,Immunology,16,10,4100,False,-0.359,0.2205,0.1133,120602.56,100000,46241055.6,Moderate,2.42,2.51,6.96,Conditional,0.52,12,16,True,False
+HTA0650,NICE (UK),2022-09-05,2022,Rehabilitation Technologies,Hematology,4,11,6483,True,1.022,0.1862,0.0923,37086.19,50000,33398734.57,Moderate,4.52,6.04,7.16,Restricted,0.789,4,18,False,False
+HTA0651,NCPE (Ireland),2022-11-27,2022,Digital Health,Neurology,24,6,3460,True,2.184,0.0696,0.082,113752.2,100000,18385937.9,Moderate,1.25,2.23,2.56,Not Recommended,0.0,7,4,False,True
+HTA0652,PBAC (Australia),2022-08-02,2022,Surgical Procedures,Immunology,8,0,5127,True,0.76,0.1572,0.3166,84126.94,100000,63135405.14,Very Low,3.69,4.23,7.46,Restricted,0.683,8,10,False,False
+HTA0653,HAS (France),2022-07-23,2022,Gene Therapy,Immunology,21,7,7513,False,-0.364,0.0701,0.2399,120856.5,100000,4589234.65,Very Low,5.09,4.23,3.63,Conditional,0.37,23,4,False,False
+HTA0654,G-BA (Germany),2022-11-27,2022,Gene Therapy,Oncology,7,3,8166,True,0.792,0.1236,0.3105,115934.94,100000,16697040.86,Low,9.07,1.98,5.26,Restricted,0.725,15,17,False,False
+HTA0655,CADTH (Canada),2020-04-23,2020,Pharmaceuticals,Infectious Disease,5,13,7474,True,0.101,0.1094,0.2649,35957.12,100000,29852469.25,Low,9.99,3.86,2.34,Restricted,0.738,6,11,False,False
+HTA0656,SMC (Scotland),2021-03-14,2021,Surgical Procedures,Neurology,18,10,9824,True,2.062,0.1472,0.2093,26697.32,100000,45523003.52,Moderate,9.49,8.96,1.76,Restricted,0.655,3,14,True,False
+HTA0657,NICE (UK),2024-06-15,2024,Diagnostic Tests,Rheumatology,7,10,1601,True,0.152,0.0902,0.3859,80413.04,50000,40669228.84,Moderate,8.01,4.06,2.61,Conditional,0.534,16,8,True,False
+HTA0658,NICE (UK),2018-04-12,2018,Rehabilitation Technologies,Infectious Disease,17,14,597,True,1.005,0.218,0.3282,144597.38,50000,8116726.16,Moderate,1.72,7.76,2.27,Conditional,0.34,19,9,False,False
+HTA0659,SMC (Scotland),2019-01-28,2019,Medical Devices,Endocrinology,3,14,1047,True,2.159,0.0752,0.0636,127929.59,100000,86522808.84,Low,6.17,8.32,8.08,Recommended,0.978,18,11,False,False
+HTA0660,TLV (Sweden),2018-10-03,2018,Rehabilitation Technologies,Immunology,19,10,649,False,0.181,0.1649,0.2991,138126.14,100000,25602857.21,Low,4.6,1.11,2.13,Not Recommended,0.0,22,16,False,False
+HTA0661,IQWIG (Germany),2020-05-22,2020,Medical Devices,Rheumatology,12,9,1067,True,0.348,0.1716,0.0564,114573.86,100000,27268905.01,Moderate,5.75,2.94,8.96,Restricted,0.526,6,5,True,False
+HTA0662,PBAC (Australia),2019-08-17,2019,Pharmaceuticals,Respiratory,10,6,4297,False,-0.496,0.0166,0.3383,33922.09,100000,7016157.57,Moderate,4.83,7.58,6.62,Restricted,0.571,3,8,True,False
+HTA0663,PBAC (Australia),2018-05-25,2018,Gene Therapy,Rheumatology,4,2,897,False,-0.328,0.0257,0.2053,128339.64,100000,8590565.81,Moderate,9.1,2.06,3.8,Conditional,0.611,16,13,False,False
+HTA0664,CADTH (Canada),2020-08-10,2020,Pharmaceuticals,Cardiology,4,3,6832,True,1.216,0.1578,0.3264,122738.26,100000,20198597.21,Moderate,8.89,8.38,6.56,Recommended,0.999,11,14,False,False
+HTA0665,PBAC (Australia),2023-12-21,2023,Diagnostic Tests,Endocrinology,9,8,6225,False,0.04,0.1094,0.392,89407.6,100000,86820484.7,Very Low,7.08,5.94,1.03,Conditional,0.316,4,0,True,False
+HTA0666,PBAC (Australia),2024-01-09,2024,Pharmaceuticals,Rheumatology,7,0,2502,True,0.832,0.1623,0.3397,67015.47,100000,64470827.04,Very Low,8.56,4.83,6.8,Restricted,0.553,20,5,True,False
+HTA0667,PBAC (Australia),2020-03-22,2020,Rehabilitation Technologies,Gastroenterology,22,9,4175,False,-0.115,0.0691,0.2521,65584.17,100000,17414817.37,Moderate,7.37,9.77,3.1,Restricted,0.732,8,10,False,False
+HTA0668,NCPE (Ireland),2018-01-24,2018,Digital Health,Oncology,18,3,3970,False,-0.23,0.1762,0.1387,56673.01,100000,19936619.8,Low,8.94,3.67,8.41,Restricted,0.607,20,5,False,False
+HTA0669,CADTH (Canada),2019-09-13,2019,Diagnostic Tests,Gastroenterology,8,7,3110,True,0.786,0.2078,0.3182,59373.86,100000,56990469.05,Low,1.16,8.22,9.52,Restricted,0.51,16,2,False,False
+HTA0670,NICE (UK),2018-04-10,2018,Rehabilitation Technologies,Endocrinology,8,6,3782,False,-0.353,0.1762,0.369,77726.8,50000,36818168.31,Moderate,8.8,4.55,9.32,Recommended,0.97,10,1,False,False
+HTA0671,HAS (France),2023-04-06,2023,Digital Health,Oncology,23,12,7651,True,0.884,0.1234,0.1693,143426.58,100000,69971719.32,Moderate,5.59,2.43,4.35,Conditional,0.569,17,2,False,False
+HTA0672,PBAC (Australia),2019-06-18,2019,Pharmaceuticals,Rheumatology,10,5,2025,False,-0.36,0.139,0.2576,83805.97,100000,10806586.99,Moderate,1.46,4.56,2.7,Not Recommended,0.0,12,12,False,False
+HTA0673,IQWIG (Germany),2018-08-22,2018,Diagnostic Tests,Gastroenterology,5,2,9392,False,-0.313,0.0943,0.2505,130854.75,100000,93005503.94,Moderate,1.6,4.79,4.55,Conditional,0.695,16,10,False,False
+HTA0674,SMC (Scotland),2018-04-15,2018,Gene Therapy,Oncology,2,0,2790,False,-0.144,0.1496,0.0848,49429.69,100000,50585629.22,Moderate,5.88,2.98,6.85,Restricted,0.771,22,8,False,False
+HTA0675,CVZ (Netherlands),2019-11-20,2019,Gene Therapy,Cardiology,9,2,8809,False,-0.14,0.1125,0.3937,118667.89,100000,89823208.96,Moderate,3.11,4.71,7.44,Restricted,0.533,22,5,True,False
+HTA0676,CVZ (Netherlands),2020-10-02,2020,Medical Devices,Hematology,8,7,3668,True,0.652,0.1862,0.3783,81740.53,100000,1987126.18,Moderate,4.59,4.05,4.93,Conditional,0.553,18,16,False,False
+HTA0677,IQWIG (Germany),2024-11-15,2024,Surgical Procedures,Gastroenterology,18,5,3698,True,0.541,0.0188,0.1152,113281.71,100000,33221429.88,Low,7.45,6.23,9.63,Recommended,0.804,12,11,False,False
+HTA0678,HAS (France),2024-08-26,2024,Screening Programs,Hematology,3,6,5678,True,1.573,0.1111,0.3489,116874.74,100000,7401888.84,Low,3.12,6.02,9.61,Restricted,0.764,17,18,True,False
+HTA0679,HAS (France),2020-07-26,2020,Medical Devices,Neurology,14,9,7648,False,-0.121,0.2112,0.1596,87664.98,100000,65194017.42,Low,8.94,3.11,3.36,Restricted,0.711,4,10,False,False
+HTA0680,PBAC (Australia),2021-01-26,2021,Digital Health,Infectious Disease,24,2,3045,True,0.812,0.1857,0.2892,45666.77,100000,67702492.38,Very Low,4.13,3.96,6.14,Conditional,0.398,5,17,True,False
+HTA0681,NCPE (Ireland),2019-01-01,2019,Immunotherapy,Neurology,13,12,5531,False,0.421,0.0835,0.1367,60723.53,100000,6478857.86,Low,9.86,8.42,5.99,Recommended,0.859,19,15,False,False
+HTA0682,CADTH (Canada),2022-11-27,2022,Medical Devices,Cardiology,21,3,3842,True,1.529,0.0654,0.3269,90746.93,100000,23753222.25,Moderate,4.65,8.86,1.29,Conditional,0.658,18,5,False,False
+HTA0683,IQWIG (Germany),2019-09-18,2019,Rehabilitation Technologies,Endocrinology,17,7,8268,False,0.47,0.1623,0.3174,17152.22,100000,16910842.9,Low,4.88,5.01,3.78,Conditional,0.543,18,9,True,False
+HTA0684,PBAC (Australia),2024-07-07,2024,Medical Devices,Cardiology,6,0,7407,True,0.03,0.1417,0.2184,11648.54,100000,1717990.37,Very Low,6.93,4.29,5.23,Restricted,0.58,4,14,True,False
+HTA0685,SMC (Scotland),2021-05-26,2021,Diagnostic Tests,Oncology,14,3,4648,False,-0.294,0.0271,0.3042,79102.64,100000,70519123.47,Moderate,3.81,3.57,7.57,Conditional,0.411,20,9,False,False
+HTA0686,HAS (France),2019-06-08,2019,Rehabilitation Technologies,Hematology,15,12,1771,True,0.674,0.2404,0.1673,117889.14,100000,85686199.31,Moderate,4.4,7.73,9.22,Restricted,0.726,10,6,False,False
+HTA0687,CVZ (Netherlands),2021-07-28,2021,Rehabilitation Technologies,Infectious Disease,7,10,259,True,-0.303,0.1792,0.2402,81238.0,100000,29912510.25,Low,1.25,1.58,7.6,Conditional,0.429,19,17,True,False
+HTA0688,CADTH (Canada),2021-11-13,2021,Preventive Interventions,Cardiology,7,9,9083,True,0.071,0.2203,0.2503,32855.61,100000,79550717.55,High,9.84,8.79,6.22,Recommended,0.822,16,18,False,False
+HTA0689,SMC (Scotland),2024-05-18,2024,Diagnostic Tests,Hematology,9,4,871,True,2.283,0.0327,0.1798,107798.35,100000,23372689.8,Low,2.48,1.5,2.09,Not Recommended,0.0,4,1,False,True
+HTA0690,SMC (Scotland),2019-04-19,2019,Immunotherapy,Rheumatology,13,3,6136,True,1.027,0.0398,0.3783,145106.79,100000,97406383.48,High,9.52,9.98,9.48,Recommended,0.934,9,3,False,False
+HTA0691,G-BA (Germany),2020-12-19,2020,Rehabilitation Technologies,Endocrinology,12,13,839,True,2.408,0.2462,0.1155,130396.55,100000,39651909.29,Moderate,3.36,1.4,3.41,Not Recommended,0.0,18,1,False,True
+HTA0692,TLV (Sweden),2022-07-01,2022,Rehabilitation Technologies,Endocrinology,19,13,8742,True,-0.165,0.179,0.3049,135040.21,100000,6212920.19,High,6.38,6.57,1.3,Conditional,0.459,23,13,True,False
+HTA0693,CVZ (Netherlands),2018-02-07,2018,Immunotherapy,Respiratory,24,3,2222,True,1.655,0.1569,0.15,99766.52,100000,65901024.19,Low,1.9,9.96,4.6,Restricted,0.691,17,13,False,False
+HTA0694,HAS (France),2018-04-02,2018,Medical Devices,Cardiology,9,8,6995,True,0.211,0.0664,0.1977,138456.53,100000,88039306.86,Moderate,4.7,6.0,3.19,Conditional,0.321,21,5,True,False
+HTA0695,NCPE (Ireland),2018-03-01,2018,Preventive Interventions,Rheumatology,15,12,386,True,0.241,0.0842,0.36,48247.29,100000,74872857.85,Very Low,10.0,5.8,8.44,Recommended,0.998,23,19,False,False
+HTA0696,SMC (Scotland),2018-11-10,2018,Immunotherapy,Hematology,4,5,1953,True,-0.379,0.2243,0.3994,31315.63,100000,12917913.51,High,6.95,6.95,8.63,Recommended,0.95,12,10,False,False
+HTA0697,CVZ (Netherlands),2024-11-20,2024,Digital Health,Rheumatology,2,11,3423,True,0.513,0.1298,0.2861,145394.09,100000,15272162.76,Low,3.56,6.32,5.92,Restricted,0.667,18,10,False,False
+HTA0698,SMC (Scotland),2019-10-27,2019,Surgical Procedures,Immunology,12,1,1530,True,1.734,0.1919,0.3992,135504.29,100000,92680144.39,Low,6.54,2.16,6.6,Restricted,0.517,21,1,True,False
+HTA0699,HAS (France),2019-05-18,2019,Diagnostic Tests,Respiratory,23,9,5120,True,0.96,0.2172,0.207,57715.66,100000,99479958.08,Low,5.25,5.46,8.28,Restricted,0.602,7,14,True,False
+HTA0700,PBAC (Australia),2024-08-02,2024,Pharmaceuticals,Rheumatology,15,6,1042,False,-0.087,0.0463,0.3249,22697.8,100000,19744041.6,Moderate,6.01,8.08,3.83,Restricted,0.525,19,15,False,False
+HTA0701,CADTH (Canada),2023-05-16,2023,Surgical Procedures,Infectious Disease,14,13,187,False,0.058,0.07,0.1222,24712.46,100000,43039103.23,High,4.74,2.34,6.91,Conditional,0.614,7,12,True,False
+HTA0702,IQWIG (Germany),2021-12-13,2021,Rehabilitation Technologies,Rheumatology,24,11,206,True,0.331,0.0697,0.1321,32949.38,100000,57900813.37,Moderate,8.38,2.66,5.18,Restricted,0.504,23,8,False,False
+HTA0703,TLV (Sweden),2023-05-08,2023,Screening Programs,Immunology,8,13,6056,False,-0.111,0.1375,0.3628,42226.98,100000,24786202.89,Moderate,4.04,1.97,7.27,Conditional,0.383,5,2,False,False
+HTA0704,NCPE (Ireland),2019-07-01,2019,Gene Therapy,Cardiology,17,6,3144,False,0.257,0.0225,0.343,141020.53,100000,99375230.06,High,6.52,2.8,3.36,Conditional,0.598,20,1,True,False
+HTA0705,PBAC (Australia),2024-12-09,2024,Preventive Interventions,Rheumatology,14,12,9683,True,-0.13,0.2034,0.0532,50313.29,100000,18266643.78,Low,3.29,3.33,5.4,Conditional,0.561,17,3,False,False
+HTA0706,PBAC (Australia),2021-11-14,2021,Screening Programs,Cardiology,3,5,2401,False,0.017,0.1442,0.2851,67559.52,100000,12445576.93,High,7.79,2.99,1.25,Conditional,0.692,17,16,False,False
+HTA0707,IQWIG (Germany),2022-10-08,2022,Diagnostic Tests,Respiratory,21,2,9500,False,0.291,0.0582,0.194,92122.15,100000,16869053.91,Moderate,3.55,5.59,5.6,Conditional,0.626,7,9,True,False
+HTA0708,IQWIG (Germany),2019-10-27,2019,Screening Programs,Infectious Disease,12,10,816,False,-0.191,0.1644,0.3588,63311.82,100000,7595586.65,Moderate,4.11,7.05,9.56,Restricted,0.646,14,5,True,False
+HTA0709,IQWIG (Germany),2019-06-16,2019,Screening Programs,Infectious Disease,12,0,4617,True,-0.447,0.1156,0.1385,104087.32,100000,72699837.89,Low,7.85,1.43,4.34,Conditional,0.409,20,14,False,False
+HTA0710,HAS (France),2022-12-26,2022,Digital Health,Gastroenterology,8,2,4453,True,1.575,0.0215,0.2985,89419.13,100000,20612762.75,High,1.98,5.72,7.83,Restricted,0.6,23,15,False,False
+HTA0711,SMC (Scotland),2024-02-10,2024,Medical Devices,Oncology,6,4,3987,False,-0.438,0.1887,0.0584,99296.88,100000,21837800.79,Low,3.79,8.86,4.03,Restricted,0.686,6,15,True,False
+HTA0712,PBAC (Australia),2022-05-18,2022,Medical Devices,Oncology,14,12,8874,True,1.097,0.2257,0.3992,114241.28,100000,97108308.07,Low,9.67,7.37,1.72,Restricted,0.621,23,9,True,False
+HTA0713,NICE (UK),2019-08-20,2019,Surgical Procedures,Hematology,12,0,6038,False,0.185,0.0165,0.3647,54025.45,50000,74672410.49,Low,6.85,4.55,6.48,Restricted,0.512,16,9,False,False
+HTA0714,PBAC (Australia),2024-09-07,2024,Screening Programs,Cardiology,19,6,9362,True,1.479,0.148,0.0608,34206.32,100000,27489582.6,High,4.19,1.24,5.98,Conditional,0.385,10,11,True,False
+HTA0715,CVZ (Netherlands),2024-08-26,2024,Diagnostic Tests,Cardiology,1,13,7906,True,1.289,0.1302,0.3936,125507.24,100000,91262033.12,Moderate,7.95,3.39,2.88,Conditional,0.678,9,1,True,False
+HTA0716,PBAC (Australia),2020-06-28,2020,Digital Health,Neurology,10,6,7697,True,-0.307,0.0339,0.1966,123145.45,100000,88929613.13,Moderate,6.17,7.92,3.6,Restricted,0.623,12,1,False,False
+HTA0717,TLV (Sweden),2018-06-27,2018,Rehabilitation Technologies,Immunology,9,13,6130,False,-0.39,0.1623,0.2853,103582.24,100000,27269766.0,Moderate,5.94,2.8,1.18,Conditional,0.525,23,16,False,False
+HTA0718,IQWIG (Germany),2019-12-19,2019,Gene Therapy,Immunology,20,6,6928,False,0.464,0.0879,0.3295,35543.61,100000,55011860.33,Moderate,4.13,9.38,2.31,Restricted,0.69,22,8,False,False
+HTA0719,G-BA (Germany),2023-08-01,2023,Medical Devices,Endocrinology,24,7,4879,True,1.743,0.0776,0.057,83476.99,100000,95703456.21,Moderate,4.78,9.72,7.25,Restricted,0.716,14,12,True,False
+HTA0720,NICE (UK),2023-02-04,2023,Preventive Interventions,Cardiology,12,9,5562,True,0.248,0.2061,0.0887,125269.76,50000,60670250.25,Moderate,5.88,3.54,3.91,Conditional,0.441,13,5,False,False
+HTA0721,G-BA (Germany),2024-04-08,2024,Digital Health,Endocrinology,7,9,8380,True,1.471,0.0772,0.0601,65150.45,100000,43920767.18,Moderate,7.34,3.78,3.84,Conditional,0.324,6,2,False,False
+HTA0722,HAS (France),2022-11-09,2022,Gene Therapy,Immunology,11,5,9240,False,-0.035,0.2324,0.0534,40895.97,100000,11295561.46,Low,3.88,8.56,8.49,Restricted,0.7,21,16,False,False
+HTA0723,NCPE (Ireland),2020-01-18,2020,Digital Health,Cardiology,17,1,4630,False,-0.486,0.0938,0.0962,23359.88,100000,81727519.91,Very Low,8.0,9.79,2.95,Restricted,0.542,23,6,False,False
+HTA0724,CADTH (Canada),2023-09-10,2023,Surgical Procedures,Gastroenterology,7,6,3590,True,2.289,0.2182,0.0564,23642.38,100000,50113613.53,Moderate,7.38,1.81,6.8,Restricted,0.685,3,13,True,False
+HTA0725,NCPE (Ireland),2024-10-14,2024,Pharmaceuticals,Rheumatology,12,1,1489,True,1.606,0.0193,0.385,11710.58,100000,88244065.01,Low,5.72,2.23,6.09,Conditional,0.551,13,16,False,False
+HTA0726,NICE (UK),2023-11-07,2023,Immunotherapy,Neurology,19,2,4189,False,0.205,0.087,0.2515,91149.66,50000,32192091.04,Moderate,7.86,6.24,2.34,Restricted,0.751,15,6,True,False
+HTA0727,SMC (Scotland),2024-04-26,2024,Preventive Interventions,Neurology,13,2,1185,True,2.487,0.0333,0.3495,74597.54,100000,82887869.35,Low,9.24,3.68,9.55,Restricted,0.546,15,6,False,False
+HTA0728,CVZ (Netherlands),2020-07-27,2020,Surgical Procedures,Oncology,11,6,6974,True,0.865,0.0167,0.1851,116713.48,100000,82306242.55,Low,7.23,5.56,5.84,Restricted,0.723,11,16,True,False
+HTA0729,G-BA (Germany),2018-08-02,2018,Immunotherapy,Oncology,2,7,7777,True,2.434,0.1789,0.341,10835.8,100000,24356090.94,Moderate,2.64,1.66,3.03,Not Recommended,0.0,3,4,False,False
+HTA0730,HAS (France),2020-03-22,2020,Rehabilitation Technologies,Infectious Disease,22,1,8051,True,0.995,0.2243,0.3318,97324.52,100000,88655324.97,Low,8.37,6.07,5.73,Restricted,0.717,13,19,True,False
+HTA0731,CADTH (Canada),2022-04-14,2022,Rehabilitation Technologies,Immunology,21,1,1792,True,2.461,0.2229,0.1938,58879.95,100000,30388351.39,Moderate,2.24,2.19,2.03,Not Recommended,0.0,3,14,False,True
+HTA0732,IQWIG (Germany),2021-06-08,2021,Gene Therapy,Oncology,15,13,6099,True,-0.071,0.2368,0.3954,11511.88,100000,15884241.6,Moderate,2.68,4.27,2.16,Conditional,0.483,13,18,False,False
+HTA0733,NICE (UK),2019-12-12,2019,Diagnostic Tests,Infectious Disease,21,10,9885,True,1.981,0.1558,0.2333,141931.05,50000,18138387.57,Moderate,7.81,7.98,4.64,Restricted,0.785,7,10,True,False
+HTA0734,IQWIG (Germany),2022-02-19,2022,Gene Therapy,Immunology,11,10,8840,True,2.307,0.1507,0.1544,26624.59,100000,83122793.38,Low,8.33,6.81,4.29,Restricted,0.591,21,19,True,False
+HTA0735,IQWIG (Germany),2018-03-12,2018,Immunotherapy,Endocrinology,24,7,151,False,-0.448,0.0192,0.2004,14145.9,100000,79125251.18,Moderate,1.26,1.36,6.51,Conditional,0.622,18,11,False,False
+HTA0736,IQWIG (Germany),2020-09-13,2020,Digital Health,Infectious Disease,5,5,1724,True,1.516,0.0339,0.1832,116559.98,100000,70984190.49,High,5.92,1.79,9.96,Restricted,0.769,14,6,True,False
+HTA0737,TLV (Sweden),2024-11-18,2024,Medical Devices,Neurology,11,8,807,True,0.773,0.0449,0.3409,55561.19,100000,40614805.84,Low,5.47,5.9,9.61,Restricted,0.766,23,0,False,False
+HTA0738,IQWIG (Germany),2019-05-09,2019,Digital Health,Endocrinology,20,13,6325,False,0.469,0.1956,0.1352,10816.9,100000,98558301.05,Moderate,3.81,9.15,6.27,Restricted,0.564,21,2,False,False
+HTA0739,SMC (Scotland),2019-02-02,2019,Rehabilitation Technologies,Neurology,15,4,6943,True,-0.258,0.1448,0.0548,64725.25,100000,8265017.65,Moderate,1.36,8.52,2.89,Conditional,0.431,16,15,False,False
+HTA0740,HAS (France),2022-05-25,2022,Diagnostic Tests,Hematology,19,13,2631,True,0.854,0.1897,0.3658,12216.24,100000,52887042.58,High,5.22,8.97,4.25,Restricted,0.78,13,14,True,False
+HTA0741,SMC (Scotland),2021-02-04,2021,Preventive Interventions,Cardiology,18,11,1860,True,2.229,0.2352,0.0544,110478.18,100000,31611565.92,Moderate,5.22,4.84,5.63,Restricted,0.675,13,10,True,False
+HTA0742,PBAC (Australia),2023-01-11,2023,Immunotherapy,Oncology,13,0,5637,True,1.435,0.0904,0.3718,99789.41,100000,28539787.99,Moderate,8.62,4.02,5.73,Restricted,0.704,8,7,True,False
+HTA0743,CADTH (Canada),2022-09-12,2022,Pharmaceuticals,Cardiology,10,9,4239,True,1.1,0.1683,0.0646,109614.18,100000,7135129.69,Moderate,8.45,5.06,2.34,Restricted,0.796,9,8,True,False
+HTA0744,SMC (Scotland),2022-06-15,2022,Pharmaceuticals,Endocrinology,22,14,8683,True,-0.007,0.0413,0.1129,34389.79,100000,12072748.44,Low,9.91,8.91,1.41,Restricted,0.627,8,17,True,False
+HTA0745,NCPE (Ireland),2021-11-03,2021,Rehabilitation Technologies,Respiratory,15,7,1566,False,-0.103,0.2478,0.1046,41764.72,100000,9812596.35,Moderate,7.91,8.68,8.01,Recommended,0.926,9,15,False,False
+HTA0746,NCPE (Ireland),2021-12-28,2021,Rehabilitation Technologies,Cardiology,20,3,7760,True,2.431,0.026,0.3644,50383.22,100000,59168083.8,Low,2.27,4.99,3.93,Conditional,0.323,11,7,True,False
+HTA0747,TLV (Sweden),2022-05-22,2022,Gene Therapy,Respiratory,12,12,5973,True,0.235,0.1904,0.0562,43861.7,100000,38164126.84,Low,9.55,7.45,5.43,Restricted,0.692,7,15,True,False
+HTA0748,SMC (Scotland),2022-05-14,2022,Immunotherapy,Gastroenterology,16,10,3639,True,0.953,0.1163,0.1558,148062.61,100000,27926744.98,Moderate,4.64,2.53,2.82,Conditional,0.667,21,1,False,False
+HTA0749,CADTH (Canada),2019-10-15,2019,Pharmaceuticals,Immunology,2,3,6151,True,0.713,0.0201,0.289,49580.19,100000,56380129.22,Very Low,3.75,1.44,7.08,Conditional,0.615,9,18,False,False
+HTA0750,IQWIG (Germany),2023-04-07,2023,Diagnostic Tests,Infectious Disease,7,1,6801,True,2.484,0.0129,0.2393,88181.66,100000,91506670.18,Moderate,5.89,5.24,3.42,Conditional,0.322,13,12,True,False
+HTA0751,CVZ (Netherlands),2023-01-11,2023,Medical Devices,Gastroenterology,2,7,7458,False,-0.154,0.0993,0.2634,44780.37,100000,70158577.03,Moderate,1.97,5.81,6.0,Conditional,0.343,23,8,True,False
+HTA0752,IQWIG (Germany),2024-06-18,2024,Immunotherapy,Infectious Disease,6,13,9492,True,1.468,0.2321,0.1367,129008.92,100000,92125735.87,Very Low,9.57,8.58,6.34,Recommended,0.882,19,7,False,False
+HTA0753,CADTH (Canada),2018-05-23,2018,Gene Therapy,Immunology,13,14,3828,False,-0.483,0.1072,0.3742,56207.39,100000,46414153.6,Very Low,2.79,1.59,8.73,Conditional,0.647,12,6,True,False
+HTA0754,TLV (Sweden),2024-01-27,2024,Preventive Interventions,Cardiology,20,3,4272,False,0.456,0.2211,0.253,69467.81,100000,77710134.81,Low,5.84,1.79,9.33,Restricted,0.637,15,19,True,False
+HTA0755,IQWIG (Germany),2020-09-07,2020,Surgical Procedures,Infectious Disease,16,6,3613,False,0.465,0.2042,0.3791,25387.84,100000,8046503.09,Low,3.61,8.45,7.05,Restricted,0.791,22,13,False,False
+HTA0756,IQWIG (Germany),2022-07-12,2022,Medical Devices,Gastroenterology,8,1,2303,True,1.974,0.2059,0.328,124441.49,100000,21935755.85,Moderate,5.36,9.01,3.67,Restricted,0.779,4,1,True,False
+HTA0757,IQWIG (Germany),2023-11-26,2023,Surgical Procedures,Endocrinology,3,10,4691,False,0.166,0.1654,0.1362,62254.26,100000,68647061.61,Low,3.84,2.94,6.34,Conditional,0.327,21,17,False,False
+HTA0758,NCPE (Ireland),2023-05-17,2023,Gene Therapy,Neurology,5,13,4426,True,2.027,0.0783,0.2514,22869.03,100000,69330866.89,Low,1.39,7.08,4.73,Conditional,0.35,10,16,False,False
+HTA0759,TLV (Sweden),2020-04-20,2020,Immunotherapy,Oncology,10,13,1519,True,1.956,0.0581,0.2527,72661.98,100000,42564039.45,Low,4.94,1.68,9.52,Restricted,0.776,11,13,False,False
+HTA0760,NICE (UK),2019-02-13,2019,Diagnostic Tests,Immunology,24,5,1519,True,-0.018,0.0285,0.1218,108745.21,50000,81083803.41,Moderate,5.56,1.29,1.62,Not Recommended,0.0,22,14,False,False
+HTA0761,HAS (France),2021-01-21,2021,Immunotherapy,Cardiology,17,3,2464,True,1.521,0.1513,0.2517,14523.72,100000,25658606.38,Low,1.16,3.26,3.06,Not Recommended,0.0,18,10,False,False
+HTA0762,TLV (Sweden),2023-03-18,2023,Rehabilitation Technologies,Cardiology,22,3,5814,True,0.223,0.0634,0.3833,143993.21,100000,72758305.98,Low,9.27,5.6,6.66,Restricted,0.626,14,3,False,False
+HTA0763,CADTH (Canada),2024-05-06,2024,Immunotherapy,Infectious Disease,24,14,1048,True,1.935,0.1717,0.1346,82785.43,100000,40783381.52,Very Low,6.47,2.43,5.52,Conditional,0.645,3,10,True,False
+HTA0764,CADTH (Canada),2024-01-08,2024,Pharmaceuticals,Respiratory,2,9,5104,False,-0.139,0.045,0.1663,71013.33,100000,53807330.14,Moderate,5.91,8.58,2.53,Restricted,0.595,9,7,True,False
+HTA0765,NICE (UK),2021-11-01,2021,Diagnostic Tests,Gastroenterology,14,0,4873,False,0.066,0.0207,0.3288,62488.94,50000,16213938.7,Low,2.78,9.29,4.98,Restricted,0.723,5,18,True,False
+HTA0766,NICE (UK),2018-03-19,2018,Digital Health,Oncology,4,2,7410,False,0.349,0.1328,0.2973,32949.04,50000,69151273.79,Moderate,8.49,1.75,7.96,Restricted,0.53,10,0,False,False
+HTA0767,CADTH (Canada),2018-05-11,2018,Rehabilitation Technologies,Infectious Disease,3,10,1197,True,1.922,0.1021,0.2151,130983.36,100000,42069949.01,Moderate,1.18,2.43,6.78,Conditional,0.587,23,6,False,False
+HTA0768,IQWIG (Germany),2023-07-04,2023,Surgical Procedures,Respiratory,19,11,5752,True,1.728,0.0514,0.0611,70419.35,100000,86698121.14,Moderate,1.12,1.99,4.27,Not Recommended,0.0,7,17,False,True
+HTA0769,NICE (UK),2018-01-01,2018,Rehabilitation Technologies,Hematology,7,3,4794,True,1.547,0.0944,0.1287,45357.43,50000,18849134.24,Very Low,2.52,8.95,6.15,Restricted,0.76,22,15,True,False
+HTA0770,HAS (France),2023-03-18,2023,Surgical Procedures,Endocrinology,15,7,2165,True,1.418,0.1197,0.1901,90963.54,100000,49635495.22,Moderate,6.03,7.03,1.24,Conditional,0.486,9,12,False,False
+HTA0771,CVZ (Netherlands),2020-02-28,2020,Immunotherapy,Immunology,23,3,7380,True,1.796,0.1886,0.3662,6230.47,100000,22451740.15,Low,7.04,9.05,1.51,Restricted,0.679,15,9,False,False
+HTA0772,CADTH (Canada),2021-02-10,2021,Rehabilitation Technologies,Oncology,3,6,2250,False,0.242,0.1295,0.3642,145126.56,100000,36862398.75,Low,6.96,4.63,3.85,Restricted,0.78,4,1,False,False
+HTA0773,NICE (UK),2018-05-12,2018,Preventive Interventions,Gastroenterology,6,14,9597,True,1.614,0.2142,0.384,35590.55,50000,50888971.76,Low,3.23,6.4,3.32,Conditional,0.433,10,12,False,False
+HTA0774,HAS (France),2022-03-04,2022,Diagnostic Tests,Neurology,19,1,5500,False,-0.331,0.0361,0.3123,49247.96,100000,95198444.48,Low,3.94,3.61,5.71,Conditional,0.332,15,18,True,False
+HTA0775,CVZ (Netherlands),2019-07-18,2019,Preventive Interventions,Oncology,7,0,6690,True,0.11,0.1445,0.1629,124371.19,100000,78713941.46,Low,6.07,4.17,6.45,Restricted,0.527,6,17,False,False
+HTA0776,CADTH (Canada),2024-05-19,2024,Preventive Interventions,Hematology,3,8,1856,False,-0.208,0.2208,0.1491,121877.61,100000,21728752.01,Moderate,2.73,3.38,8.51,Conditional,0.556,11,14,True,False
+HTA0777,CVZ (Netherlands),2023-06-16,2023,Screening Programs,Endocrinology,19,6,8582,True,1.16,0.1034,0.3994,146593.54,100000,96212792.29,Very Low,8.14,9.9,9.03,Recommended,0.883,8,0,False,False
+HTA0778,IQWIG (Germany),2018-10-16,2018,Digital Health,Endocrinology,17,10,4375,True,1.051,0.0572,0.3152,97973.95,100000,92436664.13,Low,2.63,8.2,6.78,Restricted,0.701,22,19,True,False
+HTA0779,TLV (Sweden),2020-12-19,2020,Preventive Interventions,Rheumatology,6,9,7799,True,0.586,0.1906,0.1813,75470.5,100000,41301412.31,Low,4.21,9.67,9.43,Recommended,0.97,13,10,False,False
+HTA0780,NICE (UK),2022-07-25,2022,Rehabilitation Technologies,Oncology,9,7,6009,True,2.183,0.2132,0.1346,105303.13,50000,7452027.59,Very Low,4.14,8.49,3.87,Restricted,0.69,11,0,True,False
+HTA0781,CADTH (Canada),2022-02-26,2022,Digital Health,Endocrinology,16,1,3557,True,1.128,0.0561,0.2381,45449.99,100000,29609307.52,Low,1.27,4.43,4.67,Conditional,0.494,19,3,False,False
+HTA0782,CADTH (Canada),2018-06-28,2018,Diagnostic Tests,Cardiology,7,5,3823,False,-0.012,0.0238,0.378,90008.84,100000,70220126.6,Moderate,8.51,1.3,3.42,Conditional,0.488,14,7,False,False
+HTA0783,G-BA (Germany),2020-10-14,2020,Immunotherapy,Endocrinology,21,7,8394,True,2.423,0.1608,0.2077,16420.34,100000,67296455.0,High,7.04,9.81,5.79,Recommended,0.843,12,13,False,False
+HTA0784,IQWIG (Germany),2018-01-08,2018,Screening Programs,Endocrinology,3,13,1588,False,-0.049,0.011,0.1906,32086.12,100000,62815648.26,Low,5.39,1.36,6.91,Conditional,0.637,7,17,True,False
+HTA0785,CADTH (Canada),2021-09-16,2021,Preventive Interventions,Oncology,9,10,5039,True,0.621,0.1617,0.2328,51301.16,100000,15297967.64,Low,3.57,3.1,4.59,Conditional,0.614,5,2,False,False
+HTA0786,CVZ (Netherlands),2021-01-26,2021,Immunotherapy,Respiratory,7,14,7150,True,0.43,0.1895,0.2449,133028.11,100000,31429899.2,Low,7.78,2.36,4.61,Conditional,0.493,20,15,False,False
+HTA0787,G-BA (Germany),2023-07-20,2023,Pharmaceuticals,Cardiology,12,1,8350,True,-0.293,0.2175,0.1499,94182.42,100000,97932104.8,Low,7.52,5.01,1.54,Conditional,0.619,21,15,False,False
+HTA0788,CADTH (Canada),2022-09-02,2022,Gene Therapy,Endocrinology,22,10,2477,True,0.104,0.2485,0.2225,88065.57,100000,17475598.37,Low,3.08,2.71,3.05,Not Recommended,0.0,6,19,False,False
+HTA0789,NICE (UK),2021-07-25,2021,Screening Programs,Respiratory,15,12,8435,False,-0.134,0.1566,0.3685,119678.9,50000,56774516.86,High,6.87,5.74,2.66,Restricted,0.765,8,12,False,False
+HTA0790,HAS (France),2019-09-23,2019,Screening Programs,Hematology,22,1,2338,False,-0.423,0.0924,0.2905,77295.01,100000,19876918.73,Low,4.67,4.51,8.29,Restricted,0.622,15,12,True,False
+HTA0791,NICE (UK),2020-03-14,2020,Preventive Interventions,Rheumatology,10,0,9717,True,1.175,0.1988,0.3535,20242.27,50000,36281077.11,Low,1.31,7.22,5.75,Conditional,0.415,17,3,False,False
+HTA0792,TLV (Sweden),2020-05-18,2020,Preventive Interventions,Gastroenterology,14,2,4340,True,1.893,0.1804,0.2346,79610.2,100000,9660480.97,Low,9.2,1.84,3.37,Conditional,0.661,6,4,True,False
+HTA0793,SMC (Scotland),2019-08-14,2019,Screening Programs,Rheumatology,14,3,4282,False,0.171,0.1645,0.1353,8240.02,100000,81062824.29,Moderate,3.76,1.92,1.56,Not Recommended,0.0,3,11,False,False
+HTA0794,NICE (UK),2024-12-13,2024,Surgical Procedures,Respiratory,5,11,8169,True,0.06,0.2329,0.257,22574.48,50000,19218956.6,Very Low,7.64,7.61,1.65,Restricted,0.769,5,2,True,False
+HTA0795,NCPE (Ireland),2020-09-28,2020,Pharmaceuticals,Gastroenterology,14,11,4853,False,-0.102,0.0595,0.2428,21057.75,100000,29596261.21,Moderate,4.57,2.0,1.29,Not Recommended,0.0,4,2,False,False
+HTA0796,TLV (Sweden),2020-12-25,2020,Medical Devices,Neurology,1,1,5203,False,-0.038,0.203,0.0894,17259.13,100000,5380182.63,Moderate,7.36,2.17,6.75,Restricted,0.643,23,17,True,False
+HTA0797,SMC (Scotland),2021-03-27,2021,Medical Devices,Oncology,5,6,4909,True,1.094,0.0757,0.3744,76083.36,100000,84358773.37,Moderate,7.46,4.03,6.62,Restricted,0.65,15,3,False,False
+HTA0798,PBAC (Australia),2022-12-28,2022,Diagnostic Tests,Infectious Disease,4,11,7990,False,0.253,0.1205,0.2002,135114.15,100000,29557376.69,Moderate,9.45,8.28,8.39,Recommended,0.839,14,2,False,False
+HTA0799,NICE (UK),2024-11-18,2024,Digital Health,Oncology,14,10,9772,True,2.449,0.0688,0.1817,48657.64,50000,11852873.65,Moderate,4.41,7.25,8.36,Restricted,0.663,4,16,True,False
+HTA0800,CVZ (Netherlands),2020-09-22,2020,Diagnostic Tests,Endocrinology,17,8,8300,True,2.469,0.0825,0.1471,130342.01,100000,1333921.41,Moderate,6.31,2.46,9.87,Restricted,0.639,15,2,False,False
+HTA0801,TLV (Sweden),2023-09-17,2023,Screening Programs,Neurology,3,1,2619,True,0.356,0.1349,0.3483,107593.08,100000,62566432.98,Moderate,3.69,2.07,4.68,Conditional,0.311,20,2,False,False
+HTA0802,SMC (Scotland),2020-11-27,2020,Diagnostic Tests,Rheumatology,8,4,1047,False,-0.401,0.2152,0.0501,132930.76,100000,2952253.49,Low,4.26,7.64,4.62,Restricted,0.521,16,10,False,False
+HTA0803,CADTH (Canada),2024-08-04,2024,Pharmaceuticals,Neurology,10,1,3377,False,-0.124,0.1315,0.1771,42276.86,100000,75352263.19,Moderate,4.85,4.63,7.41,Restricted,0.775,10,14,False,False
+HTA0804,PBAC (Australia),2020-10-15,2020,Preventive Interventions,Endocrinology,24,0,6899,False,-0.187,0.1022,0.3683,126351.0,100000,66839763.13,Moderate,2.05,1.14,1.96,Not Recommended,0.0,12,16,False,False
+HTA0805,SMC (Scotland),2023-11-12,2023,Gene Therapy,Respiratory,14,4,7415,True,1.814,0.0215,0.3013,137076.91,100000,35349930.84,High,3.1,6.06,9.48,Restricted,0.654,18,15,True,False
+HTA0806,IQWIG (Germany),2024-11-24,2024,Preventive Interventions,Hematology,16,9,180,False,0.048,0.0784,0.3773,105173.42,100000,22849339.57,Low,8.83,7.27,3.2,Restricted,0.695,19,9,True,False
+HTA0807,SMC (Scotland),2021-12-16,2021,Medical Devices,Respiratory,22,10,4795,True,-0.34,0.156,0.3004,59057.45,100000,68287910.88,Low,9.42,1.58,2.73,Conditional,0.327,4,5,True,False
+HTA0808,IQWIG (Germany),2023-08-04,2023,Digital Health,Endocrinology,5,6,1453,True,0.238,0.1753,0.3622,96686.78,100000,35387159.25,Moderate,7.77,1.61,2.95,Conditional,0.485,14,8,True,False
+HTA0809,CVZ (Netherlands),2021-10-13,2021,Pharmaceuticals,Oncology,14,0,1499,True,-0.084,0.0377,0.155,149325.58,100000,33323197.8,Very Low,4.53,4.95,8.17,Restricted,0.528,6,5,True,False
+HTA0810,HAS (France),2019-06-27,2019,Immunotherapy,Infectious Disease,14,5,225,True,-0.01,0.2093,0.1636,65763.47,100000,68565161.53,Moderate,6.66,8.97,8.18,Recommended,0.876,3,19,False,False
+HTA0811,NICE (UK),2022-05-07,2022,Medical Devices,Oncology,19,13,4987,False,0.088,0.0764,0.1892,103638.52,50000,89190377.54,High,1.64,3.93,3.1,Not Recommended,0.0,6,7,False,False
+HTA0812,CVZ (Netherlands),2024-01-28,2024,Pharmaceuticals,Cardiology,1,1,4199,True,-0.412,0.0916,0.2546,52642.28,100000,3658343.45,Moderate,1.95,6.57,6.58,Restricted,0.511,21,3,False,False
+HTA0813,PBAC (Australia),2020-07-25,2020,Preventive Interventions,Immunology,13,10,5231,True,-0.07,0.0424,0.1397,146158.54,100000,38631569.03,Low,7.34,7.68,7.19,Restricted,0.601,5,9,False,False
+HTA0814,HAS (France),2019-06-06,2019,Gene Therapy,Rheumatology,22,11,5073,True,0.019,0.0435,0.1484,34589.99,100000,94639500.2,High,2.91,1.73,9.82,Conditional,0.667,15,14,False,False
+HTA0815,HAS (France),2021-07-01,2021,Digital Health,Infectious Disease,2,10,9118,True,1.253,0.1029,0.062,63391.69,100000,92033002.67,Moderate,3.91,1.59,6.54,Conditional,0.64,19,4,False,False
+HTA0816,NICE (UK),2023-05-06,2023,Gene Therapy,Respiratory,14,2,9708,True,2.394,0.1472,0.3782,6100.76,50000,57694387.74,Low,7.71,9.14,1.04,Restricted,0.5,4,13,True,False
+HTA0817,PBAC (Australia),2019-04-01,2019,Medical Devices,Rheumatology,19,13,8666,False,-0.292,0.1407,0.3956,119842.79,100000,99343382.59,Very Low,5.41,7.27,1.99,Conditional,0.476,5,17,True,False
+HTA0818,IQWIG (Germany),2022-08-22,2022,Gene Therapy,Neurology,2,14,1875,False,-0.082,0.1901,0.2418,60371.4,100000,81177765.09,Low,4.52,1.99,9.06,Restricted,0.511,16,4,False,False
+HTA0819,NCPE (Ireland),2024-04-18,2024,Diagnostic Tests,Endocrinology,14,9,4233,True,2.202,0.0223,0.3038,8381.74,100000,18280994.04,Very Low,4.25,8.38,4.38,Restricted,0.752,12,17,False,False
+HTA0820,TLV (Sweden),2019-06-23,2019,Medical Devices,Neurology,12,5,7638,True,1.216,0.2415,0.3564,132010.42,100000,18430636.57,Moderate,1.69,8.01,1.63,Conditional,0.523,12,13,True,False
+HTA0821,PBAC (Australia),2022-02-06,2022,Digital Health,Infectious Disease,21,1,5087,True,1.286,0.1756,0.1875,132557.66,100000,98000513.15,Moderate,4.52,5.25,8.67,Restricted,0.694,17,7,True,False
+HTA0822,NICE (UK),2023-10-27,2023,Digital Health,Gastroenterology,19,7,534,True,0.19,0.0911,0.3994,124685.09,50000,88506279.68,Very Low,4.07,3.67,3.11,Conditional,0.632,19,5,True,False
+HTA0823,CADTH (Canada),2021-09-22,2021,Screening Programs,Endocrinology,1,12,6333,True,1.739,0.2333,0.3677,13258.17,100000,21364725.2,Moderate,4.88,6.77,9.5,Restricted,0.534,15,1,False,False
+HTA0824,G-BA (Germany),2023-10-09,2023,Rehabilitation Technologies,Gastroenterology,11,5,8453,False,0.058,0.1458,0.1541,89753.38,100000,44524589.73,Moderate,1.6,3.27,2.78,Not Recommended,0.0,16,3,False,False
+HTA0825,CVZ (Netherlands),2020-02-13,2020,Rehabilitation Technologies,Hematology,22,9,9021,True,-0.349,0.1668,0.348,141656.39,100000,99734740.55,Moderate,6.18,5.06,6.07,Restricted,0.547,21,19,False,False
+HTA0826,SMC (Scotland),2021-05-21,2021,Gene Therapy,Hematology,3,1,1387,True,2.0,0.0935,0.062,44770.65,100000,99004615.4,Low,9.11,7.97,5.86,Recommended,0.83,16,10,False,False
+HTA0827,IQWIG (Germany),2023-04-25,2023,Medical Devices,Gastroenterology,15,9,9357,True,1.568,0.0911,0.3887,19718.06,100000,50276934.88,Moderate,3.93,6.81,2.18,Conditional,0.587,11,4,True,False
+HTA0828,SMC (Scotland),2018-08-22,2018,Pharmaceuticals,Oncology,13,0,6981,True,0.915,0.2351,0.3262,144854.71,100000,61224695.26,Moderate,8.44,3.62,2.48,Conditional,0.583,6,4,True,False
+HTA0829,HAS (France),2022-05-08,2022,Preventive Interventions,Oncology,22,5,3577,True,1.518,0.1757,0.0661,54117.95,100000,41764690.47,High,3.12,1.46,9.97,Conditional,0.595,10,7,False,False
+HTA0830,G-BA (Germany),2024-04-17,2024,Diagnostic Tests,Hematology,16,6,2973,False,0.456,0.1493,0.2887,53933.83,100000,38771241.77,Low,9.35,6.66,8.11,Recommended,0.834,7,10,False,False
+HTA0831,NCPE (Ireland),2022-07-05,2022,Screening Programs,Neurology,6,1,2827,True,2.478,0.1594,0.0625,7507.63,100000,32715835.08,Moderate,8.32,8.6,3.33,Restricted,0.598,12,0,True,False
+HTA0832,TLV (Sweden),2020-02-20,2020,Medical Devices,Respiratory,7,6,3724,True,1.273,0.0804,0.1023,58443.62,100000,42104566.28,Low,9.23,1.33,3.19,Conditional,0.377,23,18,False,False
+HTA0833,G-BA (Germany),2018-11-04,2018,Surgical Procedures,Immunology,4,8,3819,False,-0.265,0.0574,0.0523,107492.43,100000,93809251.59,Moderate,6.73,7.72,9.35,Recommended,0.929,6,15,False,False
+HTA0834,HAS (France),2023-11-01,2023,Digital Health,Gastroenterology,15,7,8738,True,1.067,0.0964,0.0556,86555.1,100000,13252305.94,High,7.8,1.09,9.63,Restricted,0.655,14,19,False,False
+HTA0835,CVZ (Netherlands),2023-07-28,2023,Medical Devices,Rheumatology,17,13,6767,True,1.75,0.2371,0.1822,131447.75,100000,39978320.25,Moderate,1.03,3.97,4.41,Conditional,0.678,7,0,True,False
+HTA0836,TLV (Sweden),2022-02-26,2022,Digital Health,Cardiology,12,13,6814,True,1.704,0.1428,0.1358,56300.42,100000,64218701.03,Low,2.23,8.6,5.28,Restricted,0.549,22,3,False,False
+HTA0837,SMC (Scotland),2022-04-28,2022,Surgical Procedures,Rheumatology,8,10,9302,True,0.098,0.1291,0.3651,51741.49,100000,65549446.92,Low,8.01,6.08,4.62,Restricted,0.79,6,8,True,False
+HTA0838,SMC (Scotland),2021-02-22,2021,Preventive Interventions,Oncology,4,8,4497,True,1.296,0.1165,0.2589,47177.56,100000,71829645.4,Low,3.34,3.71,6.95,Conditional,0.578,9,4,False,False
+HTA0839,CADTH (Canada),2019-09-21,2019,Rehabilitation Technologies,Immunology,24,11,8479,False,0.407,0.1081,0.3463,27918.89,100000,3142537.67,Low,1.67,9.9,7.07,Restricted,0.726,22,2,False,False
+HTA0840,PBAC (Australia),2022-12-12,2022,Diagnostic Tests,Gastroenterology,14,6,9710,False,0.081,0.1359,0.3358,113653.6,100000,40632193.15,High,7.92,2.52,1.15,Conditional,0.637,19,18,False,False
+HTA0841,CVZ (Netherlands),2021-03-06,2021,Gene Therapy,Immunology,11,3,4544,True,0.639,0.1871,0.1025,78196.29,100000,22019827.0,High,6.56,9.57,3.8,Restricted,0.674,12,2,True,False
+HTA0842,NCPE (Ireland),2019-11-06,2019,Rehabilitation Technologies,Respiratory,20,4,2320,False,0.045,0.2319,0.2503,15097.27,100000,55734069.96,Low,2.93,5.24,5.13,Conditional,0.549,17,14,True,False
+HTA0843,NCPE (Ireland),2019-07-24,2019,Gene Therapy,Oncology,21,12,6798,True,0.721,0.2409,0.2328,85210.62,100000,94218502.84,Very Low,8.96,1.88,6.71,Restricted,0.742,12,16,True,False
+HTA0844,IQWIG (Germany),2020-07-12,2020,Immunotherapy,Cardiology,22,12,9994,True,0.482,0.2465,0.1789,81375.13,100000,84981132.33,Moderate,3.92,5.71,2.03,Conditional,0.352,12,4,True,False
+HTA0845,G-BA (Germany),2018-11-28,2018,Rehabilitation Technologies,Gastroenterology,22,1,3014,False,-0.396,0.0103,0.2079,27537.83,100000,74060651.85,Very Low,1.38,4.56,9.97,Restricted,0.72,3,13,False,False
+HTA0846,TLV (Sweden),2019-11-14,2019,Immunotherapy,Hematology,5,8,7324,True,0.308,0.209,0.0523,37351.67,100000,60918835.0,High,5.2,4.93,8.67,Restricted,0.688,23,10,True,False
+HTA0847,CADTH (Canada),2021-03-04,2021,Digital Health,Hematology,24,2,1632,True,1.822,0.1067,0.3029,104177.15,100000,96375944.46,Moderate,5.97,6.42,9.99,Restricted,0.56,9,5,False,False
+HTA0848,NICE (UK),2020-06-26,2020,Preventive Interventions,Endocrinology,16,12,9279,True,-0.352,0.2381,0.2534,123141.46,50000,42888701.56,Very Low,5.35,6.17,5.43,Restricted,0.72,6,3,False,False
+HTA0849,TLV (Sweden),2023-10-03,2023,Medical Devices,Oncology,20,3,9369,False,-0.424,0.0936,0.3379,99021.47,100000,29705873.86,Low,5.44,5.49,9.79,Restricted,0.784,14,15,False,False
+HTA0850,NICE (UK),2020-05-02,2020,Immunotherapy,Gastroenterology,8,9,5930,True,-0.482,0.0617,0.0587,114408.23,50000,15418933.81,Low,6.79,3.06,2.42,Conditional,0.551,4,9,True,False
+HTA0851,SMC (Scotland),2023-01-15,2023,Pharmaceuticals,Cardiology,12,10,6003,True,1.354,0.092,0.0601,62287.84,100000,93117601.14,Low,1.76,8.96,3.42,Conditional,0.398,13,10,True,False
+HTA0852,NICE (UK),2021-10-28,2021,Medical Devices,Cardiology,16,2,5739,True,-0.05,0.024,0.3556,46896.8,50000,29741739.79,Moderate,5.28,5.63,2.87,Conditional,0.543,12,11,True,False
+HTA0853,NCPE (Ireland),2023-03-09,2023,Medical Devices,Endocrinology,18,2,3146,True,0.725,0.1761,0.3461,56703.45,100000,24029820.15,Low,9.29,2.65,8.23,Restricted,0.643,4,11,True,False
+HTA0854,CADTH (Canada),2018-05-20,2018,Gene Therapy,Respiratory,13,12,9906,True,1.051,0.2272,0.3265,136815.52,100000,22606458.42,Moderate,8.58,2.0,8.15,Restricted,0.555,8,5,True,False
+HTA0855,CVZ (Netherlands),2022-02-16,2022,Immunotherapy,Respiratory,13,2,1356,True,1.746,0.1687,0.2037,56317.07,100000,75681566.18,Moderate,8.09,7.12,6.2,Restricted,0.611,6,10,True,False
+HTA0856,CVZ (Netherlands),2024-11-19,2024,Medical Devices,Respiratory,10,7,4375,False,-0.1,0.0973,0.2963,30916.03,100000,36969024.87,Moderate,6.41,2.46,5.94,Conditional,0.643,14,3,False,False
+HTA0857,NCPE (Ireland),2023-07-10,2023,Rehabilitation Technologies,Immunology,7,6,9343,True,1.02,0.1503,0.0733,99461.58,100000,49398700.31,Moderate,8.5,4.08,2.57,Restricted,0.666,8,19,True,False
+HTA0858,SMC (Scotland),2018-01-19,2018,Digital Health,Hematology,17,5,518,False,-0.294,0.1366,0.1214,22499.83,100000,51588682.4,High,6.29,1.28,1.96,Conditional,0.52,17,3,True,False
+HTA0859,SMC (Scotland),2018-03-23,2018,Surgical Procedures,Hematology,5,14,236,False,0.406,0.2141,0.3386,113019.95,100000,63709771.1,Low,8.26,6.96,3.95,Restricted,0.613,5,0,False,False
+HTA0860,NCPE (Ireland),2019-09-14,2019,Pharmaceuticals,Hematology,7,8,1092,False,-0.152,0.0343,0.1853,132631.27,100000,98072853.26,Moderate,8.98,5.59,7.45,Restricted,0.514,23,18,False,False
+HTA0861,IQWIG (Germany),2020-04-28,2020,Medical Devices,Neurology,15,0,9362,False,0.488,0.1932,0.2508,114708.41,100000,28050405.53,Moderate,6.89,8.85,9.73,Recommended,0.868,17,11,False,False
+HTA0862,CVZ (Netherlands),2021-04-11,2021,Gene Therapy,Oncology,8,14,453,True,2.306,0.217,0.1499,27773.54,100000,45459707.76,Moderate,7.14,9.7,4.27,Restricted,0.519,23,6,True,False
+HTA0863,CADTH (Canada),2020-02-07,2020,Screening Programs,Immunology,5,10,6489,True,1.884,0.2235,0.2139,135137.48,100000,51277157.2,Low,9.81,3.12,2.52,Restricted,0.603,5,16,False,False
+HTA0864,SMC (Scotland),2021-09-14,2021,Immunotherapy,Cardiology,11,1,1592,True,-0.083,0.2435,0.2051,142454.33,100000,14331233.74,Low,6.56,8.38,6.41,Restricted,0.789,17,6,True,False
+HTA0865,HAS (France),2019-12-03,2019,Screening Programs,Oncology,7,5,3870,True,1.594,0.1502,0.207,37396.96,100000,31657349.81,Low,3.02,6.6,6.31,Restricted,0.791,5,5,True,False
+HTA0866,NCPE (Ireland),2023-03-11,2023,Preventive Interventions,Respiratory,14,9,5687,True,2.362,0.2142,0.1531,6093.46,100000,30369060.44,Moderate,9.01,9.7,1.63,Restricted,0.641,20,6,False,False
+HTA0867,NCPE (Ireland),2021-02-15,2021,Rehabilitation Technologies,Respiratory,23,10,6505,False,-0.051,0.2245,0.353,68569.35,100000,38733188.21,Very Low,7.44,9.35,8.17,Recommended,0.922,6,6,False,False
+HTA0868,CVZ (Netherlands),2021-08-23,2021,Gene Therapy,Endocrinology,4,10,569,False,0.257,0.0556,0.1664,20775.4,100000,60618637.96,Low,6.5,2.62,5.92,Restricted,0.75,13,12,False,False
+HTA0869,SMC (Scotland),2020-08-06,2020,Gene Therapy,Cardiology,11,12,6604,True,1.069,0.0617,0.3015,17293.19,100000,57759047.6,Low,9.23,5.74,2.23,Restricted,0.672,16,8,False,False
+HTA0870,TLV (Sweden),2022-09-10,2022,Medical Devices,Oncology,8,6,225,True,1.27,0.1149,0.0584,139042.17,100000,2046120.34,Low,9.66,3.14,3.29,Restricted,0.5,22,6,True,False
+HTA0871,TLV (Sweden),2021-05-12,2021,Diagnostic Tests,Endocrinology,3,3,1928,False,-0.042,0.1643,0.0861,136147.24,100000,57291817.14,Low,8.15,3.31,5.76,Restricted,0.788,5,4,True,False
+HTA0872,G-BA (Germany),2019-09-23,2019,Pharmaceuticals,Cardiology,8,1,9644,True,0.502,0.0186,0.341,128193.62,100000,63638320.69,Moderate,1.69,7.78,7.54,Restricted,0.774,18,1,True,False
+HTA0873,CADTH (Canada),2020-02-11,2020,Rehabilitation Technologies,Neurology,9,2,7607,True,-0.029,0.0767,0.0506,22401.88,100000,75332206.0,Moderate,9.95,2.51,8.1,Restricted,0.712,9,10,False,False
+HTA0874,CADTH (Canada),2023-07-25,2023,Digital Health,Gastroenterology,16,14,8008,False,0.063,0.1777,0.3305,109544.77,100000,70283040.42,Very Low,6.37,6.73,8.64,Restricted,0.701,23,2,False,False
+HTA0875,SMC (Scotland),2020-04-15,2020,Gene Therapy,Rheumatology,19,1,4798,True,1.995,0.1576,0.2939,47692.46,100000,55315200.78,Low,6.3,9.24,9.08,Recommended,0.994,4,5,False,False
+HTA0876,G-BA (Germany),2024-07-27,2024,Diagnostic Tests,Infectious Disease,10,0,8206,True,0.064,0.011,0.3019,66702.47,100000,31944897.98,Low,8.49,9.78,6.78,Recommended,0.892,17,5,False,False
+HTA0877,G-BA (Germany),2023-02-17,2023,Screening Programs,Hematology,19,2,8291,True,1.651,0.0946,0.21,26550.5,100000,41094706.85,High,5.8,1.88,8.11,Restricted,0.67,20,16,True,False
+HTA0878,G-BA (Germany),2018-05-21,2018,Gene Therapy,Respiratory,1,3,669,True,0.632,0.0428,0.0558,113975.19,100000,24603946.35,High,8.85,4.99,3.15,Restricted,0.579,14,16,False,False
+HTA0879,HAS (France),2020-10-07,2020,Screening Programs,Infectious Disease,11,14,5810,False,-0.102,0.2046,0.3488,106927.65,100000,10201799.18,High,2.52,2.06,7.53,Conditional,0.523,12,16,False,False
+HTA0880,TLV (Sweden),2020-02-19,2020,Immunotherapy,Immunology,7,4,3046,False,-0.267,0.1182,0.0838,53597.21,100000,51181163.96,Low,2.78,2.96,6.68,Conditional,0.453,3,14,False,False
+HTA0881,CVZ (Netherlands),2022-03-07,2022,Medical Devices,Respiratory,7,0,9849,True,0.773,0.1282,0.3497,80862.88,100000,36883525.01,Moderate,4.68,5.64,7.72,Restricted,0.536,12,8,False,False
+HTA0882,NCPE (Ireland),2021-04-22,2021,Preventive Interventions,Respiratory,14,10,6071,True,1.656,0.1413,0.2064,122418.68,100000,25106030.66,Low,6.05,6.48,8.88,Restricted,0.745,19,12,False,False
+HTA0883,NICE (UK),2022-11-03,2022,Rehabilitation Technologies,Immunology,22,9,6702,False,-0.105,0.1822,0.3788,99417.11,50000,41935402.43,Low,5.89,6.26,2.32,Conditional,0.579,12,10,False,False
+HTA0884,HAS (France),2024-06-01,2024,Screening Programs,Gastroenterology,24,0,5579,True,0.973,0.0557,0.1719,109099.93,100000,22524874.14,Moderate,7.74,2.6,3.21,Conditional,0.307,16,2,True,False
+HTA0885,NICE (UK),2023-09-12,2023,Medical Devices,Infectious Disease,20,8,5412,True,1.425,0.0534,0.2392,70290.53,50000,46641028.91,Moderate,8.93,8.37,6.67,Recommended,0.943,7,5,False,False
+HTA0886,CVZ (Netherlands),2023-05-10,2023,Digital Health,Oncology,17,10,8806,False,0.227,0.2483,0.2779,36531.75,100000,21178129.88,Moderate,1.06,7.14,3.42,Conditional,0.626,23,15,False,False
+HTA0887,HAS (France),2023-09-10,2023,Immunotherapy,Rheumatology,2,6,9780,True,1.894,0.0556,0.3025,53295.83,100000,58728879.49,High,5.46,2.34,5.38,Conditional,0.357,19,18,False,False
+HTA0888,CADTH (Canada),2023-07-18,2023,Gene Therapy,Hematology,2,2,1723,True,-0.306,0.0446,0.3591,64473.83,100000,61818915.18,Moderate,4.41,4.49,6.0,Conditional,0.356,21,15,False,False
+HTA0889,NCPE (Ireland),2019-02-12,2019,Surgical Procedures,Cardiology,19,7,324,True,1.014,0.0426,0.2975,15197.94,100000,75946272.64,Moderate,3.51,8.76,9.87,Restricted,0.576,8,7,True,False
+HTA0890,G-BA (Germany),2018-08-24,2018,Screening Programs,Gastroenterology,18,11,9612,True,0.456,0.1974,0.2902,70415.29,100000,42514329.08,High,1.06,5.76,4.76,Conditional,0.618,10,9,True,False
+HTA0891,TLV (Sweden),2021-03-25,2021,Digital Health,Immunology,16,8,9015,False,-0.122,0.2407,0.164,147610.94,100000,21336902.4,High,3.81,8.97,5.7,Restricted,0.541,5,1,True,False
+HTA0892,CADTH (Canada),2024-03-01,2024,Digital Health,Rheumatology,15,3,2361,True,2.103,0.0824,0.2089,81290.7,100000,85200153.83,Very Low,9.37,1.07,9.3,Restricted,0.516,5,14,True,False
+HTA0893,NICE (UK),2020-03-13,2020,Medical Devices,Respiratory,17,1,7197,False,-0.423,0.1563,0.2886,78303.55,50000,69728956.0,Moderate,8.67,2.26,4.61,Restricted,0.523,7,19,True,False
+HTA0894,HAS (France),2020-03-17,2020,Medical Devices,Infectious Disease,18,13,9873,True,0.73,0.2112,0.1148,85452.12,100000,72501092.36,Very Low,8.96,5.58,6.79,Restricted,0.618,19,16,True,False
+HTA0895,CADTH (Canada),2024-01-19,2024,Preventive Interventions,Gastroenterology,15,8,307,True,-0.108,0.1498,0.0811,76134.66,100000,62421023.1,High,2.86,4.02,4.32,Conditional,0.57,8,1,True,False
+HTA0896,CVZ (Netherlands),2020-10-21,2020,Digital Health,Endocrinology,2,7,1075,True,1.16,0.0312,0.3053,92297.18,100000,66486200.12,Low,8.06,8.03,9.34,Recommended,0.998,3,0,False,False
+HTA0897,CADTH (Canada),2019-12-18,2019,Diagnostic Tests,Neurology,14,9,4085,True,1.693,0.1303,0.1791,20314.47,100000,73491784.77,Moderate,3.39,6.87,6.03,Restricted,0.609,18,12,False,False
+HTA0898,CVZ (Netherlands),2024-01-04,2024,Preventive Interventions,Infectious Disease,4,4,4857,False,0.349,0.0506,0.2971,26242.98,100000,78724702.89,Moderate,7.64,5.1,9.88,Recommended,0.916,5,7,False,False
+HTA0899,G-BA (Germany),2022-10-17,2022,Pharmaceuticals,Hematology,3,12,2761,True,2.352,0.0361,0.0615,93153.79,100000,94960611.8,Very Low,5.36,5.21,6.8,Restricted,0.667,22,4,False,False
+HTA0900,SMC (Scotland),2022-07-16,2022,Preventive Interventions,Infectious Disease,18,2,8207,True,-0.353,0.2157,0.1218,88397.52,100000,15749293.08,Moderate,4.25,2.29,1.41,Not Recommended,0.0,18,6,False,True
+HTA0901,IQWIG (Germany),2019-01-01,2019,Preventive Interventions,Rheumatology,14,5,3849,True,-0.371,0.0578,0.3676,18986.72,100000,85828736.22,Moderate,8.76,5.84,8.9,Recommended,0.83,22,9,False,False
+HTA0902,NICE (UK),2021-12-21,2021,Digital Health,Oncology,3,1,1449,True,2.382,0.1237,0.1385,55906.05,50000,88623327.82,Very Low,9.55,7.29,5.59,Restricted,0.555,15,15,False,False
+HTA0903,SMC (Scotland),2019-07-06,2019,Surgical Procedures,Rheumatology,17,4,7227,False,0.285,0.0369,0.1834,117311.24,100000,42316805.85,Very Low,7.62,1.14,8.92,Restricted,0.53,17,6,True,False
+HTA0904,TLV (Sweden),2023-04-04,2023,Diagnostic Tests,Immunology,4,2,5230,True,-0.215,0.0429,0.3275,68194.9,100000,14059551.18,Moderate,5.63,8.67,6.78,Restricted,0.553,14,0,False,False
+HTA0905,NICE (UK),2024-09-14,2024,Diagnostic Tests,Immunology,23,11,793,False,0.069,0.2026,0.2703,119255.69,50000,69981445.08,Moderate,1.47,9.13,9.51,Restricted,0.718,19,7,False,False
+HTA0906,PBAC (Australia),2024-07-21,2024,Digital Health,Rheumatology,17,10,7532,True,1.381,0.0128,0.3172,112307.68,100000,83202242.38,Low,6.1,8.02,5.43,Restricted,0.785,9,13,True,False
+HTA0907,PBAC (Australia),2022-03-10,2022,Digital Health,Hematology,15,3,4088,True,1.924,0.0717,0.2531,54200.33,100000,53447078.29,Low,4.15,9.95,6.07,Restricted,0.747,14,7,True,False
+HTA0908,CADTH (Canada),2023-05-04,2023,Pharmaceuticals,Respiratory,22,7,2172,True,1.258,0.2302,0.1393,85190.34,100000,18401478.49,Low,2.11,5.42,6.9,Conditional,0.532,16,9,False,False
+HTA0909,CVZ (Netherlands),2023-05-19,2023,Gene Therapy,Oncology,5,14,4688,True,1.382,0.2137,0.1305,123515.22,100000,24255719.85,Low,4.88,2.03,7.43,Conditional,0.387,19,6,False,False
+HTA0910,PBAC (Australia),2020-12-08,2020,Screening Programs,Respiratory,13,9,2801,True,0.202,0.0229,0.2002,119289.74,100000,71812931.0,Low,1.09,9.7,4.07,Conditional,0.696,10,10,False,False
+HTA0911,CADTH (Canada),2018-08-16,2018,Preventive Interventions,Gastroenterology,17,14,9047,True,1.927,0.2315,0.1329,83242.69,100000,16733827.47,Moderate,1.81,9.48,6.74,Restricted,0.756,15,11,True,False
+HTA0912,CADTH (Canada),2020-10-05,2020,Medical Devices,Infectious Disease,12,12,6250,False,0.453,0.077,0.306,88893.43,100000,24510192.81,Moderate,5.42,4.77,3.62,Conditional,0.623,19,10,False,False
+HTA0913,SMC (Scotland),2023-09-28,2023,Rehabilitation Technologies,Respiratory,24,10,9983,False,0.126,0.0456,0.2879,20211.14,100000,87338930.47,Moderate,4.47,1.51,4.43,Conditional,0.661,13,1,False,False
+HTA0914,SMC (Scotland),2019-05-01,2019,Preventive Interventions,Rheumatology,5,4,6841,True,1.329,0.231,0.0872,35588.14,100000,37652719.1,Low,3.42,8.94,1.49,Conditional,0.676,19,16,False,False
+HTA0915,TLV (Sweden),2019-07-15,2019,Pharmaceuticals,Respiratory,1,12,8941,False,-0.119,0.1366,0.0603,13448.33,100000,67830428.24,Low,7.39,7.63,1.94,Restricted,0.708,12,4,False,False
+HTA0916,CADTH (Canada),2024-01-23,2024,Immunotherapy,Neurology,17,12,7524,True,1.783,0.1376,0.0737,58405.89,100000,88606432.26,Low,3.91,9.44,1.69,Restricted,0.788,17,6,False,False
+HTA0917,NICE (UK),2021-06-23,2021,Pharmaceuticals,Endocrinology,9,9,8034,True,0.415,0.0186,0.1021,106412.58,50000,37304933.57,Moderate,2.41,7.14,7.76,Restricted,0.554,20,18,True,False
+HTA0918,TLV (Sweden),2018-11-11,2018,Surgical Procedures,Rheumatology,5,11,6134,True,1.293,0.0982,0.2968,112510.51,100000,69964032.35,Very Low,3.14,2.71,6.49,Conditional,0.538,10,18,True,False
+HTA0919,IQWIG (Germany),2019-05-22,2019,Pharmaceuticals,Gastroenterology,9,9,1186,True,1.491,0.2478,0.3382,113132.46,100000,21596618.77,Low,5.73,9.0,3.97,Restricted,0.519,4,18,False,False
+HTA0920,PBAC (Australia),2021-07-21,2021,Immunotherapy,Neurology,22,5,5361,True,1.378,0.1781,0.1386,122388.99,100000,95082129.36,Moderate,7.31,7.63,6.96,Restricted,0.664,14,18,False,False
+HTA0921,CVZ (Netherlands),2021-04-12,2021,Screening Programs,Rheumatology,20,5,5210,True,1.929,0.2076,0.298,24033.02,100000,67072463.83,Low,4.83,4.72,4.99,Conditional,0.333,19,2,False,False
+HTA0922,NCPE (Ireland),2024-11-04,2024,Digital Health,Infectious Disease,1,0,5472,False,-0.083,0.1819,0.3653,23670.42,100000,27264172.88,Very Low,9.52,5.36,4.37,Restricted,0.585,11,5,False,False
+HTA0923,G-BA (Germany),2018-04-27,2018,Screening Programs,Neurology,13,4,2467,False,0.481,0.1031,0.3458,148320.44,100000,98399184.16,Moderate,5.37,3.73,3.83,Conditional,0.497,10,18,True,False
+HTA0924,CADTH (Canada),2022-02-28,2022,Medical Devices,Endocrinology,8,0,7542,True,-0.405,0.2146,0.0981,133964.66,100000,91447194.36,Moderate,8.26,4.27,8.72,Restricted,0.747,10,8,False,False
+HTA0925,IQWIG (Germany),2021-04-25,2021,Gene Therapy,Respiratory,7,1,4599,False,0.086,0.1991,0.3059,39460.38,100000,44145471.27,High,1.38,1.57,9.48,Conditional,0.694,5,1,False,False
+HTA0926,SMC (Scotland),2022-09-13,2022,Surgical Procedures,Infectious Disease,9,7,3187,True,-0.088,0.0142,0.206,136635.99,100000,31221387.26,Moderate,9.33,1.95,1.47,Conditional,0.652,15,11,False,False
+HTA0927,PBAC (Australia),2023-02-04,2023,Immunotherapy,Infectious Disease,1,6,6647,False,-0.122,0.1516,0.0995,14636.2,100000,43845207.35,Low,6.11,4.87,8.36,Restricted,0.738,9,13,False,False
+HTA0928,NICE (UK),2020-01-15,2020,Medical Devices,Rheumatology,15,10,563,True,0.032,0.1457,0.2037,23479.24,50000,46968932.61,Moderate,7.58,9.76,5.23,Recommended,0.926,15,18,False,False
+HTA0929,SMC (Scotland),2021-12-04,2021,Diagnostic Tests,Immunology,3,9,5705,False,-0.456,0.0869,0.2502,109613.08,100000,55483313.28,Low,3.54,2.66,1.49,Not Recommended,0.0,10,8,False,False
+HTA0930,TLV (Sweden),2024-12-21,2024,Gene Therapy,Rheumatology,6,10,4436,True,0.651,0.0325,0.19,35355.48,100000,68337557.78,Moderate,2.32,4.15,3.02,Conditional,0.618,6,0,False,False
+HTA0931,CADTH (Canada),2021-11-09,2021,Pharmaceuticals,Cardiology,7,12,6245,True,1.479,0.0336,0.2462,22383.45,100000,21949917.41,Moderate,1.61,7.04,5.17,Conditional,0.632,20,11,False,False
+HTA0932,PBAC (Australia),2022-01-24,2022,Rehabilitation Technologies,Respiratory,5,5,9552,False,0.158,0.1334,0.0814,98196.36,100000,16381665.24,Moderate,6.66,8.04,7.17,Restricted,0.701,11,2,False,False
+HTA0933,HAS (France),2019-04-01,2019,Immunotherapy,Immunology,6,4,5001,True,0.712,0.207,0.252,37274.8,100000,4970954.06,Low,2.2,4.08,5.59,Conditional,0.661,12,6,True,False
+HTA0934,IQWIG (Germany),2018-08-02,2018,Screening Programs,Neurology,22,3,6486,True,0.228,0.0305,0.2371,133806.68,100000,51959704.9,Low,3.69,5.03,3.92,Conditional,0.344,14,0,False,False
+HTA0935,TLV (Sweden),2022-06-03,2022,Digital Health,Immunology,5,13,3826,True,0.015,0.035,0.2876,117969.2,100000,50592011.04,Moderate,4.89,4.5,9.64,Restricted,0.73,9,1,False,False
+HTA0936,SMC (Scotland),2024-01-11,2024,Screening Programs,Gastroenterology,9,10,5659,False,0.251,0.1969,0.3847,43637.71,100000,27497168.07,Low,7.95,9.34,1.57,Restricted,0.688,5,12,True,False
+HTA0937,TLV (Sweden),2022-04-17,2022,Pharmaceuticals,Gastroenterology,9,12,924,True,2.325,0.0868,0.1669,126779.41,100000,65127820.37,Low,6.72,9.52,2.86,Restricted,0.797,17,0,True,False
+HTA0938,PBAC (Australia),2018-06-22,2018,Immunotherapy,Endocrinology,3,9,9949,True,1.786,0.1359,0.0546,111754.45,100000,73489538.45,Moderate,9.61,3.02,5.12,Restricted,0.534,21,15,False,False
+HTA0939,CADTH (Canada),2019-08-06,2019,Surgical Procedures,Immunology,3,14,7348,True,-0.334,0.0222,0.3591,126976.05,100000,35243117.48,Low,5.41,9.7,9.55,Recommended,0.997,19,0,False,False
+HTA0940,NICE (UK),2021-06-06,2021,Digital Health,Rheumatology,17,9,1113,True,2.155,0.0693,0.3665,136873.31,50000,43991716.26,High,7.54,4.03,8.15,Restricted,0.549,22,16,True,False
+HTA0941,IQWIG (Germany),2021-02-27,2021,Preventive Interventions,Oncology,22,7,4266,True,1.521,0.2297,0.1634,135559.69,100000,51036671.73,Moderate,9.07,1.29,1.25,Conditional,0.54,10,5,False,False
+HTA0942,G-BA (Germany),2020-05-11,2020,Immunotherapy,Gastroenterology,18,9,1087,False,-0.12,0.2416,0.1427,50763.98,100000,92112529.09,Very Low,3.57,2.23,7.83,Conditional,0.672,15,5,True,False
+HTA0943,CADTH (Canada),2024-09-06,2024,Medical Devices,Respiratory,11,10,7860,True,1.608,0.2487,0.2807,120138.57,100000,3733989.67,Low,3.7,2.14,2.02,Not Recommended,0.0,14,12,False,False
+HTA0944,CADTH (Canada),2019-07-05,2019,Immunotherapy,Rheumatology,18,7,6001,False,0.468,0.1122,0.1201,123517.55,100000,74675752.96,Low,2.93,4.64,9.83,Restricted,0.547,15,3,True,False
+HTA0945,NICE (UK),2021-04-11,2021,Medical Devices,Endocrinology,10,5,8281,True,0.706,0.1882,0.3468,71714.98,50000,59853207.26,Low,8.32,6.92,8.34,Recommended,0.915,5,13,False,False
+HTA0946,NICE (UK),2018-03-21,2018,Rehabilitation Technologies,Rheumatology,20,6,2991,False,0.486,0.0776,0.1604,135917.31,50000,24173826.86,Moderate,7.37,3.45,9.45,Restricted,0.7,10,4,False,False
+HTA0947,IQWIG (Germany),2019-03-14,2019,Diagnostic Tests,Hematology,22,2,1654,True,1.271,0.1736,0.377,118129.51,100000,64740873.08,High,4.36,2.25,8.93,Restricted,0.725,15,7,True,False
+HTA0948,NICE (UK),2021-05-25,2021,Screening Programs,Rheumatology,9,2,6338,False,0.156,0.2137,0.1534,98027.65,50000,6064791.91,Moderate,3.41,4.43,4.19,Conditional,0.324,7,2,False,False
+HTA0949,IQWIG (Germany),2018-12-18,2018,Diagnostic Tests,Gastroenterology,3,11,8992,True,0.494,0.1502,0.2962,61167.9,100000,50316568.55,Moderate,1.08,4.56,6.29,Conditional,0.528,13,1,True,False
+HTA0950,PBAC (Australia),2022-04-27,2022,Medical Devices,Infectious Disease,23,9,5561,True,1.324,0.1598,0.2037,75558.46,100000,95995788.02,Low,2.0,2.91,9.78,Conditional,0.591,8,14,False,False
+HTA0951,CVZ (Netherlands),2021-10-14,2021,Diagnostic Tests,Neurology,14,9,8109,False,-0.012,0.1015,0.341,76079.21,100000,25390768.46,Moderate,2.28,7.22,4.02,Conditional,0.404,5,2,True,False
+HTA0952,G-BA (Germany),2024-03-26,2024,Surgical Procedures,Neurology,20,1,7804,True,1.12,0.1567,0.3992,146402.9,100000,96673331.9,Moderate,9.92,5.1,8.67,Recommended,0.843,8,18,False,False
+HTA0953,IQWIG (Germany),2022-05-01,2022,Gene Therapy,Respiratory,19,2,2266,True,-0.161,0.036,0.3035,25548.71,100000,47305494.84,Moderate,5.95,7.36,7.16,Restricted,0.655,16,6,False,False
+HTA0954,CADTH (Canada),2018-01-26,2018,Immunotherapy,Cardiology,14,13,1081,False,0.036,0.0906,0.3193,43452.15,100000,89260362.79,High,8.52,1.82,1.51,Conditional,0.445,7,16,True,False
+HTA0955,PBAC (Australia),2023-10-21,2023,Immunotherapy,Infectious Disease,7,12,7202,True,1.84,0.1897,0.2524,125859.25,100000,20369126.91,Moderate,7.76,3.2,1.03,Conditional,0.665,20,17,True,False
+HTA0956,CADTH (Canada),2024-05-09,2024,Gene Therapy,Rheumatology,2,1,7047,True,1.489,0.2488,0.0589,135477.96,100000,1388679.64,Moderate,2.52,7.82,1.46,Conditional,0.521,21,19,False,False
+HTA0957,TLV (Sweden),2024-03-09,2024,Gene Therapy,Cardiology,22,7,6980,True,0.302,0.2379,0.1149,107522.5,100000,5232600.24,Moderate,4.05,8.15,8.11,Restricted,0.786,13,13,False,False
+HTA0958,NCPE (Ireland),2024-04-15,2024,Screening Programs,Infectious Disease,18,6,5496,True,-0.201,0.1884,0.3602,99371.56,100000,15271845.98,Very Low,9.9,4.9,6.35,Restricted,0.733,19,19,True,False
+HTA0959,CVZ (Netherlands),2019-09-18,2019,Surgical Procedures,Gastroenterology,18,12,9829,True,0.329,0.1649,0.0692,16717.31,100000,19681909.99,Low,6.66,7.57,4.33,Restricted,0.564,4,11,True,False
+HTA0960,IQWIG (Germany),2018-04-27,2018,Surgical Procedures,Rheumatology,22,12,2604,True,2.362,0.0769,0.2054,135298.71,100000,68054837.21,Low,7.35,8.46,8.9,Recommended,0.929,6,13,False,False
+HTA0961,G-BA (Germany),2021-06-01,2021,Preventive Interventions,Infectious Disease,1,12,6161,True,-0.045,0.0688,0.3205,14624.56,100000,19617657.23,Moderate,1.08,7.86,6.04,Conditional,0.66,22,19,False,False
+HTA0962,NCPE (Ireland),2019-04-01,2019,Immunotherapy,Oncology,11,13,136,False,-0.248,0.2375,0.2384,9841.0,100000,40939631.26,Very Low,7.57,3.7,6.18,Restricted,0.68,13,16,False,False
+HTA0963,NCPE (Ireland),2019-01-06,2019,Gene Therapy,Respiratory,19,3,9904,False,-0.395,0.2478,0.1541,17194.74,100000,1501644.34,Moderate,6.67,3.99,8.53,Restricted,0.715,20,4,True,False
+HTA0964,TLV (Sweden),2023-10-26,2023,Gene Therapy,Immunology,15,5,2124,True,1.264,0.0991,0.2844,67608.35,100000,76370063.68,Low,7.05,5.42,8.04,Restricted,0.648,3,2,True,False
+HTA0965,CADTH (Canada),2022-07-26,2022,Rehabilitation Technologies,Rheumatology,22,0,4985,False,0.19,0.1403,0.2481,20336.91,100000,44158965.89,High,3.77,9.1,6.17,Restricted,0.723,8,14,False,False
+HTA0966,CVZ (Netherlands),2019-07-03,2019,Pharmaceuticals,Respiratory,9,12,8968,True,1.059,0.105,0.1538,116832.3,100000,90050488.48,Low,8.62,9.18,9.21,Recommended,0.823,6,16,False,False
+HTA0967,SMC (Scotland),2021-07-04,2021,Diagnostic Tests,Hematology,11,5,7866,True,0.886,0.0552,0.2547,75258.55,100000,52400619.67,High,5.66,1.45,8.93,Restricted,0.603,13,7,True,False
+HTA0968,NCPE (Ireland),2022-11-20,2022,Gene Therapy,Infectious Disease,21,11,5303,False,0.261,0.0293,0.2811,44271.68,100000,25128145.91,Moderate,9.24,5.5,7.03,Restricted,0.584,13,11,False,False
+HTA0969,HAS (France),2018-02-23,2018,Digital Health,Endocrinology,13,6,7290,True,-0.455,0.2256,0.2345,128221.33,100000,6930565.4,Moderate,3.33,4.48,8.23,Restricted,0.616,12,1,False,False
+HTA0970,NICE (UK),2021-08-04,2021,Diagnostic Tests,Immunology,13,12,7594,True,2.158,0.0519,0.2705,98375.3,50000,28833998.84,Very Low,1.58,6.47,5.32,Conditional,0.398,18,3,True,False
+HTA0971,NCPE (Ireland),2022-04-20,2022,Rehabilitation Technologies,Neurology,21,2,3644,True,2.295,0.1432,0.3744,53405.57,100000,33450820.85,Moderate,7.35,6.09,9.33,Recommended,0.805,12,4,False,False
+HTA0972,G-BA (Germany),2021-07-16,2021,Diagnostic Tests,Endocrinology,5,0,5167,True,0.726,0.0862,0.102,5634.18,100000,97053271.18,Very Low,5.35,9.96,7.06,Restricted,0.521,12,6,True,False
+HTA0973,SMC (Scotland),2023-12-04,2023,Immunotherapy,Infectious Disease,11,0,389,True,1.474,0.0974,0.2959,103972.93,100000,10181635.72,Very Low,5.38,4.54,9.6,Restricted,0.631,14,14,True,False
+HTA0974,G-BA (Germany),2023-10-05,2023,Rehabilitation Technologies,Cardiology,20,12,2773,False,-0.265,0.0507,0.074,135084.33,100000,20836342.38,Moderate,3.57,3.74,7.01,Conditional,0.682,18,11,True,False
+HTA0975,SMC (Scotland),2020-06-20,2020,Preventive Interventions,Endocrinology,14,1,2800,True,2.445,0.16,0.2252,60638.73,100000,54398081.32,Moderate,4.24,5.18,3.48,Conditional,0.372,8,3,False,False
+HTA0976,HAS (France),2019-05-09,2019,Pharmaceuticals,Cardiology,1,3,4189,True,0.892,0.0814,0.3039,137303.63,100000,41835737.73,Very Low,5.65,5.7,6.4,Restricted,0.58,15,5,True,False
+HTA0977,NICE (UK),2023-12-18,2023,Pharmaceuticals,Respiratory,23,0,2546,True,1.316,0.1809,0.1623,106352.67,50000,53152399.08,Low,8.52,2.66,6.52,Restricted,0.516,15,17,True,False
+HTA0978,TLV (Sweden),2018-11-07,2018,Gene Therapy,Oncology,8,2,3062,True,2.349,0.0217,0.3273,106366.19,100000,26828338.21,Low,7.45,5.13,7.2,Restricted,0.633,10,6,True,False
+HTA0979,CVZ (Netherlands),2023-02-20,2023,Pharmaceuticals,Rheumatology,21,7,7486,False,0.074,0.0556,0.287,108349.19,100000,98553128.89,Moderate,3.44,7.15,9.81,Restricted,0.553,5,12,True,False
+HTA0980,CADTH (Canada),2024-05-04,2024,Diagnostic Tests,Endocrinology,15,5,3034,False,-0.478,0.1364,0.069,84876.52,100000,72126384.3,High,7.25,5.05,8.3,Restricted,0.66,7,8,False,False
+HTA0981,SMC (Scotland),2022-11-25,2022,Preventive Interventions,Cardiology,10,12,1389,False,0.261,0.063,0.1946,33504.05,100000,95467464.87,Low,7.79,7.42,8.86,Recommended,0.99,9,14,False,False
+HTA0982,CADTH (Canada),2018-08-26,2018,Digital Health,Neurology,7,13,3505,False,0.358,0.0253,0.3836,93835.88,100000,80287790.28,Moderate,3.88,5.17,2.32,Conditional,0.443,11,12,False,False
+HTA0983,TLV (Sweden),2021-09-15,2021,Diagnostic Tests,Hematology,24,6,6151,True,0.605,0.0606,0.0848,38943.43,100000,19939751.19,Very Low,3.58,3.08,8.51,Restricted,0.626,8,4,False,False
+HTA0984,NICE (UK),2023-11-07,2023,Medical Devices,Endocrinology,17,7,159,True,0.765,0.2036,0.3663,119630.28,50000,24257898.07,Very Low,4.27,2.52,5.5,Conditional,0.59,15,16,True,False
+HTA0985,CVZ (Netherlands),2023-05-08,2023,Preventive Interventions,Oncology,1,6,4522,True,0.583,0.2094,0.387,140587.71,100000,17149708.93,High,4.95,7.56,9.8,Restricted,0.735,7,9,True,False
+HTA0986,CVZ (Netherlands),2023-10-14,2023,Rehabilitation Technologies,Gastroenterology,20,2,3968,True,2.336,0.0133,0.2411,15962.23,100000,29353261.26,High,8.74,6.32,9.12,Recommended,0.938,9,5,False,False
+HTA0987,PBAC (Australia),2019-01-16,2019,Pharmaceuticals,Gastroenterology,17,13,2946,True,0.546,0.1558,0.3832,64239.57,100000,17134254.28,Moderate,3.57,2.93,6.31,Conditional,0.666,17,12,False,False
+HTA0988,IQWIG (Germany),2021-09-12,2021,Pharmaceuticals,Cardiology,5,13,9024,True,-0.326,0.2145,0.3057,106299.22,100000,34627957.52,Moderate,9.62,1.57,7.96,Restricted,0.593,5,3,False,False
+HTA0989,G-BA (Germany),2019-09-05,2019,Screening Programs,Cardiology,21,0,7433,True,-0.462,0.2264,0.241,130950.95,100000,88390947.06,Moderate,5.57,4.74,5.04,Restricted,0.769,11,7,False,False
+HTA0990,CVZ (Netherlands),2018-12-14,2018,Screening Programs,Gastroenterology,12,14,8092,True,0.616,0.1838,0.225,87732.75,100000,71577673.25,Low,3.44,2.32,3.63,Conditional,0.503,6,13,True,False
+HTA0991,CADTH (Canada),2020-06-05,2020,Medical Devices,Cardiology,9,3,9844,False,0.039,0.2203,0.0937,76599.37,100000,46245502.77,High,4.99,4.32,7.03,Restricted,0.781,15,0,False,False
+HTA0992,CVZ (Netherlands),2018-07-05,2018,Preventive Interventions,Respiratory,23,11,1948,True,1.441,0.1029,0.116,37306.08,100000,80464450.81,Low,5.44,4.21,8.27,Restricted,0.702,5,9,True,False
+HTA0993,IQWIG (Germany),2022-12-19,2022,Pharmaceuticals,Hematology,7,9,139,False,0.216,0.1566,0.3484,45899.81,100000,88620321.55,Moderate,4.61,4.65,1.88,Conditional,0.69,13,3,False,False
+HTA0994,PBAC (Australia),2019-07-17,2019,Digital Health,Hematology,11,14,124,True,1.437,0.2492,0.1313,45537.8,100000,97212858.37,Moderate,5.6,3.16,9.39,Restricted,0.794,18,0,False,False
+HTA0995,PBAC (Australia),2022-10-15,2022,Medical Devices,Gastroenterology,14,9,7168,True,2.498,0.1666,0.1803,53103.24,100000,93228728.94,Low,5.25,4.18,7.39,Restricted,0.594,4,7,False,False
+HTA0996,NICE (UK),2024-09-16,2024,Surgical Procedures,Cardiology,22,3,1816,True,0.161,0.1697,0.3633,104374.12,50000,41935637.86,Moderate,7.64,7.67,6.46,Restricted,0.587,19,11,False,False
+HTA0997,HAS (France),2023-07-19,2023,Diagnostic Tests,Hematology,5,2,493,False,0.072,0.0351,0.1176,149829.78,100000,20365290.63,Low,4.78,8.97,7.8,Restricted,0.679,9,3,False,False
+HTA0998,NCPE (Ireland),2023-06-19,2023,Gene Therapy,Neurology,11,3,3493,True,-0.144,0.0452,0.115,52589.89,100000,89305021.36,Moderate,7.52,1.74,6.32,Restricted,0.645,6,0,False,False
+HTA0999,SMC (Scotland),2023-11-26,2023,Surgical Procedures,Endocrinology,10,1,7523,True,2.075,0.022,0.0811,39633.55,100000,88878174.52,Moderate,2.73,7.44,3.87,Conditional,0.433,23,11,False,False
+HTA1000,G-BA (Germany),2020-09-13,2020,Digital Health,Gastroenterology,9,13,2341,True,0.905,0.1971,0.3788,101207.3,100000,51108181.71,Moderate,7.06,9.84,5.29,Restricted,0.549,5,18,False,False
