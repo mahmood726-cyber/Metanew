@@ -1,0 +1,47 @@
+{
+  "best_model": "Random Forest",
+  "best_r2": 0.3936806788558199,
+  "best_rmse": 25.247717649789,
+  "best_mae": 17.873201424133725,
+  "baseline_r2": -0.05666936360019914,
+  "baseline_rmse": 33.33043477686371,
+  "baseline_mae": 27.42644182196569,
+  "n_train": 341,
+  "n_test": 147,
+  "features": [
+    "n_studies",
+    "log_n_studies",
+    "total_participants",
+    "log_total_participants",
+    "mean_sample_size",
+    "sd_sample_size",
+    "range_sample_size",
+    "cv_sample_size",
+    "mean_events_exp",
+    "sd_events_exp",
+    "mean_events_con",
+    "sd_events_con",
+    "mean_baseline_risk",
+    "mean_allocation_ratio",
+    "sd_allocation_ratio"
+  ],
+  "feature_engineering": "Pre-effect size features only (NO effect size variability)",
+  "data_leakage": "FIXED - no effect size variability features",
+  "all_models": {
+    "Random Forest": {
+      "rmse": 25.247717649789,
+      "mae": 17.873201424133725,
+      "r2": 0.3936806788558199
+    },
+    "Gradient Boosting": {
+      "rmse": 26.88333809075051,
+      "mae": 18.444546665902156,
+      "r2": 0.31257781165248144
+    },
+    "Ridge Regression": {
+      "rmse": 25.34663517484902,
+      "mae": 18.464196196277314,
+      "r2": 0.38892039944454304
+    }
+  }
+}

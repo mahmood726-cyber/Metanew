@@ -1,0 +1,51 @@
+{
+  "best_model": "Random Forest",
+  "best_r2": 0.09733304554018474,
+  "best_rmse": 0.7119523932237747,
+  "best_mae": 0.438270809136098,
+  "baseline_r2": -2.0685700832245857e-06,
+  "baseline_rmse": 0.749355038133815,
+  "baseline_mae": 0.4870036277961857,
+  "n_train": 56199,
+  "n_test": 24086,
+  "features": [
+    "total_n",
+    "log_total_n",
+    "exp_n",
+    "log_exp_n",
+    "con_n",
+    "log_con_n",
+    "allocation_ratio",
+    "allocation_ratio_squared",
+    "years_since_2000",
+    "total_n_squared"
+  ],
+  "feature_engineering": "Pre-outcome features only (NO event rates)",
+  "data_leakage": "FIXED - no outcome-derived features",
+  "all_models": {
+    "Random Forest": {
+      "rmse": 0.7119523932237747,
+      "mae": 0.438270809136098,
+      "r2": 0.09733304554018474,
+      "correlation": 0.3137306378795914
+    },
+    "Gradient Boosting": {
+      "rmse": 0.7150850936387396,
+      "mae": 0.44350707381306936,
+      "r2": 0.08937182084223205,
+      "correlation": 0.30186752632963876
+    },
+    "Ridge Regression": {
+      "rmse": 0.7374444793924817,
+      "mae": 0.46094445789541627,
+      "r2": 0.03153419103977406,
+      "correlation": 0.17762168297220682
+    },
+    "Lasso Regression": {
+      "rmse": 0.7400581514507345,
+      "mae": 0.46884964762923376,
+      "r2": 0.024657096523672872,
+      "correlation": 0.1582804795364553
+    }
+  }
+}
