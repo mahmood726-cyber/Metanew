@@ -201,7 +201,7 @@ class TestModelExplainerInitialization:
 
     @pytest.mark.skipif(not LIME_AVAILABLE, reason="LIME not available")
     def test_lime_explainer_initialized(self, trained_rf_model):
-        """Test that LIME explainer is initialized when available")
+        """Test that LIME explainer is initialized when available"""
         model, X, y, feature_names = trained_rf_model
 
         explainer = ModelExplainer(

@@ -2,10 +2,12 @@
 Authentication API Endpoints
 Routes for login, token refresh, user management, etc.
 """
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status, Request
 from fastapi.security import OAuth2PasswordRequestForm
 from pydantic import BaseModel, EmailStr
 from typing import List
+from slowapi import Limiter
+from slowapi.util import get_remote_address
 
 from backend.auth.auth_manager import (
     auth_manager,
@@ -19,6 +21,9 @@ from backend.auth.dependencies import (
     get_current_active_user,
     RoleChecker,
 )
+
+# Rate limiting for auth endpoints
+limiter = Limiter(key_func=get_remote_address)
 
 router = APIRouter(prefix="/auth", tags=["authentication"])
 
@@ -48,16 +53,18 @@ class ResetPasswordResponse(BaseModel):
 
 
 @router.post("/login", response_model=LoginResponse)
-async def login(request: LoginRequest):
+@limiter.limit("5/minute")  # Strict rate limit for login - brute force protection
+async def login(request: Request, credentials: LoginRequest):
     """
     Authenticate user and return access token
+    Rate limited to 5 attempts per minute to prevent brute force attacks
 
     Default users:
-    - Username: admin, Password: admin123 (Role: Admin)
-    - Username: analyst, Password: analyst123 (Role: Analyst)
+    - Username: admin, Password: from ADMIN_INITIAL_PASSWORD env var
+    - Username: analyst, Password: from ANALYST_INITIAL_PASSWORD env var
     """
     # Authenticate user
-    user = auth_manager.authenticate_user(request.username, request.password)
+    user = auth_manager.authenticate_user(credentials.username, credentials.password)
 
     if not user:
         raise HTTPException(
@@ -76,10 +83,12 @@ async def login(request: LoginRequest):
 
 
 @router.post("/login/oauth", response_model=Token)
-async def login_oauth(form_data: OAuth2PasswordRequestForm = Depends()):
+@limiter.limit("5/minute")  # Strict rate limit for OAuth login - brute force protection
+async def login_oauth(request: Request, form_data: OAuth2PasswordRequestForm = Depends()):
     """
     OAuth2 compatible token endpoint
     Used by some client libraries that expect OAuth2 format
+    Rate limited to 5 attempts per minute to prevent brute force attacks
     """
     user = auth_manager.authenticate_user(form_data.username, form_data.password)
 
@@ -95,9 +104,11 @@ async def login_oauth(form_data: OAuth2PasswordRequestForm = Depends()):
 
 
 @router.post("/refresh", response_model=Token)
-async def refresh_token(refresh_token: str):
+@limiter.limit("10/minute")  # Rate limit for token refresh
+async def refresh_token(request: Request, refresh_token: str):
     """
     Refresh access token using refresh token
+    Rate limited to 10 attempts per minute
     """
     new_tokens = auth_manager.refresh_access_token(refresh_token)
 
@@ -122,17 +133,20 @@ async def get_current_user_info(
 
 
 @router.post("/change-password")
+@limiter.limit("10/minute")  # Rate limit for password changes
 async def change_password(
-    request: ChangePasswordRequest,
+    request: Request,
+    password_data: ChangePasswordRequest,
     current_user: User = Depends(get_current_active_user)
 ):
     """
     Change current user's password
+    Rate limited to 10 attempts per minute
     """
     success = auth_manager.change_password(
         current_user.username,
-        request.old_password,
-        request.new_password
+        password_data.old_password,
+        password_data.new_password
     )
 
     if not success:
