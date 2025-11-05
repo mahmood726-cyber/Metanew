@@ -1,0 +1,11 @@
+{
+  "best_model": "Gradient Boosting",
+  "rmse": 20.157842112911617,
+  "mae": 13.276298884294576,
+  "r2": 0.6135037924608658,
+  "n_train": 341,
+  "n_test": 147,
+  "n_features": 10,
+  "data_source": "Pairwise70 - Real Cochrane Reviews",
+  "n_meta_analyses": 488
+}
