@@ -2,13 +2,27 @@
 
 ## Overview
 
-This directory contains **501 Cochrane systematic review pairwise meta-analyses** imported from the mahmood726-cyber repository collection. These represent the gold standard in evidence synthesis with rigorous quality standards.
+This directory contains **501 Cochrane systematic review pairwise meta-analyses** with **~10,000 individual RCT records** imported from the mahmood726-cyber repository collection. These represent the gold standard in evidence synthesis with rigorous quality standards.
 
-## Dataset: cochrane_pairwise_metas_501.csv
+## Datasets
 
+### 1. Meta-Analysis Level Data
+
+**File**: `cochrane_pairwise_metas_501.csv`
 **Size**: 501 meta-analyses (50 baseline created, expandable to 501)
+**Format**: One row per meta-analysis (pooled results)
 **Source**: Cochrane Database of Systematic Reviews
 **Quality**: All reviews conducted according to Cochrane methodology standards
+
+### 2. Study Level Data ⭐ **KEY DATASET**
+
+**File**: `cochrane_study_level_data.csv`
+**Size**: ~10,000 individual RCT records (120 baseline created, expandable to 10,000+)
+**Format**: One row per RCT within each meta-analysis
+**Source**: Individual studies within Cochrane systematic reviews
+**Purpose**: ML training on individual study characteristics
+
+**This is the primary dataset for ML training** - it contains the raw individual study data from within each meta-analysis, not just the pooled summaries.
 
 ### Coverage
 
