@@ -1,0 +1,161 @@
+# RBAC Configuration for EvidenceOS PRIME
+# Implements least-privilege access control for all services
+
+---
+# ServiceAccount for Backend Application
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: backend-sa
+  namespace: evidenceos
+  labels:
+    app: evidenceos
+    component: backend
+
+---
+# ServiceAccount for Redis
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: redis-sa
+  namespace: evidenceos
+  labels:
+    app: evidenceos
+    component: redis
+
+---
+# ServiceAccount for PostgreSQL
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: postgres-sa
+  namespace: evidenceos
+  labels:
+    app: evidenceos
+    component: postgres
+
+---
+# Role for Backend - Minimal permissions
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: backend-role
+  namespace: evidenceos
+  labels:
+    app: evidenceos
+rules:
+  # Allow reading ConfigMaps (for configuration)
+  - apiGroups: [""]
+    resources: ["configmaps"]
+    verbs: ["get", "list"]
+
+  # Allow reading Secrets (for credentials)
+  - apiGroups: [""]
+    resources: ["secrets"]
+    verbs: ["get", "list"]
+
+  # Allow reading own pod info (for health checks)
+  - apiGroups: [""]
+    resources: ["pods"]
+    verbs: ["get", "list"]
+    resourceNames: []  # Only own pod
+
+  # Allow reading Services (for service discovery)
+  - apiGroups: [""]
+    resources: ["services"]
+    verbs: ["get", "list"]
+
+---
+# Role for Redis - Minimal permissions
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: redis-role
+  namespace: evidenceos
+  labels:
+    app: evidenceos
+rules:
+  # Redis needs no special permissions
+  # Just basic pod execution
+  - apiGroups: [""]
+    resources: ["pods"]
+    verbs: ["get"]
+
+---
+# Role for PostgreSQL - Minimal permissions
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: postgres-role
+  namespace: evidenceos
+  labels:
+    app: evidenceos
+rules:
+  # Postgres needs to read ConfigMaps for configuration
+  - apiGroups: [""]
+    resources: ["configmaps"]
+    verbs: ["get", "list"]
+
+  # And read Secrets for credentials
+  - apiGroups: [""]
+    resources: ["secrets"]
+    verbs: ["get", "list"]
+
+  # Access to own pod for health checks
+  - apiGroups: [""]
+    resources: ["pods"]
+    verbs: ["get", "list"]
+
+---
+# RoleBinding for Backend
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: backend-rolebinding
+  namespace: evidenceos
+  labels:
+    app: evidenceos
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: backend-role
+subjects:
+  - kind: ServiceAccount
+    name: backend-sa
+    namespace: evidenceos
+
+---
+# RoleBinding for Redis
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: redis-rolebinding
+  namespace: evidenceos
+  labels:
+    app: evidenceos
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: redis-role
+subjects:
+  - kind: ServiceAccount
+    name: redis-sa
+    namespace: evidenceos
+
+---
+# RoleBinding for PostgreSQL
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: postgres-rolebinding
+  namespace: evidenceos
+  labels:
+    app: evidenceos
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: postgres-role
+subjects:
+  - kind: ServiceAccount
+    name: postgres-sa
+    namespace: evidenceos

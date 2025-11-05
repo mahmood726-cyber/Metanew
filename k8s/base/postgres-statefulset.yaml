@@ -39,6 +39,12 @@ spec:
         app: evidenceos
         component: postgres
     spec:
+      # SECURITY: Use dedicated ServiceAccount with minimal permissions
+      serviceAccountName: postgres-sa
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 70  # Postgres user
+        fsGroup: 70
       containers:
       - name: postgres
         image: postgres:15-alpine

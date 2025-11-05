@@ -5,7 +5,13 @@ namespace: evidenceos
 
 resources:
   - namespace.yaml
+  - rbac.yaml
+  - network-policies.yaml
   - configmap.yaml
+  # SECURITY: Generate secrets.yaml before deploying
+  # Run: ./generate-secrets.sh
+  # Note: secrets.yaml is gitignored and must be created locally
+  - secrets.yaml
   - pvc.yaml
   - postgres-statefulset.yaml
   - redis-deployment.yaml

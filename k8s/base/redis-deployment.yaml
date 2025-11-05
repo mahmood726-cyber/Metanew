@@ -18,6 +18,12 @@ spec:
         app: evidenceos
         component: redis
     spec:
+      # SECURITY: Use dedicated ServiceAccount with minimal permissions
+      serviceAccountName: redis-sa
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 999  # Redis user
+        fsGroup: 999
       containers:
       - name: redis
         image: redis:7-alpine

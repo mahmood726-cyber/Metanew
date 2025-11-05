@@ -6,12 +6,23 @@ from fastapi import APIRouter, Response, status
 from datetime import datetime
 import psutil
 import sys
-from typing import Dict, Any
+import importlib
+from typing import Dict, Any, Set
 import logging
 
 logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/health", tags=["health"])
+
+# SECURITY: Whitelist of allowed ML libraries to prevent code injection
+ALLOWED_ML_LIBRARIES: Set[str] = {
+    'numpy', 'pandas', 'scipy',
+    'xgboost', 'lightgbm', 'catboost',
+    'shap', 'lime', 'optuna',
+    'mlflow', 'evidently',
+    'sentence_transformers', 'chromadb',
+    'scikit-learn', 'sklearn'
+}
 
 
 def get_system_metrics() -> Dict[str, Any]:
@@ -110,23 +121,39 @@ def check_ml_libraries() -> Dict[str, Any]:
     ]
 
     for lib_name in libs_to_check:
-        try:
-            if lib_name == 'scikit-learn':
-                import sklearn
-                ml_libs[lib_name] = {
-                    "available": True,
-                    "version": sklearn.__version__
-                }
-            else:
-                lib = __import__(lib_name)
-                ml_libs[lib_name] = {
-                    "available": True,
-                    "version": getattr(lib, '__version__', 'unknown')
-                }
-        except ImportError:
+        # SECURITY FIX: Validate library name against whitelist
+        if lib_name not in ALLOWED_ML_LIBRARIES:
+            logger.warning(f"Attempted to check non-whitelisted library: {lib_name}")
             ml_libs[lib_name] = {
                 "available": False,
-                "version": None
+                "version": None,
+                "error": "Library not in whitelist"
+            }
+            continue
+
+        try:
+            # SECURITY FIX: Use importlib instead of __import__
+            if lib_name == 'scikit-learn':
+                lib = importlib.import_module('sklearn')
+            else:
+                lib = importlib.import_module(lib_name)
+
+            ml_libs[lib_name] = {
+                "available": True,
+                "version": getattr(lib, '__version__', 'unknown')
+            }
+        except ImportError as e:
+            ml_libs[lib_name] = {
+                "available": False,
+                "version": None,
+                "error": str(e)
+            }
+        except Exception as e:
+            logger.error(f"Error checking library {lib_name}: {e}")
+            ml_libs[lib_name] = {
+                "available": False,
+                "version": None,
+                "error": "Unexpected error"
             }
 
     available_count = sum(1 for lib in ml_libs.values() if lib['available'])

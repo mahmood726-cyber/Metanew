@@ -1,0 +1,184 @@
+# Network Policies for EvidenceOS PRIME
+# Implements pod-to-pod isolation and restricts network access
+
+---
+# Default Deny All - Start with zero trust
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: default-deny-all
+  namespace: evidenceos
+spec:
+  podSelector: {}
+  policyTypes:
+  - Ingress
+  - Egress
+
+---
+# Backend Network Policy
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: backend-netpol
+  namespace: evidenceos
+  labels:
+    app: evidenceos
+spec:
+  podSelector:
+    matchLabels:
+      app: evidenceos
+      component: backend
+  policyTypes:
+    - Ingress
+    - Egress
+
+  ingress:
+    # Allow ingress from ingress controller
+    - from:
+      - namespaceSelector:
+          matchLabels:
+            name: ingress-nginx
+      ports:
+      - protocol: TCP
+        port: 8000
+
+    # Allow Prometheus scraping
+    - from:
+      - namespaceSelector:
+          matchLabels:
+            name: monitoring
+      ports:
+      - protocol: TCP
+        port: 8000
+
+  egress:
+    # Allow egress to Redis
+    - to:
+      - podSelector:
+          matchLabels:
+            app: evidenceos
+            component: redis
+      ports:
+      - protocol: TCP
+        port: 6379
+
+    # Allow egress to PostgreSQL
+    - to:
+      - podSelector:
+          matchLabels:
+            app: evidenceos
+            component: postgres
+      ports:
+      - protocol: TCP
+        port: 5432
+
+    # Allow DNS resolution
+    - to:
+      - namespaceSelector:
+          matchLabels:
+            name: kube-system
+      ports:
+      - protocol: UDP
+        port: 53
+
+    # Allow HTTPS egress for external APIs (if needed)
+    - to:
+      - namespaceSelector: {}
+      ports:
+      - protocol: TCP
+        port: 443
+
+---
+# Redis Network Policy
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: redis-netpol
+  namespace: evidenceos
+  labels:
+    app: evidenceos
+spec:
+  podSelector:
+    matchLabels:
+      app: evidenceos
+      component: redis
+  policyTypes:
+    - Ingress
+    - Egress
+
+  ingress:
+    # Allow only from backend
+    - from:
+      - podSelector:
+          matchLabels:
+            app: evidenceos
+            component: backend
+      ports:
+      - protocol: TCP
+        port: 6379
+
+  egress:
+    # Redis needs minimal egress (only DNS)
+    - to:
+      - namespaceSelector:
+          matchLabels:
+            name: kube-system
+      ports:
+      - protocol: UDP
+        port: 53
+
+---
+# PostgreSQL Network Policy
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: postgres-netpol
+  namespace: evidenceos
+  labels:
+    app: evidenceos
+spec:
+  podSelector:
+    matchLabels:
+      app: evidenceos
+      component: postgres
+  policyTypes:
+    - Ingress
+    - Egress
+
+  ingress:
+    # Allow only from backend
+    - from:
+      - podSelector:
+          matchLabels:
+            app: evidenceos
+            component: backend
+      ports:
+      - protocol: TCP
+        port: 5432
+
+  egress:
+    # Postgres needs minimal egress (only DNS)
+    - to:
+      - namespaceSelector:
+          matchLabels:
+            name: kube-system
+      ports:
+      - protocol: UDP
+        port: 53
+
+---
+# Allow kube-system namespace access (for system services)
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-kube-system
+  namespace: evidenceos
+spec:
+  podSelector: {}
+  policyTypes:
+  - Ingress
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: kube-system

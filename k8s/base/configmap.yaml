@@ -29,24 +29,4 @@ data:
   ENABLE_ML_FEATURES: "true"
   ENABLE_RAG: "true"
   ENABLE_AUTOML: "true"
----
-apiVersion: v1
-kind: Secret
-metadata:
-  name: evidenceos-secrets
-  namespace: evidenceos
-  labels:
-    app: evidenceos
-type: Opaque
-stringData:
-  # Database credentials (replace with actual values)
-  postgres-user: evidenceos
-  postgres-password: CHANGE_ME_IN_PRODUCTION
-  database-url: postgresql://evidenceos:CHANGE_ME_IN_PRODUCTION@postgres-service:5432/evidenceos
 
-  # JWT secret (replace with actual value)
-  jwt-secret: CHANGE_ME_IN_PRODUCTION_USE_STRONG_RANDOM_STRING
-
-  # Admin credentials (replace with actual values)
-  admin-username: admin
-  admin-password: CHANGE_ME_IN_PRODUCTION
