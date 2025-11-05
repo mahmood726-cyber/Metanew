@@ -8,18 +8,15 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.trustedhost import TrustedHostMiddleware
 from fastapi.responses import JSONResponse
 from typing import Dict, List, Any, Optional
+import sys
 import pandas as pd
 import numpy as np
 from datetime import datetime
-import sys
 import os
 import logging
 from slowapi import Limiter, _rate_limit_exceeded_handler
 from slowapi.util import get_remote_address
 from slowapi.errors import RateLimitExceeded
-
-# Add parent directory to path
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from schemas.evidence_object import (
     EvidenceObject, ValidationResult, ValidationProblem,
