@@ -2,6 +2,9 @@
 # Cost-effectiveness analysis using BCEA package
 library(shiny)
 
+# Source utilities
+source("utils/plot_downloads.R", local = TRUE)
+
 he_bcea_ui <- function(id) {
   ns <- NS(id)
   tagList(
@@ -17,9 +20,24 @@ he_bcea_ui <- function(id) {
         )
       ),
       navset_card_tab(
-        nav_panel("CE Plane", plotOutput(ns("ce_plane"))),
-        nav_panel("CEAC", plotOutput(ns("ceac"))),
-        nav_panel("EVPI", plotOutput(ns("evpi"))),
+        nav_panel(
+          "CE Plane",
+          plotOutput(ns("ce_plane")),
+          hr(),
+          plot_download_ui(ns("ce_download"), "CE Plane", 2400, 2400)
+        ),
+        nav_panel(
+          "CEAC",
+          plotOutput(ns("ceac")),
+          hr(),
+          plot_download_ui(ns("ceac_download"), "CEAC", 2400, 1800)
+        ),
+        nav_panel(
+          "EVPI",
+          plotOutput(ns("evpi")),
+          hr(),
+          plot_download_ui(ns("evpi_download"), "EVPI Curve", 2400, 1800)
+        ),
         nav_panel("Summary", verbatimTextOutput(ns("summary")))
       )
     )
@@ -62,6 +80,96 @@ he_bcea_server <- function(id, rv) {
       cat(sprintf("ICER: £%.2f per QALY\n", res$icer))
       cat(sprintf("Probability cost-effective at £20k: %.1f%%\n",
                   res$prob_cost_effective * 100))
+    })
+
+    # CE Plane download handler
+    moduleServer("ce_download", function(input_dl, output_dl, session) {
+      output_dl$download <- downloadHandler(
+        filename = function() {
+          format <- tolower(input_dl$format)
+          timestamp <- format(Sys.time(), "%Y%m%d_%H%M%S")
+          paste0("ce_plane_", timestamp, ".", format)
+        },
+        content = function(file) {
+          req(bcea_results())
+          format <- tolower(input_dl$format)
+
+          if (format == "pdf") {
+            pdf(file, width = input_dl$width_pdf, height = input_dl$height_pdf)
+          } else if (format == "png") {
+            png(file, width = input_dl$width, height = input_dl$height,
+                res = input_dl$dpi, type = "cairo")
+          } else if (format == "jpg") {
+            jpeg(file, width = input_dl$width, height = input_dl$height,
+                 res = input_dl$dpi, quality = input_dl$quality, type = "cairo")
+          } else if (format == "svg") {
+            svg(file, width = input_dl$width / 96, height = input_dl$height / 96)
+          }
+
+          plot_ce_plane(bcea_results())
+          dev.off()
+        }
+      )
+    })
+
+    # CEAC download handler
+    moduleServer("ceac_download", function(input_dl, output_dl, session) {
+      output_dl$download <- downloadHandler(
+        filename = function() {
+          format <- tolower(input_dl$format)
+          timestamp <- format(Sys.time(), "%Y%m%d_%H%M%S")
+          paste0("ceac_", timestamp, ".", format)
+        },
+        content = function(file) {
+          req(bcea_results())
+          format <- tolower(input_dl$format)
+
+          if (format == "pdf") {
+            pdf(file, width = input_dl$width_pdf, height = input_dl$height_pdf)
+          } else if (format == "png") {
+            png(file, width = input_dl$width, height = input_dl$height,
+                res = input_dl$dpi, type = "cairo")
+          } else if (format == "jpg") {
+            jpeg(file, width = input_dl$width, height = input_dl$height,
+                 res = input_dl$dpi, quality = input_dl$quality, type = "cairo")
+          } else if (format == "svg") {
+            svg(file, width = input_dl$width / 96, height = input_dl$height / 96)
+          }
+
+          plot_ceac(bcea_results())
+          dev.off()
+        }
+      )
+    })
+
+    # EVPI download handler
+    moduleServer("evpi_download", function(input_dl, output_dl, session) {
+      output_dl$download <- downloadHandler(
+        filename = function() {
+          format <- tolower(input_dl$format)
+          timestamp <- format(Sys.time(), "%Y%m%d_%H%M%S")
+          paste0("evpi_curve_", timestamp, ".", format)
+        },
+        content = function(file) {
+          req(bcea_results())
+          format <- tolower(input_dl$format)
+
+          if (format == "pdf") {
+            pdf(file, width = input_dl$width_pdf, height = input_dl$height_pdf)
+          } else if (format == "png") {
+            png(file, width = input_dl$width, height = input_dl$height,
+                res = input_dl$dpi, type = "cairo")
+          } else if (format == "jpg") {
+            jpeg(file, width = input_dl$width, height = input_dl$height,
+                 res = input_dl$dpi, quality = input_dl$quality, type = "cairo")
+          } else if (format == "svg") {
+            svg(file, width = input_dl$width / 96, height = input_dl$height / 96)
+          }
+
+          plot_evpi(bcea_results())
+          dev.off()
+        }
+      )
     })
 
     return(reactive(bcea_results()))
