@@ -18,11 +18,15 @@ library(stringr)
 #' @param sections c("methods", "results", "plain_language", "raw")
 #' @param include_tables TRUE/FALSE
 #' @param include_interpretation TRUE/FALSE
+#' @param hta_type "standard", "nice", "cadth", "iqwig" (for HTA reports only)
+#' @param include_publication_components TRUE/FALSE - include PRISMA, RoB, GRADE
 create_report_config <- function(length = "standard",
                                   tone = "balanced",
                                   sections = c("methods", "results"),
                                   include_tables = TRUE,
-                                  include_interpretation = TRUE) {
+                                  include_interpretation = TRUE,
+                                  hta_type = NULL,
+                                  include_publication_components = TRUE) {
 
   list(
     length = length,
@@ -30,6 +34,8 @@ create_report_config <- function(length = "standard",
     sections = sections,
     include_tables = include_tables,
     include_interpretation = include_interpretation,
+    hta_type = hta_type,
+    include_publication_components = include_publication_components,
     word_limits = list(
       brief = list(methods = 300, results = 400, plain = 200),
       standard = list(methods = 600, results = 800, plain = 400),
@@ -116,21 +122,33 @@ generate_pairwise_methods <- function(result, data, config) {
     "plain" = "We looked for signs that some negative studies might not have been published."
   )
 
-  # Software
+  # Software & reporting
   software <- switch(tone,
-    "technical" = "All analyses were conducted in R using the metafor package (Viechtbauer, 2010). Statistical significance was set at α = 0.05 (two-tailed).",
-    "balanced" = "We used the R statistical software with specialized meta-analysis tools. We considered p-values below 0.05 as statistically significant.",
-    "plain" = "We used professional statistical software designed for combining study results."
+    "technical" = "All analyses were conducted in R using the metafor package (Viechtbauer, 2010). Statistical significance was set at α = 0.05 (two-tailed). This systematic review was reported in accordance with PRISMA 2020 guidelines.",
+    "balanced" = "We used the R statistical software with specialized meta-analysis tools. We considered p-values below 0.05 as statistically significant. This review follows PRISMA (Preferred Reporting Items for Systematic Reviews and Meta-Analyses) guidelines.",
+    "plain" = "We used professional statistical software designed for combining study results. We followed international standards for reporting our review."
   )
+
+  # Quality assessment (if publication components included)
+  quality_assessment <- if (config$include_publication_components) {
+    switch(tone,
+      "technical" = "Risk of bias was assessed using the Cochrane Risk of Bias 2.0 tool (RoB 2.0) for randomized trials or ROBINS-I for non-randomized studies. Certainty of evidence was evaluated using GRADE (Grading of Recommendations Assessment, Development and Evaluation) methodology.",
+      "balanced" = "We assessed the quality of each study using standard tools (Cochrane Risk of Bias tool for RCTs, ROBINS-I for observational studies). We also rated the overall certainty of evidence using the GRADE approach.",
+      "plain" = "We checked the quality of each study to see if we can trust the results. We also rated how certain we are about our overall findings."
+    )
+  } else {
+    ""
+  }
 
   # Combine based on length
   if (length == "brief") {
     paste(opening, details, sep = " ")
   } else if (length == "standard") {
-    paste(opening, details, pub_bias, software, sep = " ")
+    paste(opening, details, quality_assessment, pub_bias, software, sep = " ")
   } else {
-    paste(opening, details, pub_bias, software,
+    paste(opening, details, quality_assessment, pub_bias, software,
           "Sensitivity analyses were conducted to assess robustness of findings.",
+          "See supplementary materials for PRISMA flow diagram, study characteristics table, risk of bias assessments, and GRADE evidence profiles.",
           sep = " ")
   }
 }
@@ -447,16 +465,25 @@ generate_hta_report <- function(result, data, config = create_report_config()) {
 
   report <- list(title = "Health Technology Assessment Report")
 
-  if ("methods" %in% config$sections) {
-    report$methods <- generate_hta_methods(result, data, config)
-  }
+  # Check if this is a NICE-level HTA
+  is_nice_hta <- !is.null(config$hta_type) && config$hta_type == "nice"
 
-  if ("results" %in% config$sections) {
-    report$results <- generate_hta_results(result, data, config)
-  }
+  if (is_nice_hta) {
+    # NICE HTA has specific required sections
+    report <- generate_nice_hta_report(result, data, config)
+  } else {
+    # Standard HTA
+    if ("methods" %in% config$sections) {
+      report$methods <- generate_hta_methods(result, data, config)
+    }
 
-  if ("plain_language" %in% config$sections) {
-    report$plain_language <- generate_hta_plain(result, data, config)
+    if ("results" %in% config$sections) {
+      report$results <- generate_hta_results(result, data, config)
+    }
+
+    if ("plain_language" %in% config$sections) {
+      report$plain_language <- generate_hta_plain(result, data, config)
+    }
   }
 
   return(report)
@@ -510,6 +537,212 @@ generate_hta_results <- function(result, data, config) {
 generate_hta_plain <- function(result, data, config) {
 
   "BOTTOM LINE: The new treatment costs more but also works better. At $35,714 per extra QALY, it's likely worth the additional cost for most healthcare systems. There's a 78% chance it's cost-effective at typical thresholds."
+}
+
+# ============================================================================
+# NICE-LEVEL HTA REPORTS
+# ============================================================================
+
+#' Generate NICE-compliant HTA report
+#' @param result Analysis result
+#' @param data Study data
+#' @param config Report configuration
+#' @return Complete NICE HTA report
+generate_nice_hta_report <- function(result, data, config) {
+
+  report <- list(title = "Health Technology Assessment: NICE Evidence Report")
+
+  # NICE reports have mandated sections
+  report$executive_summary <- generate_nice_executive_summary(result, data)
+  report$decision_problem <- generate_nice_decision_problem(result, data)
+  report$clinical_effectiveness <- generate_nice_clinical_effectiveness(result, data)
+  report$cost_effectiveness <- generate_nice_cost_effectiveness(result, data)
+  report$budget_impact <- generate_nice_budget_impact(result, data)
+  report$equity_considerations <- generate_nice_equity(result, data)
+  report$conclusions <- generate_nice_conclusions(result, data)
+
+  return(report)
+}
+
+generate_nice_executive_summary <- function(result, data) {
+
+  paste(
+    "EXECUTIVE SUMMARY\n\n",
+    "This health technology assessment evaluates the clinical and cost-effectiveness of [intervention] compared with [comparator] for [population].\n\n",
+    "Key Findings:\n",
+    "• Clinical Effectiveness: [Summary of clinical evidence]\n",
+    "• Cost-Effectiveness: Incremental cost-effectiveness ratio (ICER) of £[value] per QALY gained\n",
+    "• Budget Impact: Estimated [£X million] over [Y] years\n",
+    "• Recommendation: [Intervention] is/is not recommended for use within the NHS for [population]\n\n",
+    "The decision is based on systematic review of clinical evidence, economic modeling, and consideration of NHS resource allocation principles.\n\n",
+    sep = ""
+  )
+}
+
+generate_nice_decision_problem <- function(result, data) {
+
+  paste(
+    "1. DEFINITION OF THE DECISION PROBLEM\n\n",
+    "1.1 Population\n",
+    "The population of interest includes [description]. Key characteristics:\n",
+    "• Age: [range]\n",
+    "• Disease severity: [description]\n",
+    "• Prior treatments: [description]\n\n",
+    "1.2 Intervention\n",
+    "[Intervention name and description]\n",
+    "• Mechanism of action: [description]\n",
+    "• Posology: [dosing]\n",
+    "• Administration: [route and frequency]\n\n",
+    "1.3 Comparator\n",
+    "The comparator is [current standard of care] as established in NICE Clinical Guideline [CG number].\n\n",
+    "1.4 Outcomes\n",
+    "Primary outcomes:\n",
+    "• [Primary outcome 1]\n",
+    "• [Primary outcome 2]\n\n",
+    "Secondary outcomes:\n",
+    "• Quality of life (measured using EQ-5D-5L)\n",
+    "• Adverse events\n",
+    "• Healthcare resource utilization\n\n",
+    sep = ""
+  )
+}
+
+generate_nice_clinical_effectiveness <- function(result, data) {
+
+  paste(
+    "2. ASSESSMENT OF CLINICAL EFFECTIVENESS\n\n",
+    "2.1 Systematic Review Methods\n",
+    "A systematic review was conducted in accordance with the NICE manual for health technology assessment. ",
+    "The review protocol was registered with PROSPERO (CRD[number]). ",
+    "Searches were conducted in MEDLINE, Embase, Cochrane CENTRAL, and clinical trial registries up to [date].\n\n",
+    "2.2 Study Selection and Quality Assessment\n",
+    "Included studies: [N] randomized controlled trials ([total N] participants)\n",
+    "Risk of bias was assessed using the Cochrane Risk of Bias tool (RoB 2.0). ",
+    "[X] studies were rated as low risk, [Y] as having some concerns, and [Z] as high risk of bias.\n\n",
+    "See Appendix A for PRISMA flow diagram.\n",
+    "See Appendix B for study characteristics table.\n",
+    "See Appendix C for risk of bias assessments.\n\n",
+    "2.3 Synthesis of Clinical Evidence\n",
+    "Random-effects meta-analysis was performed using the DerSimonian-Laird method. ",
+    sprintf("The pooled effect size was [estimate] (95%% CI [lower, upper], p = [value]). "),
+    "Statistical heterogeneity was [interpretation] (I² = [value]%).\n\n",
+    "2.4 Certainty of Evidence (GRADE)\n",
+    "The certainty of evidence was assessed using GRADE methodology:\n",
+    "• [Outcome 1]: [High/Moderate/Low/Very Low] certainty\n",
+    "• [Outcome 2]: [High/Moderate/Low/Very Low] certainty\n\n",
+    "See Appendix D for GRADE evidence profiles.\n\n",
+    sep = ""
+  )
+}
+
+generate_nice_cost_effectiveness <- function(result, data) {
+
+  paste(
+    "3. ECONOMIC EVALUATION\n\n",
+    "3.1 Methods\n",
+    "A cost-utility analysis was conducted from an NHS and Personal Social Services perspective, ",
+    "in accordance with the NICE reference case. The analysis used a [time horizon]-year time horizon, ",
+    "appropriate for capturing all relevant costs and health outcomes. ",
+    "Costs and QALYs were discounted at 3.5% per annum.\n\n",
+    "3.2 Model Structure\n",
+    "A [model type] was developed to estimate lifetime costs and QALYs. ",
+    "Model parameters were derived from the systematic review of clinical effectiveness, ",
+    "published literature, and expert clinical opinion where evidence was lacking.\n\n",
+    "3.3 Costs\n",
+    "All costs are presented in 2024 GBP (£). Key cost components:\n",
+    "• Intervention cost: £[value] per [cycle/year]\n",
+    "• Comparator cost: £[value] per [cycle/year]\n",
+    "• Healthcare resource use costs: [description]\n\n",
+    "Costs were obtained from NHS Reference Costs, BNF, and PSSRU Unit Costs.\n\n",
+    "3.4 Health Outcomes\n",
+    "Health outcomes were measured in quality-adjusted life years (QALYs) using EQ-5D-5L utility values ",
+    "where available, supplemented by mapping algorithms when necessary.\n\n",
+    "3.5 Base Case Results\n",
+    sprintf("The incremental cost-effectiveness ratio (ICER) is £[value] per QALY gained. "),
+    sprintf("At the NICE threshold of £20,000-£30,000 per QALY, [intervention] is/is not cost-effective.\n\n"),
+    "3.6 Sensitivity Analyses\n",
+    "Probabilistic sensitivity analysis (PSA) using 10,000 Monte Carlo simulations indicates:\n",
+    "• Probability cost-effective at £20,000/QALY: [X]%\n",
+    "• Probability cost-effective at £30,000/QALY: [Y]%\n\n",
+    "Deterministic sensitivity analyses identified the following key drivers:\n",
+    "• [Parameter 1]: ICER range £[low] to £[high]\n",
+    "• [Parameter 2]: ICER range £[low] to £[high]\n\n",
+    "See Appendix E for cost-effectiveness plane.\n",
+    "See Appendix F for cost-effectiveness acceptability curves.\n",
+    "See Appendix G for tornado diagram.\n\n",
+    sep = ""
+  )
+}
+
+generate_nice_budget_impact <- function(result, data) {
+
+  paste(
+    "4. BUDGET IMPACT ANALYSIS\n\n",
+    "4.1 Eligible Population\n",
+    "Based on epidemiological data, the estimated eligible population in England is [N] patients per year.\n\n",
+    "4.2 Market Uptake Assumptions\n",
+    "Uptake of [intervention] is assumed to be:\n",
+    "• Year 1: [X]%\n",
+    "• Year 2: [Y]%\n",
+    "• Year 3: [Z]%\n",
+    "• Year 4-5: [W]%\n\n",
+    "4.3 Budget Impact Estimates\n",
+    "Total budget impact over 5 years:\n",
+    "• Year 1: £[X] million\n",
+    "• Year 2: £[Y] million\n",
+    "• Year 3: £[Z] million\n",
+    "• Year 4: £[A] million\n",
+    "• Year 5: £[B] million\n",
+    "• Total: £[Total] million\n\n",
+    "This represents approximately £[X] per patient per year and [Y]% of the total [condition] treatment budget.\n\n",
+    sep = ""
+  )
+}
+
+generate_nice_equity <- function(result, data) {
+
+  paste(
+    "5. EQUITY AND EQUALITY CONSIDERATIONS\n\n",
+    "5.1 Health Inequalities\n",
+    "The following potential impacts on health inequalities have been considered:\n",
+    "• [Consideration 1]\n",
+    "• [Consideration 2]\n\n",
+    "5.2 Protected Characteristics\n",
+    "Analysis of differential effects by:\n",
+    "• Age: [findings]\n",
+    "• Sex/Gender: [findings]\n",
+    "• Ethnicity: [findings]\n",
+    "• Disability: [findings]\n\n",
+    "5.3 Innovation\n",
+    "[Intervention] represents a [step-change/incremental] innovation in the treatment of [condition].\n\n",
+    sep = ""
+  )
+}
+
+generate_nice_conclusions <- function(result, data) {
+
+  paste(
+    "6. DISCUSSION AND CONCLUSIONS\n\n",
+    "6.1 Summary of Key Findings\n",
+    "[Intervention] demonstrates [description of clinical effectiveness] compared with [comparator]. ",
+    "The economic evaluation indicates an ICER of £[value] per QALY gained.\n\n",
+    "6.2 Strengths and Limitations\n",
+    "Strengths:\n",
+    "• High-quality systematic review following NICE methods\n",
+    "• Robust economic model aligned with NICE reference case\n",
+    "• Comprehensive uncertainty analysis\n\n",
+    "Limitations:\n",
+    "• [Limitation 1]\n",
+    "• [Limitation 2]\n\n",
+    "6.3 Areas for Future Research\n",
+    "• [Research need 1]\n",
+    "• [Research need 2]\n\n",
+    "6.4 Conclusions\n",
+    "[Intervention] is/is not recommended for routine use in the NHS for [population]. ",
+    "This recommendation is based on the balance of clinical effectiveness, cost-effectiveness, ",
+    "and consideration of NHS resource constraints.\n\n",
+    sep = ""
+  )
 }
 
 # ============================================================================
