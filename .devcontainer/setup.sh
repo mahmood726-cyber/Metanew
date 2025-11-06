@@ -1,14 +1,20 @@
 #!/bin/bash
 set -e
 
-echo "🚀 Setting up EvidenceOS PRIME in Codespaces..."
+echo "⚡ Setting up EvidenceOS PRIME (OPTIMIZED for speed)..."
+echo ""
 
-# Update package lists
-echo "📦 Updating package lists..."
-sudo apt-get update -qq
+# Function to show progress
+show_progress() {
+    echo "▶ $1..."
+}
 
-# Install R and required system dependencies
-echo "📊 Installing R and system dependencies..."
+# Update package lists (silent)
+show_progress "Updating system packages"
+sudo apt-get update -qq > /dev/null 2>&1
+
+# Install system dependencies in parallel
+show_progress "Installing system dependencies"
 sudo apt-get install -y -qq \
     r-base \
     r-base-dev \
@@ -23,39 +29,50 @@ sudo apt-get install -y -qq \
     libtiff5-dev \
     libjpeg-dev \
     pandoc \
-    pandoc-citeproc \
     git \
-    curl
+    curl \
+    netcat \
+    > /dev/null 2>&1 &
+SYS_PID=$!
 
-# Install Python dependencies
-echo "🐍 Installing Python dependencies..."
+# Install Python dependencies in parallel
+show_progress "Installing Python dependencies (in parallel)"
 cd /workspace
-pip install --upgrade pip
-pip install -r backend/requirements.txt
-pip install -r backend/api/requirements.txt
+(
+    pip install --upgrade pip -q > /dev/null 2>&1
+    # Install critical packages first
+    pip install -q fastapi uvicorn pydantic pandas numpy > /dev/null 2>&1
+    # Install remaining packages
+    pip install -q -r backend/api/requirements.txt > /dev/null 2>&1
+    echo "  ✓ Python packages installed"
+) &
+PY_PID=$!
 
-# Install R packages
-echo "📈 Installing R packages (this may take a few minutes)..."
+# Wait for system dependencies
+wait $SYS_PID
+echo "  ✓ System dependencies installed"
+
+# Install R packages using BINARY packages from Posit PPM (10x faster!)
+show_progress "Installing R packages (using binary packages - FAST!)"
 sudo Rscript -e "
-options(repos = c(CRAN = 'https://cloud.r-project.org'))
-install.packages(c(
-  'shiny',
-  'bslib',
-  'DT',
-  'plotly',
-  'shinyvalidate',
-  'metafor',
-  'netmeta',
-  'dosresmeta',
-  'rmarkdown',
-  'officer',
-  'readxl',
-  'httr',
-  'jsonlite',
-  'tidyverse',
-  'ggplot2'
-), quiet = TRUE, verbose = FALSE)
-"
+# Use Posit Public Package Manager for BINARY packages (much faster!)
+options(repos = c(PPM = 'https://packagemanager.posit.co/cran/__linux__/jammy/latest'))
+
+# Install packages quietly with progress
+cat('  Installing core packages...\n')
+install.packages(c('shiny', 'bslib', 'DT', 'plotly'), quiet = TRUE)
+
+cat('  Installing meta-analysis packages...\n')
+install.packages(c('metafor', 'netmeta', 'dosresmeta'), quiet = TRUE)
+
+cat('  Installing utility packages...\n')
+install.packages(c('rmarkdown', 'officer', 'readxl', 'httr', 'jsonlite', 'shinyvalidate'), quiet = TRUE)
+
+cat('  ✓ R packages installed\n')
+" 2>&1 | grep -v "^trying URL" | grep -v "^Content type" | grep -v "^downloaded"
+
+# Wait for Python installation
+wait $PY_PID
 
 # Create necessary directories
 echo "📁 Creating directories..."

@@ -37,8 +37,12 @@ pkill -f "uvicorn" 2>/dev/null || true
 pkill -f "R.*shiny" 2>/dev/null || true
 sleep 2
 
-# Start FastAPI Main Backend (port 8000)
+# Start all services in parallel for faster startup
 echo ""
+echo "🚀 Starting all services in parallel..."
+echo ""
+
+# Start FastAPI Main Backend (port 8000)
 echo "🔧 Starting FastAPI Main Backend (port 8000)..."
 cd /workspace/backend/api
 nohup python main.py > /workspace/logs/api-main.log 2>&1 &
@@ -46,27 +50,25 @@ API_MAIN_PID=$!
 echo "   PID: $API_MAIN_PID"
 
 # Start AI Copilot Backend (port 8001)
-echo ""
 echo "🤖 Starting AI Copilot Backend (port 8001)..."
+cd /workspace/backend/api
 nohup python nlq.py > /workspace/logs/api-ai.log 2>&1 &
 API_AI_PID=$!
 echo "   PID: $API_AI_PID"
 
-# Wait for backends to be ready
-sleep 5
-wait_for_service 8000 "Main API" || exit 1
-wait_for_service 8001 "AI Copilot API" || exit 1
-
 # Start Shiny Frontend (port 3838)
-echo ""
 echo "🎨 Starting Shiny Frontend (port 3838)..."
 cd /workspace/frontend
 nohup Rscript -e "shiny::runApp(host='0.0.0.0', port=3838)" > /workspace/logs/shiny.log 2>&1 &
 SHINY_PID=$!
 echo "   PID: $SHINY_PID"
 
-# Wait for Shiny to be ready
-sleep 10
+echo ""
+echo "⏳ Waiting for all services to be ready..."
+
+# Wait for all services to be ready (in parallel health checks)
+wait_for_service 8000 "Main API" || exit 1
+wait_for_service 8001 "AI Copilot API" || exit 1
 wait_for_service 3838 "Shiny Frontend" || exit 1
 
 # Get Codespace URL

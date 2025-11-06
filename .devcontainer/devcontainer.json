@@ -1,8 +1,6 @@
 {
   "name": "EvidenceOS PRIME Development",
-  "dockerComposeFile": "../docker-compose.yml",
-  "service": "shiny-frontend",
-  "workspaceFolder": "/workspace",
+  "image": "mcr.microsoft.com/devcontainers/base:ubuntu-22.04",
 
   // Features to install
   "features": {

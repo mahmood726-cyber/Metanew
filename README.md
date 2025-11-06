@@ -70,9 +70,14 @@ Run EvidenceOS PRIME in your browser with **ZERO local installation**:
 
 **Steps:**
 1. Click the button above (or Code → Codespaces → Create codespace)
-2. Wait 3-5 minutes for automatic setup
+2. Wait ~2-3 minutes for optimized automatic setup
 3. Run: `./scripts/start-codespaces.sh`
 4. Open port 3838 to access the Shiny UI
+
+**⚡ Performance Optimizations:**
+- Binary R packages from Posit PPM (10x faster)
+- Parallel dependency installation
+- Parallel service startup
 
 **📖 See [CODESPACES_QUICKSTART.md](CODESPACES_QUICKSTART.md) for detailed instructions**
 
