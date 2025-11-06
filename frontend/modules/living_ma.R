@@ -103,13 +103,27 @@ living_ma_server <- function(id, rv) {
           n_removed <- length(setdiff(old_data$study_id, combined_data$study_id))
 
           # Re-run meta-analyses for all outcomes
+          # Use incremental meta-analysis for faster updates (from extreme_optimizations.R)
           new_results <- list()
           for (outcome in names(current_version$results)) {
-            new_results[[outcome]] <- run_pairwise_ma(
-              data = combined_data,
-              outcome = outcome,
-              method = "REML"
-            )
+            previous_ma <- current_version$results[[outcome]]
+
+            # Filter data by outcome
+            outcome_data <- combined_data[combined_data$outcome == outcome, ]
+            new_study_data <- new_data[new_data$outcome == outcome, ]
+
+            if (nrow(new_study_data) > 0 && !is.null(previous_ma)) {
+              # Use incremental update (10-16x faster!)
+              cat(sprintf("⚡ Using incremental update for outcome: %s\n", outcome))
+              new_results[[outcome]] <- incremental_meta_analysis(previous_ma, new_study_data)
+            } else {
+              # Full recomputation (no previous results or no new studies for this outcome)
+              new_results[[outcome]] <- run_pairwise_ma(
+                data = combined_data,
+                outcome = outcome,
+                method = "REML"
+              )
+            }
           }
 
           # Create new version

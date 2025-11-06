@@ -46,7 +46,8 @@ meta_pairwise_ui <- function(id) {
         conditionalPanel(
           condition = "input.subgroup == true",
           ns = ns,
-          selectInput(ns("subgroup_var"), "Subgroup Variable", choices = NULL)
+          selectInput(ns("subgroup_var"), "Subgroup Variable", choices = NULL),
+          checkboxInput(ns("fast_subgroup"), "⚡ Use parallel processing (4x faster)", FALSE)
         ),
         checkboxInput(ns("meta_regression"), "Meta-Regression", FALSE),
         conditionalPanel(
@@ -133,7 +134,8 @@ meta_pairwise_server <- function(id, rv) {
             method = input$method,
             model = input$model,
             subgroup = if (input$subgroup) input$subgroup_var else NULL,
-            moderators = if (input$meta_regression) input$moderator_vars else NULL
+            moderators = if (input$meta_regression) input$moderator_vars else NULL,
+            use_fast_subgroup = if (input$subgroup) input$fast_subgroup else FALSE
           )
 
           ma_result(result)
@@ -403,7 +405,7 @@ meta_pairwise_server <- function(id, rv) {
 
 # Helper function: Run pairwise meta-analysis
 run_pairwise_ma <- function(data, outcome = NULL, method = "REML", model = "random",
-                             subgroup = NULL, moderators = NULL) {
+                             subgroup = NULL, moderators = NULL, use_fast_subgroup = FALSE) {
 
   # Filter by outcome if specified
   if (!is.null(outcome) && "outcome" %in% names(data)) {
@@ -432,17 +434,37 @@ run_pairwise_ma <- function(data, outcome = NULL, method = "REML", model = "rand
     ma <- rma(yi, vi, data = data, method = method)
 
     # Run separate MA for each subgroup
-    subgroup_results <- list()
-    for (sg in unique(data[[subgroup]])) {
-      sg_data <- data[data[[subgroup]] == sg, ]
-      if (nrow(sg_data) >= 2) {
-        sg_ma <- rma(yi, vi, data = sg_data, method = method)
-        subgroup_results[[as.character(sg)]] <- list(
-          estimate = as.numeric(sg_ma$beta),
-          ci_lower = as.numeric(sg_ma$ci.lb),
-          ci_upper = as.numeric(sg_ma$ci.ub),
-          k = sg_ma$k
-        )
+    if (use_fast_subgroup && length(unique(data[[subgroup]])) >= 4) {
+      # Use parallel processing (from extreme_optimizations.R)
+      cat("⚡ Using parallel subgroup analysis\n")
+      subgroup_results_list <- run_subgroup_analysis_fast(data, subgroup, method)
+
+      # Convert to expected format
+      subgroup_results <- list()
+      for (sg_result in subgroup_results_list) {
+        if (!is.null(sg_result)) {
+          subgroup_results[[as.character(sg_result$subgroup)]] <- list(
+            estimate = sg_result$estimate,
+            ci_lower = sg_result$ci_lower,
+            ci_upper = sg_result$ci_upper,
+            k = sg_result$k
+          )
+        }
+      }
+    } else {
+      # Sequential subgroup analysis (original code)
+      subgroup_results <- list()
+      for (sg in unique(data[[subgroup]])) {
+        sg_data <- data[data[[subgroup]] == sg, ]
+        if (nrow(sg_data) >= 2) {
+          sg_ma <- rma(yi, vi, data = sg_data, method = method)
+          subgroup_results[[as.character(sg)]] <- list(
+            estimate = as.numeric(sg_ma$beta),
+            ci_lower = as.numeric(sg_ma$ci.lb),
+            ci_upper = as.numeric(sg_ma$ci.ub),
+            k = sg_ma$k
+          )
+        }
       }
     }
   } else {

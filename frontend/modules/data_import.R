@@ -47,6 +47,17 @@ data_import_ui <- function(id) {
           ns("btn_compute_yi"),
           "Compute Effect Sizes",
           class = "btn-success w-100 mt-2"
+        ),
+        hr(),
+        tags$div(
+          class = "text-center",
+          tags$small(class = "text-muted", "Or try a demo:"),
+          actionButton(
+            ns("btn_load_demo"),
+            "⚡ Load Demo Data",
+            class = "btn-info w-100 mt-2",
+            icon = icon("bolt")
+          )
         )
       ),
 
@@ -110,6 +121,30 @@ data_import_server <- function(id, rv) {
       }, error = function(e) {
         showNotification(
           paste("Error loading file:", e$message),
+          type = "error",
+          duration = 10
+        )
+      })
+    })
+
+    # Load demo data
+    observeEvent(input$btn_load_demo, {
+      tryCatch({
+        # Generate sample meta-analysis data (from sample_data_loader.R)
+        data <- generate_sample_ma_data()
+
+        uploaded_data(data)
+        rv$data <- data
+
+        showNotification(
+          "⚡ Demo data loaded! (15 cardiovascular studies)",
+          type = "message",
+          duration = 5
+        )
+
+      }, error = function(e) {
+        showNotification(
+          paste("Error loading demo data:", e$message),
           type = "error",
           duration = 10
         )

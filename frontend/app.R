@@ -20,15 +20,20 @@ source("modules/sensitivity.R")
 source("modules/he_params.R")
 source("modules/he_model.R")
 source("modules/he_bcea.R")
+source("modules/he_budget_impact.R")  # Budget impact analysis
 source("modules/reporting.R")
 source("modules/audit.R")
 source("modules/ai_copilot.R")
 source("modules/v2_features.R")
+source("modules/client_portal.R")  # Client portal generator
+source("modules/living_ma.R")  # Living meta-analysis
 
 # Source utilities
 source("utils/python_bridge.R")
 source("utils/plotting.R")
 source("utils/validators.R")
+source("utils/sample_data_loader.R")  # Demo data generator
+source("utils/extreme_optimizations.R")  # Advanced performance functions
 
 # Define UI
 ui <- page_navbar(
@@ -98,6 +103,10 @@ ui <- page_navbar(
       nav_panel(
         "Results (BCEA)",
         he_bcea_ui("he_bcea")
+      ),
+      nav_panel(
+        "Budget Impact",
+        he_budget_impact_ui("budget_impact")
       )
     )
   ),
@@ -128,6 +137,20 @@ ui <- page_navbar(
     title = "V2 Features",
     icon = icon("rocket"),
     v2_features_ui("v2_features")
+  ),
+
+  # Tab: Client Portal
+  nav_panel(
+    title = "Client Portal",
+    icon = icon("globe"),
+    client_portal_ui("client_portal")
+  ),
+
+  # Tab: Living MA
+  nav_panel(
+    title = "Living MA",
+    icon = icon("arrows-rotate"),
+    living_ma_ui("living_ma")
   ),
 
   # Sidebar for global controls
@@ -200,10 +223,13 @@ server <- function(input, output, session) {
   he_params_results <- he_params_server("he_params", rv)
   he_model_results <- he_model_server("he_model", rv)
   he_bcea_results <- he_bcea_server("he_bcea", rv)
+  budget_impact_results <- he_budget_impact_server("budget_impact", rv)
   ai_copilot_results <- ai_copilot_server("ai_copilot", rv)
   reporting_results <- reporting_server("reporting", rv)
   audit_results <- audit_server("audit", rv)
   v2_results <- v2_features_server("v2_features", rv)
+  client_portal_results <- client_portal_server("client_portal", rv)
+  living_ma_results <- living_ma_server("living_ma", rv)
 
   # Save session handler
   observeEvent(input$btn_save_session, {
