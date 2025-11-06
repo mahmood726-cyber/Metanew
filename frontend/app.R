@@ -9,6 +9,7 @@ library(shinyvalidate)
 library(metafor)
 library(netmeta)
 library(dosresmeta)
+library(colourpicker)  # For theme color picker
 
 # Source modules
 source("modules/data_import.R")
@@ -27,6 +28,7 @@ source("modules/ai_copilot.R")
 source("modules/v2_features.R")
 source("modules/client_portal.R")  # Client portal generator
 source("modules/living_ma.R")  # Living meta-analysis
+source("modules/theme_customizer.R")  # Visual theme customizer
 
 # Source utilities
 source("utils/python_bridge.R")
@@ -45,6 +47,15 @@ ui <- page_navbar(
     base_font = font_google("Inter")
   ),
   fillable = TRUE,
+
+  # Include theme switcher JavaScript
+  tags$head(
+    tags$script(src = "theme-switcher.js"),
+    tags$link(rel = "stylesheet", href = "https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap")
+  ),
+
+  # Theme Customizer (floating panel)
+  theme_customizer_ui("theme_customizer"),
 
   # Tab: Data Import
   nav_panel(
@@ -214,6 +225,7 @@ server <- function(input, output, session) {
   })
 
   # Module servers
+  theme_customizer_server("theme_customizer", session)  # Theme customizer
   data_results <- data_import_server("data_import", rv)
   protocol_results <- protocol_server("protocol", rv)
   pairwise_results <- meta_pairwise_server("pairwise", rv)
