@@ -1,9 +1,11 @@
-# Network Meta-Analysis Module - FIXED VERSION
+# Network Meta-Analysis Module - WITH MULTI-LEVEL SUPPORT
 library(shiny)
 library(netmeta)
+library(metafor)
 
 # Source utilities
 source("utils/plot_downloads.R", local = TRUE)
+source("utils/multilevel_nma.R", local = TRUE)
 
 nma_ui <- function(id) {
   ns <- NS(id)
@@ -14,8 +16,23 @@ nma_ui <- function(id) {
         card_header("NMA Settings"),
         selectInput(ns("outcome"), "Outcome", choices = NULL),
         selectInput(ns("reference"), "Reference Treatment", choices = NULL),
+        selectInput(ns("nma_type"), "NMA Type",
+                    choices = c("Standard NMA (netmeta)" = "standard",
+                               "Multi-Level NMA (rma.mv)" = "multilevel"),
+                    selected = "standard"),
         selectInput(ns("method"), "Method",
                     choices = c("Random Effects" = "random", "Fixed Effect" = "fixed")),
+        conditionalPanel(
+          condition = "input.nma_type == 'multilevel'",
+          ns = ns,
+          numericInput(ns("correlation"), "Within-Study Correlation",
+                      value = 0.5, min = 0, max = 1, step = 0.1),
+          selectInput(ns("vcov_structure"), "Variance Structure",
+                     choices = c("Unstructured" = "UN",
+                                "Compound Symmetry" = "CS",
+                                "Autoregressive" = "AR")),
+          helpText("Multi-level NMA properly handles multi-arm trials and within-study correlations.")
+        ),
         checkboxInput(ns("check_inconsistency"), "Check Inconsistency", TRUE),
         hr(),
         helpText("Note: For NMA, data should have multiple treatments per study."),
@@ -64,8 +81,29 @@ nma_server <- function(id, rv) {
 
       withProgress(message = "Running NMA...", {
         tryCatch({
-          result <- run_nma(rv$data, input$outcome, input$reference,
-                           input$method, input$check_inconsistency)
+          if (input$nma_type == "multilevel") {
+            # Multi-level NMA using rma.mv
+            result <- run_multilevel_nma(
+              data = rv$data,
+              outcome = input$outcome,
+              reference = input$reference,
+              correlation = input$correlation,
+              struct = input$vcov_structure,
+              method = ifelse(input$method == "random", "REML", "ML")
+            )
+            # Convert to standard format for display
+            result$is_multilevel <- TRUE
+            result$league_table <- generate_league_table_multilevel(
+              result$pairwise_comparisons,
+              result$treatments
+            )
+          } else {
+            # Standard NMA using netmeta
+            result <- run_nma(rv$data, input$outcome, input$reference,
+                            input$method, input$check_inconsistency)
+            result$is_multilevel <- FALSE
+          }
+
           nma_result(result)
           rv$nma_results[[input$outcome]] <- result
           showNotification("✓ NMA complete", type = "message")
@@ -81,19 +119,41 @@ nma_server <- function(id, rv) {
 
       cat("NETWORK META-ANALYSIS RESULTS\n")
       cat("==============================\n\n")
-      cat("Number of studies:", result$n_studies, "\n")
-      cat("Number of treatments:", result$n_treatments, "\n")
-      cat("Reference treatment:", result$reference, "\n")
-      cat("Method:", result$method, "\n\n")
 
-      if (!is.null(result$heterogeneity)) {
-        cat("Heterogeneity:\n")
-        cat(sprintf("  τ² = %.3f\n", result$heterogeneity$tau2))
-        cat(sprintf("  I² = %.1f%%\n", result$heterogeneity$I2))
+      if (isTRUE(result$is_multilevel)) {
+        cat("Method: Multi-Level NMA (rma.mv)\n")
+      } else {
+        cat("Method: Standard NMA (netmeta)\n")
       }
 
-      cat("\nModel Summary:\n")
-      print(summary(result$model))
+      cat("Number of studies:", result$n_studies, "\n")
+      cat("Number of treatments:", result$n_treatments, "\n")
+      cat("Reference treatment:", result$reference, "\n\n")
+
+      if (isTRUE(result$is_multilevel)) {
+        # Multi-level results
+        cat("Diagnostics:\n")
+        cat(sprintf("  τ² = %.3f\n", result$diagnostics$tau2[1]))
+        cat(sprintf("  I² = %.1f%%\n", result$diagnostics$I2))
+        cat(sprintf("  Q = %.2f (p = %.4f)\n", result$diagnostics$QE, result$diagnostics$QEp))
+        cat(sprintf("  AIC = %.1f, BIC = %.1f\n", result$diagnostics$AIC, result$diagnostics$BIC))
+        cat(sprintf("  Within-study correlation: %.2f\n", result$correlation_assumed))
+        cat(sprintf("  Variance structure: %s\n\n", result$structure))
+
+        cat("Treatment Effects (vs", result$reference, "):\n")
+        print(result$treatment_effects)
+
+      } else {
+        # Standard NMA results
+        if (!is.null(result$heterogeneity)) {
+          cat("Heterogeneity:\n")
+          cat(sprintf("  τ² = %.3f\n", result$heterogeneity$tau2))
+          cat(sprintf("  I² = %.1f%%\n", result$heterogeneity$I2))
+        }
+
+        cat("\nModel Summary:\n")
+        print(summary(result$model))
+      }
     })
 
     output$league_table <- renderDT({
@@ -129,13 +189,19 @@ nma_server <- function(id, rv) {
       req(nma_result())
       result <- nma_result()
 
-      netgraph(result$model,
-               cex = 1.5,
-               col = "steelblue",
-               thickness = "number.of.studies",
-               number.of.studies = TRUE,
-               labels = result$treatments,
-               main = "Evidence Network")
+      if (isTRUE(result$is_multilevel)) {
+        # Forest plot for multi-level NMA
+        plot_multilevel_nma_forest(result$treatment_effects, result$reference)
+      } else {
+        # Network graph for standard NMA
+        netgraph(result$model,
+                 cex = 1.5,
+                 col = "steelblue",
+                 thickness = "number.of.studies",
+                 number.of.studies = TRUE,
+                 labels = result$treatments,
+                 main = "Evidence Network")
+      }
     })
 
     output$inconsistency <- renderPrint({
@@ -145,18 +211,31 @@ nma_server <- function(id, rv) {
       cat("INCONSISTENCY ASSESSMENT\n")
       cat("========================\n\n")
 
-      if (!is.null(result$inconsistency)) {
-        cat("Design-by-treatment interaction model:\n\n")
-        print(result$inconsistency)
-
-        if (result$inconsistency$p.value > 0.05) {
-          cat("\n✓ No significant inconsistency detected (p > 0.05)\n")
-        } else {
-          cat("\n⚠ Significant inconsistency detected (p < 0.05)\n")
-          cat("  Consider fixed-effects model or investigate sources of inconsistency.\n")
+      if (isTRUE(result$is_multilevel)) {
+        # Multi-level inconsistency check
+        if (!is.null(result$inconsistency)) {
+          cat("Method:", result$inconsistency$method, "\n\n")
+          cat(sprintf("Q = %.2f (df = %d, p = %.4f)\n",
+                     result$inconsistency$Q,
+                     result$inconsistency$df,
+                     result$inconsistency$p_value))
+          cat("\n", result$inconsistency$interpretation, "\n")
         }
       } else {
-        cat("Inconsistency check not performed.\n")
+        # Standard NMA inconsistency
+        if (!is.null(result$inconsistency)) {
+          cat("Design-by-treatment interaction model:\n\n")
+          print(result$inconsistency)
+
+          if (result$inconsistency$p.value > 0.05) {
+            cat("\n✓ No significant inconsistency detected (p > 0.05)\n")
+          } else {
+            cat("\n⚠ Significant inconsistency detected (p < 0.05)\n")
+            cat("  Consider fixed-effects model or investigate sources of inconsistency.\n")
+          }
+        } else {
+          cat("Inconsistency check not performed.\n")
+        }
       }
     })
 
