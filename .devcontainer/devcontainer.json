@@ -1,6 +1,6 @@
 {
-  "name": "EvidenceOS PRIME",
-  "dockerComposeFile": ["../docker-compose.yml"],
+  "name": "EvidenceOS PRIME - Fast Start",
+  "dockerComposeFile": ["../docker-compose.prod.yml"],
   "service": "ai-backend",
   "workspaceFolder": "/workspace",
 

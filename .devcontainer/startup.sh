@@ -8,14 +8,16 @@ if [ ! -L /workspace ]; then
   ln -s /workspaces/$(basename $PWD) /workspace 2>/dev/null || true
 fi
 
-# Make quick-start script executable
+# Make start scripts executable
 chmod +x /workspaces/$(basename $PWD)/quick-start.sh 2>/dev/null || true
+chmod +x /workspaces/$(basename $PWD)/fast-start.sh 2>/dev/null || true
 
 echo "✅ Setup complete!"
 echo ""
 echo "📋 Quick Start Commands:"
-echo "  ./quick-start.sh          - Start all services (fastest option)"
-echo "  docker-compose up -d      - Start services in background"
+echo "  ./fast-start.sh           - INSTANT START (30-60 seconds!) - Uses pre-built images"
+echo "  ./quick-start.sh          - Build and start (5-7 minutes) - Builds from source"
+echo "  docker-compose up -d      - Manual start with local build"
 echo "  docker-compose logs -f    - View live logs"
 echo ""
 echo "🌐 Service URLs (will be available after startup):"

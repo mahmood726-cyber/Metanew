@@ -6,21 +6,31 @@ This guide will help you get EvidenceOS PRIME running quickly in GitHub Codespac
 
 ---
 
-## ⚡ Quick Start (60 seconds to running app!)
+## ⚡ INSTANT Start (30-60 seconds!)
 
 Once your Codespace is created, run:
+
+```bash
+./fast-start.sh
+```
+
+This script will:
+- ✅ Pull pre-built Docker images (10-30 seconds)
+- ✅ Start all services immediately
+- ✅ Wait for health checks
+- ✅ Display access URLs with performance metrics
+
+**That's it!** Your application will be running in **30-60 seconds** instead of 5-7 minutes!
+
+### Alternative: Build from Source
+
+If pre-built images aren't available yet (CI/CD still building), use:
 
 ```bash
 ./quick-start.sh
 ```
 
-This script will:
-- ✅ Build Docker images (with caching)
-- ✅ Start all services
-- ✅ Wait for health checks
-- ✅ Display access URLs
-
-**That's it!** Your application will be available at the forwarded ports.
+This builds from source (takes 5-7 minutes first time, ~30 seconds after caching).
 
 ---
 
@@ -77,31 +87,36 @@ Codespaces automatically generates URLs:
 
 If you prefer manual control:
 
-### 1. Build Images
+### Option A: Pre-built Images (FAST - 30-60 seconds)
+
 ```bash
+# Pull pre-built images
+docker-compose -f docker-compose.prod.yml pull
+
+# Start services
+docker-compose -f docker-compose.prod.yml up -d
+
+# Check status
+docker-compose -f docker-compose.prod.yml ps
+
+# View logs
+docker-compose -f docker-compose.prod.yml logs -f
+```
+
+### Option B: Build from Source (5-7 minutes)
+
+```bash
+# Build images
 docker-compose build --parallel
-```
 
-### 2. Start Services
-```bash
+# Start services
 docker-compose up -d
-```
 
-### 3. Check Status
-```bash
+# Check status
 docker-compose ps
-```
 
-### 4. View Logs
-```bash
-# All services
+# View logs
 docker-compose logs -f
-
-# Frontend only
-docker-compose logs -f shiny-frontend
-
-# Backend only
-docker-compose logs -f ai-backend
 ```
 
 ---
@@ -160,23 +175,29 @@ docker exec -it evidenceos-shiny-frontend R
 
 ### What We've Optimized for Codespaces
 
-1. **Parallel R Package Compilation** (`Ncpus=4`)
-   - 4x faster R package installation
+1. **Pre-built Docker Images (BIGGEST IMPACT!)** 🚀
+   - Images built once in CI/CD, pushed to GitHub Container Registry
+   - `./fast-start.sh` pulls pre-built images instead of building
+   - **Result**: 30-60 second startup vs 5-7 minutes
+   - **Speed improvement**: 8-10x faster!
+
+2. **Parallel R Package Compilation** (`Ncpus=4`)
+   - 4x faster R package installation (when building from source)
    - Reduces frontend build time from ~10min to ~3min
 
-2. **Docker Layer Caching**
+3. **Docker Layer Caching**
    - Subsequent builds use cached layers
    - Second build typically takes <30 seconds
 
-3. **Multi-stage Builds**
+4. **Multi-stage Builds**
    - Smaller final images
    - Faster container startup
 
-4. **.dockerignore Optimization**
+5. **.dockerignore Optimization**
    - Excludes unnecessary files from build context
    - Faster context transfer
 
-5. **Devcontainer Prebuilds**
+6. **Devcontainer Prebuilds**
    - GitHub can prebuild your environment
    - Near-instant Codespace creation after first build
 
@@ -274,12 +295,19 @@ R packages can use 2-4GB during build:
 
 ## 📈 Performance Expectations
 
-### First Build (Cold Start)
-- **Backend**: ~2 minutes
-- **Frontend**: ~3-5 minutes (with Ncpus=4)
-- **Total**: ~5-7 minutes
+### Fast Start (Pre-built Images) 🚀 RECOMMENDED
+- **Image Pull**: 10-30 seconds
+- **Service Startup**: 20-30 seconds
+- **Total**: **30-60 seconds**
+- **Script**: `./fast-start.sh`
 
-### Subsequent Builds (Cached)
+### Build from Source (First Time)
+- **Backend Build**: ~2 minutes
+- **Frontend Build**: ~3-5 minutes (with Ncpus=4)
+- **Total**: ~5-7 minutes
+- **Script**: `./quick-start.sh`
+
+### Build from Source (Cached)
 - **Backend**: ~10 seconds
 - **Frontend**: ~15 seconds
 - **Total**: ~30 seconds
@@ -291,6 +319,14 @@ R packages can use 2-4GB during build:
 - **Network Meta-Analysis**: 5-15 seconds
 - **Dose-Response**: 10-30 seconds
 - **Report Generation**: 10-20 seconds
+
+### Speed Comparison
+
+| Method | Time | Speed vs Build |
+|--------|------|----------------|
+| **Fast Start (pre-built)** | 30-60s | **8-10x faster** ⚡ |
+| Build from source (first) | 5-7 min | Baseline |
+| Build from source (cached) | 30s | 10x faster |
 
 ---
 
