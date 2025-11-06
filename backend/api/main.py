@@ -26,12 +26,19 @@ app = FastAPI(
 )
 
 # CORS middleware for R Shiny
+# Environment-based origin configuration for security
+ALLOWED_ORIGINS = os.getenv(
+    "ALLOWED_ORIGINS",
+    "http://localhost:3838,http://localhost:8000,http://127.0.0.1:3838"
+).split(",")
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=ALLOWED_ORIGINS,  # Restricted to configured origins
     allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allow_headers=["Content-Type", "Authorization", "Accept"],
+    max_age=3600,  # Cache preflight requests for 1 hour
 )
 
 
@@ -106,18 +113,24 @@ def bayesian_meta_analysis(data: Dict[str, Any]):
     """
     Optional Bayesian meta-analysis using PyMC
     Returns posterior distributions for pooled effect and heterogeneity
-    """
-    try:
-        # This is a placeholder for Bayesian analysis
-        # In production, this would use PyMC for full Bayesian inference
-        return {
-            "method": "bayesian",
-            "message": "Bayesian analysis not yet implemented - use R for frequentist MA",
-            "status": "pending"
-        }
 
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+    NOTE: This endpoint is not yet implemented. Use R's metafor for frequentist meta-analysis
+    or BayesianTools/brms for Bayesian approaches.
+    """
+    # Return proper HTTP 501 Not Implemented status
+    raise HTTPException(
+        status_code=501,
+        detail={
+            "error": "Not Implemented",
+            "message": "Bayesian meta-analysis is not yet implemented in the Python backend",
+            "alternatives": [
+                "Use metafor::rma() for frequentist random-effects meta-analysis",
+                "Use brms or BayesianTools packages in R for Bayesian meta-analysis",
+                "Use PyMC directly if Bayesian inference is required"
+            ],
+            "planned": "Future implementation will use PyMC for full Bayesian inference"
+        }
+    )
 
 
 @app.post("/evidence/hash")
