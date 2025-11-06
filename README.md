@@ -62,11 +62,29 @@ A comprehensive, end-to-end platform for systematic reviews, meta-analysis, netw
 
 ## 🚀 Quick Start
 
-### Prerequisites
+### ⚡ Option 1: GitHub Codespaces (Fastest - No Setup Required!)
+
+Run EvidenceOS PRIME in your browser with **ZERO local installation**:
+
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://github.com/codespaces/new)
+
+**Steps:**
+1. Click the button above (or Code → Codespaces → Create codespace)
+2. Wait 3-5 minutes for automatic setup
+3. Run: `./scripts/start-codespaces.sh`
+4. Open port 3838 to access the Shiny UI
+
+**📖 See [CODESPACES_QUICKSTART.md](CODESPACES_QUICKSTART.md) for detailed instructions**
+
+---
+
+### Option 2: Local Installation
+
+#### Prerequisites
 - Docker & Docker Compose (recommended)
 - OR: R 4.0+, Python 3.9+
 
-### Installation (Docker - Recommended)
+#### Installation (Docker - Recommended)
 
 ```bash
 # Clone repository

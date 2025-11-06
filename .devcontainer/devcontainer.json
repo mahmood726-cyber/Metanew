@@ -1,0 +1,94 @@
+{
+  "name": "EvidenceOS PRIME Development",
+  "dockerComposeFile": "../docker-compose.yml",
+  "service": "shiny-frontend",
+  "workspaceFolder": "/workspace",
+
+  // Features to install
+  "features": {
+    "ghcr.io/devcontainers/features/python:1": {
+      "version": "3.11"
+    },
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "18"
+    },
+    "ghcr.io/devcontainers/features/git:1": {},
+    "ghcr.io/devcontainers/features/github-cli:1": {}
+  },
+
+  // Configure tool-specific properties
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        "ms-toolsai.jupyter",
+        "reditorsupport.r",
+        "REditorSupport.r-lsp",
+        "ms-azuretools.vscode-docker",
+        "esbenp.prettier-vscode",
+        "dbaeumer.vscode-eslint",
+        "eamodio.gitlens",
+        "GitHub.copilot"
+      ],
+      "settings": {
+        "python.defaultInterpreterPath": "/usr/local/bin/python",
+        "python.linting.enabled": true,
+        "python.linting.pylintEnabled": true,
+        "python.formatting.provider": "black",
+        "editor.formatOnSave": true,
+        "editor.codeActionsOnSave": {
+          "source.organizeImports": true
+        },
+        "files.exclude": {
+          "**/__pycache__": true,
+          "**/.pytest_cache": true,
+          "**/.coverage": true
+        }
+      }
+    },
+    "codespaces": {
+      "openFiles": [
+        "README.md",
+        "CODESPACES_QUICKSTART.md"
+      ]
+    }
+  },
+
+  // Port forwarding
+  "forwardPorts": [
+    3838,  // Shiny frontend
+    8000,  // FastAPI main backend
+    8001   // AI Copilot backend
+  ],
+  "portsAttributes": {
+    "3838": {
+      "label": "Shiny Frontend",
+      "onAutoForward": "notify"
+    },
+    "8000": {
+      "label": "FastAPI Backend",
+      "onAutoForward": "silent"
+    },
+    "8001": {
+      "label": "AI Copilot",
+      "onAutoForward": "silent"
+    }
+  },
+
+  // Use 'postCreateCommand' to run commands after the container is created
+  "postCreateCommand": "bash .devcontainer/setup.sh",
+
+  // Use 'postStartCommand' to run commands after the container starts
+  "postStartCommand": "echo '🚀 EvidenceOS PRIME is ready! Run: ./scripts/start-codespaces.sh'",
+
+  // Set environment variables
+  "containerEnv": {
+    "ALLOWED_ORIGINS": "https://*.github.dev,https://*.preview.app.github.dev",
+    "ENVIRONMENT": "codespaces",
+    "PYTHONUNBUFFERED": "1"
+  },
+
+  // Comment out to connect as root instead
+  "remoteUser": "vscode"
+}
