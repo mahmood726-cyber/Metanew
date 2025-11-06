@@ -1,9 +1,7 @@
 # Health Economics BCEA Module
 # Cost-effectiveness analysis using BCEA package
-library(shiny)
-
-# Source utilities
-source("utils/plot_downloads.R", local = TRUE)
+# Dependencies: shiny (loaded in app.R)
+# Utilities: plot_downloads.R (sourced in app.R)
 
 he_bcea_ui <- function(id) {
   ns <- NS(id)

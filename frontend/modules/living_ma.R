@@ -1,5 +1,5 @@
 # Living Meta-Analysis Module - Incremental Updates
-library(shiny)
+# Dependencies: shiny (loaded in app.R)
 
 living_ma_ui <- function(id) {
   ns <- NS(id)

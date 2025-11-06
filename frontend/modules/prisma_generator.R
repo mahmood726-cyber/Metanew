@@ -3,13 +3,8 @@
 # with visual preview and export options
 #
 # Author: EvidenceOS PRIME
-
-library(shiny)
-library(bslib)
-
-# Source publication tools
-source("utils/publication_tools.R", local = TRUE)
-source("utils/plot_downloads.R", local = TRUE)
+# Dependencies: shiny, bslib (loaded in app.R)
+# Utilities: publication_tools.R, plot_downloads.R (sourced in app.R)
 
 prisma_generator_ui <- function(id) {
   ns <- NS(id)

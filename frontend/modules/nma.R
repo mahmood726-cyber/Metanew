@@ -1,11 +1,6 @@
 # Network Meta-Analysis Module - WITH MULTI-LEVEL SUPPORT
-library(shiny)
-library(netmeta)
-library(metafor)
-
-# Source utilities
-source("utils/plot_downloads.R", local = TRUE)
-source("utils/multilevel_nma.R", local = TRUE)
+# Dependencies: shiny, netmeta, metafor (loaded in app.R)
+# Utilities: plot_downloads.R, multilevel_nma.R (sourced in app.R)
 
 nma_ui <- function(id) {
   ns <- NS(id)

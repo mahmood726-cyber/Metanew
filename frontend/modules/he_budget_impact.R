@@ -1,5 +1,5 @@
 # Budget Impact Analysis Module
-library(shiny)
+# Dependencies: shiny (loaded in app.R)
 
 he_budget_impact_ui <- function(id) {
   ns <- NS(id)

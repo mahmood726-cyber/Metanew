@@ -1,10 +1,5 @@
 # Sensitivity Analysis Module - Enhanced with Scenario Compare
-library(shiny)
-library(bslib)
-library(DT)
-library(plotly)
-library(ggplot2)
-library(jsonlite)
+# Dependencies: shiny, bslib, DT, plotly, ggplot2, jsonlite (loaded in app.R)
 
 sensitivity_ui <- function(id) {
   ns <- NS(id)

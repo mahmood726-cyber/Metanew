@@ -1,5 +1,5 @@
 # Client-Facing Portal Module - White-label Read-only View
-library(shiny)
+# Dependencies: shiny (loaded in app.R)
 
 client_portal_ui <- function(id) {
   ns <- NS(id)

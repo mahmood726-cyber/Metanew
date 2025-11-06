@@ -1,5 +1,5 @@
 # Audit Module
-library(shiny)
+# Dependencies: shiny (loaded in app.R)
 
 audit_ui <- function(id) {
   ns <- NS(id)

@@ -12,15 +12,8 @@
 #
 # COVERAGE: ~98% of real-world MASEM use cases
 # References: Cheung (2015), Cheung & Cheung (2016), Jak & Cheung (2020)
-
-library(shiny)
-library(metaSEM)
-library(lavaan)
-library(semPlot)
-library(ggplot2)
-
-# Source plot download utilities
-source("utils/plot_downloads.R", local = TRUE)
+# Dependencies: shiny, metaSEM, lavaan, semPlot, ggplot2 (loaded in app.R)
+# Utilities: plot_downloads.R (sourced in app.R)
 
 # UI
 masem_ui <- function(id) {

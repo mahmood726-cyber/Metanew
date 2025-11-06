@@ -9,35 +9,68 @@
 # LAST UPDATED: 2025-11-06
 # ==============================================================================
 
+# ==============================================================================
+# REQUIRED LIBRARIES - All dependencies loaded here (not in modules)
+# ==============================================================================
+
+# Core Shiny
 library(shiny)
 library(bs4Dash)
-library(DT)
-library(plotly)
-library(shinyvalidate)
-library(metafor)
-library(netmeta)
-library(dosresmeta)
-library(colourpicker)
+library(bslib)       # Modern UI components (value_box, cards)
+library(DT)          # Data tables
+library(shinyvalidate) # Input validation
 
-# Additional libraries for publication tools
-library(bslib)       # For value_box in publication modules
-library(gt)          # For GRADE tables
-library(dplyr)       # Data manipulation
-library(ggplot2)     # Plotting
-library(Matrix)      # For multi-level NMA
+# Visualization
+library(plotly)      # Interactive plots
+library(ggplot2)     # Static plots
 library(gridExtra)   # Plot arrangements
-suppressMessages(library(tidyr))  # Data reshaping
+library(colourpicker) # Color picker input
 
-# Load optimization utilities first (for superfast performance)
-cat("⚡ Loading performance optimizations...\n")
+# Meta-analysis
+library(metafor)     # Core meta-analysis
+library(netmeta)     # Network meta-analysis
+library(dosresmeta)  # Dose-response meta-analysis
+library(lavaan)      # Structural equation modeling
+library(metaSEM)     # Meta-analytic SEM
+library(semPlot)     # SEM plotting
+
+# Data manipulation
+library(dplyr)       # Data manipulation
+suppressMessages(library(tidyr))  # Data reshaping
+library(Matrix)      # Matrix operations
+
+# Publication tools
+library(gt)          # GRADE tables
+library(readxl)      # Excel file reading
+library(officer)     # Word document generation
+library(rmarkdown)   # Report generation
+
+# API & JSON (for AI Copilot)
+library(httr)        # HTTP requests
+library(jsonlite)    # JSON parsing
+
+# ==============================================================================
+# LOGGING & OPTIMIZATION SETUP
+# ==============================================================================
+
+# Initialize logging system first
+source("utils/logging.R")
+set_log_level("INFO")
+set_log_output("console")
+log_session_start()
+
+# Load optimization utilities
+log_info("Loading performance optimizations...")
 source("utils/ui_optimizations.R", local = TRUE)
 source("utils/publication_cache.R", local = TRUE)
 source("utils/extreme_optimizations.R", local = TRUE)
 
 # Pre-compile functions for speed
+log_info("Pre-compiling functions for faster execution...")
 precompile_functions()
 
 # Initialize caches
+log_info("Initializing publication cache...")
 precompute_publication_cache(NULL)
 
 # Source modules
@@ -70,7 +103,6 @@ source("utils/python_bridge.R")
 source("utils/plotting.R")
 source("utils/validators.R")
 source("utils/sample_data_loader.R")
-source("utils/extreme_optimizations.R")
 
 # ==============================================================================
 # UI
@@ -752,10 +784,10 @@ server <- function(input, output, session) {
     audit_log = list()
   )
 
-  # Keep ma_results synchronized with pairwise_results
-  observe({
-    rv$ma_results <- rv$pairwise_results
-  })
+  # Keep ma_results synchronized with pairwise_results (with proper event trigger)
+  observeEvent(rv$pairwise_results, {
+    rv$ma_results <- isolate(rv$pairwise_results)
+  }, ignoreInit = FALSE, ignoreNULL = FALSE)
 
   # ============================================================================
   # DASHBOARD METRICS

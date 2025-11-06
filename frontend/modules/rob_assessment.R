@@ -3,14 +3,8 @@
 # with visual traffic light plots and summary charts
 #
 # Author: EvidenceOS PRIME
-
-library(shiny)
-library(bslib)
-library(DT)
-
-# Source publication tools
-source("utils/publication_tools.R", local = TRUE)
-source("utils/plot_downloads.R", local = TRUE)
+# Dependencies: shiny, bslib, DT (loaded in app.R)
+# Utilities: publication_tools.R, plot_downloads.R (sourced in app.R)
 
 rob_assessment_ui <- function(id) {
   ns <- NS(id)

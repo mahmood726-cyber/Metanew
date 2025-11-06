@@ -1,8 +1,6 @@
 # Health Economics Parameters Module
-library(shiny)
-
-# Load config loader utility
-source("utils/config_loader.R", local = TRUE)
+# Dependencies: shiny (loaded in app.R)
+# Utilities: config_loader.R (sourced in app.R)
 
 he_params_ui <- function(id) {
   ns <- NS(id)

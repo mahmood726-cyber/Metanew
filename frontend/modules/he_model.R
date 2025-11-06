@@ -1,5 +1,5 @@
 # Health Economics Model Module - FIXED: Now uses MA results
-library(shiny)
+# Dependencies: shiny (loaded in app.R)
 
 he_model_ui <- function(id) {
   ns <- NS(id)

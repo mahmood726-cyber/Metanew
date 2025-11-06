@@ -1,6 +1,5 @@
 # Dose-Response Meta-Analysis Module - FULL IMPLEMENTATION
-library(shiny)
-library(ggplot2)
+# Dependencies: shiny, ggplot2 (loaded in app.R)
 
 dose_response_ui <- function(id) {
   ns <- NS(id)

@@ -4,14 +4,8 @@
 #
 # Author: EvidenceOS PRIME
 # FULLY IMPLEMENTED - PRODUCTION READY
-
-library(shiny)
-library(bslib)
-library(DT)
-library(gt)
-
-# Source publication tools
-source("utils/publication_tools.R", local = TRUE)
+# Dependencies: shiny, bslib, DT, gt (loaded in app.R)
+# Utilities: publication_tools.R (sourced in app.R)
 
 grade_profile_ui <- function(id) {
   ns <- NS(id)

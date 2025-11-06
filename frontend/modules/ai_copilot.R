@@ -1,8 +1,5 @@
 # AI Copilot Module - Natural Language Assistant for Meta-Analysis
-library(shiny)
-library(bslib)
-library(httr)
-library(jsonlite)
+# Dependencies: shiny, bslib, httr, jsonlite (loaded in app.R)
 
 ai_copilot_ui <- function(id) {
   ns <- NS(id)

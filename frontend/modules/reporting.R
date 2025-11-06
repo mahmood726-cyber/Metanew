@@ -1,10 +1,6 @@
 # Reporting Module - Word/PDF/PPT Exports
-library(shiny)
-library(rmarkdown)
-library(officer)
-
-# Source plotting utilities for saving plots
-source("utils/plotting.R", local = TRUE)
+# Dependencies: shiny, rmarkdown, officer (loaded in app.R)
+# Utilities: plotting.R (sourced in app.R)
 
 reporting_ui <- function(id) {
   ns <- NS(id)

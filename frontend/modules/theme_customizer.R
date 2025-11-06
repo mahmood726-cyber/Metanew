@@ -13,9 +13,7 @@
 # AUTHOR: EvidenceOS Development Team
 # LAST UPDATED: 2025-11-06
 # ==============================================================================
-
-library(shiny)
-library(bslib)
+# Dependencies: shiny, bslib (loaded in app.R)
 
 #' Theme Customizer UI
 #'

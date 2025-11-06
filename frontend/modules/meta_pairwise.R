@@ -1,13 +1,7 @@
 # Pairwise Meta-Analysis Module
 # Performs fixed and random effects meta-analysis using metafor
-
-library(shiny)
-library(metafor)
-library(plotly)
-
-# Source utilities
-source("utils/plot_downloads.R", local = TRUE)
-source("utils/cache_bridge.R", local = TRUE)
+# Dependencies: shiny, metafor, plotly (loaded in app.R)
+# Utilities: plot_downloads.R, cache_bridge.R (sourced in app.R)
 
 # UI
 meta_pairwise_ui <- function(id) {

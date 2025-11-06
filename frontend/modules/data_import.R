@@ -1,12 +1,7 @@
 # Data Import Module
 # Handles CSV/Excel uploads, validation, and data preview
-
-library(shiny)
-library(DT)
-library(readxl)
-
-# Source intelligent data validation utility
-source("utils/data_validation.R", local = TRUE)
+# Dependencies: shiny, DT, readxl (loaded in app.R)
+# Utilities: data_validation.R (sourced in app.R)
 
 # UI
 data_import_ui <- function(id) {
@@ -99,12 +94,31 @@ data_import_server <- function(id, rv) {
     observeEvent(input$file_upload, {
       req(input$file_upload)
 
+      # File size validation (max 50MB)
+      file_size_mb <- file.info(input$file_upload$datapath)$size / (1024^2)
+
+      if (file_size_mb > 50) {
+        showNotification(
+          paste0("✗ File too large: ", round(file_size_mb, 1), " MB. Maximum size is 50 MB."),
+          type = "error",
+          duration = 10
+        )
+        return()
+      }
+
       withProgress(message = "Loading and preprocessing data...", {
 
         tryCatch({
-          setProgress(0.2, detail = "Reading file...")
+          setProgress(0.1, detail = "Validating file...")
 
+          # Security: Check file extension
           ext <- tools::file_ext(input$file_upload$name)
+
+          if (!ext %in% c("csv", "xlsx", "xls")) {
+            stop("Invalid file type. Only CSV and Excel files are allowed.")
+          }
+
+          setProgress(0.2, detail = "Reading file...")
 
           if (ext == "csv") {
             raw_data <- read.csv(

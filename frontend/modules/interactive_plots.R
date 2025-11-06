@@ -3,11 +3,7 @@
 # FULLY IMPLEMENTED - PRODUCTION READY
 #
 # Author: EvidenceOS PRIME
-
-library(shiny)
-library(bslib)
-library(plotly)
-library(metafor)
+# Dependencies: shiny, bslib, plotly, metafor (loaded in app.R)
 
 interactive_plots_ui <- function(id) {
   ns <- NS(id)

@@ -1,7 +1,5 @@
 # Protocol Module - Enhanced with PRISMA 2020
-library(shiny)
-library(bslib)
-library(DT)
+# Dependencies: shiny, bslib, DT (loaded in app.R)
 
 protocol_ui <- function(id) {
   ns <- NS(id)
