@@ -38,6 +38,12 @@ source("modules/v2_features.R")
 source("modules/client_portal.R")
 source("modules/living_ma.R")
 
+# Publication Tools Modules (NEW)
+source("modules/prisma_generator.R")
+source("modules/rob_assessment.R")
+source("modules/grade_profile.R")
+source("modules/interactive_plots.R")
+
 # Source utilities
 source("utils/python_bridge.R")
 source("utils/plotting.R")
@@ -231,6 +237,37 @@ ui <- dashboardPage(
         "Client Portal",
         tabName = "client_portal",
         icon = icon("globe"),
+        badgeLabel = "NEW",
+        badgeColor = "success"
+      ),
+
+      # Publication Tools Section (NEW)
+      sidebarHeader("PUBLICATION TOOLS"),
+      menuItem(
+        "PRISMA Diagram",
+        tabName = "prisma_generator",
+        icon = icon("diagram-project"),
+        badgeLabel = "NEW",
+        badgeColor = "success"
+      ),
+      menuItem(
+        "Risk of Bias",
+        tabName = "rob_assessment",
+        icon = icon("shield-alt"),
+        badgeLabel = "NEW",
+        badgeColor = "success"
+      ),
+      menuItem(
+        "GRADE Profile",
+        tabName = "grade_profile",
+        icon = icon("star"),
+        badgeLabel = "NEW",
+        badgeColor = "success"
+      ),
+      menuItem(
+        "Interactive Plots",
+        tabName = "interactive_plots",
+        icon = icon("chart-line"),
         badgeLabel = "NEW",
         badgeColor = "success"
       ),
@@ -625,6 +662,38 @@ ui <- dashboardPage(
         tabName = "v2_features",
         h2("V2 Features (Beta)"),
         v2_features_ui("v2_features")
+      ),
+
+      # ========================================================================
+      # PUBLICATION TOOLS (NEW)
+      # ========================================================================
+
+      # PRISMA Generator
+      tabItem(
+        tabName = "prisma_generator",
+        h2("PRISMA 2020 Flow Diagram Generator"),
+        prisma_generator_ui("prisma_generator")
+      ),
+
+      # Risk of Bias Assessment
+      tabItem(
+        tabName = "rob_assessment",
+        h2("Risk of Bias Assessment (RoB 2.0 & ROBINS-I)"),
+        rob_assessment_ui("rob_assessment")
+      ),
+
+      # GRADE Evidence Profile
+      tabItem(
+        tabName = "grade_profile",
+        h2("GRADE Evidence Profile Generator"),
+        grade_profile_ui("grade_profile")
+      ),
+
+      # Interactive Plots
+      tabItem(
+        tabName = "interactive_plots",
+        h2("Interactive Forest & Funnel Plots"),
+        interactive_plots_ui("interactive_plots")
       )
     )
   ),
@@ -749,6 +818,12 @@ server <- function(input, output, session) {
   v2_results <- v2_features_server("v2_features", rv)
   client_portal_results <- client_portal_server("client_portal", rv)
   living_ma_results <- living_ma_server("living_ma", rv)
+
+  # Publication Tools Servers (NEW)
+  prisma_results <- prisma_generator_server("prisma_generator", rv)
+  rob_results <- rob_assessment_server("rob_assessment", rv)
+  grade_results <- grade_profile_server("grade_profile", rv)
+  interactive_plots_results <- interactive_plots_server("interactive_plots", rv)
 
   # ============================================================================
   # HEADER ACTIONS
