@@ -2,6 +2,9 @@
 library(shiny)
 library(netmeta)
 
+# Source utilities
+source("utils/plot_downloads.R", local = TRUE)
+
 nma_ui <- function(id) {
   ns <- NS(id)
   tagList(
@@ -21,7 +24,17 @@ nma_ui <- function(id) {
       card(
         card_header("NMA Results"),
         navset_card_tab(
-          nav_panel("Network Plot", plotOutput(ns("network_plot"), height = "500px")),
+          nav_panel(
+            "Network Plot",
+            plotOutput(ns("network_plot"), height = "500px"),
+            hr(),
+            plot_download_ui(
+              ns("network_download"),
+              plot_name = "Network Plot",
+              default_width = 2400,
+              default_height = 2400
+            )
+          ),
           nav_panel("League Table", DTOutput(ns("league_table"))),
           nav_panel("Rankings", DTOutput(ns("rankings"))),
           nav_panel("Inconsistency", verbatimTextOutput(ns("inconsistency"))),
@@ -145,6 +158,56 @@ nma_server <- function(id, rv) {
       } else {
         cat("Inconsistency check not performed.\n")
       }
+    })
+
+    # Network plot download handler
+    moduleServer("network_download", function(input_dl, output_dl, session) {
+      output_dl$download <- downloadHandler(
+        filename = function() {
+          format <- tolower(input_dl$format)
+          timestamp <- format(Sys.time(), "%Y%m%d_%H%M%S")
+          paste0("network_plot_", input$outcome, "_", timestamp, ".", format)
+        },
+
+        content = function(file) {
+          req(nma_result())
+
+          format <- tolower(input_dl$format)
+          result <- nma_result()
+
+          # Get dimensions
+          if (format == "pdf") {
+            width <- input_dl$width_pdf
+            height <- input_dl$height_pdf
+          } else {
+            width <- input_dl$width
+            height <- input_dl$height
+          }
+
+          # Open graphics device
+          if (format == "png") {
+            png(file, width = width, height = height, res = input_dl$dpi, type = "cairo")
+          } else if (format == "jpg") {
+            jpeg(file, width = width, height = height, res = input_dl$dpi,
+                 quality = input_dl$quality, type = "cairo")
+          } else if (format == "pdf") {
+            pdf(file, width = width, height = height, useDingbats = FALSE)
+          } else if (format == "svg") {
+            svg(file, width = width / 96, height = height / 96)
+          }
+
+          # Generate network plot
+          netgraph(result$model,
+                   cex = 1.5,
+                   col = "steelblue",
+                   thickness = "number.of.studies",
+                   number.of.studies = TRUE,
+                   labels = result$treatments,
+                   main = "Evidence Network")
+
+          dev.off()
+        }
+      )
     })
 
     return(reactive(nma_result()))
