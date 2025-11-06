@@ -25,6 +25,7 @@ source("modules/protocol.R")
 source("modules/meta_pairwise.R")
 source("modules/nma.R")
 source("modules/dose_response.R")
+source("modules/masem.R")  # Meta-Analytic SEM
 source("modules/sensitivity.R")
 source("modules/he_params.R")
 source("modules/he_model.R")
@@ -170,7 +171,9 @@ ui <- dashboardPage(
         startExpanded = FALSE,
         menuSubItem("Pairwise MA", tabName = "pairwise_ma", icon = icon("arrow-right")),
         menuSubItem("Network MA", tabName = "network_ma", icon = icon("project-diagram")),
-        menuSubItem("Dose-Response", tabName = "dose_response", icon = icon("pills"))
+        menuSubItem("Dose-Response", tabName = "dose_response", icon = icon("pills")),
+        menuSubItem("MASEM", tabName = "masem", icon = icon("diagram-project"),
+                    badgeLabel = "NEW", badgeColor = "info")
       ),
       menuItem(
         "Sensitivity Analysis",
@@ -439,6 +442,7 @@ ui <- dashboardPage(
                   tags$li("Pairwise meta-analysis"),
                   tags$li("Network meta-analysis"),
                   tags$li("Dose-response meta-analysis"),
+                  tags$li("Meta-Analytic SEM (MASEM)"),
                   tags$li("Living meta-analysis"),
                   tags$li("Subgroup & sensitivity analysis")
                 )
@@ -513,6 +517,15 @@ ui <- dashboardPage(
         tabName = "dose_response",
         h2("Dose-Response Meta-Analysis"),
         dose_response_ui("dose_response")
+      ),
+
+      # ========================================================================
+      # MASEM (Meta-Analytic SEM)
+      # ========================================================================
+      tabItem(
+        tabName = "masem",
+        h2("Meta-Analytic Structural Equation Modeling"),
+        masem_ui("masem")
       ),
 
       # ========================================================================
@@ -724,6 +737,7 @@ server <- function(input, output, session) {
   pairwise_results <- meta_pairwise_server("pairwise", rv)
   nma_results <- nma_server("nma", rv)
   dr_results <- dose_response_server("dose_response", rv)
+  masem_results <- masem_server("masem", rv)  # Meta-Analytic SEM
   sensitivity_results <- sensitivity_server("sensitivity", rv)
   he_params_results <- he_params_server("he_params", rv)
   he_model_results <- he_model_server("he_model", rv)
