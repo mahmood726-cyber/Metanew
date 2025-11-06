@@ -1,236 +1,308 @@
-# R Bridge to Python Caching Layer
-# Provides R interface to Parquet caching for fast meta-analysis results storage
+# Cache Bridge - R Interface to FastAPI Cache Service
+# Provides transparent caching for meta-analysis results via Redis
+# Expected speedup: 100x for cache hits (5ms vs 500ms)
 
-library(reticulate)
-library(digest)
+library(httr)
 library(jsonlite)
+library(digest)
 
-#' Initialize cache manager
+# Cache service configuration
+CACHE_SERVICE_URL <- Sys.getenv("CACHE_SERVICE_URL", "http://localhost:8000")
+CACHE_ENABLED <- Sys.getenv("CACHE_ENABLED", "TRUE") == "TRUE"
+
+#' Check if cache service is healthy
 #'
-#' @param cache_dir Directory for cache storage (default: "cache/parquet")
-#' @return Cache manager object
-init_cache_manager <- function(cache_dir = "cache/parquet") {
+#' @return Logical indicating if cache service is available
+#' @export
+is_cache_healthy <- function() {
+  if (!CACHE_ENABLED) return(FALSE)
+
   tryCatch({
-    # Import Python cache module
-    cache_module <- import_from_path("cache_manager", path = "../../backend/cache")
-    cache_manager <- cache_module$CacheManager(cache_dir = cache_dir)
-    return(cache_manager)
+    response <- GET(paste0(CACHE_SERVICE_URL, "/health"), timeout(2))
+    status_code(response) == 200
   }, error = function(e) {
-    warning(paste("Could not initialize cache manager:", e$message))
-    return(NULL)
+    message("Cache service unavailable: ", e$message)
+    FALSE
   })
 }
 
-#' Generate cache key from analysis parameters
+
+#' Generate hash for data
 #'
-#' @param analysis_type Type of analysis (e.g., "meta_analysis")
-#' @param parameters List of analysis parameters
-#' @return SHA256 hash as cache key
-generate_cache_key <- function(analysis_type, parameters) {
-  # Sort parameters for consistency
-  param_str <- toJSON(parameters[order(names(parameters))], auto_unbox = TRUE)
-  key_input <- paste0(analysis_type, ":", param_str)
-  digest(key_input, algo = "sha256", serialize = FALSE)
+#' Creates SHA-256 hash of data for cache key generation
+#' Ensures consistent hashing by sorting columns and rows
+#'
+#' @param data Data frame to hash
+#' @return 32-character hash string
+#' @export
+hash_data <- function(data) {
+  # Sort columns alphabetically for consistent hashing
+  data_sorted <- data[, order(names(data)), drop = FALSE]
+
+  # Sort rows if possible (for consistent hashing across identical datasets)
+  if ("study_id" %in% names(data_sorted)) {
+    data_sorted <- data_sorted[order(data_sorted$study_id), ]
+  }
+
+  # Create hash
+  data_hash <- digest(data_sorted, algo = "sha256")
+
+  # Return first 32 characters
+  substr(data_hash, 1, 32)
 }
 
-#' Check if analysis results are cached
+
+#' Check cache for existing result
 #'
-#' @param cache_manager Cache manager object
-#' @param analysis_type Type of analysis
-#' @param parameters Analysis parameters
-#' @return TRUE if cached, FALSE otherwise
-is_cached <- function(cache_manager, analysis_type, parameters) {
-  if (is.null(cache_manager)) return(FALSE)
+#' @param data Data frame used in analysis
+#' @param outcome Outcome variable name (can be NULL)
+#' @param method Meta-analysis method (e.g., "REML", "DL")
+#' @param model Model type (e.g., "random", "fixed")
+#' @param subgroup Subgroup variable name (can be NULL)
+#' @param moderators Vector of moderator variable names (can be NULL)
+#' @return List with hit (TRUE/FALSE), result (if hit), source
+#' @export
+check_cache <- function(data, outcome = NULL, method = "REML",
+                        model = "random", subgroup = NULL, moderators = NULL) {
+
+  # If cache disabled or unhealthy, return miss
+  if (!CACHE_ENABLED || !is_cache_healthy()) {
+    return(list(hit = FALSE, result = NULL, source = "disabled"))
+  }
 
   tryCatch({
-    cached <- cache_manager$get(analysis_type, parameters)
-    return(!is.null(cached))
+    # Generate data hash
+    data_hash <- hash_data(data)
+
+    # Build request body
+    request_body <- list(
+      params = list(
+        data_hash = data_hash,
+        outcome = outcome %||% "",
+        method = method,
+        model = model,
+        subgroup = subgroup %||% "",
+        moderators = if (!is.null(moderators)) sort(moderators) else list()
+      )
+    )
+
+    # Call cache service
+    response <- POST(
+      paste0(CACHE_SERVICE_URL, "/cache/check"),
+      body = request_body,
+      encode = "json",
+      timeout(5)
+    )
+
+    if (status_code(response) != 200) {
+      message("Cache check failed with status ", status_code(response))
+      return(list(hit = FALSE, result = NULL, source = "error"))
+    }
+
+    # Parse response
+    result <- content(response, as = "parsed", type = "application/json")
+
+    if (result$hit) {
+      message("✓ Cache HIT - Loading cached result (~5ms)")
+      return(list(hit = TRUE, result = result$result, source = "cache"))
+    } else {
+      message("○ Cache MISS - Will compute and store result")
+      return(list(hit = FALSE, result = NULL, source = "miss"))
+    }
+
   }, error = function(e) {
+    message("Cache check error: ", e$message)
+    return(list(hit = FALSE, result = NULL, source = "error"))
+  })
+}
+
+
+#' Store result in cache
+#'
+#' @param data Data frame used in analysis
+#' @param result Meta-analysis result object to cache
+#' @param outcome Outcome variable name (can be NULL)
+#' @param method Meta-analysis method
+#' @param model Model type
+#' @param subgroup Subgroup variable name (can be NULL)
+#' @param moderators Vector of moderator variable names (can be NULL)
+#' @return Logical indicating success
+#' @export
+store_cache <- function(data, result, outcome = NULL, method = "REML",
+                        model = "random", subgroup = NULL, moderators = NULL) {
+
+  # If cache disabled, skip
+  if (!CACHE_ENABLED || !is_cache_healthy()) {
+    return(FALSE)
+  }
+
+  tryCatch({
+    # Generate data hash
+    data_hash <- hash_data(data)
+
+    # Build request body
+    request_body <- list(
+      params = list(
+        data_hash = data_hash,
+        outcome = outcome %||% "",
+        method = method,
+        model = model,
+        subgroup = subgroup %||% "",
+        moderators = if (!is.null(moderators)) sort(moderators) else list()
+      ),
+      result = result
+    )
+
+    # Call cache service
+    response <- POST(
+      paste0(CACHE_SERVICE_URL, "/cache/store"),
+      body = request_body,
+      encode = "json",
+      timeout(10)
+    )
+
+    if (status_code(response) == 200) {
+      message("✓ Result cached successfully")
+      return(TRUE)
+    } else {
+      message("Cache store failed with status ", status_code(response))
+      return(FALSE)
+    }
+
+  }, error = function(e) {
+    message("Cache store error: ", e$message)
     return(FALSE)
   })
 }
 
-#' Get cached analysis results
-#'
-#' @param cache_manager Cache manager object
-#' @param analysis_type Type of analysis
-#' @param parameters Analysis parameters
-#' @return Data frame with results or NULL
-get_cached_results <- function(cache_manager, analysis_type, parameters) {
-  if (is.null(cache_manager)) return(NULL)
-
-  tryCatch({
-    cached <- cache_manager$get(analysis_type, parameters)
-    if (is.null(cached)) return(NULL)
-
-    # Convert pandas DataFrame to R data.frame
-    return(as.data.frame(cached))
-  }, error = function(e) {
-    warning(paste("Error retrieving cache:", e$message))
-    return(NULL)
-  })
-}
-
-#' Save analysis results to cache
-#'
-#' @param cache_manager Cache manager object
-#' @param analysis_type Type of analysis
-#' @param parameters Analysis parameters
-#' @param results Data frame with results
-#' @param metadata Optional metadata list
-#' @return Cache key or NULL on error
-cache_results <- function(cache_manager, analysis_type, parameters, results, metadata = NULL) {
-  if (is.null(cache_manager)) return(NULL)
-
-  tryCatch({
-    # Convert to pandas DataFrame
-    results_pd <- r_to_py(results)
-
-    cache_key <- cache_manager$put(
-      analysis_type = analysis_type,
-      parameters = parameters,
-      data = results_pd,
-      metadata = metadata
-    )
-
-    message(sprintf("✓ Cached %s results (key: %s)", analysis_type, substr(cache_key, 1, 8)))
-    return(cache_key)
-
-  }, error = function(e) {
-    warning(paste("Error caching results:", e$message))
-    return(NULL)
-  })
-}
 
 #' Run meta-analysis with caching
 #'
-#' @param cache_manager Cache manager object
-#' @param analysis_func Function that performs analysis
-#' @param analysis_type Type of analysis
-#' @param parameters Analysis parameters
-#' @param force_refresh Force re-computation even if cached
-#' @return Analysis results data frame
-run_with_cache <- function(cache_manager, analysis_func, analysis_type,
-                           parameters, force_refresh = FALSE) {
+#' High-level wrapper that checks cache before computing
+#' If result cached: returns in ~5ms (100x faster)
+#' If not cached: computes, stores, and returns result (~500ms + cache overhead)
+#'
+#' @param data Data frame for meta-analysis
+#' @param outcome Outcome variable name
+#' @param method Meta-analysis method
+#' @param model Model type
+#' @param subgroup Subgroup variable name (optional)
+#' @param moderators Vector of moderator names (optional)
+#' @param compute_fn Function that computes the result (no arguments)
+#' @return Meta-analysis result (from cache or fresh computation)
+#' @export
+#' @examples
+#' \dontrun{
+#' result <- with_cache(
+#'   data = ma_data,
+#'   outcome = "mortality",
+#'   method = "REML",
+#'   model = "random",
+#'   compute_fn = function() {
+#'     run_pairwise_ma(ma_data, outcome = "mortality", method = "REML")
+#'   }
+#' )
+#' }
+with_cache <- function(data, outcome = NULL, method = "REML", model = "random",
+                       subgroup = NULL, moderators = NULL, compute_fn) {
 
-  # Check cache first
-  if (!force_refresh && !is.null(cache_manager)) {
-    cached <- get_cached_results(cache_manager, analysis_type, parameters)
+  # Try cache first
+  cache_result <- check_cache(
+    data = data,
+    outcome = outcome,
+    method = method,
+    model = model,
+    subgroup = subgroup,
+    moderators = moderators
+  )
 
-    if (!is.null(cached)) {
-      message(sprintf("✓ Cache hit for %s", analysis_type))
-      return(cached)
-    }
+  # Cache HIT - return immediately
+  if (cache_result$hit) {
+    return(cache_result$result)
   }
 
-  # Run analysis
-  message(sprintf("→ Computing %s...", analysis_type))
+  # Cache MISS - compute result
+  message("⏱ Computing meta-analysis...")
   start_time <- Sys.time()
 
-  results <- analysis_func()
+  result <- compute_fn()
 
   elapsed <- as.numeric(difftime(Sys.time(), start_time, units = "secs"))
+  message(sprintf("✓ Computation complete (%.2f seconds)", elapsed))
 
-  # Cache results
-  if (!is.null(cache_manager)) {
-    metadata <- list(
-      computation_time = elapsed,
-      timestamp = format(Sys.time(), "%Y-%m-%d %H:%M:%S")
-    )
+  # Store in cache for next time
+  store_cache(
+    data = data,
+    result = result,
+    outcome = outcome,
+    method = method,
+    model = model,
+    subgroup = subgroup,
+    moderators = moderators
+  )
 
-    cache_results(cache_manager, analysis_type, parameters, results, metadata)
-  }
-
-  message(sprintf("✓ Computed in %.2fs", elapsed))
-
-  return(results)
+  return(result)
 }
 
-#' Invalidate cached results
-#'
-#' @param cache_manager Cache manager object
-#' @param analysis_type Type of analysis
-#' @param parameters Analysis parameters
-#' @return TRUE if cache was invalidated
-invalidate_cache <- function(cache_manager, analysis_type, parameters) {
-  if (is.null(cache_manager)) return(FALSE)
-
-  tryCatch({
-    result <- cache_manager$invalidate(analysis_type, parameters)
-    if (result) {
-      message(sprintf("✓ Invalidated cache for %s", analysis_type))
-    }
-    return(result)
-  }, error = function(e) {
-    warning(paste("Error invalidating cache:", e$message))
-    return(FALSE)
-  })
-}
 
 #' Get cache statistics
 #'
-#' @param cache_manager Cache manager object
-#' @return List with cache statistics
-get_cache_stats <- function(cache_manager) {
-  if (is.null(cache_manager)) {
+#' @return List with cache stats (cached_analyses, total_memory_mb)
+#' @export
+cache_stats <- function() {
+  if (!CACHE_ENABLED || !is_cache_healthy()) {
     return(list(
-      total_entries = 0,
-      total_size_mb = 0,
-      error = "Cache manager not initialized"
+      status = "disabled",
+      cached_analyses = 0,
+      total_memory_mb = 0
     ))
   }
 
   tryCatch({
-    stats <- cache_manager$get_stats()
-    return(stats)
+    response <- GET(paste0(CACHE_SERVICE_URL, "/cache/stats"), timeout(5))
+
+    if (status_code(response) == 200) {
+      content(response, as = "parsed", type = "application/json")
+    } else {
+      list(status = "error", cached_analyses = 0, total_memory_mb = 0)
+    }
   }, error = function(e) {
-    return(list(error = e$message))
+    message("Error fetching cache stats: ", e$message)
+    list(status = "error", cached_analyses = 0, total_memory_mb = 0)
   })
 }
 
-#' Clear old cache entries
-#'
-#' @param cache_manager Cache manager object
-#' @param days Age threshold in days (default: 30)
-#' @return Number of entries cleared
-clear_old_cache <- function(cache_manager, days = 30) {
-  if (is.null(cache_manager)) return(0)
 
-  tryCatch({
-    count <- cache_manager$clear_old(days = as.integer(days))
-    message(sprintf("✓ Cleared %d cache entries older than %d days", count, days))
-    return(count)
-  }, error = function(e) {
-    warning(paste("Error clearing cache:", e$message))
-    return(0)
-  })
-}
-
-#' Format cache stats for display
+#' Clear all cached results
 #'
-#' @param stats Cache statistics from get_cache_stats()
-#' @return HTML formatted stats
-format_cache_stats <- function(stats) {
-  if (!is.null(stats$error)) {
-    return(tags$div(class = "alert alert-warning", stats$error))
+#' @return Logical indicating success
+#' @export
+clear_cache <- function() {
+  if (!CACHE_ENABLED || !is_cache_healthy()) {
+    message("Cache is disabled or unavailable")
+    return(FALSE)
   }
 
-  tags$div(
-    class = "cache-stats",
-    h5("Cache Statistics"),
-    tags$ul(
-      tags$li(sprintf("Total entries: %d", stats$total_entries)),
-      tags$li(sprintf("Total size: %.2f MB", stats$total_size_mb)),
-      if (length(stats$analysis_types) > 0) {
-        tags$li(
-          "Analysis types:",
-          tags$ul(
-            lapply(names(stats$analysis_types), function(type) {
-              tags$li(sprintf("%s: %d", type, stats$analysis_types[[type]]))
-            })
-          )
-        )
-      }
-    )
-  )
+  tryCatch({
+    response <- POST(paste0(CACHE_SERVICE_URL, "/cache/clear"), timeout(5))
+
+    if (status_code(response) == 200) {
+      message("✓ Cache cleared successfully")
+      return(TRUE)
+    } else {
+      message("Cache clear failed with status ", status_code(response))
+      return(FALSE)
+    }
+  }, error = function(e) {
+    message("Error clearing cache: ", e$message)
+    return(FALSE)
+  })
+}
+
+
+#' Null-coalescing operator
+#'
+#' @keywords internal
+`%||%` <- function(x, y) {
+  if (is.null(x)) y else x
 }

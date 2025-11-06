@@ -5,6 +5,9 @@ library(shiny)
 library(metafor)
 library(plotly)
 
+# Source plot download utilities
+source("utils/plot_downloads.R", local = TRUE)
+
 # UI
 meta_pairwise_ui <- function(id) {
   ns <- NS(id)
@@ -72,11 +75,25 @@ meta_pairwise_ui <- function(id) {
           ),
           nav_panel(
             "Forest Plot",
-            plotlyOutput(ns("forest_plot"), height = "600px")
+            plotlyOutput(ns("forest_plot"), height = "600px"),
+            hr(),
+            plot_download_ui(
+              ns("forest_download"),
+              plot_name = "Forest Plot",
+              default_width = 3000,
+              default_height = 2400
+            )
           ),
           nav_panel(
             "Funnel Plot",
-            plotlyOutput(ns("funnel_plot"), height = "500px")
+            plotlyOutput(ns("funnel_plot"), height = "500px"),
+            hr(),
+            plot_download_ui(
+              ns("funnel_download"),
+              plot_name = "Funnel Plot",
+              default_width = 2400,
+              default_height = 2000
+            )
           ),
           nav_panel(
             "Heterogeneity",
@@ -85,7 +102,14 @@ meta_pairwise_ui <- function(id) {
           nav_panel(
             "Publication Bias",
             verbatimTextOutput(ns("egger_test")),
-            plotOutput(ns("trim_fill_plot"))
+            plotOutput(ns("trim_fill_plot")),
+            hr(),
+            plot_download_ui(
+              ns("trimfill_download"),
+              plot_name = "Trim-and-Fill Plot",
+              default_width = 2400,
+              default_height = 2000
+            )
           )
         )
       )
@@ -394,6 +418,206 @@ meta_pairwise_server <- function(id, rv) {
              lty = c(NA, if (tf$k0 > 0) NA else NULL, 1, if (tf$k0 > 0) 2 else NULL),
              lwd = c(NA, if (tf$k0 > 0) NA else NULL, 2, if (tf$k0 > 0) 2 else NULL),
              bg = "white")
+    })
+
+    # =======================================================================
+    # DOWNLOAD HANDLERS - High-Resolution Plot Downloads
+    # =======================================================================
+
+    # Forest plot download handler
+    moduleServer("forest_download", function(input_dl, output, session) {
+      output$download <- downloadHandler(
+        filename = function() {
+          format <- tolower(input_dl$format)
+          outcome <- input$outcome
+          timestamp <- format(Sys.time(), "%Y%m%d_%H%M%S")
+          paste0("forest_plot_", gsub("[^A-Za-z0-9_]", "_", outcome), "_", timestamp, ".", format)
+        },
+
+        content = function(file) {
+          req(ma_result())
+
+          format <- tolower(input_dl$format)
+          result <- ma_result()
+
+          # Get dimensions
+          if (format == "pdf") {
+            width <- input_dl$width_pdf
+            height <- input_dl$height_pdf
+          } else {
+            width <- input_dl$width
+            height <- input_dl$height
+          }
+
+          # Open graphics device
+          if (format == "png") {
+            png(file, width = width, height = height, res = input_dl$dpi, type = "cairo")
+          } else if (format == "jpg") {
+            jpeg(file, width = width, height = height, res = input_dl$dpi,
+                 quality = input_dl$quality, type = "cairo")
+          } else if (format == "pdf") {
+            pdf(file, width = width, height = height, useDingbats = FALSE)
+          } else if (format == "svg") {
+            svg(file, width = width / 96, height = height / 96)
+          }
+
+          # Generate metafor forest plot
+          library(metafor)
+          if (!is.null(result$model_object)) {
+            forest(result$model_object,
+                   slab = result$data$study_id,
+                   xlab = "Effect Size",
+                   main = paste("Forest Plot:", input$outcome),
+                   cex = 0.9,
+                   psize = 1.2)
+          }
+
+          dev.off()
+        }
+      )
+    })
+
+    # Funnel plot download handler
+    moduleServer("funnel_download", function(input_dl, output, session) {
+      output$download <- downloadHandler(
+        filename = function() {
+          format <- tolower(input_dl$format)
+          outcome <- input$outcome
+          timestamp <- format(Sys.time(), "%Y%m%d_%H%M%S")
+          paste0("funnel_plot_", gsub("[^A-Za-z0-9_]", "_", outcome), "_", timestamp, ".", format)
+        },
+
+        content = function(file) {
+          req(ma_result())
+
+          format <- tolower(input_dl$format)
+          result <- ma_result()
+
+          # Get dimensions
+          if (format == "pdf") {
+            width <- input_dl$width_pdf
+            height <- input_dl$height_pdf
+          } else {
+            width <- input_dl$width
+            height <- input_dl$height
+          }
+
+          # Open graphics device
+          if (format == "png") {
+            png(file, width = width, height = height, res = input_dl$dpi, type = "cairo")
+          } else if (format == "jpg") {
+            jpeg(file, width = width, height = height, res = input_dl$dpi,
+                 quality = input_dl$quality, type = "cairo")
+          } else if (format == "pdf") {
+            pdf(file, width = width, height = height, useDingbats = FALSE)
+          } else if (format == "svg") {
+            svg(file, width = width / 96, height = height / 96)
+          }
+
+          # Generate metafor funnel plot
+          library(metafor)
+          if (!is.null(result$model_object)) {
+            funnel(result$model_object,
+                   xlab = "Effect Size",
+                   ylab = "Standard Error",
+                   main = paste("Funnel Plot:", input$outcome),
+                   pch = 19,
+                   col = "steelblue")
+          }
+
+          dev.off()
+        }
+      )
+    })
+
+    # Trim-and-fill plot download handler
+    moduleServer("trimfill_download", function(input_dl, output, session) {
+      output$download <- downloadHandler(
+        filename = function() {
+          format <- tolower(input_dl$format)
+          outcome <- input$outcome
+          timestamp <- format(Sys.time(), "%Y%m%d_%H%M%S")
+          paste0("trim_fill_plot_", gsub("[^A-Za-z0-9_]", "_", outcome), "_", timestamp, ".", format)
+        },
+
+        content = function(file) {
+          req(ma_result())
+
+          format <- tolower(input_dl$format)
+          result <- ma_result()
+
+          # Get dimensions
+          if (format == "pdf") {
+            width <- input_dl$width_pdf
+            height <- input_dl$height_pdf
+          } else {
+            width <- input_dl$width
+            height <- input_dl$height
+          }
+
+          # Open graphics device
+          if (format == "png") {
+            png(file, width = width, height = height, res = input_dl$dpi, type = "cairo")
+          } else if (format == "jpg") {
+            jpeg(file, width = width, height = height, res = input_dl$dpi,
+                 quality = input_dl$quality, type = "cairo")
+          } else if (format == "pdf") {
+            pdf(file, width = width, height = height, useDingbats = FALSE)
+          } else if (format == "svg") {
+            svg(file, width = width / 96, height = height / 96)
+          }
+
+          # Generate trim-and-fill plot
+          if (is.null(result$trim_fill)) {
+            plot.new()
+            text(0.5, 0.5, "Trim-and-fill analysis not available\n(need at least 5 studies)",
+                 cex = 1.2, col = "gray50")
+          } else {
+            tf <- result$trim_fill
+
+            # Create funnel plot with imputed studies
+            par(mar = c(5, 4, 4, 2) + 0.1)
+
+            yi_all <- tf$data_filled$yi
+            sei_all <- tf$data_filled$sei
+            xlim <- range(yi_all) + c(-1, 1) * diff(range(yi_all)) * 0.1
+            ylim <- c(max(sei_all) * 1.1, 0)
+
+            plot(yi_all, sei_all, pch = ifelse(tf$data_filled$imputed, 1, 16),
+                 col = ifelse(tf$data_filled$imputed, "red", "black"),
+                 xlim = xlim, ylim = ylim,
+                 xlab = "Effect Size", ylab = "Standard Error",
+                 main = paste("Trim-and-Fill Funnel Plot:", input$outcome,
+                             if (tf$k0 > 0) sprintf("\n(%d studies imputed)", tf$k0) else "\n(No imputation)"))
+
+            # Add funnel
+            funnel_x <- c(result$pooled_effect, result$pooled_effect - 1.96 * max(sei_all),
+                          result$pooled_effect + 1.96 * max(sei_all))
+            funnel_y <- c(0, max(sei_all), max(sei_all))
+            polygon(funnel_x, funnel_y, col = rgb(0, 0, 1, 0.1), border = "blue", lty = 2)
+
+            # Add pooled effect lines
+            abline(v = result$pooled_effect, col = "black", lwd = 2, lty = 1)
+            if (tf$k0 > 0) {
+              abline(v = tf$pooled_effect, col = "red", lwd = 2, lty = 2)
+            }
+
+            # Legend
+            legend("topright",
+                   legend = c("Observed studies",
+                             if (tf$k0 > 0) "Imputed studies" else NULL,
+                             "Original pooled effect",
+                             if (tf$k0 > 0) "Adjusted pooled effect" else NULL),
+                   pch = c(16, if (tf$k0 > 0) 1 else NULL, NA, if (tf$k0 > 0) NA else NULL),
+                   col = c("black", if (tf$k0 > 0) "red" else NULL, "black", if (tf$k0 > 0) "red" else NULL),
+                   lty = c(NA, if (tf$k0 > 0) NA else NULL, 1, if (tf$k0 > 0) 2 else NULL),
+                   lwd = c(NA, if (tf$k0 > 0) NA else NULL, 2, if (tf$k0 > 0) 2 else NULL),
+                   bg = "white")
+          }
+
+          dev.off()
+        }
+      )
     })
 
     # Return results
