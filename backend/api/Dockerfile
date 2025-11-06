@@ -31,7 +31,7 @@ COPY --from=builder /root/.local /root/.local
 ENV PATH=/root/.local/bin:$PATH
 
 # Copy application code
-COPY nlq.py .
+COPY nlq.py nlq_optimized.py ./
 
 # Create non-root user for security
 RUN useradd -m -u 1000 appuser && \
@@ -47,5 +47,5 @@ EXPOSE 8001
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
     CMD python -c "import requests; requests.get('http://localhost:8001/health')"
 
-# Run the application
-CMD ["uvicorn", "nlq:app", "--host", "0.0.0.0", "--port", "8001", "--workers", "2"]
+# Run OPTIMIZED application (4 workers for better throughput)
+CMD ["uvicorn", "nlq_optimized:app", "--host", "0.0.0.0", "--port", "8001", "--workers", "4", "--limit-concurrency", "1000"]
