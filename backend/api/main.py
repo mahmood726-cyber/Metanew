@@ -1,10 +1,18 @@
 """
-EvidenceOS PRIME FastAPI Backend - Enhanced with Security
+EvidenceOS PRIME FastAPI Backend - Enterprise Security Edition
+
 Provides validation, computation, and utility endpoints for R frontend
-Includes authentication, authorization, security headers, and rate limiting
+
+Enterprise Security Features:
+- JWT refresh tokens with rotation
+- Comprehensive CORS hardening
+- CSP and HSTS headers
+- Per-endpoint rate limiting
+- Request logging and monitoring
+
+Version 2.0.0 - Enhanced Security
 """
 from fastapi import FastAPI, HTTPException, Body, Request, Depends
-from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.trustedhost import TrustedHostMiddleware
 from fastapi.responses import JSONResponse
 from typing import Dict, List, Any, Optional
@@ -31,6 +39,11 @@ from auth import (
 from api.auth_routes import router as auth_router
 from api.ml_routes import router as ml_router
 from api.ai_features_routes import router as ai_features_router
+from api.des_routes import router as des_router
+
+# Import enhanced security middleware
+from middleware.security_middleware import add_security_middleware
+from config.security import ENVIRONMENT, IS_PRODUCTION
 
 # Configure logging
 logging.basicConfig(
@@ -39,111 +52,41 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-# Rate limiting
+# Rate limiting (for compatibility with existing @limiter decorators)
 limiter = Limiter(key_func=get_remote_address)
 
-# Get configuration from environment
-ENVIRONMENT = os.getenv("APP_ENV", "development")
-ALLOWED_ORIGINS = os.getenv(
-    "ALLOWED_ORIGINS",
-    "http://localhost:3838,http://localhost:8000"
-).split(",")
+# Legacy configuration (kept for compatibility)
 ENABLE_AUTH = os.getenv("ENABLE_AUTH", "true").lower() == "true"
 
+# Create FastAPI application
 app = FastAPI(
     title="EvidenceOS PRIME API",
     description="Backend API for meta-analysis and health economics with enterprise security",
     version="2.0.0",
-    docs_url="/docs" if ENVIRONMENT == "development" else None,  # Disable docs in production
-    redoc_url="/redoc" if ENVIRONMENT == "development" else None,
+    docs_url="/docs" if not IS_PRODUCTION else None,  # Disable docs in production
+    redoc_url="/redoc" if not IS_PRODUCTION else None,
 )
 
-# Add rate limiting
+# Add rate limiting state (for compatibility with existing routes using @limiter decorator)
 app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
-# CORS middleware with restrictions
-if ENVIRONMENT == "development":
-    # Allow all in development
-    app.add_middleware(
-        CORSMiddleware,
-        allow_origins=["*"],
-        allow_credentials=True,
-        allow_methods=["*"],
-        allow_headers=["*"],
-    )
-else:
-    # Restrict in production
-    app.add_middleware(
-        CORSMiddleware,
-        allow_origins=ALLOWED_ORIGINS,
-        allow_credentials=True,
-        allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-        allow_headers=["Authorization", "Content-Type", "X-Request-ID"],
-        max_age=3600,
-    )
+# ==================== ENHANCED SECURITY MIDDLEWARE ====================
+# Comprehensive security middleware replaces manual CORS/headers
+add_security_middleware(app)
+logger.info(f"🔒 Enhanced security middleware initialized (Environment: {ENVIRONMENT.value})")
 
 # Trusted host middleware (optional, for production)
-if ENVIRONMENT == "production":
+if IS_PRODUCTION:
     trusted_hosts = os.getenv("TRUSTED_HOSTS", "").split(",")
-    if trusted_hosts:
+    if trusted_hosts and trusted_hosts != ['']:
         app.add_middleware(
             TrustedHostMiddleware,
             allowed_hosts=trusted_hosts
         )
+        logger.info(f"✓ Trusted hosts configured: {len(trusted_hosts)} hosts")
 
-
-# Security headers middleware
-@app.middleware("http")
-async def add_security_headers(request: Request, call_next):
-    """Add security headers to all responses"""
-    response = await call_next(request)
-
-    # Security headers
-    response.headers["X-Content-Type-Options"] = "nosniff"
-    response.headers["X-Frame-Options"] = "DENY"
-    response.headers["X-XSS-Protection"] = "1; mode=block"
-    response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
-
-    if ENVIRONMENT == "production":
-        response.headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains"
-        response.headers["Content-Security-Policy"] = (
-            "default-src 'self'; "
-            "script-src 'self'; "
-            "style-src 'self' 'unsafe-inline'; "
-            "img-src 'self' data: https:; "
-            "font-src 'self'; "
-            "connect-src 'self'; "
-            "frame-ancestors 'none'"
-        )
-
-    return response
-
-
-# Request logging middleware
-@app.middleware("http")
-async def log_requests(request: Request, call_next):
-    """Log all requests for audit purposes"""
-    start_time = datetime.utcnow()
-
-    # Log request
-    logger.info(f"Request: {request.method} {request.url.path}")
-
-    try:
-        response = await call_next(request)
-        duration = (datetime.utcnow() - start_time).total_seconds()
-
-        logger.info(
-            f"Response: {request.method} {request.url.path} "
-            f"Status: {response.status_code} Duration: {duration:.3f}s"
-        )
-
-        return response
-
-    except Exception as e:
-        logger.error(f"Request failed: {request.method} {request.url.path} Error: {str(e)}")
-        raise
-
+# ==================== ROUTE REGISTRATION ====================
 
 # Include authentication routes with /api prefix
 app.include_router(auth_router, prefix="/api")
@@ -153,6 +96,11 @@ app.include_router(ml_router, prefix="/api")
 
 # Include advanced AI features routes with /api prefix
 app.include_router(ai_features_router, prefix="/api")
+
+# Include DES routes with /api prefix
+app.include_router(des_router, prefix="/api")
+
+logger.info("✓ All API routes registered (auth, ml, ai-features, des)")
 
 
 # Health check endpoints (no auth required)

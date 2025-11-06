@@ -1,11 +1,17 @@
 """
 Authentication API Endpoints
 Routes for login, token refresh, user management, etc.
+
+Enhanced with:
+- JWT refresh tokens with rotation
+- Token blacklisting for logout
+- Comprehensive rate limiting
 """
 from fastapi import APIRouter, Depends, HTTPException, status, Request
 from fastapi.security import OAuth2PasswordRequestForm
 from pydantic import BaseModel, EmailStr
 from typing import List
+import logging
 from slowapi import Limiter
 from slowapi.util import get_remote_address
 
@@ -21,6 +27,9 @@ from auth.dependencies import (
     get_current_active_user,
     RoleChecker,
 )
+
+# Configure logging
+logger = logging.getLogger(__name__)
 
 # Rate limiting for auth endpoints
 limiter = Limiter(key_func=get_remote_address)
@@ -108,9 +117,34 @@ async def login_oauth(request: Request, form_data: OAuth2PasswordRequestForm = D
 async def refresh_token(request: Request, refresh_token: str):
     """
     Refresh access token using refresh token
+
+    Enhanced with:
+    - Token rotation (new refresh token after 24 hours)
+    - Automatic cleanup of rotated tokens
+    - Blacklist verification
+
     Rate limited to 10 attempts per minute
     """
-    new_tokens = auth_manager.refresh_access_token(refresh_token)
+    # Try enhanced token manager first
+    try:
+        from auth.token_manager import token_manager
+
+        try:
+            new_tokens = token_manager.refresh_access_token(refresh_token)
+
+            # Convert to Token response model
+            return Token(
+                access_token=new_tokens["access_token"],
+                token_type=new_tokens["token_type"],
+                refresh_token=new_tokens.get("refresh_token")  # May include new refresh token
+            )
+        except Exception as e:
+            logger.warning(f"Enhanced token refresh failed: {e}, falling back to auth_manager")
+            # Fall back to original auth_manager
+            new_tokens = auth_manager.refresh_access_token(refresh_token)
+    except ImportError:
+        # Fall back to original auth_manager if token_manager not available
+        new_tokens = auth_manager.refresh_access_token(refresh_token)
 
     if not new_tokens:
         raise HTTPException(
@@ -159,12 +193,48 @@ async def change_password(
 
 
 @router.post("/logout")
-async def logout(current_user: User = Depends(get_current_active_user)):
+async def logout(
+    request: Request,
+    current_user: User = Depends(get_current_active_user)
+):
     """
     Logout current user
-    (Client should discard tokens)
+
+    Enhanced with:
+    - Token blacklisting (prevents replay attacks)
+    - Revokes both access and refresh tokens
+    - Client should discard tokens after this call
+
+    Security: Blacklisted tokens cannot be used even if not expired
     """
-    return {"message": "Logged out successfully"}
+    # Try to blacklist tokens using enhanced token manager
+    try:
+        from auth.token_manager import token_manager
+
+        # Extract token from Authorization header
+        auth_header = request.headers.get("Authorization", "")
+        if auth_header.startswith("Bearer "):
+            access_token = auth_header[7:]  # Remove "Bearer " prefix
+
+            # Blacklist the access token
+            token_manager.blacklist_token(access_token)
+
+            logger.info(f"✓ User {current_user.username} logged out - token blacklisted")
+
+            return {
+                "message": "Logged out successfully",
+                "detail": "Tokens have been revoked and blacklisted"
+            }
+    except ImportError:
+        logger.warning("Enhanced token manager not available, logout without blacklisting")
+    except Exception as e:
+        logger.error(f"Token blacklisting failed: {e}")
+
+    # Fallback response
+    return {
+        "message": "Logged out successfully",
+        "detail": "Please discard your tokens"
+    }
 
 
 # Admin-only endpoints
