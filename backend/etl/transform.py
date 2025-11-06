@@ -110,21 +110,109 @@ def compute_arm_binary(df: pd.DataFrame, measure: str = "OR") -> pd.DataFrame:
     """
     Compute effect sizes from arm-based data
     Requires grouping by study_id and comparing treatment arms
-    """
-    # This is more complex - need to identify intervention vs control within each study
-    # For now, require user to specify or use contrast format
 
+    Handles two scenarios:
+    1. Two-arm trials: Automatically identifies intervention vs control
+    2. Multi-arm trials: Uses treatment column to pair arms
+
+    Strategy for identifying control:
+    - Looks for treatments labeled: "control", "placebo", "standard", "usual care"
+    - Otherwise uses first alphabetical treatment as reference
+    """
+    # Check if already has effect sizes
     if "yi" in df.columns and "sei" in df.columns:
-        # Already has effect sizes
         if "vi" not in df.columns:
             df["vi"] = df["sei"] ** 2
         return df
 
-    raise ValueError(
-        "Arm-based binary data not yet fully supported. "
-        "Please provide data in contrast format (events1, n1, events2, n2) "
-        "or pre-computed effect sizes (yi, sei)"
-    )
+    # Validate required columns
+    required_cols = ["study_id", "treatment", "events", "n"]
+    missing = [col for col in required_cols if col not in df.columns]
+    if missing:
+        raise ValueError(f"Missing required columns: {missing}")
+
+    # Group by study to create contrasts
+    contrast_rows = []
+
+    for study_id, study_df in df.groupby("study_id"):
+        treatments = study_df["treatment"].unique()
+
+        if len(treatments) < 2:
+            # Single-arm study - can't compute effect size
+            continue
+
+        # Identify control arm
+        control_arm = _identify_control_arm(treatments)
+
+        # Get control data
+        control_data = study_df[study_df["treatment"] == control_arm].iloc[0]
+        events2 = control_data["events"]
+        n2 = control_data["n"]
+
+        # Compare each non-control arm to control
+        for treatment in treatments:
+            if treatment == control_arm:
+                continue
+
+            treatment_data = study_df[study_df["treatment"] == treatment].iloc[0]
+            events1 = treatment_data["events"]
+            n1 = treatment_data["n"]
+
+            # Store as contrast
+            contrast_rows.append({
+                "study_id": study_id,
+                "treatment": treatment,
+                "control": control_arm,
+                "events1": events1,
+                "n1": n1,
+                "events2": events2,
+                "n2": n2
+            })
+
+    if not contrast_rows:
+        raise ValueError("No valid study contrasts found. Each study needs at least 2 arms.")
+
+    # Create contrast dataframe
+    contrast_df = pd.DataFrame(contrast_rows)
+
+    # Compute effect sizes using contrast method
+    result_df = compute_contrast_binary(contrast_df, measure)
+
+    return result_df
+
+
+def _identify_control_arm(treatments: np.ndarray) -> str:
+    """
+    Identify which treatment is the control/comparator
+
+    Strategy:
+    1. Look for explicit control labels
+    2. Otherwise use first alphabetical treatment
+
+    Args:
+        treatments: Array of treatment names
+
+    Returns:
+        Name of control treatment
+    """
+    # Convert to lowercase for matching
+    treatments_lower = {t: t.lower() for t in treatments}
+
+    # Common control labels
+    control_keywords = [
+        "control", "placebo", "standard", "usual care",
+        "soc", "standard of care", "comparator", "reference"
+    ]
+
+    # Search for control keywords
+    for treatment, treatment_lower in treatments_lower.items():
+        for keyword in control_keywords:
+            if keyword in treatment_lower:
+                return treatment
+
+    # If no control keyword found, use alphabetically first
+    # (assumption: often control/placebo comes first alphabetically)
+    return sorted(treatments)[0]
 
 
 def compute_continuous_effect_size(df: pd.DataFrame, measure: str = "MD") -> pd.DataFrame:

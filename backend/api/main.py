@@ -111,26 +111,96 @@ def compute_effect_sizes(data: Dict[str, Any]):
 @app.post("/meta/bayes")
 def bayesian_meta_analysis(data: Dict[str, Any]):
     """
-    Optional Bayesian meta-analysis using PyMC
-    Returns posterior distributions for pooled effect and heterogeneity
+    Bayesian random-effects meta-analysis using PyMC
 
-    NOTE: This endpoint is not yet implemented. Use R's metafor for frequentist meta-analysis
-    or BayesianTools/brms for Bayesian approaches.
+    Full hierarchical Bayesian model with half-Cauchy prior on heterogeneity.
+    Returns posterior distributions for pooled effect (mu) and between-study SD (tau).
+
+    Request body:
+    {
+        "yi": [0.5, 0.7, 0.3, ...],  # Effect sizes (log scale)
+        "sei": [0.1, 0.15, 0.12, ...],  # Standard errors
+        "n_samples": 2000,  # Optional: posterior samples per chain
+        "n_chains": 4,  # Optional: number of MCMC chains
+        "random_seed": 42  # Optional: for reproducibility
+    }
+
+    Returns:
+    {
+        "mu_mean": float,  # Posterior mean of pooled effect
+        "mu_hdi_lower": float,  # 95% HDI lower bound
+        "mu_hdi_upper": float,  # 95% HDI upper bound
+        "tau2_mean": float,  # Between-study variance
+        "i2_mean": float,  # I² statistic
+        "prob_positive": float,  # P(mu > 0)
+        "converged": bool,  # MCMC convergence status
+        ...
+    }
     """
-    # Return proper HTTP 501 Not Implemented status
-    raise HTTPException(
-        status_code=501,
-        detail={
-            "error": "Not Implemented",
-            "message": "Bayesian meta-analysis is not yet implemented in the Python backend",
-            "alternatives": [
-                "Use metafor::rma() for frequentist random-effects meta-analysis",
-                "Use brms or BayesianTools packages in R for Bayesian meta-analysis",
-                "Use PyMC directly if Bayesian inference is required"
-            ],
-            "planned": "Future implementation will use PyMC for full Bayesian inference"
-        }
-    )
+    try:
+        # Check if PyMC is available
+        try:
+            from models.bayesian_meta import simple_bayesian_ma
+        except ImportError:
+            raise HTTPException(
+                status_code=503,
+                detail={
+                    "error": "PyMC Not Available",
+                    "message": "PyMC is not installed. Bayesian analysis requires PyMC.",
+                    "install_instructions": "pip install 'pymc>=5.0' arviz",
+                    "alternatives": [
+                        "Use /meta/frequentist endpoint for REML/DL meta-analysis",
+                        "Use metafor::rma() in R for frequentist analysis",
+                        "Use brms package in R for Bayesian analysis"
+                    ]
+                }
+            )
+
+        # Extract data
+        yi = np.array(data.get("yi", []))
+        sei = np.array(data.get("sei", []))
+
+        if len(yi) == 0 or len(sei) == 0:
+            raise ValueError("yi and sei cannot be empty")
+
+        if len(yi) != len(sei):
+            raise ValueError("yi and sei must have the same length")
+
+        # Optional parameters
+        n_samples = data.get("n_samples", 2000)
+        n_chains = data.get("n_chains", 4)
+        random_seed = data.get("random_seed", None)
+
+        # Run Bayesian meta-analysis
+        results = simple_bayesian_ma(
+            yi=yi,
+            sei=sei,
+            n_samples=n_samples,
+            random_seed=random_seed
+        )
+
+        # Add method info
+        results["method"] = "bayesian"
+        results["model"] = "hierarchical_random_effects"
+        results["prior_mu"] = "Normal(0, 10)"
+        results["prior_tau"] = "HalfCauchy(0, 1)"
+        results["timestamp"] = datetime.utcnow().isoformat()
+
+        return results
+
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    except ImportError as e:
+        raise HTTPException(
+            status_code=503,
+            detail={
+                "error": "Dependency Missing",
+                "message": str(e),
+                "required": ["pymc>=5.0", "arviz"]
+            }
+        )
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 @app.post("/evidence/hash")

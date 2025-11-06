@@ -47,14 +47,106 @@ def parse_revman_csv(file_path: str) -> pd.DataFrame:
     return df
 
 
-def parse_distiller_export(file_path: str) -> pd.DataFrame:
+def parse_distiller_export(file_path: str, data_level: str = "extraction") -> pd.DataFrame:
     """
     Parse DistillerSR export file
-    Future implementation for direct DistillerSR integration
+
+    DistillerSR exports data in specific formats:
+    - CSV exports have metadata rows at the top
+    - Column headers include form/question structure
+    - Multiple levels: study level, extraction level, quality assessment
+
+    Args:
+        file_path: Path to DistillerSR CSV export
+        data_level: Type of export - "extraction", "quality", "screening"
+
+    Returns:
+        Cleaned DataFrame with normalized column names
     """
-    # Placeholder - will be implemented based on DistillerSR API spec
-    df = pd.read_csv(file_path)
+    # DistillerSR CSVs typically have metadata rows before data
+    # Read first few rows to detect structure
+    with open(file_path, 'r', encoding='utf-8') as f:
+        first_lines = [f.readline() for _ in range(10)]
+
+    # Find where actual data starts (look for "RefID" or "Study ID" column)
+    header_row = 0
+    for i, line in enumerate(first_lines):
+        if 'RefID' in line or 'Study ID' in line or 'Reference' in line:
+            header_row = i
+            break
+
+    # Read CSV starting from detected header
+    df = pd.read_csv(file_path, skiprows=header_row, encoding='utf-8')
+
+    # Clean column names
+    df.columns = df.columns.str.strip()
+
+    # DistillerSR uses nested column structure like: "Form Name -> Question"
+    # Simplify these column names
+    df.columns = [_simplify_distiller_column(col) for col in df.columns]
+
+    # Map common DistillerSR columns to standard names
+    column_mapping = {
+        'RefID': 'study_id',
+        'Reference': 'study_id',
+        'Study ID': 'study_id',
+        'Author': 'author',
+        'Year': 'year',
+        'Title': 'title',
+        'Journal': 'journal',
+        'DOI': 'doi',
+        'PMID': 'pmid',
+        'Study Design': 'design',
+        'Risk of Bias': 'risk_of_bias',
+        'Overall ROB': 'risk_of_bias'
+    }
+
+    # Rename columns
+    for old_name, new_name in column_mapping.items():
+        if old_name in df.columns:
+            df.rename(columns={old_name: new_name}, inplace=True)
+
+    # Remove completely empty rows (DistillerSR exports often have blank rows)
+    df = df.dropna(how='all')
+
+    # Remove metadata columns (columns starting with underscore or "Level")
+    df = df[[col for col in df.columns if not col.startswith('_') and not col.startswith('Level')]]
+
     return df
+
+
+def _simplify_distiller_column(column_name: str) -> str:
+    """
+    Simplify DistillerSR nested column names
+
+    DistillerSR exports columns like:
+    "Extraction Form -> Intervention Details -> Drug Name"
+
+    This simplifies to: "Drug Name" or "Intervention_Drug_Name"
+
+    Args:
+        column_name: Original DistillerSR column name
+
+    Returns:
+        Simplified column name
+    """
+    # If no arrow separator, return as-is
+    if '->' not in column_name:
+        return column_name
+
+    # Split by arrow and take meaningful parts
+    parts = [p.strip() for p in column_name.split('->')]
+
+    # Skip generic form names
+    skip_terms = ['Extraction Form', 'Quality Assessment', 'Data Extraction', 'Form']
+    parts = [p for p in parts if p not in skip_terms]
+
+    # If only one part remains, use it
+    if len(parts) == 1:
+        return parts[0]
+
+    # Otherwise join with underscore
+    return '_'.join(parts).replace(' ', '_')
 
 
 def detect_data_format(df: pd.DataFrame) -> str:
