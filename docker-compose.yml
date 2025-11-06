@@ -10,6 +10,9 @@ services:
     build:
       context: ./backend/api
       dockerfile: Dockerfile
+      cache_from:
+        - evidenceos-ai-backend:latest
+    image: evidenceos-ai-backend:latest
     container_name: evidenceos-ai-backend
     restart: unless-stopped
     ports:
@@ -34,6 +37,9 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
+      cache_from:
+        - evidenceos-shiny-frontend:latest
+    image: evidenceos-shiny-frontend:latest
     container_name: evidenceos-shiny-frontend
     restart: unless-stopped
     ports:

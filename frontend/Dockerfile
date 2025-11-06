@@ -18,7 +18,8 @@ RUN apt-get update && apt-get install -y \
     pandoc \
     && rm -rf /var/lib/apt/lists/*
 
-# Install R packages
+# Install R packages with parallel compilation for faster builds
+# Use Ncpus=4 for parallel installation (4x faster on multi-core systems)
 RUN R -e "install.packages(c(\
     'shiny', \
     'bslib', \
@@ -41,7 +42,7 @@ RUN R -e "install.packages(c(\
     'digest', \
     'yaml', \
     'BCEA' \
-    ), repos='https://cloud.r-project.org/')"
+    ), repos='https://cloud.r-project.org/', Ncpus=4)"
 
 # Create app directory
 RUN mkdir -p /srv/shiny-server/evidenceos

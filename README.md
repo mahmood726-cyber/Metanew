@@ -62,7 +62,23 @@ A comprehensive, end-to-end platform for systematic reviews, meta-analysis, netw
 
 ## 🚀 Quick Start
 
-### Prerequisites
+### ⚡ GitHub Codespaces (Fastest - Recommended!)
+
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/mahmood726-cyber/Metanew)
+
+Get started in **60 seconds** with zero setup:
+
+```bash
+./quick-start.sh
+```
+
+That's it! The app will automatically build, start, and be accessible at the forwarded ports.
+
+👉 **[Full Codespaces Guide](CODESPACES.md)** - Detailed instructions, troubleshooting, and pro tips
+
+---
+
+### Prerequisites (Local Setup)
 - Docker & Docker Compose (recommended)
 - OR: R 4.0+, Python 3.9+
 
