@@ -19,6 +19,15 @@ library(netmeta)
 library(dosresmeta)
 library(colourpicker)
 
+# Additional libraries for publication tools
+library(bslib)       # For value_box in publication modules
+library(gt)          # For GRADE tables
+library(dplyr)       # Data manipulation
+library(ggplot2)     # Plotting
+library(Matrix)      # For multi-level NMA
+library(gridExtra)   # Plot arrangements
+suppressMessages(library(tidyr))  # Data reshaping
+
 # Source modules
 source("modules/data_import.R")
 source("modules/protocol.R")
@@ -724,11 +733,17 @@ server <- function(input, output, session) {
     data = NULL,
     protocol = NULL,
     pairwise_results = list(),
+    ma_results = list(),  # Alias for pairwise_results (used by publication tools)
     nma_results = list(),
     dr_results = list(),
     he_results = NULL,
     audit_log = list()
   )
+
+  # Keep ma_results synchronized with pairwise_results
+  observe({
+    rv$ma_results <- rv$pairwise_results
+  })
 
   # ============================================================================
   # DASHBOARD METRICS
