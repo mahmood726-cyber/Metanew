@@ -10,7 +10,12 @@ interactive_plots_ui <- function(id) {
 
   tagList(
     layout_columns(
-      col_widths = c(3, 9),
+      col_widths = breakpoints(
+        xs = c(12, 12),   # Phone: Stack vertically
+        sm = c(12, 12),   # Small tablet: Stack
+        md = c(4, 8),     # Tablet: 33/66 split
+        lg = c(3, 9)      # Desktop: 25/75 split
+      ),
 
       # LEFT PANEL: Controls
       card(
@@ -18,6 +23,7 @@ interactive_plots_ui <- function(id) {
           "Interactive Plot Settings",
           class = "bg-primary text-white"
         ),
+        style = "min-width: 280px;",
 
         # PLOT TYPE
         selectInput(
@@ -71,7 +77,30 @@ interactive_plots_ui <- function(id) {
             checkboxInput(ns("sort_by_year"), "Sort by Year", FALSE),
             selectInput(ns("effect_measure"), "Effect Measure Display:",
                        choices = c("Estimate" = "est", "Standardized" = "std",
-                                  "Raw" = "raw"))
+                                  "Raw" = "raw")),
+
+            hr(),
+            h6("X-Axis Range (Wide Range)", class = "text-muted"),
+
+            sliderInput(
+              ns("forest_xlim_min"),
+              "X-axis Minimum:",
+              min = -20,
+              max = 0,
+              value = -5,
+              step = 0.5,
+              width = "100%"
+            ),
+
+            sliderInput(
+              ns("forest_xlim_max"),
+              "X-axis Maximum:",
+              min = 0,
+              max = 20,
+              value = 5,
+              step = 0.5,
+              width = "100%"
+            )
           ),
 
           # Funnel plot options
@@ -81,11 +110,37 @@ interactive_plots_ui <- function(id) {
             checkboxInput(ns("show_contours"), "Show Contours", TRUE),
             checkboxInput(ns("show_egger"), "Show Egger's Line", TRUE),
             selectInput(ns("funnel_xaxis"), "X-axis:",
-                       choices = c("Effect Size" = "effect", "Standard Error" = "se"))
+                       choices = c("Effect Size" = "effect", "Standard Error" = "se")),
+
+            hr(),
+            h6("X-Axis Range (Effect Size)", class = "text-muted"),
+
+            sliderInput(
+              ns("funnel_xlim_min"),
+              "X-axis Minimum:",
+              min = -20,
+              max = 0,
+              value = -5,
+              step = 0.5,
+              width = "100%"
+            ),
+
+            sliderInput(
+              ns("funnel_xlim_max"),
+              "X-axis Maximum:",
+              min = 0,
+              max = 20,
+              value = 5,
+              step = 0.5,
+              width = "100%"
+            )
           ),
 
           # General options
-          sliderInput(ns("point_size"), "Point Size:", min = 3, max = 15, value = 8),
+          hr(),
+          h6("General Options", class = "text-muted"),
+
+          sliderInput(ns("point_size"), "Point Size:", min = 3, max = 15, value = 8, width = "100%"),
           selectInput(ns("color_scheme"), "Color Scheme:",
                      choices = c("Default" = "default", "Viridis" = "viridis",
                                 "Plasma" = "plasma", "Journal" = "journal")),
@@ -111,20 +166,43 @@ interactive_plots_ui <- function(id) {
         actionButton(
           ns("btn_generate"),
           "Generate Interactive Plot",
-          class = "btn-primary w-100",
-          icon = icon("chart-line")
+          class = "btn-primary btn-lg w-100 mt-3",
+          icon = icon("chart-line"),
+          style = "min-height: 50px; font-size: 16px; font-weight: 600;"
         ),
 
-        hr(),
+        hr(class = "my-3"),
+        h5("Export Options", class = "text-muted mb-2"),
 
-        downloadButton(ns("download_html"), "Download HTML", class = "btn-success w-100 mb-2"),
-        downloadButton(ns("download_png"), "Download PNG", class = "btn-secondary w-100 mb-2"),
-        downloadButton(ns("download_pdf"), "Download PDF", class = "btn-secondary w-100")
+        downloadButton(
+          ns("download_html"),
+          "Download Interactive HTML",
+          class = "btn-success w-100 mb-3",
+          icon = icon("file-code"),
+          style = "min-height: 45px; font-size: 15px;"
+        ),
+
+        downloadButton(
+          ns("download_png"),
+          "Download High-Res PNG",
+          class = "btn-info w-100 mb-3",
+          icon = icon("file-image"),
+          style = "min-height: 45px; font-size: 15px;"
+        ),
+
+        downloadButton(
+          ns("download_pdf"),
+          "Download Publication PDF",
+          class = "btn-secondary w-100 mb-3",
+          icon = icon("file-pdf"),
+          style = "min-height: 45px; font-size: 15px;"
+        )
       ),
 
       # RIGHT PANEL: Plot Display
       card(
-        card_header("Interactive Plot"),
+        card_header("Interactive Plot", class = "bg-info text-white"),
+        style = "min-width: 600px; overflow-x: auto;",
 
         navset_card_tab(
           nav_panel(

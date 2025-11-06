@@ -6,40 +6,113 @@ nma_ui <- function(id) {
   ns <- NS(id)
   tagList(
     layout_columns(
-      col_widths = c(3, 9),
+      col_widths = breakpoints(
+        xs = c(12, 12),   # Phone: Stack vertically
+        sm = c(12, 12),   # Small tablet: Stack
+        md = c(4, 8),     # Tablet: 33/66 split
+        lg = c(3, 9)      # Desktop: 25/75 split
+      ),
       card(
-        card_header("NMA Settings"),
-        selectInput(ns("outcome"), "Outcome", choices = NULL),
-        selectInput(ns("reference"), "Reference Treatment", choices = NULL),
-        selectInput(ns("nma_type"), "NMA Type",
+        card_header("NMA Settings", class = "bg-primary text-white"),
+        style = "min-width: 280px;",
+
+        selectInput(ns("outcome"), "Outcome:", choices = NULL),
+        selectInput(ns("reference"), "Reference Treatment:", choices = NULL),
+        selectInput(ns("nma_type"), "NMA Type:",
                     choices = c("Standard NMA (netmeta)" = "standard",
                                "Multi-Level NMA (rma.mv)" = "multilevel"),
                     selected = "standard"),
-        selectInput(ns("method"), "Method",
+        selectInput(ns("method"), "Method:",
                     choices = c("Random Effects" = "random", "Fixed Effect" = "fixed")),
+
         conditionalPanel(
           condition = "input.nma_type == 'multilevel'",
           ns = ns,
-          numericInput(ns("correlation"), "Within-Study Correlation",
-                      value = 0.5, min = 0, max = 1, step = 0.1),
-          selectInput(ns("vcov_structure"), "Variance Structure",
+
+          hr(),
+          h5("Multi-Level NMA Parameters", class = "text-muted"),
+
+          sliderInput(
+            ns("correlation"),
+            "Within-Study Correlation (ρ):",
+            min = 0,
+            max = 1,
+            value = 0.5,
+            step = 0.05,
+            width = "100%"
+          ),
+
+          checkboxInput(ns("test_sensitivity"), "Test Correlation Sensitivity", FALSE),
+
+          conditionalPanel(
+            condition = "input.test_sensitivity == true",
+            ns = ns,
+            sliderInput(
+              ns("rho_range_min"),
+              "Min Correlation to Test:",
+              min = 0.1,
+              max = 0.5,
+              value = 0.3,
+              step = 0.1,
+              width = "100%"
+            ),
+            sliderInput(
+              ns("rho_range_max"),
+              "Max Correlation to Test:",
+              min = 0.5,
+              max = 0.9,
+              value = 0.7,
+              step = 0.1,
+              width = "100%"
+            ),
+            helpText("Tests robustness to correlation assumption (0.3, 0.5, 0.7)")
+          ),
+
+          selectInput(ns("vcov_structure"), "Variance Structure:",
                      choices = c("Unstructured" = "UN",
                                 "Compound Symmetry" = "CS",
                                 "Autoregressive" = "AR")),
+
           helpText("Multi-level NMA properly handles multi-arm trials and within-study correlations.")
         ),
+
+        hr(),
+        h5("Statistical Options", class = "text-muted"),
+
+        sliderInput(
+          ns("conf_level"),
+          "Confidence Level:",
+          min = 80,
+          max = 99,
+          value = 95,
+          step = 1,
+          post = "%",
+          width = "100%"
+        ),
+
         checkboxInput(ns("check_inconsistency"), "Check Inconsistency", TRUE),
+
         hr(),
         helpText("Note: For NMA, data should have multiple treatments per study."),
-        actionButton(ns("btn_run"), "Run NMA", class = "btn-primary w-100")
+
+        actionButton(
+          ns("btn_run"),
+          "Run Network Meta-Analysis",
+          class = "btn-primary btn-lg w-100 mt-3",
+          icon = icon("project-diagram"),
+          style = "min-height: 50px; font-size: 16px; font-weight: 600;"
+        )
       ),
       card(
-        card_header("NMA Results"),
+        card_header("NMA Results", class = "bg-info text-white"),
+        style = "min-width: 600px; overflow-x: auto;",
+
         navset_card_tab(
           nav_panel(
-            "Network Plot",
+            "Network",
+            icon = icon("diagram-project"),
             plotOutput(ns("network_plot"), height = "500px"),
-            hr(),
+            hr(class = "my-3"),
             plot_download_ui(
               ns("network_download"),
               plot_name = "Network Plot",
@@ -47,10 +120,26 @@ nma_ui <- function(id) {
               default_height = 2400
             )
           ),
-          nav_panel("League Table", DTOutput(ns("league_table"))),
-          nav_panel("Rankings", DTOutput(ns("rankings"))),
-          nav_panel("Inconsistency", verbatimTextOutput(ns("inconsistency"))),
-          nav_panel("Summary", verbatimTextOutput(ns("summary")))
+          nav_panel(
+            "League Table",
+            icon = icon("table"),
+            DTOutput(ns("league_table"))
+          ),
+          nav_panel(
+            "Rankings",
+            icon = icon("trophy"),
+            DTOutput(ns("rankings"))
+          ),
+          nav_panel(
+            "Consistency",
+            icon = icon("balance-scale"),
+            verbatimTextOutput(ns("inconsistency"))
+          ),
+          nav_panel(
+            "Summary",
+            icon = icon("chart-bar"),
+            verbatimTextOutput(ns("summary"))
+          )
         )
       )
     )

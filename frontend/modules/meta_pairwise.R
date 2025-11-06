@@ -9,19 +9,27 @@ meta_pairwise_ui <- function(id) {
 
   tagList(
     layout_columns(
-      col_widths = c(3, 9),
+      col_widths = breakpoints(
+        xs = c(12, 12),   # Phone: Stack vertically
+        sm = c(12, 12),   # Small tablet: Stack
+        md = c(4, 8),     # Tablet: 33/66 split
+        lg = c(3, 9)      # Desktop: 25/75 split
+      ),
 
       # Left panel: Settings
       card(
-        card_header("Analysis Settings"),
+        card_header("Analysis Settings", class = "bg-primary text-white"),
+        style = "min-width: 280px;",
+
         selectInput(
           ns("outcome"),
-          "Outcome",
+          "Outcome:",
           choices = NULL
         ),
+
         selectInput(
           ns("method"),
-          "Method",
+          "Estimation Method:",
           choices = c(
             "REML" = "REML",
             "DerSimonian-Laird" = "DL",
@@ -31,47 +39,119 @@ meta_pairwise_ui <- function(id) {
           ),
           selected = "REML"
         ),
+
         selectInput(
           ns("model"),
-          "Model",
+          "Model Type:",
           choices = c(
             "Random Effects" = "random",
             "Fixed Effect" = "fixed"
           ),
           selected = "random"
         ),
+
+        hr(),
+        h5("Statistical Parameters", class = "text-muted"),
+
+        sliderInput(
+          ns("conf_level"),
+          "Confidence Level:",
+          min = 80,
+          max = 99,
+          value = 95,
+          step = 1,
+          post = "%",
+          width = "100%"
+        ),
+
+        sliderInput(
+          ns("alpha"),
+          "Significance Level (α):",
+          min = 0.001,
+          max = 0.10,
+          value = 0.05,
+          step = 0.005,
+          width = "100%"
+        ),
+
+        hr(),
+        h5("Plot Options", class = "text-muted"),
+
+        sliderInput(
+          ns("forest_xlim_min"),
+          "Forest Plot X-axis Min:",
+          min = -10,
+          max = 0,
+          value = -3,
+          step = 0.5,
+          width = "100%"
+        ),
+
+        sliderInput(
+          ns("forest_xlim_max"),
+          "Forest Plot X-axis Max:",
+          min = 0,
+          max = 10,
+          value = 3,
+          step = 0.5,
+          width = "100%"
+        ),
+
+        sliderInput(
+          ns("plot_text_size"),
+          "Plot Text Size:",
+          min = 8,
+          max = 16,
+          value = 12,
+          step = 0.5,
+          post = "pt",
+          width = "100%"
+        ),
+
+        hr(),
+
         checkboxInput(ns("subgroup"), "Subgroup Analysis", FALSE),
         conditionalPanel(
           condition = "input.subgroup == true",
           ns = ns,
-          selectInput(ns("subgroup_var"), "Subgroup Variable", choices = NULL),
+          selectInput(ns("subgroup_var"), "Subgroup Variable:", choices = NULL),
           checkboxInput(ns("fast_subgroup"), "⚡ Use parallel processing (4x faster)", FALSE)
         ),
+
         checkboxInput(ns("meta_regression"), "Meta-Regression", FALSE),
         conditionalPanel(
           condition = "input.meta_regression == true",
           ns = ns,
-          selectInput(ns("moderator_vars"), "Moderators", choices = NULL, multiple = TRUE)
+          selectInput(ns("moderator_vars"), "Moderators:", choices = NULL, multiple = TRUE)
         ),
+
+        hr(),
+
         actionButton(
           ns("btn_run"),
-          "Run Analysis",
-          class = "btn-primary w-100 mt-3"
+          "Run Meta-Analysis",
+          class = "btn-primary btn-lg w-100 mt-3",
+          icon = icon("play-circle"),
+          style = "min-height: 50px; font-size: 16px; font-weight: 600;"
         )
       ),
 
       # Right panel: Results
       card(
-        card_header("Results"),
+        card_header("Results", class = "bg-info text-white"),
+        style = "min-width: 600px; overflow-x: auto;",
+
         navset_card_tab(
           nav_panel(
-            "Summary",
+            "Overview",
+            icon = icon("chart-bar"),
             verbatimTextOutput(ns("summary"))
           ),
           nav_panel(
             "Forest Plot",
+            icon = icon("chart-line"),
             plotlyOutput(ns("forest_plot"), height = "600px"),
-            hr(),
+            hr(class = "my-3"),
             plot_download_ui(
               ns("forest_download"),
               plot_name = "Forest Plot",
@@ -81,8 +161,9 @@ meta_pairwise_ui <- function(id) {
           ),
           nav_panel(
             "Funnel Plot",
+            icon = icon("filter"),
             plotlyOutput(ns("funnel_plot"), height = "500px"),
-            hr(),
+            hr(class = "my-3"),
             plot_download_ui(
               ns("funnel_download"),
               plot_name = "Funnel Plot",
@@ -91,14 +172,16 @@ meta_pairwise_ui <- function(id) {
             )
           ),
           nav_panel(
-            "Heterogeneity",
+            "Diagnostics",
+            icon = icon("stethoscope"),
             uiOutput(ns("heterogeneity"))
           ),
           nav_panel(
-            "Publication Bias",
+            "Pub Bias",
+            icon = icon("shield-exclamation"),
             verbatimTextOutput(ns("egger_test")),
             plotOutput(ns("trim_fill_plot")),
-            hr(),
+            hr(class = "my-3"),
             plot_download_ui(
               ns("trimfill_download"),
               plot_name = "Trim-and-Fill Plot",
@@ -262,11 +345,16 @@ meta_pairwise_server <- function(id, rv) {
 
       card(
         card_body(
-          h4("Heterogeneity Assessment"),
-          hr(),
+          h4("Heterogeneity Assessment", class = "mb-3"),
+          hr(class = "my-3"),
 
           layout_columns(
-            col_widths = c(6, 6),
+            col_widths = breakpoints(
+              xs = c(12, 12),   # Phone: Stack all
+              sm = c(6, 6),     # Tablet: 2 per row
+              md = c(6, 6),     # Desktop: 2 per row
+              lg = c(6, 6)      # Large: 2 per row
+            ),
 
             # Q statistic
             value_box(
@@ -288,7 +376,12 @@ meta_pairwise_server <- function(id, rv) {
           ),
 
           layout_columns(
-            col_widths = c(6, 6),
+            col_widths = breakpoints(
+              xs = c(12, 12),   # Phone: Stack all
+              sm = c(6, 6),     # Tablet: 2 per row
+              md = c(6, 6),     # Desktop: 2 per row
+              lg = c(6, 6)      # Large: 2 per row
+            ),
 
             # Tau-squared
             value_box(
