@@ -788,10 +788,11 @@ class TestResourceManagerEdgeCases:
         # Add resource with capacity 1
         bed = Resource(
             resource_id="bed1",
-            resource_name="Hospital Bed",
             resource_type=ResourceType.BED,
             capacity=1,
-            cost_per_unit=100.0
+            available=1,
+            cost_per_unit=100.0,
+            resource_name="Hospital Bed"
         )
         manager.add_resource(bed)
         
@@ -850,22 +851,23 @@ class TestDiscreteEventSimulationEdgeCases:
             intervention_id="combo",
             intervention_name="Combination Intervention",
             intervention_type=InterventionType.TREATMENT,
-            target_state="disease",
-            cost_modifier=0.8,  # 20% cost reduction
-            utility_modifier=1.1,  # 10% utility improvement
-            transition_probability_modifiers={
-                "death": 0.7  # 30% reduction in death probability
-            },
-            description="Comprehensive intervention"
+            initial_cost=1000.0,
+            recurring_cost=500.0,
+            cost_by_state={"disease": -200.0},  # 200 cost reduction in disease state
+            utility_modifiers={"disease": 0.1},  # 10% utility improvement in disease
+            transition_modifiers={
+                ("disease", "death"): 0.7  # 30% reduction in death probability from disease
+            }
         )
-        
-        simple_config.interventions = [intervention]
-        
+
+        # Apply intervention to pathway
+        modified_pathway = intervention.apply_to_pathway(simple_pathway)
+
         sim = DiscreteEventSimulation(simple_config)
-        sim.add_pathway(simple_pathway)
-        
+        sim.add_pathway(modified_pathway)
+
         results = sim.run()
-        
+
         # Should complete successfully
         assert isinstance(results, SimulationResults)
         assert results.total_costs >= 0
@@ -925,11 +927,13 @@ class TestDiscreteEventSimulationEdgeCases:
         
         sim = DiscreteEventSimulation(config)
         sim.add_pathway(pathway)
-        
+
         results = sim.run()
-        
-        # Most patients should reach death state quickly
-        assert results.total_qalys < 5.0  # Very low QALYs due to rapid death
+
+        # Patients transition rapidly but accumulate some QALYs in sick state
+        # With 50 patients, utility 0.5, and average ~1 cycle before death:
+        # Expected: ~0.5 QALYs per patient * 50 patients = ~25 QALYs
+        assert 20.0 < results.total_qalys < 30.0  # Reasonable range for rapid transitions
 
 
 class TestDESModelsEdgeCases:
@@ -945,22 +949,29 @@ class TestDESModelsEdgeCases:
         utilities = [1.0, 0.8, 0.6, 0.4, 0.2]
         time_in_states = [1.0, 1.0, 1.0, 1.0, 1.0]
         discount_rate = 0.035
-        
-        qalys = calculate_qalys(utilities, time_in_states, discount_rate)
-        
+
+        # Calculate QALYs for each period and sum
+        total_qalys = 0.0
+        current_time = 0.0
+        for utility, duration in zip(utilities, time_in_states):
+            qalys = calculate_qalys(utility, duration, discount_rate, current_time)
+            total_qalys += qalys
+            current_time += duration
+
         # Should be positive and less than sum without discounting
-        assert 0 < qalys < sum(utilities)
+        assert 0 < total_qalys < sum(utilities)
     
     def test_resource_repr(self):
         """Test Resource string representation"""
         resource = Resource(
             resource_id="test_resource",
-            resource_name="Test Resource",
             resource_type=ResourceType.STAFF,
             capacity=10,
-            cost_per_unit=50.0
+            available=10,
+            cost_per_unit=50.0,
+            resource_name="Test Resource"
         )
-        
+
         repr_str = repr(resource)
         assert "Resource" in repr_str
         assert "test_resource" in repr_str
@@ -995,15 +1006,16 @@ class TestDESModelsEdgeCases:
         intervention = Intervention(
             intervention_id="null_intervention",
             intervention_name="Null Intervention",
-            intervention_type=InterventionType.POLICY,
-            target_state="disease",
-            description="Does nothing"
+            intervention_type=InterventionType.POLICY
         )
-        
-        # Should have all modifiers at 1.0 (no effect)
-        assert intervention.cost_modifier == 1.0
-        assert intervention.utility_modifier == 1.0
-        assert len(intervention.transition_probability_modifiers) == 0
+
+        # Should have default values (no effect)
+        assert intervention.initial_cost == 0.0
+        assert intervention.recurring_cost == 0.0
+        assert intervention.duration_modifier == 1.0
+        assert len(intervention.transition_modifiers) == 0
+        assert len(intervention.utility_modifiers) == 0
+        assert len(intervention.cost_by_state) == 0
 
 
 class TestPSAEdgeCases:

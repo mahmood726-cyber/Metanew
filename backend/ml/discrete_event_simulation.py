@@ -80,6 +80,15 @@ class EventQueue:
         heapq.heappush(self.queue, event)
         self.event_count += 1
 
+    def add_event(self, event: Event):
+        """
+        Add an event (alias for schedule for backward compatibility)
+
+        Args:
+            event: Event to add
+        """
+        self.schedule(event)
+
     def next_event(self) -> Optional[Event]:
         """
         Get and remove next event

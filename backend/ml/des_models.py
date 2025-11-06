@@ -52,6 +52,7 @@ class EventType(Enum):
     STATE_TRANSITION = "state_transition"
     RESOURCE_AVAILABLE = "resource_available"
     RESOURCE_UNAVAILABLE = "resource_unavailable"
+    RESOURCE_REQUEST = "resource_request"
     ADVERSE_EVENT = "adverse_event"
     DEATH = "death"
     CYCLE_END = "cycle_end"
@@ -65,6 +66,7 @@ class ResourceType(Enum):
     NURSE = "nurse"
     DOCTOR = "doctor"
     SPECIALIST = "specialist"
+    STAFF = "staff"
     EQUIPMENT = "equipment"
     MEDICATION = "medication"
     SURGERY_ROOM = "surgery_room"
@@ -89,6 +91,8 @@ class InterventionType(Enum):
     BEHAVIORAL = "behavioral"
     SCREENING = "screening"
     PREVENTION = "prevention"
+    TREATMENT = "treatment"
+    POLICY = "policy"
 
 
 # ==================== CORE DATA STRUCTURES ====================
@@ -130,6 +134,7 @@ class Resource:
     available: int  # Currently available
     cost_per_unit: float  # Cost per unit per time period
     cost_per_use: float = 0.0  # One-time cost per use
+    resource_name: Optional[str] = None  # Optional human-readable name
 
     # Utilization tracking
     total_uses: int = 0
