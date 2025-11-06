@@ -1,7 +1,13 @@
 # Meta-Analytic Structural Equation Modeling (MASEM) Module
-# Implements two-stage MASEM using metaSEM package (Cheung 2015)
-# Stage 1: Pool correlation matrices across studies
-# Stage 2: Fit structural equation model to pooled matrix
+# Implements both TSSEM and OSMASEM using metaSEM package (Cheung 2015)
+#
+# TWO-STAGE MASEM (TSSEM):
+#   Stage 1: Pool correlation matrices across studies
+#   Stage 2: Fit structural equation model to pooled matrix
+#
+# ONE-STAGE MASEM (OSMASEM) - RECOMMENDED:
+#   Simultaneous pooling and SEM fitting with proper uncertainty propagation
+#   Theoretically superior to TSSEM (Cheung & Cheung, 2016)
 
 library(shiny)
 library(metaSEM)
@@ -44,15 +50,52 @@ masem_ui <- function(id) {
               icon = icon("book-open")
             ),
             hr(),
-            h6("Stage 1: Pooling Method"),
+            h6("MASEM Method"),
             selectInput(
-              ns("stage1_method"),
-              "Method",
+              ns("masem_method"),
+              "Analysis Method",
               choices = c(
-                "Random Effects (TSSEM)" = "REM",
-                "Fixed Effects" = "FEM"
+                "Two-Stage (TSSEM)" = "TSSEM",
+                "One-Stage (OSMASEM)" = "OSMASEM"
               ),
-              selected = "REM"
+              selected = "TSSEM"
+            ),
+            tags$small(
+              class = "text-muted",
+              "OSMASEM is theoretically superior (simultaneous pooling + fitting)"
+            ),
+            hr(),
+            conditionalPanel(
+              condition = "input.masem_method == 'TSSEM'",
+              ns = ns,
+              h6("Stage 1: Pooling Method"),
+              selectInput(
+                ns("stage1_method"),
+                "Pooling",
+                choices = c(
+                  "Random Effects" = "REM",
+                  "Fixed Effects" = "FEM"
+                ),
+                selected = "REM"
+              )
+            ),
+            conditionalPanel(
+              condition = "input.masem_method == 'OSMASEM'",
+              ns = ns,
+              h6("OSMASEM Options"),
+              selectInput(
+                ns("osmasem_model"),
+                "Random Effects Model",
+                choices = c(
+                  "Diagonal (Independent Tau²)" = "Diag",
+                  "Symmetric (Correlated Tau²)" = "Symm"
+                ),
+                selected = "Diag"
+              ),
+              tags$small(
+                class = "text-muted",
+                "Diagonal: Assumes independent between-study variance. Symmetric: Allows correlations."
+              )
             )
           ),
 
@@ -92,21 +135,26 @@ masem_ui <- function(id) {
 
           nav_panel(
             "Help",
-            h6("Two-Stage MASEM"),
+            h6("Meta-Analytic SEM (MASEM)"),
             tags$p("MASEM combines meta-analysis with SEM to synthesize correlation matrices and test theoretical models."),
 
-            h6("Stage 1: Pooling"),
+            h6("Two-Stage MASEM (TSSEM)"),
+            tags$p(class = "small", "Classic approach: Pool correlations first, then fit SEM"),
             tags$ul(
-              tags$li("Synthesizes correlation matrices across studies"),
-              tags$li("Random effects accounts for between-study heterogeneity"),
-              tags$li("Produces pooled correlation matrix + standard errors")
+              tags$li("Stage 1: Synthesizes correlation matrices (random/fixed effects)"),
+              tags$li("Stage 2: Fits structural model to pooled matrix"),
+              tags$li("Pro: Simple, fast, widely used"),
+              tags$li("Con: Doesn't fully propagate uncertainty from Stage 1")
             ),
 
-            h6("Stage 2: SEM Fitting"),
+            h6("One-Stage MASEM (OSMASEM)"),
+            tags$p(class = "small text-primary", tags$b("Recommended:"), " Theoretically superior method"),
             tags$ul(
-              tags$li("Fits structural model to pooled correlations"),
-              tags$li("Tests direct and indirect effects"),
-              tags$li("Provides model fit indices")
+              tags$li("Simultaneously pools correlations AND fits SEM"),
+              tags$li("Properly accounts for uncertainty in pooling"),
+              tags$li("More accurate standard errors and fit indices"),
+              tags$li("Handles missing correlations better"),
+              tags$li("Uses maximum likelihood estimation")
             ),
 
             h6("Example Use Cases:"),
@@ -115,6 +163,13 @@ masem_ui <- function(id) {
               tags$li(tags$b("Measurement:"), "CFA on pooled correlations"),
               tags$li(tags$b("Path models:"), "Test complex theoretical models"),
               tags$li(tags$b("Multi-group:"), "Compare models across subgroups")
+            ),
+
+            hr(),
+            h6("When to Use Which Method?"),
+            tags$ul(
+              tags$li(tags$b("OSMASEM:"), "Default choice for most analyses"),
+              tags$li(tags$b("TSSEM:"), "When you have very large models (faster) or want two-step inspection")
             )
           )
         )
@@ -182,7 +237,9 @@ masem_server <- function(id, rv) {
     # Results storage
     stage1_result <- reactiveVal(NULL)
     stage2_result <- reactiveVal(NULL)
+    osmasem_result <- reactiveVal(NULL)  # For one-stage MASEM
     masem_data <- reactiveVal(NULL)
+    current_method <- reactiveVal("TSSEM")  # Track which method was used
 
     # Load example data
     observeEvent(input$btn_load_example, {
@@ -281,14 +338,7 @@ prop_mediated := (a*b) / (cp + (a*b))"
         tryCatch({
           data <- masem_data()
 
-          # ===================================================================
-          # STAGE 1: Pool correlation matrices
-          # ===================================================================
-          setProgress(0.2, detail = "Stage 1: Pooling correlation matrices...")
-
-          # Prepare data for metaSEM (requires specific format)
-          # metaSEM expects list of correlation matrices and sample sizes
-
+          # Prepare data for metaSEM
           cor_list <- data$cor_matrices
           n_list <- data$n
 
@@ -297,49 +347,93 @@ prop_mediated := (a*b) / (cp + (a*b))"
             dimnames(cor_list[[i]]) <- list(data$var_names, data$var_names)
           }
 
-          # Stage 1: Pool correlations using TSSEM or Fixed Effects
-          if (input$stage1_method == "REM") {
-            # Two-Stage SEM with Random Effects
-            stage1 <- tssem1(
-              Cov = cor_list,
-              n = n_list,
-              method = "REM"
-            )
-          } else {
-            # Fixed Effects Model
-            stage1 <- tssem1(
-              Cov = cor_list,
-              n = n_list,
-              method = "FEM"
-            )
-          }
-
-          stage1_result(stage1)
-
-          # ===================================================================
-          # STAGE 2: Fit structural model
-          # ===================================================================
-          setProgress(0.6, detail = "Stage 2: Fitting structural model...")
-
-          # Parse lavaan syntax
+          # Get model syntax
           model_syntax <- input$model_syntax
 
-          # Create A matrix (asymmetric paths) and S matrix (symmetric paths)
-          # This is simplified - metaSEM requires matrices, but we can use
-          # lavaan.Ramsimulation to convert syntax
+          # ===================================================================
+          # METHOD SELECTION: TSSEM vs OSMASEM
+          # ===================================================================
 
-          # For demonstration, fit using WLS on pooled matrix
-          stage2 <- tssem2(
-            stage1,
-            RAM = lavaan2RAM(
+          if (input$masem_method == "TSSEM") {
+            # =================================================================
+            # TWO-STAGE MASEM (Classic Approach)
+            # =================================================================
+            current_method("TSSEM")
+
+            # Clear OSMASEM results
+            osmasem_result(NULL)
+
+            # STAGE 1: Pool correlation matrices
+            setProgress(0.2, detail = "Stage 1: Pooling correlation matrices...")
+
+            if (input$stage1_method == "REM") {
+              stage1 <- tssem1(
+                Cov = cor_list,
+                n = n_list,
+                method = "REM"
+              )
+            } else {
+              stage1 <- tssem1(
+                Cov = cor_list,
+                n = n_list,
+                method = "FEM"
+              )
+            }
+
+            stage1_result(stage1)
+
+            # STAGE 2: Fit structural model
+            setProgress(0.6, detail = "Stage 2: Fitting structural model...")
+
+            stage2 <- tssem2(
+              stage1,
+              RAM = lavaan2RAM(
+                model_syntax,
+                obs.variables = data$var_names
+              )
+            )
+
+            stage2_result(stage2)
+
+            showNotification("✓ Two-Stage MASEM analysis complete", type = "message")
+
+          } else {
+            # =================================================================
+            # ONE-STAGE MASEM (OSMASEM - Theoretically Superior)
+            # =================================================================
+            current_method("OSMASEM")
+
+            # Clear two-stage results
+            stage1_result(NULL)
+            stage2_result(NULL)
+
+            setProgress(0.3, detail = "Running One-Stage MASEM (simultaneous pooling + fitting)...")
+
+            # Convert lavaan syntax to RAM matrices
+            RAM <- lavaan2RAM(
               model_syntax,
               obs.variables = data$var_names
             )
-          )
 
-          stage2_result(stage2)
+            # Run OSMASEM with maximum likelihood
+            # This simultaneously pools correlations AND fits the SEM model
+            osmasem_fit <- osmasem(
+              model.name = "OSMASEM",
+              Mmatrix = RAM$M,      # Model-implied mean structure (usually NULL for correlations)
+              Tmatrix = RAM$T,      # Selection matrix
+              data = cor_list,      # List of correlation matrices
+              n = n_list,           # Sample sizes
+              Amatrix = RAM$A,      # Asymmetric paths (regressions)
+              Smatrix = RAM$S,      # Symmetric paths (variances/covariances)
+              Fmatrix = RAM$F,      # Filter matrix (selects observed variables)
+              RE.type = input$osmasem_model,  # "Diag" or "Symm"
+              intervals.type = "z"   # Use Wald CI (faster than LB)
+            )
 
-          showNotification("✓ MASEM analysis complete", type = "message")
+            osmasem_result(osmasem_fit)
+
+            showNotification("✓ One-Stage MASEM (OSMASEM) analysis complete", type = "message")
+          }
 
         }, error = function(e) {
           showNotification(
@@ -354,43 +448,63 @@ prop_mediated := (a*b) / (cp + (a*b))"
 
     # Stage 1 summary output
     output$stage1_summary <- renderPrint({
-      req(stage1_result())
+      # Show pooled matrix for TSSEM, or explain OSMASEM doesn't have separate stage 1
+      if (current_method() == "TSSEM") {
+        req(stage1_result())
 
-      cat("STAGE 1: POOLED CORRELATION MATRIX\n")
-      cat("==================================\n\n")
+        cat("STAGE 1: POOLED CORRELATION MATRIX (TSSEM)\n")
+        cat("===========================================\n\n")
 
-      stage1 <- stage1_result()
+        stage1 <- stage1_result()
 
-      cat("Pooling method:", ifelse(input$stage1_method == "REM",
-                                     "Random Effects (TSSEM)",
-                                     "Fixed Effects"), "\n")
-      cat("Number of studies:", length(masem_data()$study_id), "\n")
-      cat("Total N:", sum(masem_data()$n), "\n\n")
+        cat("Pooling method:", ifelse(input$stage1_method == "REM",
+                                       "Random Effects",
+                                       "Fixed Effects"), "\n")
+        cat("Number of studies:", length(masem_data()$study_id), "\n")
+        cat("Total N:", sum(masem_data()$n), "\n\n")
 
-      cat("Pooled Correlation Matrix:\n")
-      pooled <- coef(stage1, select = "fixed")
+        cat("Pooled Correlation Matrix:\n")
+        pooled <- coef(stage1, select = "fixed")
 
-      # Extract unique correlations
-      k <- length(masem_data()$var_names)
-      cor_matrix <- matrix(NA, k, k)
-      dimnames(cor_matrix) <- list(masem_data()$var_names, masem_data()$var_names)
+        # Extract unique correlations
+        k <- length(masem_data()$var_names)
+        cor_matrix <- matrix(NA, k, k)
+        dimnames(cor_matrix) <- list(masem_data()$var_names, masem_data()$var_names)
 
-      # Fill diagonal with 1s
-      diag(cor_matrix) <- 1
+        # Fill diagonal with 1s
+        diag(cor_matrix) <- 1
 
-      # Fill off-diagonal
-      cor_names <- names(pooled)
-      for (param in cor_names) {
-        # Parse parameter name (e.g., "S21" means row 2, col 1)
-        if (grepl("^S", param)) {
-          row <- as.numeric(substr(param, 2, 2))
-          col <- as.numeric(substr(param, 3, 3))
-          cor_matrix[row, col] <- pooled[param]
-          cor_matrix[col, row] <- pooled[param]  # Symmetric
+        # Fill off-diagonal
+        cor_names <- names(pooled)
+        for (param in cor_names) {
+          # Parse parameter name (e.g., "S21" means row 2, col 1)
+          if (grepl("^S", param)) {
+            row <- as.numeric(substr(param, 2, 2))
+            col <- as.numeric(substr(param, 3, 3))
+            cor_matrix[row, col] <- pooled[param]
+            cor_matrix[col, row] <- pooled[param]  # Symmetric
+          }
         }
-      }
 
-      print(round(cor_matrix, 3))
+        print(round(cor_matrix, 3))
+
+      } else if (current_method() == "OSMASEM") {
+        req(osmasem_result())
+
+        cat("ONE-STAGE MASEM (OSMASEM)\n")
+        cat("=========================\n\n")
+
+        cat("Method: Simultaneous pooling + SEM fitting\n")
+        cat("Random effects model:", input$osmasem_model, "\n")
+        cat("Number of studies:", length(masem_data()$study_id), "\n")
+        cat("Total N:", sum(masem_data()$n), "\n\n")
+
+        cat("Note: OSMASEM does not have separate 'stages'.\n")
+        cat("Pooling and model fitting occur simultaneously,\n")
+        cat("which properly accounts for uncertainty propagation.\n\n")
+
+        cat("See 'SEM Results' tab for parameter estimates and fit indices.\n")
+      }
     })
 
     # Stage 1 heterogeneity
@@ -416,10 +530,16 @@ prop_mediated := (a*b) / (cp + (a*b))"
 
     # Model fit indices
     output$fit_indices <- renderTable({
-      req(stage2_result())
+      # Get model result based on method
+      if (current_method() == "TSSEM") {
+        req(stage2_result())
+        model_result <- stage2_result()
+      } else {
+        req(osmasem_result())
+        model_result <- osmasem_result()
+      }
 
-      stage2 <- stage2_result()
-      fit <- summary(stage2)
+      fit <- summary(model_result)
 
       # Extract fit indices
       data.frame(
@@ -442,16 +562,23 @@ prop_mediated := (a*b) / (cp + (a*b))"
           ifelse(fit$RMSEA < 0.05, "Excellent", ifelse(fit$RMSEA < 0.08, "Acceptable", "Poor")),
           ifelse(fit$SRMR < 0.05, "Excellent", ifelse(fit$SRMR < 0.08, "Acceptable", "Poor"))
         ),
+        Method = current_method(),
         stringsAsFactors = FALSE
       )
     }, striped = TRUE, hover = TRUE)
 
     # Parameter estimates
     output$parameter_estimates <- renderTable({
-      req(stage2_result())
+      # Get model result based on method
+      if (current_method() == "TSSEM") {
+        req(stage2_result())
+        model_result <- stage2_result()
+      } else {
+        req(osmasem_result())
+        model_result <- osmasem_result()
+      }
 
-      stage2 <- stage2_result()
-      params <- summary(stage2)$parameters
+      params <- summary(model_result)$parameters
 
       # Format parameter table
       params_df <- as.data.frame(params)
@@ -469,15 +596,20 @@ prop_mediated := (a*b) / (cp + (a*b))"
 
     # Defined parameters (indirect effects)
     output$defined_parameters <- renderTable({
-      req(stage2_result())
-
-      stage2 <- stage2_result()
+      # Get model result based on method
+      if (current_method() == "TSSEM") {
+        req(stage2_result())
+        model_result <- stage2_result()
+      } else {
+        req(osmasem_result())
+        model_result <- osmasem_result()
+      }
 
       # Extract defined parameters (e.g., indirect effects)
       # This depends on lavaan model having := definitions
 
       tryCatch({
-        defined <- summary(stage2)$indirect
+        defined <- summary(model_result)$indirect
 
         if (!is.null(defined) && nrow(defined) > 0) {
           defined_df <- as.data.frame(defined)
@@ -502,15 +634,19 @@ prop_mediated := (a*b) / (cp + (a*b))"
 
     # Path diagram
     output$path_diagram <- renderPlot({
-      req(stage2_result())
+      # Get model result based on method
+      if (current_method() == "TSSEM") {
+        req(stage2_result())
+        model_result <- stage2_result()
+      } else {
+        req(osmasem_result())
+        model_result <- osmasem_result()
+      }
 
       tryCatch({
-        # Convert metaSEM result to lavaan object for semPlot
-        stage2 <- stage2_result()
-
         # Create path diagram using semPlot
         semPaths(
-          stage2,
+          model_result,
           what = "est",
           layout = "tree2",
           rotation = 2,
@@ -525,7 +661,7 @@ prop_mediated := (a*b) / (cp + (a*b))"
           title.cex = 1.5
         )
 
-        title(main = "Path Diagram with Standardized Estimates", line = -1)
+        title(main = paste("Path Diagram -", current_method()), line = -1)
 
       }, error = function(e) {
         plot.new()
@@ -544,7 +680,14 @@ prop_mediated := (a*b) / (cp + (a*b))"
         },
 
         content = function(file) {
-          req(stage2_result())
+          # Get model result based on method
+          if (current_method() == "TSSEM") {
+            req(stage2_result())
+            model_result <- stage2_result()
+          } else {
+            req(osmasem_result())
+            model_result <- osmasem_result()
+          }
 
           format <- tolower(input_dl$format)
 
@@ -570,10 +713,8 @@ prop_mediated := (a*b) / (cp + (a*b))"
           }
 
           # Generate path diagram
-          stage2 <- stage2_result()
-
           semPaths(
-            stage2,
+            model_result,
             what = "est",
             layout = "tree2",
             rotation = 2,
@@ -586,7 +727,7 @@ prop_mediated := (a*b) / (cp + (a*b))"
             edge.color = "black"
           )
 
-          title(main = "Path Diagram with Standardized Estimates")
+          title(main = paste("Path Diagram -", current_method()))
 
           dev.off()
         }
@@ -595,32 +736,51 @@ prop_mediated := (a*b) / (cp + (a*b))"
 
     # Full summary
     output$full_summary <- renderPrint({
-      req(stage1_result(), stage2_result())
-
       cat("=================================================================\n")
-      cat("TWO-STAGE META-ANALYTIC STRUCTURAL EQUATION MODELING (MASEM)\n")
+      cat("META-ANALYTIC STRUCTURAL EQUATION MODELING (MASEM)\n")
       cat("=================================================================\n\n")
 
+      cat("Method:", current_method(), "\n")
       cat("Data:\n")
       cat("  Number of studies:", length(masem_data()$study_id), "\n")
       cat("  Total sample size:", sum(masem_data()$n), "\n")
       cat("  Variables:", paste(masem_data()$var_names, collapse = ", "), "\n\n")
 
-      cat("=================================================================\n")
-      cat("STAGE 1: POOLING CORRELATION MATRICES\n")
-      cat("=================================================================\n\n")
+      if (current_method() == "TSSEM") {
+        req(stage1_result(), stage2_result())
 
-      print(summary(stage1_result()))
+        cat("=================================================================\n")
+        cat("STAGE 1: POOLING CORRELATION MATRICES\n")
+        cat("=================================================================\n\n")
 
-      cat("\n=================================================================\n")
-      cat("STAGE 2: STRUCTURAL EQUATION MODEL\n")
-      cat("=================================================================\n\n")
+        print(summary(stage1_result()))
 
-      cat("Model specification:\n")
-      cat(input$model_syntax, "\n\n")
+        cat("\n=================================================================\n")
+        cat("STAGE 2: STRUCTURAL EQUATION MODEL\n")
+        cat("=================================================================\n\n")
 
-      cat("Results:\n")
-      print(summary(stage2_result()))
+        cat("Model specification:\n")
+        cat(input$model_syntax, "\n\n")
+
+        cat("Results:\n")
+        print(summary(stage2_result()))
+
+      } else {
+        req(osmasem_result())
+
+        cat("=================================================================\n")
+        cat("ONE-STAGE MASEM (OSMASEM)\n")
+        cat("=================================================================\n\n")
+
+        cat("Model specification:\n")
+        cat(input$model_syntax, "\n\n")
+
+        cat("Random effects model:", input$osmasem_model, "\n\n")
+
+        cat("Results:\n")
+        cat("(Simultaneous pooling + SEM fitting with proper uncertainty propagation)\n\n")
+        print(summary(osmasem_result()))
+      }
     })
 
     # Data preview
@@ -660,8 +820,10 @@ prop_mediated := (a*b) / (cp + (a*b))"
     # Return results
     return(reactive({
       list(
+        method = current_method(),
         stage1 = stage1_result(),
         stage2 = stage2_result(),
+        osmasem = osmasem_result(),
         data = masem_data()
       )
     }))
