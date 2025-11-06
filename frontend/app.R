@@ -28,6 +28,18 @@ library(Matrix)      # For multi-level NMA
 library(gridExtra)   # Plot arrangements
 suppressMessages(library(tidyr))  # Data reshaping
 
+# Load optimization utilities first (for superfast performance)
+cat("⚡ Loading performance optimizations...\n")
+source("utils/ui_optimizations.R", local = TRUE)
+source("utils/publication_cache.R", local = TRUE)
+source("utils/extreme_optimizations.R", local = TRUE)
+
+# Pre-compile functions for speed
+precompile_functions()
+
+# Initialize caches
+precompute_publication_cache(NULL)
+
 # Source modules
 source("modules/data_import.R")
 source("modules/protocol.R")
