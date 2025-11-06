@@ -102,22 +102,50 @@ living_ma_server <- function(id, rv) {
           n_new <- length(setdiff(combined_data$study_id, old_data$study_id))
           n_removed <- length(setdiff(old_data$study_id, combined_data$study_id))
 
-          # Re-run meta-analyses for all outcomes
-          # Use incremental meta-analysis for faster updates (from extreme_optimizations.R)
+          # =======================================================================
+          # INTELLIGENT UPDATE STRATEGY: Incremental vs Full Recomputation
+          # =======================================================================
+          # Living meta-analysis requires re-running all analyses when new studies are added.
+          # Instead of always computing from scratch, we use intelligent decision logic:
+          #
+          # FAST PATH (incremental): When previous results exist AND new studies for this outcome
+          #   → Uses incremental_meta_analysis() which leverages previous tau² estimates
+          #   → 10-16x faster than full recomputation
+          #
+          # STANDARD PATH (full): When no previous results OR no new studies for this outcome
+          #   → Uses run_pairwise_ma() for complete recomputation
+          #   → Necessary when starting fresh or when outcome wasn't in new upload
+
           new_results <- list()
           for (outcome in names(current_version$results)) {
+            # Get previous meta-analysis results for this outcome
             previous_ma <- current_version$results[[outcome]]
 
-            # Filter data by outcome
+            # Filter combined and new data to this specific outcome
             outcome_data <- combined_data[combined_data$outcome == outcome, ]
             new_study_data <- new_data[new_data$outcome == outcome, ]
 
+            # DECISION: Use incremental update OR full recomputation?
+            # Criteria: (1) New studies exist for this outcome AND (2) Previous results available
             if (nrow(new_study_data) > 0 && !is.null(previous_ma)) {
-              # Use incremental update (10-16x faster!)
+              # -------------------------------------------------------------------
+              # FAST PATH: Incremental meta-analysis (10-16x faster!)
+              # -------------------------------------------------------------------
+              # Integration point: Calls incremental_meta_analysis() from extreme_optimizations.R
+              # This function uses previous tau² as starting value for faster convergence
+              # Expected speedup: 10-16x when new studies are ≤10% of total
+
               cat(sprintf("⚡ Using incremental update for outcome: %s\n", outcome))
               new_results[[outcome]] <- incremental_meta_analysis(previous_ma, new_study_data)
             } else {
-              # Full recomputation (no previous results or no new studies for this outcome)
+              # -------------------------------------------------------------------
+              # STANDARD PATH: Full recomputation from scratch
+              # -------------------------------------------------------------------
+              # Used when:
+              # - No previous results exist for this outcome, OR
+              # - New upload doesn't contain any studies for this outcome
+              # This ensures we always have complete results even when structure changes
+
               new_results[[outcome]] <- run_pairwise_ma(
                 data = combined_data,
                 outcome = outcome,

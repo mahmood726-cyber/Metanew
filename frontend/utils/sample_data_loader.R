@@ -26,6 +26,11 @@ generate_sample_ma_data <- function() {
             0.10, 0.16, 0.13, 0.12, 0.17,
             0.11, 0.14, 0.10, 0.13, 0.12),
 
+    # Variance (sei^2) - required for meta-analysis
+    vi = c(0.12, 0.15, 0.18, 0.11, 0.14,
+           0.10, 0.16, 0.13, 0.12, 0.17,
+           0.11, 0.14, 0.10, 0.13, 0.12)^2,
+
     # Sample sizes
     n_total = c(450, 320, 280, 520, 380,
                 610, 290, 440, 480, 260,
@@ -65,7 +70,7 @@ generate_sample_ma_results <- function(data = NULL) {
     ci_upper = -0.287,
     se = 0.032,
     z_value = -10.91,
-    p_value = < 0.0001,
+    p_value = 0.0001,  # Fixed: was "< 0.0001" which is invalid syntax
     i_squared = 32.4,
     tau_squared = 0.0074,
     q_statistic = 20.7,
