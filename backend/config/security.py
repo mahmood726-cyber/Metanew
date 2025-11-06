@@ -21,12 +21,17 @@ class Environment(Enum):
     DEVELOPMENT = "development"
     STAGING = "staging"
     PRODUCTION = "production"
+    TEST = "test"
 
 
 # ==================== ENVIRONMENT ====================
 
 # Determine current environment
-ENVIRONMENT = Environment(os.getenv("ENVIRONMENT", "development"))
+env_value = os.getenv("ENVIRONMENT", "development")
+# Handle test environment (pytest sets this)
+if env_value not in ["development", "staging", "production", "test"]:
+    env_value = "development"
+ENVIRONMENT = Environment(env_value)
 
 # Is production environment
 IS_PRODUCTION = ENVIRONMENT == Environment.PRODUCTION

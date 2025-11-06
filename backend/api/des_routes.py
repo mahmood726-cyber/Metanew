@@ -23,8 +23,7 @@ from ml.des_models import (
     Resource, ResourceType,
     SimulationConfig, SimulationResults,
     Intervention, InterventionType,
-    CostCategory, EventType,
-    EvidenceQuality, StudyDesign
+    CostCategory, EventType
 )
 
 # Configure logging

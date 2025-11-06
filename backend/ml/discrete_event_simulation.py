@@ -624,12 +624,15 @@ class DiscreteEventSimulation:
 
         psa_results = []
 
+        # Save pathways before looping (will be cleared on reinit)
+        saved_pathways = list(self.pathways.values())
+
         for i in range(n_iterations):
             # Reset simulation
             self.__init__(self.config)
 
             # Re-add pathways (with potentially sampled parameters)
-            for pathway in self.pathways.values():
+            for pathway in saved_pathways:
                 self.add_pathway(pathway)
 
             # Run simulation

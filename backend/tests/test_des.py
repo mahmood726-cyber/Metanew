@@ -277,7 +277,7 @@ class TestResource:
         )
 
         utilization = bed.utilization_rate()
-        assert utilization == 0.3  # 3 out of 10 in use
+        assert abs(utilization - 0.3) < 0.01  # 3 out of 10 in use (with floating point tolerance)
 
 
 class TestSimulationConfig:
