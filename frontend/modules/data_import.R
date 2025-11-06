@@ -5,6 +5,9 @@ library(shiny)
 library(DT)
 library(readxl)
 
+# Source intelligent data validation utility
+source("utils/data_validation.R", local = TRUE)
+
 # UI
 data_import_ui <- function(id) {
   ns <- NS(id)
@@ -90,40 +93,108 @@ data_import_server <- function(id, rv) {
     # Reactive data storage
     uploaded_data <- reactiveVal(NULL)
     validation_result <- reactiveVal(NULL)
+    preprocessing_report <- reactiveVal(NULL)  # Store preprocessing report
 
-    # Handle file upload
+    # Handle file upload WITH INTELLIGENT PREPROCESSING
     observeEvent(input$file_upload, {
       req(input$file_upload)
 
-      tryCatch({
-        ext <- tools::file_ext(input$file_upload$name)
+      withProgress(message = "Loading and preprocessing data...", {
 
-        if (ext == "csv") {
-          data <- read.csv(
-            input$file_upload$datapath,
-            header = input$has_header,
-            stringsAsFactors = FALSE
+        tryCatch({
+          setProgress(0.2, detail = "Reading file...")
+
+          ext <- tools::file_ext(input$file_upload$name)
+
+          if (ext == "csv") {
+            raw_data <- read.csv(
+              input$file_upload$datapath,
+              header = input$has_header,
+              stringsAsFactors = FALSE,
+              na.strings = c("", " ", "NA", "N/A", "na", "n/a", "NULL", "null", "-", "--", ".")
+            )
+          } else if (ext %in% c("xlsx", "xls")) {
+            raw_data <- read_excel(input$file_upload$datapath)
+          } else {
+            stop("Unsupported file format")
+          }
+
+          setProgress(0.4, detail = "Cleaning and validating...")
+
+          # Determine analysis type
+          analysis_type <- if (input$data_type == "auto") {
+            detect_data_type(raw_data)
+          } else {
+            input$data_type
+          }
+
+          # Run comprehensive preprocessing
+          preprocess_result <- preprocess_data(
+            df = raw_data,
+            analysis_type = "pairwise",  # Default - covers most cases
+            expected_columns = NULL
           )
-        } else if (ext %in% c("xlsx", "xls")) {
-          data <- read_excel(input$file_upload$datapath)
-        } else {
-          stop("Unsupported file format")
-        }
 
-        uploaded_data(data)
-        rv$data <- data
+          setProgress(0.7, detail = "Finalizing...")
 
-        showNotification(
-          paste("Loaded", nrow(data), "rows,", ncol(data), "columns"),
-          type = "message"
-        )
+          # Store results
+          preprocessing_report(preprocess_result$report)
 
-      }, error = function(e) {
-        showNotification(
-          paste("Error loading file:", e$message),
-          type = "error",
-          duration = 10
-        )
+          if (preprocess_result$success) {
+            # Use cleaned data
+            uploaded_data(preprocess_result$data)
+            rv$data <- preprocess_result$data
+
+            # Generate user-friendly report
+            report_text <- generate_report_text(preprocess_result)
+
+            showNotification(
+              paste("✓ Data loaded successfully!",
+                    nrow(preprocess_result$data), "studies,",
+                    ncol(preprocess_result$data), "variables"),
+              type = "message",
+              duration = 8
+            )
+
+            if (preprocess_result$has_warnings) {
+              showNotification(
+                paste("⚠", length(preprocess_result$report$warnings), "warnings - check Validation tab"),
+                type = "warning",
+                duration = 10
+              )
+            }
+
+            # Print report to console for debugging
+            cat("\n")
+            cat(report_text)
+            cat("\n")
+
+          } else {
+            # Validation failed
+            showNotification(
+              paste("✗ Data validation failed:", length(preprocess_result$report$errors), "errors"),
+              type = "error",
+              duration = 15
+            )
+
+            # Still store the data for inspection
+            uploaded_data(preprocess_result$data)
+
+            # Generate error report
+            report_text <- generate_report_text(preprocess_result)
+            cat("\n")
+            cat(report_text)
+            cat("\n")
+          }
+
+        }, error = function(e) {
+          showNotification(
+            paste("Error loading file:", e$message),
+            type = "error",
+            duration = 15
+          )
+          print(e)  # Debugging
+        })
       })
     })
 
@@ -257,52 +328,213 @@ data_import_server <- function(id, rv) {
       })
     })
 
-    # Display validation results
+    # Display validation results - NEW COMPREHENSIVE VERSION
     output$validation_results <- renderUI({
-      req(validation_result())
 
-      result <- validation_result()
+      if (!is.null(preprocessing_report())) {
+        # Use new preprocessing report
+        report <- preprocessing_report()
 
-      if (result$is_valid) {
-        div(
-          class = "alert alert-success",
-          icon("check-circle"),
-          " Data validation passed!",
-          hr(),
-          h5("Summary:"),
-          tags$ul(
-            tags$li(paste("Rows:", nrow(uploaded_data()))),
-            tags$li(paste("Studies:", length(unique(uploaded_data()$study_id)))),
-            tags$li(paste("Warnings:", result$summary$warnings))
+        # Header with overall status
+        status_div <- if (report$validation$valid) {
+          div(
+            class = "alert alert-success",
+            icon("check-circle"),
+            tags$strong(" Data Validation PASSED"),
+            tags$p(class = "mb-0 mt-2",
+                   sprintf("✓ %d studies × %d variables ready for analysis",
+                          report$final_rows, report$final_cols))
           )
-        )
-      } else {
-        div(
+        } else {
           div(
             class = "alert alert-danger",
             icon("exclamation-triangle"),
-            sprintf(" %d errors, %d warnings",
-                    result$summary$errors,
-                    result$summary$warnings)
-          ),
-          hr(),
-          h5("Problems:"),
-          tagList(
-            lapply(result$problems, function(p) {
-              class_name <- switch(p$severity,
-                                   "error" = "alert-danger",
-                                   "warning" = "alert-warning",
-                                   "info" = "alert-info")
-              div(
-                class = paste("alert", class_name, "py-2 px-3 mb-2"),
-                tags$strong(p$severity, ": "),
-                p$message,
-                if (!is.null(p$study_id)) {
-                  tags$small(paste(" (Study:", p$study_id, ")"))
-                }
-              )
-            })
+            tags$strong(" Data Validation FAILED"),
+            tags$p(class = "mb-0 mt-2",
+                   sprintf("%d errors must be fixed before analysis",
+                          length(report$errors)))
           )
+        }
+
+        # Column changes section
+        column_changes <- if (!is.null(report$column_changes)) {
+          changed <- report$column_changes[report$column_changes$changed, ]
+          if (nrow(changed) > 0) {
+            div(
+              class = "card mb-3",
+              div(class = "card-header bg-info text-white",
+                  icon("edit"), " Column Name Corrections"),
+              div(
+                class = "card-body",
+                tags$p(class = "text-muted",
+                       "The following columns were automatically renamed to R-compatible format:"),
+                tags$table(
+                  class = "table table-sm",
+                  tags$thead(
+                    tags$tr(
+                      tags$th("Original"),
+                      tags$th("→"),
+                      tags$th("New Name")
+                    )
+                  ),
+                  tags$tbody(
+                    lapply(1:nrow(changed), function(i) {
+                      tags$tr(
+                        tags$td(tags$code(changed$original[i])),
+                        tags$td("→"),
+                        tags$td(tags$code(class = "text-success", changed$new[i]))
+                      )
+                    })
+                  )
+                )
+              )
+            )
+          }
+        }
+
+        # Missing data section
+        missing_div <- if (report$missing_data$overall_pct > 0) {
+          severity_class <- if (report$missing_data$overall_pct > 30) {
+            "warning"
+          } else if (report$missing_data$overall_pct > 10) {
+            "info"
+          } else {
+            "secondary"
+          }
+
+          div(
+            class = "card mb-3",
+            div(class = paste("card-header bg-", severity_class, " text-white"),
+                icon("database"), " Missing Data Analysis"),
+            div(
+              class = "card-body",
+              tags$p(
+                tags$strong(sprintf("Overall: %.1f%% missing",
+                                   report$missing_data$overall_pct))
+              ),
+              if (length(report$missing_data$recommendations) > 0) {
+                tags$ul(
+                  lapply(report$missing_data$recommendations, function(rec) {
+                    tags$li(rec)
+                  })
+                )
+              }
+            )
+          )
+        }
+
+        # Errors section
+        errors_div <- if (length(report$errors) > 0) {
+          div(
+            class = "card mb-3",
+            div(class = "card-header bg-danger text-white",
+                icon("times-circle"), " Errors (Must Fix)"),
+            div(
+              class = "card-body",
+              tags$ul(
+                lapply(report$errors, function(err) {
+                  tags$li(class = "text-danger", err)
+                })
+              )
+            )
+          )
+        }
+
+        # Warnings section
+        warnings_div <- if (length(report$warnings) > 0) {
+          div(
+            class = "card mb-3",
+            div(class = "card-header bg-warning",
+                icon("exclamation-triangle"), " Warnings"),
+            div(
+              class = "card-body",
+              tags$ul(
+                lapply(report$warnings, function(warn) {
+                  tags$li(class = "text-warning", warn)
+                })
+              )
+            )
+          )
+        }
+
+        # Suggestions section
+        suggestions_div <- if (length(report$suggestions) > 0) {
+          div(
+            class = "card mb-3",
+            div(class = "card-header bg-light",
+                icon("lightbulb"), " Helpful Suggestions"),
+            div(
+              class = "card-body",
+              tags$ul(
+                lapply(report$suggestions, function(sug) {
+                  tags$li(class = "text-muted", sug)
+                })
+              )
+            )
+          )
+        }
+
+        # Combine all sections
+        tagList(
+          status_div,
+          column_changes,
+          missing_div,
+          errors_div,
+          warnings_div,
+          suggestions_div
+        )
+
+      } else if (!is.null(validation_result())) {
+        # Fallback to old validation system
+        result <- validation_result()
+
+        if (result$is_valid) {
+          div(
+            class = "alert alert-success",
+            icon("check-circle"),
+            " Data validation passed!",
+            hr(),
+            h5("Summary:"),
+            tags$ul(
+              tags$li(paste("Rows:", nrow(uploaded_data()))),
+              tags$li(paste("Studies:", length(unique(uploaded_data()$study_id)))),
+              tags$li(paste("Warnings:", result$summary$warnings))
+            )
+          )
+        } else {
+          div(
+            div(
+              class = "alert alert-danger",
+              icon("exclamation-triangle"),
+              sprintf(" %d errors, %d warnings",
+                      result$summary$errors,
+                      result$summary$warnings)
+            ),
+            hr(),
+            h5("Problems:"),
+            tagList(
+              lapply(result$problems, function(p) {
+                class_name <- switch(p$severity,
+                                     "error" = "alert-danger",
+                                     "warning" = "alert-warning",
+                                     "info" = "alert-info")
+                div(
+                  class = paste("alert", class_name, "py-2 px-3 mb-2"),
+                  tags$strong(p$severity, ": "),
+                  p$message,
+                  if (!is.null(p$study_id)) {
+                    tags$small(paste(" (Study:", p$study_id, ")"))
+                  }
+                )
+              })
+            )
+          )
+        }
+      } else {
+        div(
+          class = "alert alert-info",
+          icon("info-circle"),
+          " Upload data to see validation results"
         )
       }
     })
