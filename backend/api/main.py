@@ -40,6 +40,7 @@ from api.auth_routes import router as auth_router
 from api.ml_routes import router as ml_router
 from api.ai_features_routes import router as ai_features_router
 from api.des_routes import router as des_router
+from api.transportability_routes import router as transportability_router
 
 # Import enhanced security middleware
 from middleware.security_middleware import add_security_middleware
@@ -100,7 +101,10 @@ app.include_router(ai_features_router, prefix="/api")
 # Include DES routes with /api prefix
 app.include_router(des_router, prefix="/api")
 
-logger.info("✓ All API routes registered (auth, ml, ai-features, des)")
+# Include transportability routes with /api prefix
+app.include_router(transportability_router, prefix="/api")
+
+logger.info("✓ All API routes registered (auth, ml, ai-features, des, transportability)")
 
 
 # Health check endpoints (no auth required)
