@@ -3,7 +3,26 @@
 # =============================================================================
 # Purpose: Centralized input validation, error handling, and quality checks
 # Quality: Production-ready with comprehensive edge case handling
-# Version: 1.0 - Full Implementation
+# Version: 2.0 - EU HTA Multi-Jurisdiction Support
+# =============================================================================
+
+# Source jurisdiction configuration framework
+script_dir <- dirname(sys.frame(1)$ofile)
+if (file.exists(file.path(script_dir, "jurisdiction_config.R"))) {
+  source(file.path(script_dir, "jurisdiction_config.R"))
+} else if (file.exists("frontend/modules/jurisdiction_config.R")) {
+  source("frontend/modules/jurisdiction_config.R")
+}
+
+# =============================================================================
+# EU HTA SUPPORT
+# =============================================================================
+# This framework now supports multi-jurisdiction validation with guidance-based
+# approaches for discount rates, perspectives, and utility instruments.
+#
+# Instead of stopping execution for non-NICE methodologies, the framework
+# provides jurisdiction-specific guidance while allowing flexibility for valid
+# EU HTA submissions (France, Germany, Netherlands, Sweden, Belgium, etc.)
 # =============================================================================
 
 #' Validate numeric parameter with bounds checking
@@ -137,51 +156,102 @@ validate_utility <- function(value, param_name, required = TRUE,
   return(value)
 }
 
-#' Validate utility sources for all health states (NICE-specific)
+#' Validate utility sources for all health states (Multi-Jurisdiction Support)
 #'
 #' @param params Parameter list to validate
-#' @param nice_compliant Whether to enforce NICE reference case
+#' @param nice_compliant Whether to enforce NICE reference case (deprecated - use jurisdiction)
+#' @param jurisdiction Jurisdiction code (e.g., "UK_NICE", "DE_IQWIG", "FR_HAS")
+#' @param enforcement Enforcement level: "strict", "moderate", "guidance"
 #' @return Validated params with utility_source metadata
 #' @export
-validate_utility_sources <- function(params, nice_compliant = FALSE) {
+validate_utility_sources <- function(params, nice_compliant = FALSE,
+                                     jurisdiction = NULL, enforcement = "guidance") {
+
+  # Backward compatibility
+  if (nice_compliant && is.null(jurisdiction)) {
+    jurisdiction <- "UK_NICE"
+    enforcement <- "strict"
+  }
 
   # Check if utility_source is provided
   if (is.null(params$utility_source)) {
-    if (nice_compliant) {
-      stop(paste0("NICE Reference Case requires documenting utility sources. ",
-                 "Please provide 'utility_source' parameter (e.g., 'EQ-5D-3L', 'EQ-5D-5L'). ",
+    if (!is.null(jurisdiction) && enforcement == "strict") {
+      stop(paste0("Utility source documentation is required. ",
+                 "Please provide 'utility_source' parameter (e.g., 'EQ-5D-3L', 'EQ-5D-5L', 'SF-6D', 'HUI3'). ",
                  "This should specify the preference-based measure used."))
     } else {
-      message("Note: No utility_source specified. For NICE submissions, document the source (e.g., EQ-5D-3L).")
+      message("Note: No utility_source specified. Consider documenting the source for transparency.")
       params$utility_source <- "unspecified"
     }
   }
 
-  # Validate against NICE requirements
-  if (nice_compliant) {
-    valid_eq5d <- c("EQ-5D-3L", "EQ-5D-5L", "EQ-5D", "EQ5D")
+  # Define valid utility instruments for different jurisdictions
+  valid_eq5d <- c("EQ-5D-3L", "EQ-5D-5L", "EQ-5D", "EQ5D")
+  valid_sf6d <- c("SF-6D", "SF-6Dv2", "SF6D")
+  valid_hui <- c("HUI2", "HUI3", "HUI")
+  valid_other_eu <- c("15D", "AQoL", "QWB")
 
-    if (!params$utility_source %in% valid_eq5d) {
-      # Allow with strong warning for mapped utilities
-      if (grepl("mapped|derived|estimated", params$utility_source, ignore.case = TRUE)) {
-        warning(paste0("Using mapped/derived utilities from: ", params$utility_source, ". ",
-                      "NICE Reference Case prefers directly measured EQ-5D. ",
-                      "Provide justification for mapping approach in submission."))
+  all_valid_instruments <- c(valid_eq5d, valid_sf6d, valid_hui, valid_other_eu)
+
+  # Jurisdiction-specific validation
+  if (!is.null(jurisdiction) && exists("get_jurisdiction_config", mode = "function")) {
+    config <- get_jurisdiction_config(jurisdiction)
+
+    if (!is.null(config) && !is.null(config$utility_instrument_required)) {
+      required_instrument <- config$utility_instrument_required
+
+      if (required_instrument == "EQ-5D") {
+        # UK/NICE requires EQ-5D specifically
+        if (!params$utility_source %in% valid_eq5d) {
+          msg <- paste0(config$name, " requires EQ-5D-based utilities. ",
+                       "Received: '", params$utility_source, "'. ",
+                       "Valid options: ", paste(valid_eq5d, collapse = ", "), ". ",
+                       "If using alternative measures or mapped utilities, provide justification.")
+
+          if (enforcement == "strict") {
+            if (!grepl("mapped|derived|EQ.?5D", params$utility_source, ignore.case = TRUE)) {
+              stop(msg)
+            } else {
+              warning(msg)  # Allow mapped EQ-5D with warning
+            }
+          } else if (enforcement == "moderate") {
+            warning(msg)
+          } else {
+            message(paste0("Note: ", msg))
+          }
+        } else {
+          message(paste0("✓ Using EQ-5D utilities (source: ", params$utility_source, ")"))
+        }
+
+        # Check for UK population tariff
+        if (is.null(params$utility_tariff) && config$name == "United Kingdom (NICE)") {
+          message("Note: Consider specifying 'utility_tariff' (e.g., 'UK_crosswalk', 'UK_TTO') for transparency.")
+        }
+
       } else {
-        warning(paste0("NICE Reference Case requires EQ-5D-based utilities. ",
-                      "Received: '", params$utility_source, "'. ",
-                      "Valid options: ", paste(valid_eq5d, collapse = ", "), ". ",
-                      "If using alternative measures, provide strong justification."))
+        # Other jurisdictions - more flexible
+        if (params$utility_source %in% all_valid_instruments) {
+          message(paste0("✓ Using ", params$utility_source, " utilities (accepted in ", config$name, ")"))
+        } else if (params$utility_source != "unspecified") {
+          message(paste0("Note: Using '", params$utility_source, "' utilities. ",
+                        "Standard instruments: ", paste(all_valid_instruments[1:8], collapse = ", ")))
+        }
       }
-    } else {
-      message(paste0("✓ Using EQ-5D utilities (source: ", params$utility_source, ")"))
     }
+  } else {
+    # No jurisdiction specified - general validation
+    if (params$utility_source %in% all_valid_instruments) {
+      message(paste0("✓ Using ", params$utility_source, " utilities"))
+    } else if (params$utility_source != "unspecified") {
+      message(paste0("Note: Using '", params$utility_source, "' utilities. ",
+                    "Common preference-based measures include: EQ-5D, SF-6D, HUI3, 15D"))
+    }
+  }
 
-    # Check for UK population tariff
-    if (is.null(params$utility_tariff)) {
-      message("Note: Consider specifying 'utility_tariff' (e.g., 'UK_crosswalk', 'UK_TTO') for transparency.")
-      params$utility_tariff <- "unspecified"
-    }
+  # Check for mapped utilities
+  if (grepl("mapped|derived|estimated|converted", params$utility_source, ignore.case = TRUE)) {
+    message(paste0("Note: Using mapped/derived utilities. ",
+                  "Document mapping methodology and provide justification if directly measured utilities unavailable."))
   }
 
   return(params)
@@ -230,57 +300,90 @@ validate_time_horizon <- function(value, param_name = "time_horizon",
   return(as.integer(value))
 }
 
-#' Validate discount rate (NICE-compliant)
+#' Validate discount rate (Multi-Jurisdiction Support)
 #'
 #' @param value Discount rate to validate
 #' @param param_name Parameter name for error messages
-#' @param nice_compliant Whether to enforce NICE reference case rates
-#' @param rate_type Type of rate: "costs" or "health" (for NICE differential discounting)
+#' @param nice_compliant Whether to enforce NICE reference case rates (deprecated - use jurisdiction)
+#' @param rate_type Type of rate: "costs" or "health" (for differential discounting)
+#' @param jurisdiction Jurisdiction code (e.g., "UK_NICE", "DE_IQWIG", "FR_HAS")
+#' @param enforcement Enforcement level: "strict", "moderate", "guidance"
 #' @return Validated discount rate in [0, 0.2]
 #' @export
 validate_discount_rate <- function(value, param_name = "discount_rate",
                                    nice_compliant = FALSE,
-                                   rate_type = NULL) {
+                                   rate_type = NULL,
+                                   jurisdiction = NULL,
+                                   enforcement = "guidance") {
   value <- validate_numeric(value, param_name, min_value = 0, max_value = 0.2,
                            required = TRUE, allow_zero = TRUE)
 
-  # NICE compliance checks
-  if (nice_compliant) {
-    if (!is.null(rate_type)) {
-      if (rate_type == "costs" && abs(value - 0.035) > 0.001) {
-        stop(paste0("NICE Reference Case requires 3.5% discount rate for costs. ",
-                   "Received: ", value * 100, "%"))
+  # Backward compatibility: nice_compliant = TRUE maps to UK_NICE jurisdiction
+  if (nice_compliant && is.null(jurisdiction)) {
+    jurisdiction <- "UK_NICE"
+    enforcement <- "strict"
+  }
+
+  # Jurisdiction-aware validation
+  if (!is.null(jurisdiction) && exists("get_jurisdiction_config", mode = "function")) {
+    config <- get_jurisdiction_config(jurisdiction)
+
+    if (!is.null(rate_type) && !is.null(config)) {
+      expected_rate <- if (rate_type == "costs") {
+        config$discount_rate_costs
+      } else if (rate_type == "health") {
+        config$discount_rate_health
+      } else {
+        NULL
       }
-      if (rate_type == "health" && abs(value - 0.015) > 0.001) {
-        stop(paste0("NICE Reference Case requires 1.5% discount rate for health effects. ",
-                   "Received: ", value * 100, "%"))
+
+      if (!is.null(expected_rate) && abs(value - expected_rate) > 0.005) {
+        msg <- paste0(config$name, " typically uses ", expected_rate * 100, "% for ", rate_type, ". ",
+                     "You specified ", value * 100, "%. Please provide justification if deviating from standard.")
+
+        if (enforcement == "strict") {
+          stop(msg)
+        } else if (enforcement == "moderate") {
+          warning(msg)
+        } else {
+          message(paste0("Note: ", msg))
+        }
       }
     }
   }
 
-  # Warning for unusual values
-  if (!nice_compliant && value > 0.1) {
-    warning(paste0("Discount rate of ", value * 100, "% is higher than typical NICE guidance. ",
+  # General warning for unusual values
+  if (value > 0.1) {
+    message(paste0("Note: Discount rate of ", value * 100, "% is higher than typical European standards. ",
                   "Please verify this is appropriate for your jurisdiction."))
   }
 
   return(value)
 }
 
-#' Validate differential discounting parameters (NICE-specific)
+#' Validate differential discounting parameters (Multi-Jurisdiction Support)
 #'
 #' @param params Parameter list to validate
-#' @param nice_compliant Whether to enforce NICE reference case
+#' @param nice_compliant Whether to enforce NICE reference case (deprecated - use jurisdiction)
+#' @param jurisdiction Jurisdiction code (e.g., "UK_NICE", "DE_IQWIG", "FR_HAS")
+#' @param enforcement Enforcement level: "strict", "moderate", "guidance"
 #' @return Validated params with discount_rate_costs and discount_rate_health
 #' @export
-validate_differential_discounting <- function(params, nice_compliant = FALSE) {
+validate_differential_discounting <- function(params, nice_compliant = FALSE,
+                                              jurisdiction = NULL, enforcement = "guidance") {
+
+  # Backward compatibility
+  if (nice_compliant && is.null(jurisdiction)) {
+    jurisdiction <- "UK_NICE"
+    enforcement <- "strict"
+  }
 
   # Check if using new differential discounting or old single rate
   has_differential <- !is.null(params$discount_rate_costs) || !is.null(params$discount_rate_health)
   has_single <- !is.null(params$discount_rate)
 
   if (has_differential) {
-    # Using differential discounting (NICE Reference Case)
+    # Using differential discounting
     if (is.null(params$discount_rate_costs)) {
       stop("When using differential discounting, 'discount_rate_costs' is required")
     }
@@ -291,15 +394,19 @@ validate_differential_discounting <- function(params, nice_compliant = FALSE) {
     params$discount_rate_costs <- validate_discount_rate(
       params$discount_rate_costs,
       "discount_rate_costs",
-      nice_compliant = nice_compliant,
-      rate_type = "costs"
+      nice_compliant = FALSE,  # Handled by jurisdiction parameter
+      rate_type = "costs",
+      jurisdiction = jurisdiction,
+      enforcement = enforcement
     )
 
     params$discount_rate_health <- validate_discount_rate(
       params$discount_rate_health,
       "discount_rate_health",
-      nice_compliant = nice_compliant,
-      rate_type = "health"
+      nice_compliant = FALSE,  # Handled by jurisdiction parameter
+      rate_type = "health",
+      jurisdiction = jurisdiction,
+      enforcement = enforcement
     )
 
     # Set single rate to NULL to avoid confusion
@@ -310,23 +417,38 @@ validate_differential_discounting <- function(params, nice_compliant = FALSE) {
                   params$discount_rate_health * 100, "% (health effects)"))
 
   } else if (has_single) {
-    # Using single discount rate (legacy/non-NICE)
-    params$discount_rate <- validate_discount_rate(params$discount_rate, "discount_rate")
+    # Using single discount rate
+    params$discount_rate <- validate_discount_rate(
+      params$discount_rate,
+      "discount_rate",
+      jurisdiction = jurisdiction,
+      enforcement = enforcement
+    )
 
-    if (nice_compliant) {
-      warning(paste0("NICE Reference Case requires differential discounting. ",
-                    "Converting single rate (", params$discount_rate * 100,
-                    "%) to NICE-compliant rates (3.5% costs, 1.5% health)."))
-      params$discount_rate_costs <- 0.035
-      params$discount_rate_health <- 0.015
-      params$discount_rate <- NULL
+    # Get jurisdiction-specific rates if available
+    if (!is.null(jurisdiction) && exists("get_jurisdiction_config", mode = "function")) {
+      config <- get_jurisdiction_config(jurisdiction)
+
+      if (!is.null(config) && !is.null(config$discount_differential) && config$discount_differential) {
+        # Jurisdiction uses differential discounting
+        message(paste0("Note: ", config$name, " typically uses differential discounting. ",
+                      "Converting single rate to jurisdiction-specific rates."))
+        params$discount_rate_costs <- config$discount_rate_costs
+        params$discount_rate_health <- config$discount_rate_health
+        params$discount_rate <- NULL
+      } else {
+        # Use same rate for both
+        params$discount_rate_costs <- params$discount_rate
+        params$discount_rate_health <- params$discount_rate
+        message(paste0("Note: Using single discount rate (", params$discount_rate * 100,
+                      "%) for both costs and health effects."))
+      }
     } else {
-      # Use same rate for both
+      # No jurisdiction specified - use same rate for both
       params$discount_rate_costs <- params$discount_rate
       params$discount_rate_health <- params$discount_rate
       message(paste0("Note: Using single discount rate (", params$discount_rate * 100,
-                    "%) for both costs and health effects. ",
-                    "Consider using differential discounting for NICE submissions."))
+                    "%) for both costs and health effects."))
     }
   } else {
     stop("Either 'discount_rate' or both 'discount_rate_costs' and 'discount_rate_health' must be provided")
@@ -335,59 +457,101 @@ validate_differential_discounting <- function(params, nice_compliant = FALSE) {
   return(params)
 }
 
-#' Validate cost perspective (NICE-specific)
+#' Validate cost perspective (Multi-Jurisdiction Support)
 #'
 #' @param params Parameter list to validate
-#' @param nice_compliant Whether to enforce NICE reference case
+#' @param nice_compliant Whether to enforce NICE reference case (deprecated - use jurisdiction)
+#' @param jurisdiction Jurisdiction code (e.g., "UK_NICE", "DE_IQWIG", "FR_HAS")
+#' @param enforcement Enforcement level: "strict", "moderate", "guidance"
 #' @return Validated params with cost_perspective set
 #' @export
-validate_cost_perspective <- function(params, nice_compliant = FALSE) {
+validate_cost_perspective <- function(params, nice_compliant = FALSE,
+                                      jurisdiction = NULL, enforcement = "guidance") {
 
-  # Default to NHS/PSS for NICE compliance
-  if (is.null(params$cost_perspective)) {
-    if (nice_compliant) {
-      params$cost_perspective <- "NHS_PSS"
-      message("✓ Using NHS/PSS perspective (NICE Reference Case default)")
-    } else {
-      params$cost_perspective <- "NHS_PSS"
-      message("Note: Defaulting to NHS/PSS perspective. Specify 'cost_perspective' explicitly if needed.")
+  # Backward compatibility
+  if (nice_compliant && is.null(jurisdiction)) {
+    jurisdiction <- "UK_NICE"
+    enforcement <- "strict"
+  }
+
+  # Get jurisdiction-specific default perspective
+  default_perspective <- "healthcare_system"
+  if (!is.null(jurisdiction) && exists("get_jurisdiction_config", mode = "function")) {
+    config <- get_jurisdiction_config(jurisdiction)
+    if (!is.null(config) && !is.null(config$perspective_required)) {
+      default_perspective <- config$perspective_required[1]  # First perspective if multiple
     }
   }
 
-  # Validate perspective value
-  valid_perspectives <- c("NHS_PSS", "NHS", "PSS", "societal", "payer", "healthcare_system")
+  # Default perspective if not specified
+  if (is.null(params$cost_perspective)) {
+    params$cost_perspective <- default_perspective
+    message(paste0("Note: Defaulting to '", default_perspective, "' perspective. ",
+                  "Specify 'cost_perspective' explicitly if needed."))
+  }
+
+  # Validate perspective value (expanded for EU)
+  valid_perspectives <- c(
+    # UK perspectives
+    "NHS_PSS", "NHS", "PSS",
+    # EU perspectives
+    "societal",               # France, Belgium, societal
+    "payer",                  # General payer
+    "healthcare_system",      # General healthcare
+    "SHI",                    # Germany - Statutory Health Insurance
+    "healthcare",             # Netherlands, Spain, Italy
+    "public_healthcare",      # Sweden, Norway
+    "third_party_payer"       # Alternative term
+  )
 
   if (!params$cost_perspective %in% valid_perspectives) {
-    stop(paste0("Invalid cost_perspective: '", params$cost_perspective, "'. ",
-               "Valid options: ", paste(valid_perspectives, collapse = ", ")))
+    warning(paste0("Cost perspective '", params$cost_perspective, "' not in standard list. ",
+               "Standard options: ", paste(valid_perspectives, collapse = ", ")))
   }
 
-  # NICE compliance check
-  if (nice_compliant) {
-    if (params$cost_perspective != "NHS_PSS") {
-      stop(paste0("NICE Reference Case requires NHS/PSS perspective. ",
-                 "Received: '", params$cost_perspective, "'"))
+  # Jurisdiction-specific validation
+  if (!is.null(jurisdiction) && exists("get_jurisdiction_config", mode = "function")) {
+    config <- get_jurisdiction_config(jurisdiction)
+
+    if (!is.null(config) && !is.null(config$perspective_required)) {
+      required_perspectives <- config$perspective_required
+
+      if (!params$cost_perspective %in% required_perspectives) {
+        msg <- paste0(config$name, " typically requires '",
+                     paste(required_perspectives, collapse = "' or '"), "' perspective. ",
+                     "You specified '", params$cost_perspective, "'. ",
+                     "Please provide justification if using alternative perspective.")
+
+        if (enforcement == "strict") {
+          stop(msg)
+        } else if (enforcement == "moderate") {
+          warning(msg)
+        } else {
+          message(paste0("Note: ", msg))
+        }
+      } else {
+        message(paste0("✓ Using '", params$cost_perspective, "' perspective (compliant with ", config$name, ")"))
+      }
     }
+  }
 
-    # Check for productivity costs (not allowed in NHS/PSS)
-    productivity_cost_params <- c("cost_productivity_loss", "cost_absenteeism",
-                                  "cost_presenteeism", "cost_caregiver_time",
-                                  "cost_lost_earnings")
+  # Check for productivity costs
+  productivity_cost_params <- c("cost_productivity_loss", "cost_absenteeism",
+                                "cost_presenteeism", "cost_caregiver_time",
+                                "cost_lost_earnings")
 
-    found_productivity <- intersect(productivity_cost_params, names(params))
+  found_productivity <- intersect(productivity_cost_params, names(params))
 
-    if (length(found_productivity) > 0) {
-      warning(paste0("NHS/PSS perspective detected productivity costs: ",
+  if (length(found_productivity) > 0) {
+    if (params$cost_perspective %in% c("NHS_PSS", "NHS", "PSS", "SHI", "healthcare")) {
+      message(paste0("Note: Healthcare payer perspective detected productivity costs: ",
                     paste(found_productivity, collapse = ", "), ". ",
-                    "These costs should be excluded from base case and presented in scenario analysis only. ",
-                    "Consider setting these to 0 or removing them."))
+                    "These costs are typically excluded from healthcare payer perspectives. ",
+                    "Consider presenting them in separate societal perspective analysis."))
+    } else if (params$cost_perspective == "societal") {
+      message(paste0("✓ Societal perspective allows productivity costs: ",
+                    paste(found_productivity, collapse = ", ")))
     }
-  }
-
-  # Warning for non-NHS/PSS perspectives
-  if (!nice_compliant && params$cost_perspective != "NHS_PSS") {
-    message(paste0("Note: Using '", params$cost_perspective, "' perspective. ",
-                  "NICE requires NHS/PSS perspective for UK submissions."))
   }
 
   return(params)

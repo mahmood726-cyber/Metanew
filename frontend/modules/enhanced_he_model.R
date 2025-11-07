@@ -3,7 +3,7 @@
 # =============================================================================
 # Purpose: Production-ready Markov model with comprehensive validation
 # Quality: Full error handling, input validation, performance optimization
-# Version: 2.0 - Enhanced Implementation
+# Version: 3.0 - EU HTA Multi-Jurisdiction Support
 # =============================================================================
 
 source("frontend/modules/validation_framework.R", local = TRUE)
@@ -26,7 +26,9 @@ source("frontend/modules/validation_framework.R", local = TRUE)
 #' @param hr_death Hazard ratio for death (list with hr, se_log, ci_lower, ci_upper)
 #' @param validate_inputs Whether to perform comprehensive input validation (default TRUE)
 #' @param progress_callback Function to call with progress updates
-#' @param nice_compliant Whether to enforce NICE Reference Case requirements (default FALSE)
+#' @param nice_compliant Whether to enforce NICE Reference Case requirements (deprecated - use jurisdiction)
+#' @param jurisdiction Jurisdiction code for country-specific validation (e.g., "UK_NICE", "DE_IQWIG", "FR_HAS", "NL_ZIN", "SE_TLV")
+#' @param enforcement Enforcement level: "strict" (stop on deviation), "moderate" (warn), "guidance" (message)
 #'
 #' @details
 #' Required params structure:
@@ -104,7 +106,15 @@ run_markov_model_enhanced <- function(params,
                                      hr_death,
                                      validate_inputs = TRUE,
                                      progress_callback = NULL,
-                                     nice_compliant = FALSE) {
+                                     nice_compliant = FALSE,
+                                     jurisdiction = NULL,
+                                     enforcement = "guidance") {
+
+  # Backward compatibility: nice_compliant = TRUE maps to UK_NICE jurisdiction
+  if (nice_compliant && is.null(jurisdiction)) {
+    jurisdiction <- "UK_NICE"
+    enforcement <- "strict"
+  }
 
   # ==========================================================================
   # STEP 1: INPUT VALIDATION
@@ -136,16 +146,25 @@ run_markov_model_enhanced <- function(params,
                                                    min_cycles = 1,
                                                    max_cycles = 100)
 
-      # Validate differential discounting (NICE Reference Case)
-      params <- validate_differential_discounting(params, nice_compliant = nice_compliant)
+      # Validate differential discounting (Multi-Jurisdiction)
+      params <- validate_differential_discounting(params,
+                                                  nice_compliant = nice_compliant,
+                                                  jurisdiction = jurisdiction,
+                                                  enforcement = enforcement)
 
-      # Validate cost perspective (NICE Reference Case)
-      params <- validate_cost_perspective(params, nice_compliant = nice_compliant)
+      # Validate cost perspective (Multi-Jurisdiction)
+      params <- validate_cost_perspective(params,
+                                         nice_compliant = nice_compliant,
+                                         jurisdiction = jurisdiction,
+                                         enforcement = enforcement)
 
-      # Validate utility sources (NICE Reference Case - EQ-5D requirement)
-      params <- validate_utility_sources(params, nice_compliant = nice_compliant)
+      # Validate utility sources (Multi-Jurisdiction)
+      params <- validate_utility_sources(params,
+                                         nice_compliant = nice_compliant,
+                                         jurisdiction = jurisdiction,
+                                         enforcement = enforcement)
 
-      # Validate age-weighting (NICE: not allowed)
+      # Validate age-weighting (NICE: not allowed, flexible for EU)
       params <- validate_age_weighting(params, nice_compliant = nice_compliant)
 
       # Validate time horizon adequacy
@@ -214,45 +233,86 @@ run_markov_model_enhanced <- function(params,
       hr_death$hr <- validate_hazard_ratio(hr_death$hr,
                                            "hr_death")
 
-      # Set half-cycle correction default for NICE compliance
-      if (nice_compliant) {
+      # Set half-cycle correction default (jurisdiction-aware)
+      if (!is.null(jurisdiction) || nice_compliant) {
         if (is.null(params$half_cycle_correction)) {
           params$half_cycle_correction <- TRUE
-          message("✓ Half-cycle correction enabled (NICE Reference Case default)")
-        } else if (!params$half_cycle_correction) {
+          message("✓ Half-cycle correction enabled (best practice default)")
+        } else if (!params$half_cycle_correction && nice_compliant) {
           warning(paste0("Half-cycle correction is disabled. ",
-                        "NICE Reference Case typically requires half-cycle correction. ",
+                        "Most HTA agencies recommend half-cycle correction. ",
                         "Provide justification if disabled intentionally."))
         }
       }
 
-      # Validate PSA parameters (MANDATORY for NICE compliance)
-      if (nice_compliant) {
+      # Validate PSA parameters (jurisdiction-aware)
+      if (!is.null(jurisdiction) && exists("get_jurisdiction_config", mode = "function")) {
+        config <- get_jurisdiction_config(jurisdiction)
+
+        if (!is.null(config) && !is.null(config$psa_required) && config$psa_required) {
+          min_iterations <- if (!is.null(config$psa_min_iterations)) config$psa_min_iterations else 1000
+
+          if (is.null(params$n_iterations) || params$n_iterations == 0) {
+            msg <- paste0(config$name, " requires Probabilistic Sensitivity Analysis (PSA). ",
+                         "Please provide 'n_iterations' parameter with at least ", min_iterations, " simulations.")
+
+            if (enforcement == "strict") {
+              stop(msg)
+            } else if (enforcement == "moderate") {
+              warning(msg)
+            } else {
+              message(paste0("Note: ", msg))
+            }
+          } else if (params$n_iterations < min_iterations) {
+            msg <- paste0(config$name, " typically requires at least ", min_iterations, " PSA iterations. ",
+                         "Received: ", params$n_iterations, ". Consider increasing for reliable uncertainty estimates.")
+
+            if (enforcement == "strict") {
+              stop(msg)
+            } else if (enforcement == "moderate") {
+              warning(msg)
+            } else {
+              message(paste0("Note: ", msg))
+            }
+          }
+
+          # Check for standard errors on HRs
+          if (!is.null(params$n_iterations) && params$n_iterations > 0) {
+            if (is.null(hr_progression$se_log) || is.na(hr_progression$se_log) ||
+                is.null(hr_death$se_log) || is.na(hr_death$se_log)) {
+              msg <- paste0("PSA requires standard errors for hazard ratios. ",
+                           "Please provide 'se_log' for both hr_progression and hr_death.")
+
+              if (enforcement == "strict") {
+                stop(msg)
+              } else {
+                warning(msg)
+              }
+            }
+          }
+
+          # Validate and confirm PSA configuration
+          if (!is.null(params$n_iterations) && params$n_iterations > 0) {
+            params$n_iterations <- validate_psa_sims(params$n_iterations)
+            message(paste0("✓ PSA configured with ", params$n_iterations, " iterations (", config$name, " compliant)"))
+          }
+        }
+      } else if (nice_compliant) {
+        # Legacy nice_compliant path (backward compatibility)
         if (is.null(params$n_iterations) || params$n_iterations == 0) {
-          stop(paste0("NICE Reference Case requires Probabilistic Sensitivity Analysis (PSA). ",
-                     "Please provide 'n_iterations' parameter with at least 1,000 simulations. ",
-                     "PSA is essential for capturing parameter uncertainty in NICE submissions."))
+          stop(paste0("NICE Reference Case requires PSA. Please provide 'n_iterations' >= 1,000."))
         }
-
         if (params$n_iterations < 1000) {
-          stop(paste0("NICE submissions require at least 1,000 PSA iterations for reliable uncertainty estimates. ",
-                     "Received: ", params$n_iterations, ". Please increase to >= 1,000."))
+          stop(paste0("NICE requires at least 1,000 PSA iterations. Received: ", params$n_iterations))
         }
-
-        # Check for standard errors on HRs
-        if (is.na(hr_progression$se_log) || is.na(hr_death$se_log)) {
-          stop(paste0("NICE PSA requires standard errors for hazard ratios. ",
-                     "Please provide 'se_log' for both hr_progression and hr_death."))
-        }
-
         params$n_iterations <- validate_psa_sims(params$n_iterations)
-        message(paste0("✓ PSA configured with ", params$n_iterations, " iterations (NICE compliant)"))
       } else {
-        # Optional for non-NICE
-        if (!is.null(params$n_iterations)) {
+        # No jurisdiction specified - PSA optional
+        if (!is.null(params$n_iterations) && params$n_iterations > 0) {
           params$n_iterations <- validate_psa_sims(params$n_iterations)
+          message(paste0("✓ PSA configured with ", params$n_iterations, " iterations"))
         } else {
-          message("Note: PSA not configured. For NICE submissions, PSA is mandatory.")
+          message("Note: PSA not configured. Most HTA agencies recommend PSA for uncertainty assessment.")
         }
       }
 
