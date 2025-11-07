@@ -509,17 +509,148 @@ process_rwd <- function(data, data_format, patient_id_var, treatment_var, outcom
 #' @param data Patient data
 #' @return Matched data
 apply_propensity_matching <- function(data) {
-  # Simplified propensity matching for demonstration
-  # In practice, use MatchIt or similar package
+  #' Apply propensity score matching to RWD
+  #'
+  #' Uses logistic regression for propensity scores and nearest neighbor matching
 
-  # For now, return data as-is
-  # Real implementation would use:
-  # library(MatchIt)
-  # matchit_obj <- matchit(treatment ~ age + sex + comorbidity_score, data = data, method = "nearest")
-  # matched_data <- match.data(matchit_obj)
+  # Check if we have necessary variables
+  if (!all(c("treatment", "age", "sex") %in% names(data))) {
+    warning("Missing required variables for propensity matching. Returning unmatched data.")
+    data$propensity_matched <- FALSE
+    data$propensity_score <- NA
+    return(data)
+  }
 
-  data$propensity_matched <- TRUE
-  return(data)
+  # Ensure treatment is binary
+  treatment_levels <- unique(data$treatment)
+  if (length(treatment_levels) != 2) {
+    warning("Treatment must be binary for propensity matching. Returning unmatched data.")
+    data$propensity_matched <- FALSE
+    data$propensity_score <- NA
+    return(data)
+  }
+
+  tryCatch({
+    # Create binary treatment indicator (1 = Treatment, 0 = Control)
+    data$treatment_binary <- as.integer(data$treatment == "Treatment")
+
+    # Build propensity score model
+    # Include available covariates
+    covariate_formula <- "treatment_binary ~ age + sex"
+
+    # Add optional covariates if they exist
+    if ("comorbidity_score" %in% names(data)) {
+      covariate_formula <- paste(covariate_formula, "+ comorbidity_score")
+    }
+    if ("baseline_value" %in% names(data)) {
+      covariate_formula <- paste(covariate_formula, "+ baseline_value")
+    }
+
+    # Fit propensity score model
+    ps_model <- glm(as.formula(covariate_formula),
+                   data = data,
+                   family = binomial(link = "logit"))
+
+    # Calculate propensity scores
+    data$propensity_score <- predict(ps_model, type = "response")
+
+    # Perform 1:1 nearest neighbor matching without replacement
+    # Separate treatment and control groups
+    treated_idx <- which(data$treatment_binary == 1)
+    control_idx <- which(data$treatment_binary == 0)
+
+    treated_ps <- data$propensity_score[treated_idx]
+    control_ps <- data$propensity_score[control_idx]
+
+    # For each treated unit, find nearest control
+    matched_control_idx <- integer(length(treated_idx))
+    used_controls <- logical(length(control_idx))
+
+    for (i in seq_along(treated_idx)) {
+      # Find nearest available control
+      available_controls <- which(!used_controls)
+
+      if (length(available_controls) == 0) {
+        warning(paste("Ran out of controls at treated unit", i, "- some treated units unmatched"))
+        matched_control_idx[i] <- NA
+        next
+      }
+
+      # Calculate distances to all available controls
+      distances <- abs(treated_ps[i] - control_ps[available_controls])
+
+      # Find minimum distance
+      min_idx <- which.min(distances)
+      matched_control <- available_controls[min_idx]
+
+      # Store match and mark control as used
+      matched_control_idx[i] <- matched_control
+      used_controls[matched_control] <- TRUE
+    }
+
+    # Create matched dataset
+    # Include all treated units and their matched controls
+    valid_matches <- !is.na(matched_control_idx)
+
+    matched_treated_idx <- treated_idx[valid_matches]
+    matched_control_global_idx <- control_idx[matched_control_idx[valid_matches]]
+
+    matched_data <- rbind(
+      data[matched_treated_idx, ],
+      data[matched_control_global_idx, ]
+    )
+
+    # Add matching metadata
+    matched_data$propensity_matched <- TRUE
+    matched_data$match_id <- rep(1:sum(valid_matches), each = 2)
+
+    # Calculate matching quality metrics
+    # Standardized mean difference for covariates
+    covariates <- c("age")
+    if ("comorbidity_score" %in% names(data)) covariates <- c(covariates, "comorbidity_score")
+    if ("baseline_value" %in% names(data)) covariates <- c(covariates, "baseline_value")
+
+    smd_before <- numeric(length(covariates))
+    smd_after <- numeric(length(covariates))
+
+    for (j in seq_along(covariates)) {
+      cov <- covariates[j]
+
+      # Before matching
+      mean_treat_before <- mean(data[[cov]][data$treatment_binary == 1], na.rm = TRUE)
+      mean_control_before <- mean(data[[cov]][data$treatment_binary == 0], na.rm = TRUE)
+      sd_pooled_before <- sqrt((var(data[[cov]][data$treatment_binary == 1], na.rm = TRUE) +
+                                var(data[[cov]][data$treatment_binary == 0], na.rm = TRUE)) / 2)
+      smd_before[j] <- (mean_treat_before - mean_control_before) / sd_pooled_before
+
+      # After matching
+      mean_treat_after <- mean(matched_data[[cov]][matched_data$treatment_binary == 1], na.rm = TRUE)
+      mean_control_after <- mean(matched_data[[cov]][matched_data$treatment_binary == 0], na.rm = TRUE)
+      sd_pooled_after <- sqrt((var(matched_data[[cov]][matched_data$treatment_binary == 1], na.rm = TRUE) +
+                              var(matched_data[[cov]][matched_data$treatment_binary == 0], na.rm = TRUE)) / 2)
+      smd_after[j] <- (mean_treat_after - mean_control_after) / sd_pooled_after
+    }
+
+    # Attach matching diagnostics as attributes
+    attr(matched_data, "matching_diagnostics") <- list(
+      n_treated = length(treated_idx),
+      n_control = length(control_idx),
+      n_matched_pairs = sum(valid_matches),
+      n_unmatched_treated = sum(!valid_matches),
+      covariates = covariates,
+      smd_before = smd_before,
+      smd_after = smd_after,
+      balance_improved = mean(abs(smd_after)) < mean(abs(smd_before))
+    )
+
+    return(matched_data)
+
+  }, error = function(e) {
+    warning(paste("Propensity matching failed:", e$message, "- Returning unmatched data"))
+    data$propensity_matched <- FALSE
+    data$propensity_score <- NA
+    return(data)
+  })
 }
 
 #' Analyze RWD

@@ -508,33 +508,77 @@ run_tornado_analysis <- function(params, base_results, outcome, wtp_threshold, v
 }
 
 #' Approximate results change for threshold analysis
+#'
+#' @description
+#' Uses linear approximation to estimate model outcomes when parameters change.
+#' This provides fast threshold analysis suitable for interactive exploration.
+#'
+#' @details
+#' **Approximation Method**:
+#' - Cost parameters: Linear scaling of costs (ACCURATE for cost changes)
+#' - Utility parameters: Linear scaling of QALYs (APPROXIMATE - assumes proportional effect)
+#' - Hazard ratios: Dampened linear scaling (APPROXIMATE - nonlinear effects simplified)
+#'
+#' **Limitations**:
+#' - Does not re-run full Markov simulation
+#' - Assumes linear/proportional relationships
+#' - May underestimate threshold uncertainty for HR parameters
+#'
+#' **When to use full model re-run**:
+#' For final threshold estimates or sensitivity analysis for publication,
+#' re-run the full Markov model with modified parameters to get exact results.
+#' This approximation is for rapid screening and interactive use.
+#'
+#' @param base_results Base case model results
+#' @param parameter Parameter name being varied
+#' @param new_value New parameter value
+#' @param old_value Original parameter value
+#' @return Modified results with approximated outcomes
 approximate_results_change <- function(base_results, parameter, new_value, old_value) {
-  # Simplified approximation - in production would re-run full model
 
   ratio <- new_value / old_value
-
   mod_results <- base_results
 
   if (grepl("cost", parameter)) {
-    # Cost parameter
+    # Cost parameter - ACCURATE linear approximation
+    # Costs scale directly with parameter changes
     if (parameter == "cost_treatment") {
       mod_results$costs_treatment <- base_results$costs_treatment * ratio
       mod_results$inc_costs <- mod_results$costs_treatment - base_results$costs_comparator
     } else if (parameter == "cost_comparator") {
       mod_results$costs_comparator <- base_results$costs_comparator * ratio
       mod_results$inc_costs <- base_results$costs_treatment - mod_results$costs_comparator
+    } else {
+      # State costs
+      # Approximate impact by scaling total costs
+      mod_results$costs_treatment <- base_results$costs_treatment * ratio
+      mod_results$costs_comparator <- base_results$costs_comparator * ratio
+      mod_results$inc_costs <- mod_results$costs_treatment - mod_results$costs_comparator
     }
+
   } else if (grepl("utility", parameter)) {
-    # Utility parameter - affects QALYs
+    # Utility parameter - APPROXIMATE linear scaling
+    # Assumes proportional effect on QALYs (reasonable for small changes)
     mod_results$qalys_treatment <- base_results$qalys_treatment * ratio
     mod_results$inc_qalys <- mod_results$qalys_treatment - base_results$qalys_comparator
-  } else if (grepl("hr", parameter)) {
-    # HR affects QALYs
+
+  } else if (grepl("hr|hazard", tolower(parameter))) {
+    # Hazard ratio - APPROXIMATE with dampening
+    # HRs have nonlinear effects on survival/QALYs
+    # Use dampened ratio to approximate (50% of linear effect)
+    # More accurate would require re-running Markov model
     effect_ratio <- (ratio - 1) * 0.5 + 1  # Dampened effect
     mod_results$qalys_treatment <- base_results$qalys_treatment * effect_ratio
     mod_results$inc_qalys <- mod_results$qalys_treatment - base_results$qalys_comparator
+
+  } else {
+    # Unknown parameter - assume proportional effect on QALYs
+    warning(paste("Unknown parameter type:", parameter, "- using proportional approximation"))
+    mod_results$qalys_treatment <- base_results$qalys_treatment * ratio
+    mod_results$inc_qalys <- mod_results$qalys_treatment - base_results$qalys_comparator
   }
 
+  # Recalculate ICER
   mod_results$icer <- mod_results$inc_costs / mod_results$inc_qalys
 
   return(mod_results)
