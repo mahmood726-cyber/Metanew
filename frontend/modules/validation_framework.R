@@ -393,6 +393,210 @@ validate_cost_perspective <- function(params, nice_compliant = FALSE) {
   return(params)
 }
 
+#' Validate age-weighting (NICE-specific)
+#'
+#' @param params Parameter list to validate
+#' @param nice_compliant Whether to enforce NICE reference case
+#' @return Validated params
+#' @export
+validate_age_weighting <- function(params, nice_compliant = FALSE) {
+
+  # Check for age-weighting parameters
+  age_weight_params <- c("age_weighting", "age_weights", "apply_age_weighting",
+                         "age_weight_function", "age_adjustment")
+
+  found_age_weights <- intersect(age_weight_params, names(params))
+
+  if (length(found_age_weights) > 0) {
+    # Age-weighting detected
+    age_weighting_enabled <- FALSE
+
+    for (param in found_age_weights) {
+      if (is.logical(params[[param]]) && params[[param]] == TRUE) {
+        age_weighting_enabled <- TRUE
+        break
+      }
+      if (!is.logical(params[[param]]) && !is.null(params[[param]])) {
+        age_weighting_enabled <- TRUE
+        break
+      }
+    }
+
+    if (age_weighting_enabled) {
+      if (nice_compliant) {
+        stop(paste0("NICE Reference Case does NOT use age-weighting of QALYs. ",
+                   "Detected age-weighting parameters: ", paste(found_age_weights, collapse = ", "), ". ",
+                   "Please remove age-weighting for NICE submissions. ",
+                   "All QALYs should be valued equally regardless of age."))
+      } else {
+        message(paste0("Note: Age-weighting detected. ",
+                      "Be aware that NICE does not use age-weighting in the Reference Case."))
+      }
+    }
+  } else {
+    # No age-weighting parameters found
+    if (nice_compliant) {
+      message("✓ No age-weighting applied (NICE Reference Case compliant)")
+    }
+  }
+
+  return(params)
+}
+
+#' Validate time horizon adequacy (NICE-specific)
+#'
+#' @param params Parameter list to validate
+#' @param nice_compliant Whether to enforce NICE reference case
+#' @return Validated params
+#' @export
+validate_time_horizon_adequacy <- function(params, nice_compliant = FALSE) {
+
+  if (is.null(params$time_horizon)) {
+    return(params)  # Will be caught by other validation
+  }
+
+  time_horizon <- params$time_horizon
+
+  # NICE guidance: Time horizon should be long enough to capture all important differences
+  if (nice_compliant) {
+    # Check if time_horizon_justification is provided
+    if (is.null(params$time_horizon_justification)) {
+      if (time_horizon < 10) {
+        warning(paste0("Short time horizon (", time_horizon, " years) detected. ",
+                      "NICE typically expects longer horizons for chronic conditions. ",
+                      "Consider providing 'time_horizon_justification' parameter to document rationale."))
+      } else if (time_horizon < 20) {
+        message(paste0("Note: Consider documenting time horizon rationale via 'time_horizon_justification' parameter. ",
+                      "NICE expects justification that horizon captures all relevant costs and QALYs."))
+      }
+    } else {
+      message(paste0("✓ Time horizon justification provided: ", substr(params$time_horizon_justification, 1, 50),
+                    if (nchar(params$time_horizon_justification) > 50) "..." else ""))
+    }
+
+    # Check for lifetime horizon indicators
+    if (!is.null(params$lifetime_horizon) && params$lifetime_horizon == TRUE) {
+      message("✓ Lifetime horizon specified (appropriate for chronic/lifetime conditions)")
+    }
+  }
+
+  return(params)
+}
+
+#' Validate comparator choice (NICE-specific)
+#'
+#' @param params Parameter list to validate
+#' @param nice_compliant Whether to enforce NICE reference case
+#' @return Validated params
+#' @export
+validate_comparator_choice <- function(params, nice_compliant = FALSE) {
+
+  if (nice_compliant) {
+    # Check if comparator_justification is provided
+    if (is.null(params$comparator_choice) && is.null(params$comparator_justification)) {
+      warning(paste0("NICE requires justification of comparator choice. ",
+                    "Please provide 'comparator_choice' (e.g., 'established_clinical_practice', 'best_supportive_care') ",
+                    "and/or 'comparator_justification' parameter to document why this comparator was selected."))
+    } else if (!is.null(params$comparator_choice)) {
+      valid_choices <- c("established_clinical_practice", "standard_of_care",
+                        "best_supportive_care", "placebo", "other")
+
+      if (params$comparator_choice %in% valid_choices) {
+        message(paste0("✓ Comparator choice documented: ", params$comparator_choice))
+
+        # Additional checks
+        if (params$comparator_choice == "placebo" && is.null(params$comparator_justification)) {
+          warning(paste0("Placebo comparator selected. ",
+                        "NICE typically requires active comparator (established clinical practice). ",
+                        "Provide strong justification via 'comparator_justification' if placebo is appropriate."))
+        }
+      } else {
+        message(paste0("Note: Comparator choice '", params$comparator_choice, "' specified. ",
+                      "Valid standard choices: ", paste(valid_choices, collapse = ", ")))
+      }
+
+      if (!is.null(params$comparator_justification)) {
+        message(paste0("✓ Comparator justification provided: ", substr(params$comparator_justification, 1, 50),
+                      if (nchar(params$comparator_justification) > 50) "..." else ""))
+      }
+    }
+  }
+
+  return(params)
+}
+
+#' Validate adverse events consistency (NICE-specific)
+#'
+#' @param params Parameter list to validate
+#' @param nice_compliant Whether to enforce NICE reference case
+#' @return Validated params
+#' @export
+validate_adverse_events <- function(params, nice_compliant = FALSE) {
+
+  # Check for adverse event parameters
+  ae_params <- grep("^ae_|^adverse_event", names(params), value = TRUE)
+
+  if (length(ae_params) > 0) {
+    # Adverse events detected
+
+    # Check for required AE components
+    has_ae_costs <- any(grepl("cost", ae_params, ignore.case = TRUE))
+    has_ae_utilities <- any(grepl("util|qaly|disutil", ae_params, ignore.case = TRUE))
+    has_ae_rates <- any(grepl("rate|prob|incidence", ae_params, ignore.case = TRUE))
+
+    if (nice_compliant) {
+      # NICE requires consistency between treatment and comparator AEs
+      ae_treatment_params <- grep("_treatment|_trt", ae_params, value = TRUE)
+      ae_comparator_params <- grep("_comparator|_comp", ae_params, value = TRUE)
+
+      if (length(ae_treatment_params) > 0 && length(ae_comparator_params) == 0) {
+        warning(paste0("Adverse events specified for treatment but not comparator. ",
+                      "NICE requires consistent modeling of AEs across both arms. ",
+                      "Ensure comparator AEs are also included."))
+      }
+
+      if (length(ae_comparator_params) > 0 && length(ae_treatment_params) == 0) {
+        warning(paste0("Adverse events specified for comparator but not treatment. ",
+                      "NICE requires consistent modeling of AEs across both arms. ",
+                      "Ensure treatment AEs are also included."))
+      }
+
+      # Check for completeness of AE modeling
+      if (has_ae_rates && !has_ae_costs) {
+        warning(paste0("Adverse event rates specified but no AE costs found. ",
+                      "NICE expects comprehensive AE modeling including both costs and utilities. ",
+                      "Consider adding AE cost parameters."))
+      }
+
+      if (has_ae_rates && !has_ae_utilities) {
+        warning(paste0("Adverse event rates specified but no AE utilities/disutilities found. ",
+                      "NICE expects comprehensive AE modeling including both costs and utilities. ",
+                      "Consider adding AE utility parameters."))
+      }
+
+      # Check for AE data source documentation
+      if (is.null(params$ae_data_source)) {
+        message(paste0("Note: Consider documenting adverse event data source via 'ae_data_source' parameter. ",
+                      "NICE expects transparent reporting of AE inputs."))
+      } else {
+        message(paste0("✓ Adverse event data source documented: ", params$ae_data_source))
+      }
+
+      message(paste0("✓ Adverse events modeling detected (", length(ae_params), " parameters)"))
+    }
+
+  } else {
+    # No adverse events
+    if (nice_compliant) {
+      message(paste0("Note: No adverse events modeling detected. ",
+                    "If AEs differ between treatment and comparator, consider including them. ",
+                    "Document rationale if AEs are excluded as immaterial."))
+    }
+  }
+
+  return(params)
+}
+
 #' Validate WTP threshold
 #'
 #' @param value WTP threshold to validate

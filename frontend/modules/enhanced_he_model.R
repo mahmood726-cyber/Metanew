@@ -145,6 +145,18 @@ run_markov_model_enhanced <- function(params,
       # Validate utility sources (NICE Reference Case - EQ-5D requirement)
       params <- validate_utility_sources(params, nice_compliant = nice_compliant)
 
+      # Validate age-weighting (NICE: not allowed)
+      params <- validate_age_weighting(params, nice_compliant = nice_compliant)
+
+      # Validate time horizon adequacy
+      params <- validate_time_horizon_adequacy(params, nice_compliant = nice_compliant)
+
+      # Validate comparator choice
+      params <- validate_comparator_choice(params, nice_compliant = nice_compliant)
+
+      # Validate adverse events consistency
+      params <- validate_adverse_events(params, nice_compliant = nice_compliant)
+
       params$utility_stable <- validate_utility(params$utility_stable,
                                                 "utility_stable",
                                                 nice_compliant = nice_compliant,
@@ -201,6 +213,18 @@ run_markov_model_enhanced <- function(params,
 
       hr_death$hr <- validate_hazard_ratio(hr_death$hr,
                                            "hr_death")
+
+      # Set half-cycle correction default for NICE compliance
+      if (nice_compliant) {
+        if (is.null(params$half_cycle_correction)) {
+          params$half_cycle_correction <- TRUE
+          message("✓ Half-cycle correction enabled (NICE Reference Case default)")
+        } else if (!params$half_cycle_correction) {
+          warning(paste0("Half-cycle correction is disabled. ",
+                        "NICE Reference Case typically requires half-cycle correction. ",
+                        "Provide justification if disabled intentionally."))
+        }
+      }
 
       # Validate PSA parameters (MANDATORY for NICE compliance)
       if (nice_compliant) {
