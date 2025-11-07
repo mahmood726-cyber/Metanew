@@ -163,7 +163,18 @@ meta_pairwise_server <- function(id, rv) {
       cat("Outcome:", input$outcome, "\n")
       cat("Method:", input$method, "\n")
       cat("Model:", input$model, "\n")
-      cat("Studies:", result$n_studies, "\n\n")
+      cat("Studies:", result$n_studies, "\n")
+
+      # Display small-sample adjustment info
+      if (!is.null(result$knapp_hartung_used) && result$knapp_hartung_used) {
+        cat("Inference: Knapp-Hartung adjustment (small-sample correction)\n")
+      }
+
+      # Display convergence status
+      if (!is.null(result$converged) && !result$converged) {
+        cat("⚠ WARNING: Model did not converge\n")
+      }
+      cat("\n")
 
       cat("Pooled Effect:\n")
       cat(sprintf("  Estimate: %.3f (%.3f to %.3f)\n",
@@ -210,6 +221,23 @@ meta_pairwise_server <- function(id, rv) {
       if (!is.null(result$meta_regression)) {
         cat("\nMeta-Regression:\n")
         print(result$meta_regression)
+      }
+
+      # Influence diagnostics
+      if (!is.null(result$influence)) {
+        cat("\n")
+        cat("Influence Diagnostics:\n")
+        cat(sprintf("  Studies analyzed: %d\n", result$n_studies))
+        cat(sprintf("  Influential studies (Cook's D > %.4f): %d\n",
+                    result$influence$cook_threshold,
+                    result$influence$n_influential))
+
+        if (result$influence$n_influential > 0) {
+          cat("  ⚠ Influential study indices:", paste(result$influence$influential_studies, collapse = ", "), "\n")
+          cat("  → Consider leave-one-out sensitivity analysis\n")
+        } else {
+          cat("  ✓ No highly influential studies detected\n")
+        }
       }
     })
 
@@ -432,11 +460,17 @@ run_pairwise_ma <- function(data, outcome = NULL, method = "REML", model = "rand
     data$vi <- data$sei^2
   }
 
+  # Determine if Knapp-Hartung adjustment should be used
+  # Reference: Knapp & Hartung (2003) Statistics in Medicine
+  # Recommended for small-sample inference (k < 20) to obtain more accurate CIs
+  use_knha <- nrow(data) < 20
+  test_type <- if (use_knha) "knha" else "z"
+
   # Run meta-analysis
   if (!is.null(moderators) && length(moderators) > 0) {
     # Meta-regression
     formula_str <- paste("yi ~", paste(moderators, collapse = " + "))
-    ma <- rma(as.formula(formula_str), vi = vi, data = data, method = method)
+    ma <- rma(as.formula(formula_str), vi = vi, data = data, method = method, test = test_type)
 
     meta_reg_result <- summary(ma)
   } else if (!is.null(subgroup)) {
@@ -444,12 +478,12 @@ run_pairwise_ma <- function(data, outcome = NULL, method = "REML", model = "rand
     # Reference: Borenstein et al. (2009) Introduction to Meta-Analysis, Chapter 19
 
     # Overall pooled estimate
-    ma <- rma(yi, vi, data = data, method = method)
+    ma <- rma(yi, vi, data = data, method = method, test = test_type)
 
     # Test for subgroup differences using Q-between statistic
     # Fit model with subgroup as moderator (factor variable)
     subgroup_test_ma <- tryCatch({
-      rma(yi, vi, mods = ~ factor(data[[subgroup]]), data = data, method = method)
+      rma(yi, vi, mods = ~ factor(data[[subgroup]]), data = data, method = method, test = test_type)
     }, error = function(e) NULL)
 
     # Run separate MA for each subgroup
@@ -487,10 +521,17 @@ run_pairwise_ma <- function(data, outcome = NULL, method = "REML", model = "rand
     }
   } else {
     # Simple pooled analysis
-    ma <- rma(yi, vi, data = data, method = method)
+    ma <- rma(yi, vi, data = data, method = method, test = test_type)
     subgroup_results <- NULL
     meta_reg_result <- NULL
     subgroup_test <- NULL
+  }
+
+  # Convergence check
+  # Reference: Viechtbauer (2010) Journal of Statistical Software
+  if (!ma$converged) {
+    warning(paste("Model did not converge after", ma$iter, "iterations.",
+                  "Results may be unreliable. Consider using a different method."))
   }
 
   # Extract results
@@ -561,6 +602,33 @@ run_pairwise_ma <- function(data, outcome = NULL, method = "REML", model = "rand
 
     result$trim_fill <- tf
   }
+
+  # Influence diagnostics (Cook's distances, DFBETAS, hat values)
+  # Reference: Viechtbauer & Cheung (2010) Research Synthesis Methods
+  # Helps identify influential studies that disproportionately affect results
+  influence_diagnostics <- tryCatch({
+    inf <- influence(ma)
+
+    # Cook's distance threshold: 4/k (common rule of thumb)
+    cook_threshold <- 4 / ma$k
+    influential_idx <- which(inf$inf$cook > cook_threshold)
+
+    list(
+      cook_d = inf$inf$cook,                    # Cook's distances
+      dfbetas = inf$inf$dfb,                    # DFBETAS (change in estimate)
+      hat_values = inf$inf$hat,                 # Leverage (hat values)
+      influential_studies = influential_idx,     # Indices of influential studies
+      cook_threshold = cook_threshold,          # Threshold used
+      n_influential = length(influential_idx)   # Count of influential studies
+    )
+  }, error = function(e) NULL)
+
+  result$influence <- influence_diagnostics
+
+  # Add metadata about small-sample adjustments
+  result$knapp_hartung_used <- use_knha
+  result$test_type <- test_type
+  result$converged <- ma$converged
 
   return(result)
 }

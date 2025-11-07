@@ -205,6 +205,15 @@ multilevel_server <- function(id, rv) {
       cat(sprintf("  Log-likelihood: %.2f\n", result$loglik))
       cat(sprintf("  AIC: %.2f\n", result$aic))
       cat(sprintf("  BIC: %.2f\n", result$bic))
+
+      # Display convergence status
+      if (!is.null(result$converged)) {
+        if (result$converged) {
+          cat("  ✓ Model converged successfully\n")
+        } else {
+          cat("  ⚠ WARNING: Model did not converge\n")
+        }
+      }
       cat("\n")
 
       cat(sprintf("Number of studies: %d\n", result$n_studies))
@@ -503,6 +512,13 @@ run_threelevel_ma <- function(data, method = "REML", moderators = NULL) {
     )
   }
 
+  # Convergence check for three-level model
+  # Reference: Viechtbauer (2010) Journal of Statistical Software
+  if (!ml_model$converged) {
+    warning(paste("Three-level model did not converge after", ml_model$iter, "iterations.",
+                  "Results may be unreliable. Consider using a different method or simplifying the model."))
+  }
+
   # Extract variance components
   # ml_model$sigma2 gives variance at each level
   # Level 3 (study_id) is first, Level 2 (effect_id within study) is second
@@ -574,6 +590,7 @@ run_threelevel_ma <- function(data, method = "REML", moderators = NULL) {
     residuals = residuals,
     two_level_comparison = two_level_comparison,
     lr_test = lr_test,
-    moderator_results = moderator_results
+    moderator_results = moderator_results,
+    converged = ml_model$converged
   )
 }
