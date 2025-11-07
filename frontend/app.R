@@ -16,10 +16,13 @@ source("modules/protocol.R")
 source("modules/meta_pairwise.R")
 source("modules/nma.R")
 source("modules/dose_response.R")
+source("modules/bayesian_ma.R")
 source("modules/sensitivity.R")
 source("modules/he_params.R")
 source("modules/he_model.R")
 source("modules/he_bcea.R")
+source("modules/partitioned_survival.R")
+source("modules/multistate_markov.R")
 source("modules/reporting.R")
 source("modules/audit.R")
 source("modules/ai_copilot.R")
@@ -77,6 +80,10 @@ ui <- page_navbar(
         nma_ui("nma")
       ),
       nav_panel(
+        "Bayesian MA",
+        bayesian_ma_ui("bayesian_ma")
+      ),
+      nav_panel(
         "Dose-Response",
         dose_response_ui("dose_response")
       )
@@ -100,8 +107,16 @@ ui <- page_navbar(
         he_params_ui("he_params")
       ),
       nav_panel(
-        "Model",
+        "3-State Markov",
         he_model_ui("he_model")
+      ),
+      nav_panel(
+        "Multi-State Markov",
+        multistate_markov_ui("multistate_markov")
+      ),
+      nav_panel(
+        "Partitioned Survival",
+        partitioned_survival_ui("partitioned_survival")
       ),
       nav_panel(
         "Results (BCEA)",
@@ -231,10 +246,13 @@ server <- function(input, output, session) {
   protocol_results <- protocol_server("protocol", rv)
   pairwise_results <- meta_pairwise_server("pairwise", rv)
   nma_results <- nma_server("nma", rv)
+  bayesian_ma_results <- bayesian_ma_server("bayesian_ma", rv)
   dr_results <- dose_response_server("dose_response", rv)
   sensitivity_results <- sensitivity_server("sensitivity", rv)
   he_params_results <- he_params_server("he_params", rv)
   he_model_results <- he_model_server("he_model", rv)
+  multistate_results <- multistate_markov_server("multistate_markov", rv)
+  psm_results <- partitioned_survival_server("partitioned_survival", rv)
   he_bcea_results <- he_bcea_server("he_bcea", rv)
   ai_copilot_results <- ai_copilot_server("ai_copilot", rv)
   reporting_results <- reporting_server("reporting", rv)
