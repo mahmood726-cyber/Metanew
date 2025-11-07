@@ -17,6 +17,7 @@ source("frontend/modules/validation_framework.R", local = TRUE)
 #' - Performance optimization
 #' - Progress tracking
 #' - Edge case handling
+#' - NICE Reference Case compliance (differential discounting)
 #'
 #' @param params List of model parameters (see details)
 #' @param base_prob_prog Baseline annual probability of progression [0, 1]
@@ -25,21 +26,32 @@ source("frontend/modules/validation_framework.R", local = TRUE)
 #' @param hr_death Hazard ratio for death (list with hr, se_log, ci_lower, ci_upper)
 #' @param validate_inputs Whether to perform comprehensive input validation (default TRUE)
 #' @param progress_callback Function to call with progress updates
+#' @param nice_compliant Whether to enforce NICE Reference Case requirements (default FALSE)
 #'
 #' @details
 #' Required params structure:
 #' \itemize{
 #'   \item time_horizon: Integer 1-100
-#'   \item discount_rate: Numeric [0, 0.2]
+#'   \item discount_rate: Numeric [0, 0.2] (legacy - single rate for both costs and health)
+#'   \item discount_rate_costs: Numeric [0, 0.2] (NICE: 3.5% = 0.035)
+#'   \item discount_rate_health: Numeric [0, 0.2] (NICE: 1.5% = 0.015)
 #'   \item utility_stable: Numeric [0, 1]
 #'   \item utility_progressed: Numeric [0, 1]
 #'   \item cost_treatment: Numeric >= 0
 #'   \item cost_comparator: Numeric >= 0
 #'   \item cost_stable: Numeric >= 0
 #'   \item cost_progressed: Numeric >= 0
-#'   \item half_cycle_correction: Logical (optional)
+#'   \item half_cycle_correction: Logical (optional, NICE default: TRUE)
 #'   \item background_mortality: Numeric [0, 1] (optional)
 #'   \item n_iterations: Integer 100-100000 (for PSA, optional)
+#' }
+#'
+#' @section NICE Reference Case:
+#' When nice_compliant = TRUE, the model enforces:
+#' \itemize{
+#'   \item Differential discounting: 3.5% for costs, 1.5% for health effects
+#'   \item Half-cycle correction enabled by default
+#'   \item PSA strongly recommended (warning if not provided)
 #' }
 #'
 #' @return List with model results and diagnostics
@@ -47,9 +59,11 @@ source("frontend/modules/validation_framework.R", local = TRUE)
 #'
 #' @examples
 #' \dontrun{
-#' params <- list(
+#' # Example 1: NICE-compliant analysis with differential discounting
+#' params_nice <- list(
 #'   time_horizon = 20,
-#'   discount_rate = 0.035,
+#'   discount_rate_costs = 0.035,    # 3.5% for costs
+#'   discount_rate_health = 0.015,   # 1.5% for health effects
 #'   utility_stable = 0.80,
 #'   utility_progressed = 0.60,
 #'   cost_treatment = 5000,
@@ -63,7 +77,25 @@ source("frontend/modules/validation_framework.R", local = TRUE)
 #' hr_prog <- list(hr = 0.70, se_log = 0.15, ci_lower = 0.55, ci_upper = 0.90)
 #' hr_death <- list(hr = 0.65, se_log = 0.18, ci_lower = 0.48, ci_upper = 0.88)
 #'
-#' results <- run_markov_model_enhanced(params, 0.15, 0.25, hr_prog, hr_death)
+#' results <- run_markov_model_enhanced(params_nice, 0.15, 0.25, hr_prog, hr_death,
+#'                                     nice_compliant = TRUE)
+#'
+#' # Example 2: Legacy single discount rate (backward compatible)
+#' params_legacy <- list(
+#'   time_horizon = 20,
+#'   discount_rate = 0.035,  # Single rate for both
+#'   utility_stable = 0.80,
+#'   utility_progressed = 0.60,
+#'   cost_treatment = 5000,
+#'   cost_comparator = 1000,
+#'   cost_stable = 500,
+#'   cost_progressed = 3000,
+#'   half_cycle_correction = TRUE,
+#'   n_iterations = 1000
+#' )
+#'
+#' results_legacy <- run_markov_model_enhanced(params_legacy, 0.15, 0.25,
+#'                                            hr_prog, hr_death)
 #' }
 run_markov_model_enhanced <- function(params,
                                      base_prob_prog,
@@ -71,7 +103,8 @@ run_markov_model_enhanced <- function(params,
                                      hr_progression,
                                      hr_death,
                                      validate_inputs = TRUE,
-                                     progress_callback = NULL) {
+                                     progress_callback = NULL,
+                                     nice_compliant = FALSE) {
 
   # ==========================================================================
   # STEP 1: INPUT VALIDATION
@@ -103,13 +136,24 @@ run_markov_model_enhanced <- function(params,
                                                    min_cycles = 1,
                                                    max_cycles = 100)
 
-      params$discount_rate <- validate_discount_rate(params$discount_rate)
+      # Validate differential discounting (NICE Reference Case)
+      params <- validate_differential_discounting(params, nice_compliant = nice_compliant)
+
+      # Validate cost perspective (NICE Reference Case)
+      params <- validate_cost_perspective(params, nice_compliant = nice_compliant)
+
+      # Validate utility sources (NICE Reference Case - EQ-5D requirement)
+      params <- validate_utility_sources(params, nice_compliant = nice_compliant)
 
       params$utility_stable <- validate_utility(params$utility_stable,
-                                                "utility_stable")
+                                                "utility_stable",
+                                                nice_compliant = nice_compliant,
+                                                utility_source = params$utility_source)
 
       params$utility_progressed <- validate_utility(params$utility_progressed,
-                                                    "utility_progressed")
+                                                    "utility_progressed",
+                                                    nice_compliant = nice_compliant,
+                                                    utility_source = params$utility_source)
 
       # Check utility ordering
       if (params$utility_progressed > params$utility_stable) {
@@ -158,9 +202,34 @@ run_markov_model_enhanced <- function(params,
       hr_death$hr <- validate_hazard_ratio(hr_death$hr,
                                            "hr_death")
 
-      # Validate PSA parameters if present
-      if (!is.null(params$n_iterations)) {
+      # Validate PSA parameters (MANDATORY for NICE compliance)
+      if (nice_compliant) {
+        if (is.null(params$n_iterations) || params$n_iterations == 0) {
+          stop(paste0("NICE Reference Case requires Probabilistic Sensitivity Analysis (PSA). ",
+                     "Please provide 'n_iterations' parameter with at least 1,000 simulations. ",
+                     "PSA is essential for capturing parameter uncertainty in NICE submissions."))
+        }
+
+        if (params$n_iterations < 1000) {
+          stop(paste0("NICE submissions require at least 1,000 PSA iterations for reliable uncertainty estimates. ",
+                     "Received: ", params$n_iterations, ". Please increase to >= 1,000."))
+        }
+
+        # Check for standard errors on HRs
+        if (is.na(hr_progression$se_log) || is.na(hr_death$se_log)) {
+          stop(paste0("NICE PSA requires standard errors for hazard ratios. ",
+                     "Please provide 'se_log' for both hr_progression and hr_death."))
+        }
+
         params$n_iterations <- validate_psa_sims(params$n_iterations)
+        message(paste0("✓ PSA configured with ", params$n_iterations, " iterations (NICE compliant)"))
+      } else {
+        # Optional for non-NICE
+        if (!is.null(params$n_iterations)) {
+          params$n_iterations <- validate_psa_sims(params$n_iterations)
+        } else {
+          message("Note: PSA not configured. For NICE submissions, PSA is mandatory.")
+        }
       }
 
       # Validate background mortality if present
@@ -186,7 +255,8 @@ run_markov_model_enhanced <- function(params,
   log_progress("Preparing model parameters...", "info")
 
   horizon <- params$time_horizon
-  discount <- params$discount_rate
+  discount_costs <- params$discount_rate_costs
+  discount_health <- params$discount_rate_health
 
   p_stable_prog_comp <- base_prob_prog
   p_prog_dead_comp <- base_prob_death
@@ -302,10 +372,10 @@ run_markov_model_enhanced <- function(params,
   })
 
   # ==========================================================================
-  # STEP 5: CALCULATE OUTCOMES
+  # STEP 5: CALCULATE OUTCOMES (WITH DIFFERENTIAL DISCOUNTING)
   # ==========================================================================
 
-  log_progress("Calculating QALYs and costs...", "info")
+  log_progress("Calculating QALYs and costs with differential discounting...", "info")
 
   # Half-cycle correction
   if (!is.null(params$half_cycle_correction) && params$half_cycle_correction) {
@@ -314,33 +384,36 @@ run_markov_model_enhanced <- function(params,
     cycle_weights <- rep(1, horizon + 1)
   }
 
-  # Discounting
-  discount_vec <- (1 / (1 + discount))^(0:horizon)
-  discount_weights <- discount_vec * cycle_weights
+  # Differential discounting vectors
+  discount_vec_costs <- (1 / (1 + discount_costs))^(0:horizon)
+  discount_vec_health <- (1 / (1 + discount_health))^(0:horizon)
 
-  # Calculate QALYs
+  discount_weights_costs <- discount_vec_costs * cycle_weights
+  discount_weights_health <- discount_vec_health * cycle_weights
+
+  # Calculate QALYs (use health discount rate)
   qalys_comp <- sum(
     (trace_comp[, 1] * params$utility_stable +
-     trace_comp[, 2] * params$utility_progressed) * discount_weights
+     trace_comp[, 2] * params$utility_progressed) * discount_weights_health
   )
 
   qalys_trt <- sum(
     (trace_trt[, 1] * params$utility_stable +
-     trace_trt[, 2] * params$utility_progressed) * discount_weights
+     trace_trt[, 2] * params$utility_progressed) * discount_weights_health
   )
 
-  # Calculate costs
-  drug_costs_comp_discounted <- sum(params$cost_comparator * discount_weights)
-  drug_costs_trt_discounted <- sum(params$cost_treatment * discount_weights)
+  # Calculate costs (use cost discount rate)
+  drug_costs_comp_discounted <- sum(params$cost_comparator * discount_weights_costs)
+  drug_costs_trt_discounted <- sum(params$cost_treatment * discount_weights_costs)
 
   costs_comp <- sum(
     (trace_comp[, 1] * params$cost_stable +
-     trace_comp[, 2] * params$cost_progressed) * discount_weights
+     trace_comp[, 2] * params$cost_progressed) * discount_weights_costs
   ) + drug_costs_comp_discounted
 
   costs_trt <- sum(
     (trace_trt[, 1] * params$cost_stable +
-     trace_trt[, 2] * params$cost_progressed) * discount_weights
+     trace_trt[, 2] * params$cost_progressed) * discount_weights_costs
   ) + drug_costs_trt_discounted
 
   # Incremental outcomes
@@ -374,7 +447,8 @@ run_markov_model_enhanced <- function(params,
       params, base_prob_prog, base_prob_death,
       hr_progression, hr_death,
       n_sim = params$n_iterations,
-      progress_callback = progress_callback
+      progress_callback = progress_callback,
+      nice_compliant = nice_compliant
     )
 
     log_progress("✓ PSA completed successfully", "success")
@@ -428,7 +502,8 @@ run_markov_model_enhanced <- function(params,
 #' @keywords internal
 run_psa_from_ma_enhanced <- function(params, base_prob_prog, base_prob_death,
                                      hr_progression, hr_death,
-                                     n_sim = 1000, progress_callback = NULL) {
+                                     n_sim = 1000, progress_callback = NULL,
+                                     nice_compliant = FALSE) {
 
   tryCatch({
     # Sample HRs on log scale
@@ -495,7 +570,8 @@ run_psa_from_ma_enhanced <- function(params, base_prob_prog, base_prob_death,
         temp_params, base_prob_prog, base_prob_death,
         temp_hr_prog, temp_hr_death,
         validate_inputs = FALSE,
-        progress_callback = NULL
+        progress_callback = NULL,
+        nice_compliant = nice_compliant
       )
 
       inc_qalys_sim[i] <- sim_result$inc_qalys

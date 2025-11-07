@@ -107,9 +107,12 @@ validate_hazard_ratio <- function(value, param_name, required = TRUE) {
 #' @param value Utility value to validate
 #' @param param_name Parameter name for error messages
 #' @param required Whether parameter is required
+#' @param nice_compliant Whether to check NICE EQ-5D requirements
+#' @param utility_source Source of utility values (e.g., "EQ-5D-3L", "EQ-5D-5L", "SF-6D", "HUI3")
 #' @return Validated utility in [0, 1]
 #' @export
-validate_utility <- function(value, param_name, required = TRUE) {
+validate_utility <- function(value, param_name, required = TRUE,
+                             nice_compliant = FALSE, utility_source = NULL) {
   value <- validate_probability(value, param_name, required)
 
   # Warning for unusual values
@@ -120,7 +123,68 @@ validate_utility <- function(value, param_name, required = TRUE) {
     }
   }
 
+  # NICE compliance: Check for EQ-5D source
+  if (nice_compliant && !is.null(utility_source)) {
+    valid_eq5d_sources <- c("EQ-5D-3L", "EQ-5D-5L", "EQ-5D", "EQ5D")
+
+    if (!utility_source %in% valid_eq5d_sources) {
+      warning(paste0("NICE Reference Case requires EQ-5D-based utilities. ",
+                    "Received source: '", utility_source, "'. ",
+                    "If using mapped utilities, provide justification in submission."))
+    }
+  }
+
   return(value)
+}
+
+#' Validate utility sources for all health states (NICE-specific)
+#'
+#' @param params Parameter list to validate
+#' @param nice_compliant Whether to enforce NICE reference case
+#' @return Validated params with utility_source metadata
+#' @export
+validate_utility_sources <- function(params, nice_compliant = FALSE) {
+
+  # Check if utility_source is provided
+  if (is.null(params$utility_source)) {
+    if (nice_compliant) {
+      stop(paste0("NICE Reference Case requires documenting utility sources. ",
+                 "Please provide 'utility_source' parameter (e.g., 'EQ-5D-3L', 'EQ-5D-5L'). ",
+                 "This should specify the preference-based measure used."))
+    } else {
+      message("Note: No utility_source specified. For NICE submissions, document the source (e.g., EQ-5D-3L).")
+      params$utility_source <- "unspecified"
+    }
+  }
+
+  # Validate against NICE requirements
+  if (nice_compliant) {
+    valid_eq5d <- c("EQ-5D-3L", "EQ-5D-5L", "EQ-5D", "EQ5D")
+
+    if (!params$utility_source %in% valid_eq5d) {
+      # Allow with strong warning for mapped utilities
+      if (grepl("mapped|derived|estimated", params$utility_source, ignore.case = TRUE)) {
+        warning(paste0("Using mapped/derived utilities from: ", params$utility_source, ". ",
+                      "NICE Reference Case prefers directly measured EQ-5D. ",
+                      "Provide justification for mapping approach in submission."))
+      } else {
+        warning(paste0("NICE Reference Case requires EQ-5D-based utilities. ",
+                      "Received: '", params$utility_source, "'. ",
+                      "Valid options: ", paste(valid_eq5d, collapse = ", "), ". ",
+                      "If using alternative measures, provide strong justification."))
+      }
+    } else {
+      message(paste0("✓ Using EQ-5D utilities (source: ", params$utility_source, ")"))
+    }
+
+    # Check for UK population tariff
+    if (is.null(params$utility_tariff)) {
+      message("Note: Consider specifying 'utility_tariff' (e.g., 'UK_crosswalk', 'UK_TTO') for transparency.")
+      params$utility_tariff <- "unspecified"
+    }
+  }
+
+  return(params)
 }
 
 #' Validate cost parameter
@@ -166,23 +230,167 @@ validate_time_horizon <- function(value, param_name = "time_horizon",
   return(as.integer(value))
 }
 
-#' Validate discount rate
+#' Validate discount rate (NICE-compliant)
 #'
 #' @param value Discount rate to validate
 #' @param param_name Parameter name for error messages
+#' @param nice_compliant Whether to enforce NICE reference case rates
+#' @param rate_type Type of rate: "costs" or "health" (for NICE differential discounting)
 #' @return Validated discount rate in [0, 0.2]
 #' @export
-validate_discount_rate <- function(value, param_name = "discount_rate") {
+validate_discount_rate <- function(value, param_name = "discount_rate",
+                                   nice_compliant = FALSE,
+                                   rate_type = NULL) {
   value <- validate_numeric(value, param_name, min_value = 0, max_value = 0.2,
                            required = TRUE, allow_zero = TRUE)
 
+  # NICE compliance checks
+  if (nice_compliant) {
+    if (!is.null(rate_type)) {
+      if (rate_type == "costs" && abs(value - 0.035) > 0.001) {
+        stop(paste0("NICE Reference Case requires 3.5% discount rate for costs. ",
+                   "Received: ", value * 100, "%"))
+      }
+      if (rate_type == "health" && abs(value - 0.015) > 0.001) {
+        stop(paste0("NICE Reference Case requires 1.5% discount rate for health effects. ",
+                   "Received: ", value * 100, "%"))
+      }
+    }
+  }
+
   # Warning for unusual values
-  if (value > 0.1) {
-    warning(paste0("Discount rate of ", value * 100, "% is higher than typical NICE guidance (3.5%). ",
+  if (!nice_compliant && value > 0.1) {
+    warning(paste0("Discount rate of ", value * 100, "% is higher than typical NICE guidance. ",
                   "Please verify this is appropriate for your jurisdiction."))
   }
 
   return(value)
+}
+
+#' Validate differential discounting parameters (NICE-specific)
+#'
+#' @param params Parameter list to validate
+#' @param nice_compliant Whether to enforce NICE reference case
+#' @return Validated params with discount_rate_costs and discount_rate_health
+#' @export
+validate_differential_discounting <- function(params, nice_compliant = FALSE) {
+
+  # Check if using new differential discounting or old single rate
+  has_differential <- !is.null(params$discount_rate_costs) || !is.null(params$discount_rate_health)
+  has_single <- !is.null(params$discount_rate)
+
+  if (has_differential) {
+    # Using differential discounting (NICE Reference Case)
+    if (is.null(params$discount_rate_costs)) {
+      stop("When using differential discounting, 'discount_rate_costs' is required")
+    }
+    if (is.null(params$discount_rate_health)) {
+      stop("When using differential discounting, 'discount_rate_health' is required")
+    }
+
+    params$discount_rate_costs <- validate_discount_rate(
+      params$discount_rate_costs,
+      "discount_rate_costs",
+      nice_compliant = nice_compliant,
+      rate_type = "costs"
+    )
+
+    params$discount_rate_health <- validate_discount_rate(
+      params$discount_rate_health,
+      "discount_rate_health",
+      nice_compliant = nice_compliant,
+      rate_type = "health"
+    )
+
+    # Set single rate to NULL to avoid confusion
+    params$discount_rate <- NULL
+
+    message(paste0("✓ Using differential discounting: ",
+                  params$discount_rate_costs * 100, "% (costs), ",
+                  params$discount_rate_health * 100, "% (health effects)"))
+
+  } else if (has_single) {
+    # Using single discount rate (legacy/non-NICE)
+    params$discount_rate <- validate_discount_rate(params$discount_rate, "discount_rate")
+
+    if (nice_compliant) {
+      warning(paste0("NICE Reference Case requires differential discounting. ",
+                    "Converting single rate (", params$discount_rate * 100,
+                    "%) to NICE-compliant rates (3.5% costs, 1.5% health)."))
+      params$discount_rate_costs <- 0.035
+      params$discount_rate_health <- 0.015
+      params$discount_rate <- NULL
+    } else {
+      # Use same rate for both
+      params$discount_rate_costs <- params$discount_rate
+      params$discount_rate_health <- params$discount_rate
+      message(paste0("Note: Using single discount rate (", params$discount_rate * 100,
+                    "%) for both costs and health effects. ",
+                    "Consider using differential discounting for NICE submissions."))
+    }
+  } else {
+    stop("Either 'discount_rate' or both 'discount_rate_costs' and 'discount_rate_health' must be provided")
+  }
+
+  return(params)
+}
+
+#' Validate cost perspective (NICE-specific)
+#'
+#' @param params Parameter list to validate
+#' @param nice_compliant Whether to enforce NICE reference case
+#' @return Validated params with cost_perspective set
+#' @export
+validate_cost_perspective <- function(params, nice_compliant = FALSE) {
+
+  # Default to NHS/PSS for NICE compliance
+  if (is.null(params$cost_perspective)) {
+    if (nice_compliant) {
+      params$cost_perspective <- "NHS_PSS"
+      message("✓ Using NHS/PSS perspective (NICE Reference Case default)")
+    } else {
+      params$cost_perspective <- "NHS_PSS"
+      message("Note: Defaulting to NHS/PSS perspective. Specify 'cost_perspective' explicitly if needed.")
+    }
+  }
+
+  # Validate perspective value
+  valid_perspectives <- c("NHS_PSS", "NHS", "PSS", "societal", "payer", "healthcare_system")
+
+  if (!params$cost_perspective %in% valid_perspectives) {
+    stop(paste0("Invalid cost_perspective: '", params$cost_perspective, "'. ",
+               "Valid options: ", paste(valid_perspectives, collapse = ", ")))
+  }
+
+  # NICE compliance check
+  if (nice_compliant) {
+    if (params$cost_perspective != "NHS_PSS") {
+      stop(paste0("NICE Reference Case requires NHS/PSS perspective. ",
+                 "Received: '", params$cost_perspective, "'"))
+    }
+
+    # Check for productivity costs (not allowed in NHS/PSS)
+    productivity_cost_params <- c("cost_productivity_loss", "cost_absenteeism",
+                                  "cost_presenteeism", "cost_caregiver_time",
+                                  "cost_lost_earnings")
+
+    found_productivity <- intersect(productivity_cost_params, names(params))
+
+    if (length(found_productivity) > 0) {
+      warning(paste0("NHS/PSS perspective detected productivity costs: ",
+                    paste(found_productivity, collapse = ", "), ". ",
+                    "These costs should be excluded from base case and presented in scenario analysis only. ",
+                    "Consider setting these to 0 or removing them."))
+    }
+  }
+
+  # Warning for non-NHS/PSS perspectives
+  if (!nice_compliant && params$cost_perspective != "NHS_PSS") {
+    message(paste0("Note: Using '", params$cost_perspective, "' perspective. ",
+                  "NICE requires NHS/PSS perspective for UK submissions."))
+  }
+
+  return(params)
 }
 
 #' Validate WTP threshold
