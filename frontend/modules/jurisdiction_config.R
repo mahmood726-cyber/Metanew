@@ -51,7 +51,19 @@ get_jurisdiction_config <- function(jurisdiction) {
     "PT" = "PT",
     "Portugal" = "PT",
     "IE" = "IE",
-    "Ireland" = "IE"
+    "Ireland" = "IE",
+    # United States jurisdictions
+    "US" = "US_ICER",  # Default to ICER for economic analyses
+    "USA" = "US_ICER",
+    "United States" = "US_ICER",
+    "FDA" = "US_FDA",
+    "ICER" = "US_ICER",
+    "Medicare" = "US_MEDICARE",
+    "CMS" = "US_MEDICARE",
+    "Medicaid" = "US_MEDICAID",
+    "VA" = "US_VA",
+    "Veterans Affairs" = "US_VA",
+    "Commercial" = "US_COMMERCIAL"
   )
 
   # Normalize jurisdiction code
@@ -482,6 +494,299 @@ JURISDICTION_CONFIGS <- list(
     equity_analysis = FALSE,
 
     enforcement = "guidance"  # Guidance only, not enforcement
+  ),
+
+  # ===========================================================================
+  # UNITED STATES - FDA
+  # ===========================================================================
+  US_FDA = list(
+    name = "United States (FDA)",
+    agency = "Food and Drug Administration",
+
+    # Discount rates (not FDA requirement, but US standard for economic analyses)
+    discount_rate_costs = 0.03,
+    discount_rate_health = 0.03,
+    discount_differential = FALSE,
+    discount_rationale = "US standard: 3% for both costs and health effects",
+
+    # Cost perspective
+    perspective_required = NULL,  # FDA focuses on efficacy/safety, not economics
+    perspective_allowed = c("healthcare_sector", "societal", "payer"),
+    perspective_rationale = "FDA approval based on clinical evidence, not economics",
+
+    # Utility measurement
+    utility_instrument_required = NULL,
+    utility_instrument_allowed = c("EQ-5D-5L", "SF-6D", "HUI3", "QWB"),
+    utility_tariff = "US",
+    utility_rationale = "Multiple instruments accepted; US tariff preferred",
+
+    # Methods
+    psa_required = FALSE,  # Not required for FDA submission
+    psa_min_iterations = 1000,
+    half_cycle_correction = TRUE,
+    age_weighting = FALSE,
+    severity_weighting = FALSE,
+    budget_impact_required = FALSE,
+    equity_analysis = FALSE,
+
+    # FDA-specific requirements
+    regulatory_endpoints = TRUE,  # FDA regulatory endpoints (OS, PFS, ORR, etc.)
+    rwe_acceptable = TRUE,         # Real-world evidence (FDA RWE Framework 2018)
+    pro_validation = TRUE,          # Patient-reported outcomes (FDA PRO Guidance 2009)
+    safety_reporting = "mandatory", # Comprehensive safety data required
+
+    # Comparator
+    comparator_type = "placebo_or_active_control",
+
+    # Enforcement level
+    enforcement = "strict"
+  ),
+
+  # ===========================================================================
+  # UNITED STATES - ICER
+  # ===========================================================================
+  US_ICER = list(
+    name = "United States (ICER)",
+    agency = "Institute for Clinical and Economic Review",
+
+    # Discount rates
+    discount_rate_costs = 0.03,
+    discount_rate_health = 0.03,
+    discount_differential = FALSE,
+    discount_rationale = "ICER standard: 3% for both",
+
+    # Cost perspective
+    perspective_required = c("healthcare_sector", "societal"),
+    perspective_allowed = c("healthcare_sector", "societal", "modified_societal"),
+    perspective_rationale = "Both healthcare sector and societal perspectives required",
+
+    # Utility measurement
+    utility_instrument_required = "preference-based",
+    utility_instrument_allowed = c("EQ-5D-5L", "SF-6D", "HUI3", "QWB"),
+    utility_tariff = "US",
+    utility_rationale = "Preference-based instruments with US tariff",
+
+    # Methods
+    psa_required = TRUE,
+    psa_min_iterations = 5000,  # ICER recommends 5000+ iterations
+    half_cycle_correction = TRUE,
+    age_weighting = FALSE,
+    severity_weighting = TRUE,  # Implicit through other benefits framework
+    budget_impact_required = TRUE,  # 5-year budget impact mandatory
+    equity_analysis = TRUE,         # Contextual considerations include equity
+
+    # ICER-specific
+    value_framework = TRUE,
+    other_benefits = TRUE,              # Reduction in uncertainty, insurance value, etc.
+    contextual_considerations = TRUE,   # Unmet need, innovation, equity
+    budget_impact_threshold = 915000000,  # $915M triggers affordability concerns
+
+    # Thresholds
+    icer_threshold_base = 100000,      # $100,000/QALY base case
+    icer_threshold_range = c(50000, 150000, 175000),  # Multiple thresholds
+
+    # Comparator
+    comparator_type = "relevant_comparators",
+
+    # Time horizon
+    time_horizon_preferred = "lifetime",
+
+    # Enforcement level
+    enforcement = "strict"
+  ),
+
+  # ===========================================================================
+  # UNITED STATES - MEDICARE/CMS
+  # ===========================================================================
+  US_MEDICARE = list(
+    name = "United States (Medicare/CMS)",
+    agency = "Centers for Medicare & Medicaid Services",
+
+    # Discount rates
+    discount_rate_costs = 0.03,
+    discount_rate_health = 0.03,
+    discount_differential = FALSE,
+    discount_rationale = "CMS standard: 3% for both",
+
+    # Cost perspective
+    perspective_required = "medicare",
+    perspective_allowed = c("medicare", "cms", "federal_payer"),
+    perspective_rationale = "Medicare perspective - federal payer viewpoint",
+
+    # Utility measurement
+    utility_instrument_required = NULL,
+    utility_instrument_allowed = c("EQ-5D-5L", "SF-6D", "HUI3"),
+    utility_tariff = "US",
+    utility_rationale = "QALY use limited due to statutory restrictions",
+
+    # Methods
+    psa_required = FALSE,
+    psa_min_iterations = 1000,
+    half_cycle_correction = TRUE,
+    age_weighting = FALSE,
+    severity_weighting = FALSE,
+    budget_impact_required = TRUE,
+    equity_analysis = FALSE,
+
+    # CMS-specific
+    qaly_restricted = TRUE,  # CMS statutorily prohibited from using QALY thresholds
+    coverage_gap_analysis = TRUE,
+    beneficiary_cost_sharing = TRUE,
+
+    # Population
+    target_population = "medicare_beneficiaries",  # Age 65+, disabled, ESRD
+
+    # Comparator
+    comparator_type = "current_medicare_coverage",
+
+    # Enforcement level
+    enforcement = "moderate"
+  ),
+
+  # ===========================================================================
+  # UNITED STATES - MEDICAID
+  # ===========================================================================
+  US_MEDICAID = list(
+    name = "United States (Medicaid)",
+    agency = "State Medicaid Programs",
+
+    # Discount rates
+    discount_rate_costs = 0.03,
+    discount_rate_health = 0.03,
+    discount_differential = FALSE,
+    discount_rationale = "Standard 3% for both",
+
+    # Cost perspective
+    perspective_required = "medicaid",
+    perspective_allowed = c("medicaid", "state_payer"),
+    perspective_rationale = "State Medicaid perspective - state budget impact critical",
+
+    # Utility measurement
+    utility_instrument_required = NULL,
+    utility_instrument_allowed = c("EQ-5D-5L", "SF-6D", "HUI3"),
+    utility_tariff = "US",
+    utility_rationale = "Flexible - varies by state",
+
+    # Methods
+    psa_required = FALSE,
+    psa_min_iterations = 1000,
+    half_cycle_correction = TRUE,
+    age_weighting = FALSE,
+    severity_weighting = FALSE,
+    budget_impact_required = TRUE,  # Critical for state budgets
+    equity_analysis = TRUE,          # Important for vulnerable populations
+
+    # Medicaid-specific
+    state_variation = TRUE,           # Varies significantly by state
+    preferred_drug_list = TRUE,       # PDL placement critical
+    prior_authorization = TRUE,
+    rebate_considerations = TRUE,     # Manufacturer rebates affect net cost
+
+    # Population
+    target_population = "medicaid_beneficiaries",  # Low-income, disabled, children
+
+    # Comparator
+    comparator_type = "state_formulary_comparator",
+
+    # Enforcement level
+    enforcement = "moderate"
+  ),
+
+  # ===========================================================================
+  # UNITED STATES - VA
+  # ===========================================================================
+  US_VA = list(
+    name = "United States (VA)",
+    agency = "Veterans Affairs",
+
+    # Discount rates
+    discount_rate_costs = 0.03,
+    discount_rate_health = 0.03,
+    discount_differential = FALSE,
+    discount_rationale = "VA standard: 3% for both",
+
+    # Cost perspective
+    perspective_required = "VA_healthcare",
+    perspective_allowed = c("VA_healthcare", "federal_payer"),
+    perspective_rationale = "VA healthcare system perspective",
+
+    # Utility measurement
+    utility_instrument_required = NULL,
+    utility_instrument_allowed = c("EQ-5D-5L", "SF-6D", "HUI3", "VR-12"),
+    utility_tariff = "US",
+    utility_rationale = "VR-12 (Veterans RAND) also acceptable",
+
+    # Methods
+    psa_required = FALSE,
+    psa_min_iterations = 1000,
+    half_cycle_correction = TRUE,
+    age_weighting = FALSE,
+    severity_weighting = FALSE,
+    budget_impact_required = TRUE,
+    equity_analysis = FALSE,
+
+    # VA-specific
+    va_formulary = TRUE,
+    federal_pricing = TRUE,           # Federal pricing differs from commercial
+    veteran_population = TRUE,        # Specific demographic considerations
+
+    # Population
+    target_population = "veterans",
+
+    # Comparator
+    comparator_type = "va_formulary_comparator",
+
+    # Enforcement level
+    enforcement = "moderate"
+  ),
+
+  # ===========================================================================
+  # UNITED STATES - COMMERCIAL PAYERS
+  # ===========================================================================
+  US_COMMERCIAL = list(
+    name = "United States (Commercial Payers)",
+    agency = "Commercial Health Plans",
+
+    # Discount rates
+    discount_rate_costs = 0.03,
+    discount_rate_health = 0.03,
+    discount_differential = FALSE,
+    discount_rationale = "Industry standard: 3% for both",
+
+    # Cost perspective
+    perspective_required = "commercial_payer",
+    perspective_allowed = c("commercial_payer", "health_plan", "employer"),
+    perspective_rationale = "Commercial payer perspective; employer perspective for large employers",
+
+    # Utility measurement
+    utility_instrument_required = NULL,
+    utility_instrument_allowed = c("EQ-5D-5L", "SF-6D", "HUI3"),
+    utility_tariff = "US",
+    utility_rationale = "Flexible - varies by payer",
+
+    # Methods
+    psa_required = FALSE,  # Recommended but not mandatory
+    psa_min_iterations = 1000,
+    half_cycle_correction = TRUE,
+    age_weighting = FALSE,
+    severity_weighting = FALSE,
+    budget_impact_required = TRUE,  # Critical for formulary decisions
+    equity_analysis = FALSE,
+
+    # Commercial payer-specific
+    amcp_format = TRUE,               # AMCP Format dossier preferred
+    pmpm_required = TRUE,              # Per-member-per-month costs
+    medical_cost_offsets = TRUE,      # Medical cost savings important
+    productivity_optional = TRUE,      # Productivity costs optional
+
+    # Time horizon
+    time_horizon_typical = "3-5 years",  # Shorter than clinical models
+
+    # Comparator
+    comparator_type = "formulary_alternatives",
+
+    # Enforcement level
+    enforcement = "guidance"
   )
 )
 
