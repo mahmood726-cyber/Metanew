@@ -14,9 +14,12 @@ library(dosresmeta)
 source("modules/data_import.R")
 source("modules/protocol.R")
 source("modules/meta_pairwise.R")
+source("modules/meta_multilevel.R")
 source("modules/nma.R")
 source("modules/dose_response.R")
 source("modules/sensitivity.R")
+source("modules/rob2.R")
+source("modules/grade.R")
 source("modules/he_params.R")
 source("modules/he_model.R")
 source("modules/he_bcea.R")
@@ -65,6 +68,10 @@ ui <- page_navbar(
         meta_pairwise_ui("pairwise")
       ),
       nav_panel(
+        "Three-Level MA",
+        multilevel_ui("multilevel")
+      ),
+      nav_panel(
         "Network MA",
         nma_ui("nma")
       ),
@@ -80,6 +87,22 @@ ui <- page_navbar(
     title = "Sensitivity",
     icon = icon("sliders"),
     sensitivity_ui("sensitivity")
+  ),
+
+  # Tab: Quality Assessment
+  nav_panel(
+    title = "Quality",
+    icon = icon("check-circle"),
+    navset_card_tab(
+      nav_panel(
+        "RoB 2.0",
+        rob2_ui("rob2")
+      ),
+      nav_panel(
+        "GRADE",
+        grade_ui("grade")
+      )
+    )
   ),
 
   # Tab: Economics
@@ -162,8 +185,11 @@ server <- function(input, output, session) {
     data = NULL,
     protocol = NULL,
     pairwise_results = list(),
+    multilevel_results = list(),
     nma_results = list(),
     dr_results = list(),
+    rob2_results = list(),
+    grade_results = list(),
     he_results = NULL,
     audit_log = list()
   )
@@ -194,9 +220,12 @@ server <- function(input, output, session) {
   data_results <- data_import_server("data_import", rv)
   protocol_results <- protocol_server("protocol", rv)
   pairwise_results <- meta_pairwise_server("pairwise", rv)
+  multilevel_results <- multilevel_server("multilevel", rv)
   nma_results <- nma_server("nma", rv)
   dr_results <- dose_response_server("dose_response", rv)
   sensitivity_results <- sensitivity_server("sensitivity", rv)
+  rob2_results <- rob2_server("rob2", rv)
+  grade_results <- grade_server("grade", rv)
   he_params_results <- he_params_server("he_params", rv)
   he_model_results <- he_model_server("he_model", rv)
   he_bcea_results <- he_bcea_server("he_bcea", rv)
@@ -283,8 +312,11 @@ create_evidence_object <- function(rv) {
     studies = if (!is.null(rv$data)) unique(rv$data$study_id) else list(),
     observations = if (!is.null(rv$data)) nrow(rv$data) else 0,
     pairwise_results = rv$pairwise_results,
+    multilevel_results = rv$multilevel_results,
     nma_results = rv$nma_results,
     dose_response_results = rv$dr_results,
+    rob2_results = rv$rob2_results,
+    grade_results = rv$grade_results,
     economic_results = rv$he_results,
     audit_trail = rv$audit_log
   )

@@ -8,7 +8,7 @@ library(metafor)
 library(bslib)
 library(plotly)
 
-meta_multilevel_ui <- function(id) {
+multilevel_ui <- function(id) {
   ns <- NS(id)
 
   tagList(
@@ -99,7 +99,7 @@ meta_multilevel_ui <- function(id) {
   )
 }
 
-meta_multilevel_server <- function(id, rv) {
+multilevel_server <- function(id, rv) {
   moduleServer(id, function(input, output, session) {
 
     # Results storage
