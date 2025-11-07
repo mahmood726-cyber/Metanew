@@ -25,10 +25,18 @@ source("modules/audit.R")
 source("modules/ai_copilot.R")
 source("modules/v2_features.R")
 
+# NEW: Source advanced modules
+source("modules/fda_submission.R")
+source("modules/rwd_integration.R")
+source("modules/grade_assessment.R")
+source("modules/threshold_analysis.R")
+
 # Source utilities
 source("utils/python_bridge.R")
 source("utils/plotting.R")
 source("utils/validators.R")
+source("utils/mortality_tables.R")
+source("utils/microsimulation.R")
 
 # Define UI
 ui <- page_navbar(
@@ -123,6 +131,34 @@ ui <- page_navbar(
     audit_ui("audit")
   ),
 
+  # NEW: Tab: GRADE Assessment
+  nav_panel(
+    title = "GRADE",
+    icon = icon("star-half-alt"),
+    grade_assessment_ui("grade")
+  ),
+
+  # NEW: Tab: Threshold Analysis
+  nav_panel(
+    title = "Thresholds",
+    icon = icon("sliders-h"),
+    threshold_analysis_ui("threshold")
+  ),
+
+  # NEW: Tab: Real-World Data
+  nav_panel(
+    title = "RWD",
+    icon = icon("database"),
+    rwd_integration_ui("rwd")
+  ),
+
+  # NEW: Tab: FDA Submission
+  nav_panel(
+    title = "FDA",
+    icon = icon("flag-usa"),
+    fda_submission_ui("fda")
+  ),
+
   # Tab: V2 Features
   nav_panel(
     title = "V2 Features",
@@ -204,6 +240,12 @@ server <- function(input, output, session) {
   reporting_results <- reporting_server("reporting", rv)
   audit_results <- audit_server("audit", rv)
   v2_results <- v2_features_server("v2_features", rv)
+
+  # NEW: Advanced module servers
+  grade_results <- grade_assessment_server("grade", rv)
+  threshold_results <- threshold_analysis_server("threshold", rv)
+  rwd_results <- rwd_integration_server("rwd", rv)
+  fda_results <- fda_submission_server("fda", rv)
 
   # Save session handler
   observeEvent(input$btn_save_session, {

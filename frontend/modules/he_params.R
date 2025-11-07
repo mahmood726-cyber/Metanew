@@ -44,6 +44,33 @@ he_params_ui <- function(id) {
           numericInput(ns("psa_iter"), "PSA Iterations", 1000, min = 100, max = 10000, step = 100)
         )
       ),
+      layout_columns(
+        col_widths = c(6, 6),
+        card(
+          card_header("Background Mortality"),
+          numericInput(ns("base_age"), "Cohort Base Age", 60, min = 0, max = 110),
+          selectInput(ns("sex"), "Sex Distribution",
+                      choices = c("Both" = "both", "Male" = "male", "Female" = "female")),
+          numericInput(ns("mortality_smr"), "Mortality SMR (Standardized Mortality Ratio)",
+                      1.0, min = 0.5, max = 5, step = 0.1),
+          helpText("SMR adjusts background mortality. 1.0 = general population, >1.0 = higher risk")
+        ),
+        card(
+          card_header("Model Options"),
+          checkboxInput(ns("half_cycle"), "Half-Cycle Correction", TRUE),
+          helpText("Applies half-cycle correction for more accurate discounting"),
+          hr(),
+          selectInput(ns("model_type"), "Model Type",
+                     choices = c("Cohort (Markov)" = "cohort",
+                               "Patient-Level (Microsimulation)" = "microsim")),
+          conditionalPanel(
+            condition = "input.model_type == 'microsim'",
+            ns = ns,
+            numericInput(ns("n_patients"), "Number of Patients to Simulate",
+                        1000, min = 100, max = 100000, step = 100)
+          )
+        )
+      ),
       actionButton(ns("btn_save"), "Save Parameters", class = "btn-primary")
     )
   )
@@ -92,6 +119,31 @@ he_params_server <- function(id, rv) {
     }, ignoreInit = FALSE)  # Run on initialization to load default (UK)
 
     observeEvent(input$btn_save, {
+      # Source mortality tables utility if not already loaded
+      if (!exists("get_mortality_rate")) {
+        source("utils/mortality_tables.R", local = TRUE)
+      }
+
+      # Calculate age-specific background mortality
+      country_code <- switch(input$country,
+        "uk" = "GBR",
+        "us" = "USA",
+        "germany" = "DEU",
+        "france" = "FRA",
+        "canada" = "CAN",
+        "GBR"
+      )
+
+      # Get mortality rate for base age
+      base_mortality <- get_mortality_rate(
+        age = input$base_age,
+        sex = input$sex,
+        country = country_code
+      )
+
+      # Apply SMR adjustment
+      adjusted_mortality <- adjust_mortality_smr(base_mortality, input$mortality_smr)
+
       params <- list(
         country = input$country,
         wtp_threshold = input$wtp,
@@ -106,11 +158,21 @@ he_params_server <- function(id, rv) {
         cost_comparator = input$cost_comparator,
         hr_progression = input$hr_prog,
         hr_death = input$hr_death,
-        n_iterations = input$psa_iter
+        n_iterations = input$psa_iter,
+        # New parameters
+        background_mortality = adjusted_mortality,
+        base_age = input$base_age,
+        sex = input$sex,
+        mortality_smr = input$mortality_smr,
+        country_code = country_code,
+        half_cycle_correction = input$half_cycle,
+        model_type = input$model_type,
+        n_patients_microsim = if (input$model_type == "microsim") input$n_patients else NULL
       )
 
       rv$he_params <- params
-      showNotification("✓ Parameters saved", type = "message")
+      showNotification("✓ Parameters saved (Background mortality: {:.2%})" %>%
+                      sprintf(adjusted_mortality), type = "message")
     })
 
     return(reactive(rv$he_params))

@@ -269,12 +269,31 @@ run_markov_model <- function(params, base_prob_prog, base_prob_death,
   discount <- params$discount_rate
 
   # Apply HRs to baseline probabilities
+  # IMPORTANT: HRs apply to hazard rates, not probabilities directly
+  # Convert probability to rate, apply HR, convert back to probability
+
   p_stable_prog_comp <- base_prob_prog
   p_prog_dead_comp <- base_prob_death
-  p_stable_dead <- 0.02  # Background mortality
 
-  p_stable_prog_trt <- p_stable_prog_comp * hr_progression$hr
-  p_prog_dead_trt <- p_prog_dead_comp * hr_death$hr
+  # Get age/sex-adjusted background mortality if available
+  p_stable_dead <- if (!is.null(params$background_mortality)) {
+    params$background_mortality
+  } else {
+    0.02  # Default background mortality (2% annually)
+  }
+
+  # FIXED: Proper HR application to probabilities via rate transformation
+  # Convert probability to hazard rate: rate = -log(1 - prob)
+  rate_stable_prog_comp <- -log(1 - p_stable_prog_comp)
+  rate_prog_dead_comp <- -log(1 - p_prog_dead_comp)
+
+  # Apply hazard ratios to rates
+  rate_stable_prog_trt <- rate_stable_prog_comp * hr_progression$hr
+  rate_prog_dead_trt <- rate_prog_dead_comp * hr_death$hr
+
+  # Convert rates back to probabilities: prob = 1 - exp(-rate)
+  p_stable_prog_trt <- 1 - exp(-rate_stable_prog_trt)
+  p_prog_dead_trt <- 1 - exp(-rate_prog_dead_trt)
 
   # Trace for comparator
   trace_comp <- matrix(0, nrow = horizon + 1, ncol = 3)
@@ -307,27 +326,41 @@ run_markov_model <- function(params, base_prob_prog, base_prob_death,
   }
 
   # Calculate QALYs and Costs with discounting
+  # Apply half-cycle correction if enabled
+  if (!is.null(params$half_cycle_correction) && params$half_cycle_correction) {
+    # Half-cycle correction: multiply by 0.5 for first and last cycles
+    cycle_weights <- c(0.5, rep(1, horizon - 1), 0.5)
+  } else {
+    cycle_weights <- rep(1, horizon + 1)
+  }
+
   discount_vec <- (1 / (1 + discount))^(0:horizon)
+  discount_weights <- discount_vec * cycle_weights
 
   qalys_comp <- sum(
     (trace_comp[, 1] * params$utility_stable +
-       trace_comp[, 2] * params$utility_progressed) * discount_vec
+       trace_comp[, 2] * params$utility_progressed) * discount_weights
   )
 
   qalys_trt <- sum(
     (trace_trt[, 1] * params$utility_stable +
-       trace_trt[, 2] * params$utility_progressed) * discount_vec
+       trace_trt[, 2] * params$utility_progressed) * discount_weights
   )
+
+  # FIXED: Drug costs should be discounted over time, not added as lump sum
+  # Calculate discounted drug costs over the time horizon
+  drug_costs_comp_discounted <- sum(params$cost_comparator * discount_weights)
+  drug_costs_trt_discounted <- sum(params$cost_treatment * discount_weights)
 
   costs_comp <- sum(
     (trace_comp[, 1] * params$cost_stable +
-       trace_comp[, 2] * params$cost_progressed) * discount_vec
-  ) + params$cost_comparator
+       trace_comp[, 2] * params$cost_progressed) * discount_weights
+  ) + drug_costs_comp_discounted
 
   costs_trt <- sum(
     (trace_trt[, 1] * params$cost_stable +
-       trace_trt[, 2] * params$cost_progressed) * discount_vec
-  ) + params$cost_treatment
+       trace_trt[, 2] * params$cost_progressed) * discount_weights
+  ) + drug_costs_trt_discounted
 
   inc_qalys <- qalys_trt - qalys_comp
   inc_costs <- costs_trt - costs_comp
@@ -446,13 +479,24 @@ run_psa_from_ma <- function(params, base_prob_prog, base_prob_death,
     horizon <- params_temp$time_horizon
     discount <- params_temp$discount_rate
 
-    # Apply HRs to baseline
+    # Apply HRs to baseline using correct rate transformation
     p_stable_prog_comp <- base_prob_prog
     p_prog_dead_comp <- base_prob_death
-    p_stable_dead <- 0.02
+    p_stable_dead <- if (!is.null(params_temp$background_mortality)) {
+      params_temp$background_mortality
+    } else {
+      0.02
+    }
 
-    p_stable_prog_trt <- p_stable_prog_comp * hr_prog_temp$hr
-    p_prog_dead_trt <- p_prog_dead_comp * hr_death_temp$hr
+    # FIXED: Proper HR application in PSA
+    rate_stable_prog_comp <- -log(1 - p_stable_prog_comp)
+    rate_prog_dead_comp <- -log(1 - p_prog_dead_comp)
+
+    rate_stable_prog_trt <- rate_stable_prog_comp * hr_prog_temp$hr
+    rate_prog_dead_trt <- rate_prog_dead_comp * hr_death_temp$hr
+
+    p_stable_prog_trt <- 1 - exp(-rate_stable_prog_trt)
+    p_prog_dead_trt <- 1 - exp(-rate_prog_dead_trt)
 
     # Quick trace calculation
     trace_comp <- matrix(0, nrow = horizon + 1, ncol = 3)
@@ -471,17 +515,29 @@ run_psa_from_ma <- function(params, base_prob_prog, base_prob_death,
       trace_trt[t + 1, 3] <- trace_trt[t, 1] * p_stable_dead + trace_trt[t, 2] * p_prog_dead_trt + trace_trt[t, 3]
     }
 
+    # Apply half-cycle correction if enabled
+    if (!is.null(params_temp$half_cycle_correction) && params_temp$half_cycle_correction) {
+      cycle_weights <- c(0.5, rep(1, horizon - 1), 0.5)
+    } else {
+      cycle_weights <- rep(1, horizon + 1)
+    }
+
     discount_vec <- (1 / (1 + discount))^(0:horizon)
+    discount_weights <- discount_vec * cycle_weights
 
     qalys_comp <- sum((trace_comp[, 1] * params_temp$utility_stable +
-                        trace_comp[, 2] * params_temp$utility_progressed) * discount_vec)
+                        trace_comp[, 2] * params_temp$utility_progressed) * discount_weights)
     qalys_trt <- sum((trace_trt[, 1] * params_temp$utility_stable +
-                       trace_trt[, 2] * params_temp$utility_progressed) * discount_vec)
+                       trace_trt[, 2] * params_temp$utility_progressed) * discount_weights)
+
+    # FIXED: Discounted drug costs in PSA
+    drug_costs_comp_disc <- sum(params_temp$cost_comparator * discount_weights)
+    drug_costs_trt_disc <- sum(params_temp$cost_treatment * discount_weights)
 
     costs_comp <- sum((trace_comp[, 1] * params_temp$cost_stable +
-                        trace_comp[, 2] * params_temp$cost_progressed) * discount_vec) + params_temp$cost_comparator
+                        trace_comp[, 2] * params_temp$cost_progressed) * discount_weights) + drug_costs_comp_disc
     costs_trt <- sum((trace_trt[, 1] * params_temp$cost_stable +
-                       trace_trt[, 2] * params_temp$cost_progressed) * discount_vec) + params_temp$cost_treatment
+                       trace_trt[, 2] * params_temp$cost_progressed) * discount_weights) + drug_costs_trt_disc
 
     inc_qalys_sim[i] <- qalys_trt - qalys_comp
     inc_costs_sim[i] <- costs_trt - costs_comp

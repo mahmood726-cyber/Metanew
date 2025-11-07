@@ -114,10 +114,17 @@ run_bcea_analysis <- function(model_results, params) {
     mean(nmb > 0)
   })
 
-  # EVPI calculation (simplified)
+  # EVPI calculation (FIXED: correct formula)
+  # EVPI = E[max(NMB)] - max(E[NMB])
+  # Expected value with perfect information minus expected value with current information
   evpi <- sapply(wtp_range, function(wtp) {
     nmb <- inc_qalys_sim * wtp - inc_costs_sim
-    max(mean(nmb), 0) - mean(pmax(nmb, 0))
+    # Expected value with perfect information (average of best decision in each iteration)
+    expected_with_perfect_info <- mean(pmax(nmb, 0))
+    # Expected value with current information (best expected decision)
+    expected_with_current_info <- max(mean(nmb), 0)
+    # EVPI per patient
+    expected_with_perfect_info - expected_with_current_info
   })
 
   list(
