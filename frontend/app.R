@@ -33,6 +33,10 @@ source("modules/fda_submission.R")
 source("modules/rwd_integration.R")
 source("modules/grade_assessment.R")
 source("modules/threshold_analysis.R")
+source("modules/bayesian_nma.R")
+source("modules/model_validation.R")
+source("modules/advanced_viz.R")
+source("modules/time_varying.R")
 
 # Source utilities
 source("utils/python_bridge.R")
@@ -174,6 +178,27 @@ ui <- page_navbar(
     fda_submission_ui("fda")
   ),
 
+  # Tab: Model Validation
+  nav_panel(
+    title = "Validation",
+    icon = icon("check-double"),
+    model_validation_ui("validation")
+  ),
+
+  # Tab: Advanced Visualizations
+  nav_panel(
+    title = "Visualizations",
+    icon = icon("chart-line"),
+    advanced_viz_ui("viz")
+  ),
+
+  # Tab: Time-Varying
+  nav_panel(
+    title = "Time-Varying",
+    icon = icon("clock"),
+    time_varying_ui("time_varying")
+  ),
+
   # Tab: V2 Features
   nav_panel(
     title = "V2 Features",
@@ -264,6 +289,10 @@ server <- function(input, output, session) {
   threshold_results <- threshold_analysis_server("threshold", rv)
   rwd_results <- rwd_integration_server("rwd", rv)
   fda_results <- fda_submission_server("fda", rv)
+  bayesian_nma_results <- bayesian_nma_server("bayesian_nma", rv)
+  validation_results <- model_validation_server("validation", rv)
+  viz_results <- advanced_viz_server("viz", rv)
+  time_varying_results <- time_varying_server("time_varying", rv)
 
   # Save session handler
   observeEvent(input$btn_save_session, {
