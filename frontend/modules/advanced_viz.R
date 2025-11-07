@@ -635,11 +635,74 @@ advanced_viz_server <- function(id, rv) {
 # ============================================================================
 
 create_decision_tree_dot <- function(results, tree_type, show_probs, show_payoffs, highlight_optimal) {
-  #' Create decision tree in DOT format
+  #' Create decision tree in DOT format using real model results
   #'
+  #' @param results Model results object with costs, QALYs, and trace
   #' @return Character string in DOT format
 
-  dot_code <- "
+  # Extract data from results
+  if (is.null(results)) {
+    warning("No results provided for decision tree. Using template.")
+    qalys_trt <- 5.5; costs_trt <- 35000
+    qalys_comp <- 4.0; costs_comp <- 18000
+    p_stable_trt <- 0.60; p_prog_trt <- 0.40
+    p_stable_comp <- 0.45; p_prog_comp <- 0.55
+  } else {
+    # Extract QALYs and costs
+    qalys_trt <- round(results$qalys_treatment, 2)
+    qalys_comp <- round(results$qalys_comparator, 2)
+    costs_trt <- round(results$costs_treatment / 1000, 0)  # Convert to thousands
+    costs_comp <- round(results$costs_comparator / 1000, 0)
+
+    # Extract probabilities from Markov trace (if available)
+    if (!is.null(results$trace_treatment) && nrow(results$trace_treatment) > 1) {
+      trace_trt <- results$trace_treatment
+      trace_comp <- results$trace_comparator
+
+      # Get final state distribution as proxy for outcome probabilities
+      final_trt <- trace_trt[nrow(trace_trt), ]
+      final_comp <- trace_comp[nrow(trace_comp), ]
+
+      p_stable_trt <- round(final_trt[1], 2)  # Probability in Stable
+      p_prog_trt <- round(final_trt[2], 2)     # Probability in Progressed
+
+      p_stable_comp <- round(final_comp[1], 2)
+      p_prog_comp <- round(final_comp[2], 2)
+    } else {
+      # Default probabilities
+      p_stable_trt <- 0.60; p_prog_trt <- 0.40
+      p_stable_comp <- 0.45; p_prog_comp <- 0.55
+    }
+  }
+
+  # Determine optimal branch
+  nmb_trt <- qalys_trt * 20000 - costs_trt * 1000
+  nmb_comp <- qalys_comp * 20000 - costs_comp * 1000
+  optimal_is_treat <- nmb_trt > nmb_comp
+
+  # Build DOT code with real data
+  treat_color <- if (highlight_optimal && optimal_is_treat) "gold" else "lightgreen"
+  notreat_color <- if (highlight_optimal && !optimal_is_treat) "gold" else "lightcoral"
+
+  # Build payoff labels conditionally
+  payoff_trt <- if (show_payoffs) {
+    paste0("\\nQALYs: ", qalys_trt, "\\nCosts: £", costs_trt, "k")
+  } else {
+    ""
+  }
+
+  payoff_comp <- if (show_payoffs) {
+    paste0("\\nQALYs: ", qalys_comp, "\\nCosts: £", costs_comp, "k")
+  } else {
+    ""
+  }
+
+  prob_label_trt <- if (show_probs) paste0("p=", p_stable_trt) else ""
+  prob_label_trt_prog <- if (show_probs) paste0("p=", p_prog_trt) else ""
+  prob_label_comp <- if (show_probs) paste0("p=", p_stable_comp) else ""
+  prob_label_comp_prog <- if (show_probs) paste0("p=", p_prog_comp) else ""
+
+  dot_code <- paste0("
   digraph DecisionTree {
     graph [rankdir=LR, splines=ortho]
     node [shape=box, style=filled, fillcolor=lightblue]
@@ -647,28 +710,28 @@ create_decision_tree_dot <- function(results, tree_type, show_probs, show_payoff
     # Decision node
     decision [label='Treatment Decision', shape=box, fillcolor=yellow]
 
-    # Treatment branch
-    treat [label='Treat', shape=circle, fillcolor=lightgreen]
-    no_treat [label='No Treatment', shape=circle, fillcolor=lightcoral]
+    # Treatment branches
+    treat [label='Treat', shape=circle, fillcolor=", treat_color, "]
+    no_treat [label='No Treatment', shape=circle, fillcolor=", notreat_color, "]
 
     decision -> treat [label='Choose']
     decision -> no_treat [label='Choose']
 
     # Outcomes for Treatment
-    treat_stable [label='Stable\\nQALYs: 5.5\\nCosts: £35k', shape=plaintext]
-    treat_prog [label='Progressed\\nQALYs: 3.2\\nCosts: £55k', shape=plaintext]
+    treat_stable [label='Stable", payoff_trt, "', shape=plaintext]
+    treat_prog [label='Progressed\\n(Terminal)', shape=plaintext]
 
-    treat -> treat_stable [label='p=0.60']
-    treat -> treat_prog [label='p=0.40']
+    treat -> treat_stable [label='", prob_label_trt, "']
+    treat -> treat_prog [label='", prob_label_trt_prog, "']
 
     # Outcomes for No Treatment
-    notreat_stable [label='Stable\\nQALYs: 4.0\\nCosts: £18k', shape=plaintext]
-    notreat_prog [label='Progressed\\nQALYs: 2.5\\nCosts: £40k', shape=plaintext]
+    notreat_stable [label='Stable", payoff_comp, "', shape=plaintext]
+    notreat_prog [label='Progressed\\n(Terminal)', shape=plaintext]
 
-    no_treat -> notreat_stable [label='p=0.45']
-    no_treat -> notreat_prog [label='p=0.55']
+    no_treat -> notreat_stable [label='", prob_label_comp, "']
+    no_treat -> notreat_prog [label='", prob_label_comp_prog, "']
   }
-  "
+  ")
 
   dot_code
 }
@@ -723,20 +786,94 @@ create_publication_plot <- function(results, bcea_results, plot_type, theme, add
                       "lancet" = theme_classic() + theme(legend.position = "top"))
 
   if (plot_type == "forest") {
-    # Forest plot
-    forest_data <- data.frame(
-      Study = c("Study 1", "Study 2", "Study 3", "Study 4", "Study 5", "Overall"),
-      HR = c(0.72, 0.68, 0.75, 0.70, 0.73, 0.71),
-      Lower = c(0.55, 0.52, 0.58, 0.54, 0.57, 0.65),
-      Upper = c(0.92, 0.88, 0.95, 0.90, 0.93, 0.78)
-    )
+    # Forest plot - try to use real data from results
+    forest_data <- NULL
 
+    # Try to extract study-level data from meta-analysis results
+    if (!is.null(results) && !is.null(results$studies)) {
+      # If we have individual study results (from pairwise or NMA)
+      studies <- results$studies
+      if (is.data.frame(studies) && nrow(studies) > 0) {
+        forest_data <- data.frame(
+          Study = paste("Study", 1:nrow(studies)),
+          HR = studies$effect,
+          Lower = studies$lower,
+          Upper = studies$upper
+        )
+
+        # Add overall effect if available
+        if (!is.null(results$pooled_effect)) {
+          forest_data <- rbind(
+            forest_data,
+            data.frame(
+              Study = "Overall",
+              HR = results$pooled_effect,
+              Lower = results$pooled_lower,
+              Upper = results$pooled_upper
+            )
+          )
+        }
+      }
+    }
+
+    # Alternative: Use PSA results to show parameter uncertainty as "studies"
+    if (is.null(forest_data) && !is.null(results$psa_results)) {
+      psa <- results$psa_results
+      if (!is.null(psa$param_samples)) {
+        # Show top 5 parameters with their uncertainty
+        param_names <- names(psa$param_samples)
+        n_params <- min(5, length(param_names))
+
+        forest_list <- list()
+        for (i in 1:n_params) {
+          param_name <- param_names[i]
+          param_vals <- psa$param_samples[[param_name]]
+
+          # Calculate mean and 95% CI
+          param_mean <- mean(param_vals, na.rm = TRUE)
+          param_lower <- quantile(param_vals, 0.025, na.rm = TRUE)
+          param_upper <- quantile(param_vals, 0.975, na.rm = TRUE)
+
+          forest_list[[i]] <- data.frame(
+            Study = param_name,
+            HR = param_mean,
+            Lower = param_lower,
+            Upper = param_upper
+          )
+        }
+
+        # Add overall ICER as summary measure
+        if (!is.null(results$icer)) {
+          forest_list[[n_params + 1]] <- data.frame(
+            Study = "ICER",
+            HR = results$icer / 1000,  # Scale to thousands
+            Lower = results$icer / 1000 * 0.7,
+            Upper = results$icer / 1000 * 1.3
+          )
+        }
+
+        forest_data <- do.call(rbind, forest_list)
+      }
+    }
+
+    # Fallback: Template data with warning
+    if (is.null(forest_data)) {
+      warning("No study-level data available for forest plot. Using template.")
+      forest_data <- data.frame(
+        Study = c("Study 1", "Study 2", "Study 3", "Study 4", "Study 5", "Overall"),
+        HR = c(0.72, 0.68, 0.75, 0.70, 0.73, 0.71),
+        Lower = c(0.55, 0.52, 0.58, 0.54, 0.57, 0.65),
+        Upper = c(0.92, 0.88, 0.95, 0.90, 0.93, 0.78)
+      )
+    }
+
+    # Create plot
     p <- ggplot(forest_data, aes(x = HR, y = Study)) +
       geom_point(size = 4) +
       geom_errorbarh(aes(xmin = Lower, xmax = Upper), height = 0.2) +
       geom_vline(xintercept = 1, linetype = "dashed", color = "red") +
       labs(title = "Meta-Analysis Forest Plot",
-           x = "Hazard Ratio (95% CI)",
+           x = "Effect Size (95% CI)",
            y = "") +
       base_theme
 

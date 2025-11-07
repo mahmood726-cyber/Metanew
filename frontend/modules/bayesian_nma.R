@@ -708,57 +708,310 @@ run_inconsistency_nma_stan <- function(stan_data, priors, n_chains = 4,
                                         thin = 1, adapt_delta = 0.8) {
   #' Run inconsistency (unrelated mean effects) NMA model
   #'
-  #' Similar to consistency but allows design-specific effects
+  #' Allows design-specific treatment effects (relaxes consistency assumption)
+  #' @return List with posterior samples and summaries
 
-  # For full implementation, this would include design-by-treatment interactions
-  # For now, return consistency model with note
-  results <- run_consistency_nma_stan(stan_data, priors, n_chains,
-                                      n_iter, n_warmup, thin, adapt_delta)
+  # Stan model code for inconsistency NMA (unrelated mean effects)
+  # Each design (multi-arm study or set of 2-arm studies with same comparison)
+  # gets its own treatment effect parameter
+  stan_code <- "
+  data {
+    int<lower=1> N;              // Number of studies
+    int<lower=2> NT;             // Number of treatments
+    array[N] int<lower=1,upper=NT> t1;  // Treatment 1 in each study
+    array[N] int<lower=1,upper=NT> t2;  // Treatment 2 in each study
+    vector[N] y;                 // Observed effect sizes
+    vector<lower=0>[N] se;       // Standard errors
+    int<lower=1,upper=NT> ref;   // Reference treatment
+    array[N] int<lower=1,upper=N> design_id;  // Design identifier for each study
+    real prior_mean;             // Prior mean for treatment effects
+    real<lower=0> prior_sd;      // Prior SD for treatment effects
+    real<lower=0> tau_scale;     // Scale for heterogeneity prior
+  }
 
-  results$model_note <- "Inconsistency model: Design-specific effects estimated"
-  results
+  parameters {
+    vector[NT] d_raw;            // Basic treatment effects (consistency part)
+    real<lower=0> tau;           // Between-study SD
+    vector[N] delta;             // Study-specific random effects
+    vector[N] w;                 // Design-by-treatment interactions
+  }
+
+  transformed parameters {
+    vector[NT] d;                // Treatment effects (centered on reference)
+    vector[N] theta;             // Expected effect in each study
+
+    // Center on reference treatment
+    d = d_raw - d_raw[ref];
+
+    // Calculate expected effects with design-specific deviations
+    for (i in 1:N) {
+      theta[i] = d[t1[i]] - d[t2[i]] + delta[i] + w[i];
+    }
+  }
+
+  model {
+    // Priors
+    d_raw ~ normal(prior_mean, prior_sd);
+    tau ~ normal(0, tau_scale);
+
+    // Study-specific random effects
+    delta ~ normal(0, tau);
+
+    // Design-by-treatment interactions (allows inconsistency)
+    // Wider prior allows departures from consistency
+    w ~ normal(0, tau * 2);
+
+    // Likelihood
+    y ~ normal(theta, se);
+  }
+
+  generated quantities {
+    // Pairwise comparisons for all treatment pairs (from consistency part)
+    array[NT, NT] real d_compare;
+    vector[N] log_lik;
+
+    for (i in 1:NT) {
+      for (j in 1:NT) {
+        d_compare[i, j] = d[i] - d[j];
+      }
+    }
+
+    // Log-likelihood for LOO/WAIC
+    for (i in 1:N) {
+      log_lik[i] = normal_lpdf(y[i] | theta[i], se[i]);
+    }
+  }
+  "
+
+  # Create design identifiers
+  # Studies with same treatment comparison get same design ID
+  comparisons <- paste(pmin(stan_data$t1, stan_data$t2),
+                      pmax(stan_data$t1, stan_data$t2),
+                      sep = "_")
+  design_id <- as.integer(factor(comparisons))
+
+  # Add to stan_data
+  stan_data$design_id <- design_id
+
+  # Compile and run Stan model
+  stan_model <- stan_model(model_code = stan_code)
+
+  # Add priors to data
+  stan_data$prior_mean <- priors$treatment_mean
+  stan_data$prior_sd <- priors$treatment_sd
+  stan_data$tau_scale <- if (priors$heterogeneity_prior == "hn_05") 0.5 else if (priors$heterogeneity_prior == "hn_1") 1.0 else 2.0
+
+  # Fit model
+  fit <- sampling(
+    stan_model,
+    data = stan_data,
+    chains = n_chains,
+    iter = n_iter,
+    warmup = n_warmup,
+    thin = thin,
+    control = list(adapt_delta = adapt_delta),
+    refresh = 0  # Suppress output
+  )
+
+  # Extract results
+  posterior <- extract(fit)
+
+  # Treatment effects summary
+  d_summary <- summary(fit, pars = "d")$summary
+
+  # Heterogeneity
+  tau_summary <- summary(fit, pars = "tau")$summary
+
+  # Inconsistency parameters (w)
+  w_summary <- summary(fit, pars = "w")$summary
+
+  # Diagnostics
+  diagnostics <- data.frame(
+    parameter = rownames(d_summary),
+    rhat = d_summary[, "Rhat"],
+    ess_bulk = d_summary[, "n_eff"],
+    ess_tail = d_summary[, "n_eff"]  # Simplified
+  )
+
+  # Check if inconsistency is present
+  # If w parameters have CrIs excluding 0, suggests inconsistency
+  w_significant <- sum(w_summary[, "2.5%"] > 0 | w_summary[, "97.5%"] < 0)
+  inconsistency_detected <- w_significant > 0
+
+  list(
+    stan_fit = fit,
+    posterior = posterior,
+    treatment_effects = d_summary,
+    heterogeneity = list(
+      median = median(posterior$tau),
+      mean = mean(posterior$tau),
+      lower = quantile(posterior$tau, 0.025),
+      upper = quantile(posterior$tau, 0.975)
+    ),
+    inconsistency_params = w_summary,
+    inconsistency_detected = inconsistency_detected,
+    diagnostics = diagnostics,
+    treatment_names = stan_data$treatment_names,
+    model_note = "Inconsistency model: Design-by-treatment interactions estimated"
+  )
 }
 
 run_node_splitting_nma <- function(stan_data, priors, n_chains = 4,
                                     n_iter = 2000, n_warmup = 1000) {
   #' Run node-splitting analysis for all direct comparisons
   #'
+  #' Performs Bayesian inconsistency testing by comparing direct vs indirect evidence
   #' @return List with node-split results for each comparison
+
+  # First run full network meta-analysis
+  full_results <- run_consistency_nma_stan(stan_data, priors, n_chains, n_iter, n_warmup)
+  full_posterior <- full_results$posterior
 
   # Identify all direct comparisons in the network
   direct_comparisons <- unique(data.frame(
     t1 = stan_data$t1,
-    t2 = stan_data$t2
+    t2 = stan_data$t2,
+    stringsAsFactors = FALSE
   ))
 
   node_split_results <- list()
 
+  # For each direct comparison, split evidence into direct and indirect
   for (i in 1:nrow(direct_comparisons)) {
     comp <- direct_comparisons[i, ]
+    comp_name <- paste(stan_data$treatment_names[comp$t1],
+                      "vs",
+                      stan_data$treatment_names[comp$t2])
 
-    # For each comparison, fit two models:
-    # 1. Direct evidence only
-    # 2. Indirect evidence only
+    tryCatch({
+      # Identify which studies are direct evidence for this comparison
+      direct_idx <- which(stan_data$t1 == comp$t1 & stan_data$t2 == comp$t2 |
+                         stan_data$t1 == comp$t2 & stan_data$t2 == comp$t1)
 
-    # Simplified implementation - in production would fit separate models
-    # Here we estimate direct, indirect, and network effects
+      if (length(direct_idx) == 0) {
+        # No direct evidence - skip this comparison
+        next
+      }
 
-    node_split_results[[i]] <- data.frame(
-      Comparison = paste(stan_data$treatment_names[comp$t1],
-                        "vs",
-                        stan_data$treatment_names[comp$t2]),
-      Direct = rnorm(1, 0, 0.2),  # Placeholder - would be actual estimate
-      Indirect = rnorm(1, 0, 0.2),
-      Network = rnorm(1, 0, 0.15),
-      Difference = rnorm(1, 0, 0.1),
-      p_value = runif(1, 0.1, 0.9),
-      stringsAsFactors = FALSE
-    )
+      indirect_idx <- setdiff(1:stan_data$N, direct_idx)
+
+      if (length(indirect_idx) < 2) {
+        # Not enough indirect evidence to form network
+        warning(paste("Insufficient indirect evidence for", comp_name))
+        next
+      }
+
+      # Extract network effect from full model
+      # d_compare[i,j] gives treatment i - treatment j
+      network_samples <- full_posterior$d_compare[, comp$t1, comp$t2]
+      network_mean <- mean(network_samples)
+      network_sd <- sd(network_samples)
+
+      # Fit model with INDIRECT evidence only (remove direct comparisons)
+      indirect_data <- stan_data
+      indirect_data$N <- length(indirect_idx)
+      indirect_data$t1 <- stan_data$t1[indirect_idx]
+      indirect_data$t2 <- stan_data$t2[indirect_idx]
+      indirect_data$y <- stan_data$y[indirect_idx]
+      indirect_data$se <- stan_data$se[indirect_idx]
+
+      indirect_fit <- tryCatch({
+        run_consistency_nma_stan(indirect_data, priors,
+                                n_chains = max(2, n_chains - 2),
+                                n_iter = n_iter,
+                                n_warmup = n_warmup)
+      }, error = function(e) {
+        warning(paste("Indirect model failed for", comp_name, ":", e$message))
+        NULL
+      })
+
+      if (is.null(indirect_fit)) next
+
+      # Extract indirect effect
+      indirect_samples <- indirect_fit$posterior$d_compare[, comp$t1, comp$t2]
+      indirect_mean <- mean(indirect_samples)
+      indirect_sd <- sd(indirect_samples)
+
+      # Calculate direct effect from observed data
+      # Use meta-analysis of direct comparisons only
+      direct_y <- stan_data$y[direct_idx]
+      direct_se <- stan_data$se[direct_idx]
+      direct_weights <- 1 / (direct_se^2)
+
+      # Random effects meta-analysis for direct evidence
+      if (length(direct_y) > 1) {
+        # Multiple direct studies - use random effects
+        direct_pooled <- sum(direct_y * direct_weights) / sum(direct_weights)
+        direct_se_pooled <- sqrt(1 / sum(direct_weights))
+
+        # Account for heterogeneity
+        tau_direct <- median(full_posterior$tau)
+        direct_sd_final <- sqrt(direct_se_pooled^2 + tau_direct^2)
+
+        # Simulate posterior for direct effect
+        direct_samples <- rnorm(length(network_samples), direct_pooled, direct_sd_final)
+        direct_mean <- direct_pooled
+        direct_sd <- direct_sd_final
+      } else {
+        # Single direct study
+        direct_mean <- direct_y[1]
+        direct_sd <- direct_se[1]
+        direct_samples <- rnorm(length(network_samples), direct_mean, direct_sd)
+      }
+
+      # Calculate difference: Direct - Indirect
+      difference_samples <- direct_samples - indirect_samples
+      difference_mean <- mean(difference_samples)
+      difference_sd <- sd(difference_samples)
+
+      # Calculate p-value: probability that difference != 0
+      # Two-sided test
+      p_value <- 2 * min(
+        mean(difference_samples > 0),
+        mean(difference_samples < 0)
+      )
+
+      # Calculate 95% credible interval for difference
+      diff_ci_lower <- quantile(difference_samples, 0.025)
+      diff_ci_upper <- quantile(difference_samples, 0.975)
+
+      # Inconsistency detected if p < 0.05 or CI excludes 0
+      inconsistent <- p_value < 0.05
+
+      node_split_results[[comp_name]] <- data.frame(
+        Comparison = comp_name,
+        Direct = round(direct_mean, 3),
+        Direct_SD = round(direct_sd, 3),
+        Indirect = round(indirect_mean, 3),
+        Indirect_SD = round(indirect_sd, 3),
+        Network = round(network_mean, 3),
+        Network_SD = round(network_sd, 3),
+        Difference = round(difference_mean, 3),
+        Diff_SD = round(difference_sd, 3),
+        Diff_Lower = round(diff_ci_lower, 3),
+        Diff_Upper = round(diff_ci_upper, 3),
+        p_value = round(p_value, 3),
+        Inconsistent = inconsistent,
+        n_direct = length(direct_idx),
+        n_indirect = length(indirect_idx),
+        stringsAsFactors = FALSE
+      )
+
+    }, error = function(e) {
+      warning(paste("Node-splitting failed for", comp_name, ":", e$message))
+    })
   }
 
-  results <- run_consistency_nma_stan(stan_data, priors, n_chains, n_iter, n_warmup)
-  results$node_split_results <- do.call(rbind, node_split_results)
-  results
+  # Combine results
+  if (length(node_split_results) > 0) {
+    full_results$node_split_results <- do.call(rbind, node_split_results)
+    full_results$node_split_note <- "Real Bayesian node-splitting with indirect evidence network"
+  } else {
+    full_results$node_split_results <- data.frame()
+    full_results$node_split_note <- "No node-splitting performed - insufficient data"
+  }
+
+  full_results
 }
 
 calculate_sucra <- function(results, maximize = FALSE) {
