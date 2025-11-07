@@ -9,13 +9,44 @@ import hashlib
 import json
 
 
+class RiskOfBias2(BaseModel):
+    """
+    Risk of Bias assessment using Cochrane RoB 2.0 tool
+    Reference: Sterne et al. (2019) RoB 2: a revised tool for assessing risk of bias in randomised trials
+    """
+    # Domain 1: Bias arising from the randomization process
+    d1_randomization: Optional[Literal["Low", "Some concerns", "High"]] = None
+    d1_rationale: Optional[str] = None
+
+    # Domain 2: Bias due to deviations from intended interventions
+    d2_deviations: Optional[Literal["Low", "Some concerns", "High"]] = None
+    d2_rationale: Optional[str] = None
+
+    # Domain 3: Bias due to missing outcome data
+    d3_missing_data: Optional[Literal["Low", "Some concerns", "High"]] = None
+    d3_rationale: Optional[str] = None
+
+    # Domain 4: Bias in measurement of the outcome
+    d4_measurement: Optional[Literal["Low", "Some concerns", "High"]] = None
+    d4_rationale: Optional[str] = None
+
+    # Domain 5: Bias in selection of the reported result
+    d5_selection: Optional[Literal["Low", "Some concerns", "High"]] = None
+    d5_rationale: Optional[str] = None
+
+    # Overall risk of bias (algorithm-based)
+    overall: Optional[Literal["Low", "Some concerns", "High"]] = None
+    overall_rationale: Optional[str] = None
+
+
 class Study(BaseModel):
     """Individual study data"""
     study_id: str
     author: Optional[str] = None
     year: Optional[int] = None
     design: Optional[str] = None
-    risk_of_bias: Optional[str] = None
+    risk_of_bias: Optional[str] = None  # Legacy overall assessment
+    rob2: Optional[RiskOfBias2] = None  # RoB 2.0 domain-level assessment
     country: Optional[str] = None
     population: Optional[str] = None
     intervention: Optional[str] = None

@@ -188,10 +188,22 @@ meta_pairwise_server <- function(id, rv) {
         cat("Subgroup Analysis:\n")
         for (subgroup in names(result$subgroup_results)) {
           sg <- result$subgroup_results[[subgroup]]
-          cat(sprintf("  %s: %.3f (%.3f to %.3f), k=%d\n",
-                      subgroup, sg$estimate, sg$ci_lower, sg$ci_upper, sg$k))
+          cat(sprintf("  %s: %.3f (%.3f to %.3f), k=%d, I²=%.1f%%, τ²=%.3f\n",
+                      subgroup, sg$estimate, sg$ci_lower, sg$ci_upper, sg$k,
+                      sg$i_squared, sg$tau_squared))
         }
         cat("\n")
+
+        # Display Q-between test for subgroup differences
+        if (!is.null(result$subgroup_test)) {
+          cat("Test of Subgroup Differences (Q-between):\n")
+          cat(sprintf("  Q = %.2f, df = %d, p = %.4f\n",
+                      result$subgroup_test$q_between,
+                      result$subgroup_test$df_between,
+                      result$subgroup_test$p_between))
+          cat(sprintf("  %s\n", result$subgroup_test$interpretation))
+          cat("\n")
+        }
       }
 
       # Meta-regression if applicable
@@ -428,8 +440,17 @@ run_pairwise_ma <- function(data, outcome = NULL, method = "REML", model = "rand
 
     meta_reg_result <- summary(ma)
   } else if (!is.null(subgroup)) {
-    # Subgroup analysis
+    # Subgroup analysis with formal test of subgroup differences
+    # Reference: Borenstein et al. (2009) Introduction to Meta-Analysis, Chapter 19
+
+    # Overall pooled estimate
     ma <- rma(yi, vi, data = data, method = method)
+
+    # Test for subgroup differences using Q-between statistic
+    # Fit model with subgroup as moderator (factor variable)
+    subgroup_test_ma <- tryCatch({
+      rma(yi, vi, mods = ~ factor(data[[subgroup]]), data = data, method = method)
+    }, error = function(e) NULL)
 
     # Run separate MA for each subgroup
     subgroup_results <- list()
@@ -441,15 +462,35 @@ run_pairwise_ma <- function(data, outcome = NULL, method = "REML", model = "rand
           estimate = as.numeric(sg_ma$beta),
           ci_lower = as.numeric(sg_ma$ci.lb),
           ci_upper = as.numeric(sg_ma$ci.ub),
-          k = sg_ma$k
+          k = sg_ma$k,
+          i_squared = as.numeric(sg_ma$I2),
+          tau_squared = as.numeric(sg_ma$tau2)
         )
       }
+    }
+
+    # Extract Q-between test results
+    # Q-between = QM from the moderator model (tests if subgroup effects differ)
+    if (!is.null(subgroup_test_ma)) {
+      subgroup_test <- list(
+        q_between = as.numeric(subgroup_test_ma$QM),  # Q statistic for moderator test
+        df_between = as.numeric(subgroup_test_ma$QMdf),  # Degrees of freedom
+        p_between = as.numeric(subgroup_test_ma$QMp),  # P-value for test of subgroup differences
+        interpretation = if (subgroup_test_ma$QMp < 0.05) {
+          "Significant subgroup differences detected (p < 0.05)"
+        } else {
+          "No significant subgroup differences (p ≥ 0.05)"
+        }
+      )
+    } else {
+      subgroup_test <- NULL
     }
   } else {
     # Simple pooled analysis
     ma <- rma(yi, vi, data = data, method = method)
     subgroup_results <- NULL
     meta_reg_result <- NULL
+    subgroup_test <- NULL
   }
 
   # Extract results
@@ -471,6 +512,7 @@ run_pairwise_ma <- function(data, outcome = NULL, method = "REML", model = "rand
     model_object = ma,
     data = data,
     subgroup_results = subgroup_results,
+    subgroup_test = subgroup_test,
     meta_regression = meta_reg_result
   )
 

@@ -233,24 +233,86 @@ save_forest_plot_static <- function(ma_result, outcome_name, save_path) {
   return(p)
 }
 
-# Enhanced funnel plot with trim-and-fill
-create_funnel_plot <- function(ma_result, show_trim_fill = TRUE) {
+# Enhanced funnel plot with trim-and-fill and significance contours
+# Reference: Peters et al. (2008) Comparison of two methods to detect publication bias in meta-analysis
+create_funnel_plot <- function(ma_result, show_trim_fill = TRUE, show_contours = TRUE) {
 
   data <- ma_result$data
 
   # Create funnel plot
   p <- plot_ly()
 
-  # Add studies
+  # Add significance contours (contour-enhanced funnel plot)
+  # Shows regions where studies would be statistically significant
+  # at p < 0.10, 0.05, 0.01 thresholds
+  if (show_contours) {
+    max_se <- max(data$sei) * 1.1
+    se_seq <- seq(0, max_se, length.out = 100)
+
+    # p < 0.10 (z = 1.645): Light gray background
+    p10_lower <- -1.645 * se_seq
+    p10_upper <- 1.645 * se_seq
+    p <- p %>%
+      add_trace(
+        x = c(p10_lower, rev(p10_upper)),
+        y = c(se_seq, rev(se_seq)),
+        type = "scatter",
+        mode = "lines",
+        fill = "toself",
+        fillcolor = 'rgba(240, 240, 240, 0.6)',
+        line = list(color = 'rgba(200, 200, 200, 0)', width = 0),
+        name = "p < 0.10",
+        showlegend = TRUE,
+        hoverinfo = "skip"
+      )
+
+    # p < 0.05 (z = 1.96): Medium gray
+    p05_lower <- -1.96 * se_seq
+    p05_upper <- 1.96 * se_seq
+    p <- p %>%
+      add_trace(
+        x = c(p05_lower, rev(p05_upper)),
+        y = c(se_seq, rev(se_seq)),
+        type = "scatter",
+        mode = "lines",
+        fill = "toself",
+        fillcolor = 'rgba(220, 220, 220, 0.4)',
+        line = list(color = 'rgba(150, 150, 150, 0.5)', width = 1, dash = 'dot'),
+        name = "p < 0.05",
+        showlegend = TRUE,
+        hoverinfo = "skip"
+      )
+
+    # p < 0.01 (z = 2.576): Dark gray
+    p01_lower <- -2.576 * se_seq
+    p01_upper <- 2.576 * se_seq
+    p <- p %>%
+      add_trace(
+        x = c(p01_lower, rev(p01_upper)),
+        y = c(se_seq, rev(se_seq)),
+        type = "scatter",
+        mode = "lines",
+        fill = "toself",
+        fillcolor = 'rgba(200, 200, 200, 0.3)',
+        line = list(color = 'rgba(100, 100, 100, 0.5)', width = 1, dash = 'dot'),
+        name = "p < 0.01",
+        showlegend = TRUE,
+        hoverinfo = "skip"
+      )
+  }
+
+  # Add studies (on top of contours)
   p <- p %>%
     add_markers(
       data = data,
       x = ~yi, y = ~sei,
-      marker = list(color = 'steelblue', size = 10, opacity = 0.7),
+      marker = list(color = 'steelblue', size = 10, opacity = 0.8),
       text = ~paste0(
         "<b>", study_id, "</b><br>",
         "Effect: ", round(yi, 3), "<br>",
-        "SE: ", round(sei, 3)
+        "SE: ", round(sei, 3), "<br>",
+        "z-value: ", round(yi/sei, 2), "<br>",
+        "p-value: ", round(2*(1 - pnorm(abs(yi/sei))), 4)
       ),
       hovertemplate = '%{text}<extra></extra>',
       name = "Studies",
@@ -262,31 +324,19 @@ create_funnel_plot <- function(ma_result, show_trim_fill = TRUE) {
     add_segments(
       x = ma_result$pooled_effect, xend = ma_result$pooled_effect,
       y = 0, yend = max(data$sei) * 1.1,
-      line = list(color = 'red', width = 2, dash = 'solid'),
+      line = list(color = 'red', width = 3, dash = 'solid'),
       name = "Pooled Effect",
       showlegend = TRUE
     )
 
-  # Add funnel (pseudo-confidence limits)
-  max_se <- max(data$sei) * 1.1
-  se_seq <- seq(0, max_se, length.out = 50)
-
-  # 95% CI funnel
-  ci_lower <- ma_result$pooled_effect - 1.96 * se_seq
-  ci_upper <- ma_result$pooled_effect + 1.96 * se_seq
-
+  # Add null effect line (for reference)
   p <- p %>%
-    add_trace(
-      x = c(ci_lower, rev(ci_upper)),
-      y = c(se_seq, rev(se_seq)),
-      type = "scatter",
-      mode = "lines",
-      fill = "toself",
-      fillcolor = 'rgba(200, 200, 200, 0.2)',
-      line = list(color = 'gray', width = 1, dash = 'dash'),
-      name = "95% CI",
-      showlegend = TRUE,
-      hoverinfo = "none"
+    add_segments(
+      x = 0, xend = 0,
+      y = 0, yend = max(data$sei) * 1.1,
+      line = list(color = 'black', width = 2, dash = 'dash'),
+      name = "Null Effect",
+      showlegend = TRUE
     )
 
   # Trim-and-fill if requested and enough studies
@@ -422,33 +472,81 @@ save_forest_plot <- function(ma_result, outcome_name, save_path,
 #' @param height Plot height in inches (default: 8)
 #' @return ggplot object
 save_funnel_plot <- function(ma_result, outcome_name, save_path,
-                             width = 8, height = 8) {
+                             width = 8, height = 8, show_contours = TRUE) {
 
   data <- ma_result$data
+  max_se <- max(data$sei) * 1.1
 
   # Create static funnel plot using ggplot2 (for PNG export)
-  p <- ggplot(data, aes(x = yi, y = sei)) +
-    geom_point(color = "steelblue", size = 3, alpha = 0.6) +
+  # With contour-enhanced regions (Peters et al., 2008)
+  p <- ggplot(data, aes(x = yi, y = sei))
+
+  # Add significance contours if requested
+  if (show_contours) {
+    # Create polygon data for significance regions
+    se_seq <- seq(0, max_se, length.out = 100)
+
+    # p < 0.10 region (lightest gray)
+    p10_df <- data.frame(
+      x = c(-1.645 * se_seq, rev(1.645 * se_seq)),
+      y = c(se_seq, rev(se_seq))
+    )
+    p <- p +
+      geom_polygon(data = p10_df, aes(x = x, y = y),
+                   fill = "gray90", alpha = 0.6, inherit.aes = FALSE)
+
+    # p < 0.05 region (medium gray)
+    p05_df <- data.frame(
+      x = c(-1.96 * se_seq, rev(1.96 * se_seq)),
+      y = c(se_seq, rev(se_seq))
+    )
+    p <- p +
+      geom_polygon(data = p05_df, aes(x = x, y = y),
+                   fill = "gray75", alpha = 0.4, inherit.aes = FALSE) +
+      geom_line(data = p05_df[1:100,], aes(x = x, y = y),
+                linetype = "dotted", color = "gray50", inherit.aes = FALSE) +
+      geom_line(data = p05_df[101:200,], aes(x = x, y = y),
+                linetype = "dotted", color = "gray50", inherit.aes = FALSE)
+
+    # p < 0.01 region (darkest gray)
+    p01_df <- data.frame(
+      x = c(-2.576 * se_seq, rev(2.576 * se_seq)),
+      y = c(se_seq, rev(se_seq))
+    )
+    p <- p +
+      geom_polygon(data = p01_df, aes(x = x, y = y),
+                   fill = "gray60", alpha = 0.3, inherit.aes = FALSE) +
+      geom_line(data = p01_df[1:100,], aes(x = x, y = y),
+                linetype = "dotted", color = "gray40", inherit.aes = FALSE) +
+      geom_line(data = p01_df[101:200,], aes(x = x, y = y),
+                linetype = "dotted", color = "gray40", inherit.aes = FALSE)
+  }
+
+  # Add studies (on top of contours)
+  p <- p +
+    geom_point(color = "steelblue", size = 3, alpha = 0.7) +
+    # Null effect line
+    geom_vline(xintercept = 0, linetype = "dashed", color = "black", linewidth = 0.8) +
+    # Pooled effect line
     geom_vline(xintercept = ma_result$pooled_effect,
-               linetype = "dashed", color = "red", size = 1) +
-    # Add funnel (pseudo confidence interval)
-    geom_abline(intercept = 0, slope = 1.96, linetype = "dotted", color = "gray50") +
-    geom_abline(intercept = 0, slope = -1.96, linetype = "dotted", color = "gray50") +
+               linetype = "solid", color = "red", linewidth = 1.2) +
     scale_y_reverse() +
     labs(
-      title = paste("Funnel Plot:", outcome_name),
+      title = paste("Contour-Enhanced Funnel Plot:", outcome_name),
       subtitle = if (!is.null(ma_result$egger_test)) {
-        sprintf("Egger's test: p = %.3f", ma_result$egger_test$p_value)
+        sprintf("Egger's test: p = %.3f | Shaded regions show significance thresholds", ma_result$egger_test$p_value)
       } else {
-        "Funnel plot for publication bias assessment"
+        "Shaded regions show p < 0.10, 0.05, 0.01 thresholds"
       },
       x = "Effect Size",
-      y = "Standard Error"
+      y = "Standard Error",
+      caption = "Peters et al. (2008) contour-enhanced funnel plot"
     ) +
     theme_minimal() +
     theme(
       plot.title = element_text(size = 14, face = "bold"),
-      plot.subtitle = element_text(size = 10, color = "gray40")
+      plot.subtitle = element_text(size = 9, color = "gray40"),
+      plot.caption = element_text(size = 7, color = "gray50", hjust = 0)
     )
 
   # Save the plot
