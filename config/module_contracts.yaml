@@ -1,0 +1,845 @@
+# Module Contracts for EvidenceOS PRIME
+# MIT "Legible Software" Architecture - Explicit Synchronization Contracts
+# Version: 2.0.0
+# Purpose: Define explicit dependencies between modules to enable:
+#   - Safe incremental development
+#   - LLM-assisted coding without breaking changes
+#   - Transparent data flow
+#   - Guaranteed integrity across module boundaries
+
+version: "2.0.0"
+schema_version: "1.0"
+
+# ==============================================================================
+# CONCEPTS (User-Facing Functional Units)
+# ==============================================================================
+
+concepts:
+
+  # --------------------------------------------------------------------------
+  # DATA MANAGEMENT CONCEPTS
+  # --------------------------------------------------------------------------
+
+  data_import:
+    description: "Upload and validate study data from CSV/Excel"
+    user_value: "Converts raw data into analysis-ready format"
+
+    consumes: []
+
+    produces:
+      validated_data:
+        type: "data.frame"
+        schema:
+          required_columns: ["study_id", "yi", "sei"]
+          optional_columns: ["treatment", "outcome", "rob", "year", "sample_size"]
+          constraints:
+            - "study_id must be unique per arm"
+            - "yi and sei must be numeric"
+            - "sei > 0"
+        destination: "data_store"
+
+    api_calls:
+      - endpoint: "/validate"
+        purpose: "Python-based enhanced validation"
+      - endpoint: "/compute/yi"
+        purpose: "Effect size computation from raw data"
+
+    can_fail: false  # Entry point, always available
+
+  # --------------------------------------------------------------------------
+
+  protocol:
+    description: "Define study protocol using PICO framework"
+    user_value: "Ensures analysis aligns with pre-specified protocol"
+
+    consumes: []
+
+    produces:
+      protocol_definition:
+        type: "list"
+        schema:
+          required_fields: ["population", "intervention", "comparator", "outcomes"]
+          optional_fields: ["inclusion_criteria", "exclusion_criteria", "prisma_checklist"]
+        destination: "protocol_store"
+
+    api_calls: []
+
+    can_fail: false
+
+  # --------------------------------------------------------------------------
+  # CORE ANALYSIS CONCEPTS
+  # --------------------------------------------------------------------------
+
+  meta_pairwise:
+    description: "Pairwise random/fixed effects meta-analysis"
+    user_value: "Pool treatment effects across studies with heterogeneity assessment"
+
+    consumes:
+      validated_data:
+        source: "data_store"
+        required: true
+        validation: "must have yi, sei, study_id columns"
+
+    produces:
+      pairwise_results:
+        type: "list"
+        schema:
+          required_fields:
+            - "estimate"      # numeric
+            - "se"            # numeric
+            - "ci_lower"      # numeric
+            - "ci_upper"      # numeric
+            - "tau2"          # numeric
+            - "I2"            # numeric
+            - "Q"             # numeric
+            - "p_value"       # numeric
+            - "k"             # integer (number of studies)
+          optional_fields:
+            - "prediction_interval"  # list(lower, upper)
+            - "forest_plot"          # plotly object
+            - "funnel_plot"          # plotly object
+        destination: "analysis_results_store"
+
+    api_calls: []
+
+    can_fail: true
+    failure_modes:
+      - "Insufficient studies (k < 2)"
+      - "All studies have same effect (no variance)"
+
+  # --------------------------------------------------------------------------
+
+  nma:
+    description: "Network meta-analysis for multi-arm trials"
+    user_value: "Compare multiple treatments simultaneously"
+
+    consumes:
+      validated_data:
+        source: "data_store"
+        required: true
+        validation: "must have treatment column with ≥3 unique treatments"
+
+    produces:
+      nma_results:
+        type: "list"
+        schema:
+          required_fields:
+            - "league_table"     # matrix
+            - "rankings"         # data.frame
+            - "network_plot"     # plotly object
+          optional_fields:
+            - "inconsistency"    # list
+        destination: "analysis_results_store"
+
+    api_calls: []
+
+    can_fail: true
+    failure_modes:
+      - "Disconnected network"
+      - "Insufficient comparisons"
+
+  # --------------------------------------------------------------------------
+
+  dose_response:
+    description: "Dose-response meta-analysis with RCS"
+    user_value: "Model non-linear dose-effect relationships"
+
+    consumes:
+      validated_data:
+        source: "data_store"
+        required: true
+        validation: "must have dose column with numeric values"
+
+    produces:
+      dr_results:
+        type: "list"
+        schema:
+          required_fields:
+            - "dose_response_curve"  # data.frame
+            - "linearity_test"       # list
+            - "dose_plot"            # plotly object
+        destination: "analysis_results_store"
+
+    api_calls: []
+
+    can_fail: true
+    failure_modes:
+      - "Insufficient dose levels (< 3)"
+
+  # --------------------------------------------------------------------------
+  # SENSITIVITY & EXPLORATION CONCEPTS
+  # --------------------------------------------------------------------------
+
+  sensitivity:
+    description: "Scenario-based sensitivity analysis"
+    user_value: "Assess robustness of findings to analysis decisions"
+
+    consumes:
+      validated_data:
+        source: "data_store"
+        required: true
+      pairwise_results:
+        source: "analysis_results_store"
+        required: false  # Can run independently
+
+    produces:
+      sensitivity_results:
+        type: "list"
+        schema:
+          required_fields:
+            - "scenarios"           # list of scenario objects
+            - "comparison_table"    # data.frame
+          optional_fields:
+            - "comparison_plot"     # plotly object
+        destination: "analysis_results_store"
+
+    mutates:
+      validated_data:
+        how: "Creates filtered copies, never modifies original"
+
+    api_calls: []
+
+    can_fail: false
+
+  # --------------------------------------------------------------------------
+  # HEALTH ECONOMICS CONCEPTS
+  # --------------------------------------------------------------------------
+
+  he_params:
+    description: "Health economics parameter definition"
+    user_value: "Country-specific cost-effectiveness inputs"
+
+    consumes: []
+
+    produces:
+      he_parameters:
+        type: "list"
+        schema:
+          required_fields:
+            - "country"              # character
+            - "wtp_threshold"        # numeric
+            - "discount_rate"        # numeric (0-1)
+            - "time_horizon"         # integer (years)
+            - "utility_stable"       # numeric (0-1)
+            - "utility_progressed"   # numeric (0-1)
+            - "cost_treatment"       # numeric
+            - "cost_comparator"      # numeric
+            - "n_iterations"         # integer
+        destination: "he_params_store"
+
+    config_files:
+      - "config/countries/uk.yaml"
+      - "config/countries/us.yaml"
+      - "config/countries/germany.yaml"
+      - "config/countries/france.yaml"
+      - "config/countries/canada.yaml"
+
+    api_calls: []
+
+    can_fail: false
+
+  # --------------------------------------------------------------------------
+
+  he_model:
+    description: "Markov cohort model for cost-effectiveness"
+    user_value: "Estimate QALYs and costs with uncertainty propagation"
+
+    consumes:
+      he_parameters:
+        source: "he_params_store"
+        required: true
+      pairwise_results:
+        source: "analysis_results_store"
+        required: false
+        purpose: "Use MA-derived HRs with uncertainty"
+
+    produces:
+      he_model_results:
+        type: "list"
+        schema:
+          required_fields:
+            - "qalys_treatment"      # numeric
+            - "qalys_comparator"     # numeric
+            - "costs_treatment"      # numeric
+            - "costs_comparator"     # numeric
+            - "inc_qalys"            # numeric
+            - "inc_costs"            # numeric
+            - "icer"                 # numeric
+            - "trace_treatment"      # matrix
+            - "trace_comparator"     # matrix
+          optional_fields:
+            - "psa_results"          # data.frame (PSA iterations)
+            - "inc_qalys_se"         # numeric
+            - "inc_costs_se"         # numeric
+        destination: "he_results_store"
+
+    api_calls: []
+
+    can_fail: true
+    failure_modes:
+      - "Invalid transition probabilities (> 1 or < 0)"
+
+  # --------------------------------------------------------------------------
+
+  he_bcea:
+    description: "Cost-effectiveness analysis with VOI"
+    user_value: "CEAC, EVPI, cost-effectiveness plane"
+
+    consumes:
+      he_model_results:
+        source: "he_results_store"
+        required: true
+        validation: "must have psa_results for full analysis"
+      he_parameters:
+        source: "he_params_store"
+        required: true
+
+    produces:
+      bcea_results:
+        type: "list"
+        schema:
+          required_fields:
+            - "ceac"                 # data.frame
+            - "ce_plane"             # plotly object
+            - "evpi"                 # numeric
+        destination: "he_results_store"
+
+    api_calls: []
+
+    can_fail: false  # Can run with deterministic results
+
+  # --------------------------------------------------------------------------
+
+  he_budget_impact:
+    description: "Budget impact analysis over time"
+    user_value: "Multi-year budget projections for payers"
+
+    consumes:
+      he_model_results:
+        source: "he_results_store"
+        required: true
+
+    produces:
+      bia_results:
+        type: "list"
+        schema:
+          required_fields:
+            - "annual_budget"        # numeric vector
+            - "cumulative_budget"    # numeric vector
+            - "tornado_plot"         # plotly object
+        destination: "he_results_store"
+
+    api_calls: []
+
+    can_fail: false
+
+  # --------------------------------------------------------------------------
+  # OUTPUT & REPORTING CONCEPTS
+  # --------------------------------------------------------------------------
+
+  reporting:
+    description: "Generate publication-ready reports"
+    user_value: "Word/PDF/PowerPoint with embedded plots and tables"
+
+    consumes:
+      validated_data:
+        source: "data_store"
+        required: false
+      protocol_definition:
+        source: "protocol_store"
+        required: false
+      pairwise_results:
+        source: "analysis_results_store"
+        required: false
+      nma_results:
+        source: "analysis_results_store"
+        required: false
+      dr_results:
+        source: "analysis_results_store"
+        required: false
+      he_model_results:
+        source: "he_results_store"
+        required: false
+
+    produces:
+      report_artifacts:
+        type: "list"
+        schema:
+          required_fields:
+            - "file_paths"           # character vector
+            - "formats"              # character vector (Word/PDF/PPT)
+        destination: "file_system"
+        file_locations:
+          - "outputs/reports/"
+
+    api_calls: []
+
+    can_fail: true
+    failure_modes:
+      - "No data available to report"
+      - "Template not found"
+
+  # --------------------------------------------------------------------------
+
+  audit:
+    description: "Audit trail display"
+    user_value: "Complete reproducibility log"
+
+    consumes:
+      audit_log:
+        source: "audit_store"
+        required: true
+
+    produces: {}
+
+    api_calls: []
+
+    can_fail: false
+
+  # --------------------------------------------------------------------------
+  # AI & CLIENT-FACING CONCEPTS
+  # --------------------------------------------------------------------------
+
+  ai_copilot:
+    description: "Natural language query interface"
+    user_value: "Ask questions about results in plain English"
+
+    consumes:
+      validated_data:
+        source: "data_store"
+        required: false
+      pairwise_results:
+        source: "analysis_results_store"
+        required: false
+      he_model_results:
+        source: "he_results_store"
+        required: false
+
+    produces:
+      copilot_responses:
+        type: "list"
+        schema:
+          required_fields:
+            - "question"             # character
+            - "answer"               # character
+            - "confidence"           # numeric (0-1)
+            - "actions"              # list
+        destination: "ephemeral"  # Not persisted
+
+    api_calls:
+      - endpoint: "/nlq"
+        purpose: "Natural language query processing"
+      - endpoint: "/interpret/heterogeneity"
+        purpose: "I² interpretation"
+
+    can_fail: true
+    failure_modes:
+      - "API unavailable"
+      - "Rate limit exceeded"
+
+  # --------------------------------------------------------------------------
+
+  client_portal:
+    description: "White-label client-facing dashboard"
+    user_value: "Read-only results portal for external stakeholders"
+
+    consumes:
+      validated_data:
+        source: "data_store"
+        required: true
+      pairwise_results:
+        source: "analysis_results_store"
+        required: true
+
+    produces:
+      portal_apps:
+        type: "list"
+        schema:
+          required_fields:
+            - "app_path"             # character
+            - "url"                  # character
+        destination: "file_system"
+        file_locations:
+          - "outputs/portals/"
+
+    api_calls: []
+
+    can_fail: false
+
+  # --------------------------------------------------------------------------
+
+  living_ma:
+    description: "Living meta-analysis with version control"
+    user_value: "Incremental updates as new studies emerge"
+
+    consumes:
+      validated_data:
+        source: "data_store"
+        required: true
+      pairwise_results:
+        source: "analysis_results_store"
+        required: true
+
+    produces:
+      living_ma_versions:
+        type: "list"
+        schema:
+          required_fields:
+            - "version_id"           # character
+            - "timestamp"            # POSIXct
+            - "delta_summary"        # list
+        destination: "version_store"
+
+    mutates:
+      validated_data:
+        how: "Appends new studies, maintains version history"
+      pairwise_results:
+        how: "Re-runs analysis with updated data"
+
+    api_calls: []
+
+    can_fail: false
+
+  # --------------------------------------------------------------------------
+
+  v2_features:
+    description: "Showcase module for advanced features"
+    user_value: "Scenario presets, cache management, protocol diff, advanced HE"
+
+    consumes:
+      # Context-dependent - can consume anything based on active feature
+      _any_:
+        source: "any_store"
+        required: false
+
+    produces: {}
+
+    mutates:
+      # Can apply presets that modify multiple stores
+      _multiple_stores_:
+        how: "Applies scenario presets that set multiple module inputs"
+
+    api_calls: []
+
+    can_fail: false
+
+# ==============================================================================
+# SYNCHRONIZATIONS (Explicit Inter-Concept Contracts)
+# ==============================================================================
+
+synchronizations:
+
+  # Data preparation flow
+  data_validated:
+    description: "When data import completes successfully"
+    trigger:
+      concept: "data_import"
+      event: "validation_complete"
+      condition: "validation successful"
+
+    effects:
+      - concept: "meta_pairwise"
+        action: "enable_ui"
+        data: "validated_data"
+      - concept: "nma"
+        action: "enable_ui"
+        data: "validated_data"
+      - concept: "dose_response"
+        action: "enable_ui"
+        data: "validated_data"
+      - concept: "sensitivity"
+        action: "enable_ui"
+        data: "validated_data"
+
+    constraints:
+      - "validated_data must remain immutable after this point"
+      - "all consuming concepts receive same data snapshot"
+
+  # --------------------------------------------------------------------------
+
+  # Analysis completion flow
+  pairwise_complete:
+    description: "When pairwise meta-analysis completes"
+    trigger:
+      concept: "meta_pairwise"
+      event: "analysis_complete"
+
+    effects:
+      - concept: "sensitivity"
+        action: "update_available_results"
+        data: "pairwise_results"
+      - concept: "he_model"
+        action: "enable_ma_integration"
+        data: "pairwise_results"
+      - concept: "reporting"
+        action: "update_available_sections"
+        data: "pairwise_results"
+      - concept: "client_portal"
+        action: "enable_generation"
+        data: "pairwise_results"
+      - concept: "living_ma"
+        action: "register_version"
+        data: "pairwise_results"
+
+    constraints:
+      - "pairwise_results must be read-only for all consumers"
+      - "each consumer must validate schema before use"
+
+  # --------------------------------------------------------------------------
+
+  # Health economics flow
+  he_params_defined:
+    description: "When HE parameters are set"
+    trigger:
+      concept: "he_params"
+      event: "params_saved"
+
+    effects:
+      - concept: "he_model"
+        action: "enable_model_run"
+        data: "he_parameters"
+      - concept: "he_bcea"
+        action: "update_wtp_threshold"
+        data: "he_parameters"
+
+    constraints:
+      - "he_parameters immutable during model run"
+
+  # --------------------------------------------------------------------------
+
+  he_model_complete:
+    description: "When economic model completes"
+    trigger:
+      concept: "he_model"
+      event: "model_complete"
+
+    effects:
+      - concept: "he_bcea"
+        action: "enable_cea"
+        data: "he_model_results"
+      - concept: "he_budget_impact"
+        action: "enable_bia"
+        data: "he_model_results"
+      - concept: "reporting"
+        action: "update_available_sections"
+        data: "he_model_results"
+
+    constraints:
+      - "he_model_results immutable after first consumer receives it"
+
+  # --------------------------------------------------------------------------
+
+  # Living MA update flow
+  living_ma_update:
+    description: "When new studies added to living MA"
+    trigger:
+      concept: "living_ma"
+      event: "studies_added"
+
+    effects:
+      - concept: "data_import"
+        action: "merge_new_data"
+        data: "new_studies"
+      - concept: "meta_pairwise"
+        action: "re_run_analysis"
+        data: "updated_validated_data"
+      - concept: "audit"
+        action: "log_update"
+        data: "delta_summary"
+
+    constraints:
+      - "original data preserved as version snapshot"
+      - "new analysis marked with version ID"
+
+  # --------------------------------------------------------------------------
+
+  # Report generation flow
+  report_requested:
+    description: "When user requests report generation"
+    trigger:
+      concept: "reporting"
+      event: "generate_report_clicked"
+
+    effects:
+      - concept: "audit"
+        action: "log_report_generation"
+        data: "report_metadata"
+
+    constraints:
+      - "all data must be snapshotted before report generation"
+      - "report hash computed for reproducibility"
+
+# ==============================================================================
+# DATA STORES (Centralized State Management)
+# ==============================================================================
+
+data_stores:
+
+  data_store:
+    description: "Validated study data"
+    schema: "data.frame with yi, sei, study_id"
+    writers: ["data_import", "living_ma"]
+    readers: ["meta_pairwise", "nma", "dose_response", "sensitivity", "reporting", "client_portal", "living_ma", "ai_copilot"]
+    immutability: "write-once per analysis, versioned for living MA"
+
+  protocol_store:
+    description: "Study protocol definition"
+    schema: "list with PICO fields"
+    writers: ["protocol"]
+    readers: ["sensitivity", "reporting"]
+    immutability: "can be versioned, locked after analysis starts"
+
+  analysis_results_store:
+    description: "All meta-analysis results"
+    schema: "nested list keyed by outcome and analysis type"
+    writers: ["meta_pairwise", "nma", "dose_response", "sensitivity"]
+    readers: ["sensitivity", "he_model", "reporting", "client_portal", "living_ma", "ai_copilot"]
+    immutability: "write-once per analysis, new analyses create new keys"
+
+  he_params_store:
+    description: "Health economics parameters"
+    schema: "list with HE parameter fields"
+    writers: ["he_params"]
+    readers: ["he_model", "he_bcea", "he_budget_impact"]
+    immutability: "can be modified before model run, locked during run"
+
+  he_results_store:
+    description: "Health economics results"
+    schema: "nested list with model, BCEA, BIA results"
+    writers: ["he_model", "he_bcea", "he_budget_impact"]
+    readers: ["he_bcea", "he_budget_impact", "reporting", "ai_copilot"]
+    immutability: "write-once per model run"
+
+  audit_store:
+    description: "Complete audit trail"
+    schema: "list of audit entries"
+    writers: ["all_concepts"]
+    readers: ["audit", "reporting"]
+    immutability: "append-only, never delete"
+
+  version_store:
+    description: "Living MA version history"
+    schema: "list of version snapshots"
+    writers: ["living_ma"]
+    readers: ["living_ma", "reporting"]
+    immutability: "append-only, never modify past versions"
+
+# ==============================================================================
+# SCHEMA DEFINITIONS (Runtime Type Validation)
+# ==============================================================================
+
+schemas:
+
+  validated_data:
+    type: "data.frame"
+    required_columns:
+      study_id: "character"
+      yi: "numeric"
+      sei: "numeric"
+    optional_columns:
+      treatment: "character"
+      outcome: "character"
+      rob: "character"
+      year: "integer"
+      sample_size: "integer"
+      dose: "numeric"
+    constraints:
+      - field: "sei"
+        rule: "> 0"
+      - field: "study_id"
+        rule: "no duplicates within same arm"
+
+  pairwise_results:
+    type: "list"
+    required_fields:
+      estimate: "numeric"
+      se: "numeric"
+      ci_lower: "numeric"
+      ci_upper: "numeric"
+      tau2: "numeric"
+      I2: "numeric"
+      Q: "numeric"
+      p_value: "numeric"
+      k: "integer"
+    optional_fields:
+      prediction_interval: "list"
+      forest_plot: "plotly"
+      funnel_plot: "plotly"
+    constraints:
+      - field: "k"
+        rule: ">= 2"
+      - field: "I2"
+        rule: ">= 0 and <= 100"
+
+  he_parameters:
+    type: "list"
+    required_fields:
+      country: "character"
+      wtp_threshold: "numeric"
+      discount_rate: "numeric"
+      time_horizon: "integer"
+      utility_stable: "numeric"
+      utility_progressed: "numeric"
+      cost_treatment: "numeric"
+      cost_comparator: "numeric"
+      n_iterations: "integer"
+    constraints:
+      - field: "discount_rate"
+        rule: ">= 0 and <= 1"
+      - field: "utility_stable"
+        rule: ">= 0 and <= 1"
+      - field: "utility_progressed"
+        rule: ">= 0 and <= 1"
+      - field: "time_horizon"
+        rule: "> 0"
+      - field: "n_iterations"
+        rule: ">= 1000"
+
+# ==============================================================================
+# LLM SAFETY RULES
+# ==============================================================================
+
+llm_safety:
+  description: "Rules for LLM-assisted code modifications"
+
+  rules:
+    - rule: "Before modifying any module, read module_contracts.yaml"
+      rationale: "Understand dependencies"
+
+    - rule: "When adding a new field to a data store, update all readers"
+      rationale: "Prevent deserialization errors"
+
+    - rule: "Never modify immutable stores"
+      rationale: "Preserve integrity guarantees"
+
+    - rule: "Always validate schema changes against consumers"
+      rationale: "Type safety"
+
+    - rule: "Test all synchronizations affected by change"
+      rationale: "Ensure data flows remain valid"
+
+    - rule: "Update version number when contracts change"
+      rationale: "Track breaking changes"
+
+  verification_checklist:
+    - "Module contract updated?"
+    - "Schema validators updated?"
+    - "All consuming modules tested?"
+    - "Synchronizations still valid?"
+    - "Documentation updated?"
+    - "No breaking changes to immutable stores?"
+
+# ==============================================================================
+# METADATA
+# ==============================================================================
+
+metadata:
+  created_at: "2025-11-08"
+  created_by: "Architecture Refactoring - MIT Legible Software Pattern"
+  purpose: "Enable safe incremental development with guaranteed integrity"
+  benefits:
+    - "LLMs can verify contracts before code changes"
+    - "Explicit dependencies make refactoring safe"
+    - "New modules can be added without breaking existing ones"
+    - "Data flow is transparent and auditable"
+    - "Integrity guaranteed by schema validation"
