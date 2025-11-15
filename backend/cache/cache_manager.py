@@ -29,9 +29,9 @@ class CacheManager:
         self.cache_dir = Path(cache_dir)
         self.cache_dir.mkdir(parents=True, exist_ok=True)
         self.index_file = self.cache_dir / "cache_index.parquet"
-        self._load_index()
-        self._index_dirty = False  # Track if index needs saving
+        self._index_dirty = False  # Track if index needs saving - MUST be before _load_index()
         self._access_count = 0  # Count accesses between saves
+        self._load_index()
 
     def _load_index(self):
         """Load cache index or create new one"""
