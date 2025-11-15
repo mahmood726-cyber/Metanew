@@ -2,7 +2,37 @@
 
 ## 5-Minute Setup
 
-### Option 1: Docker (Easiest)
+### Option 1: GitHub Codespaces (Fastest)
+
+```bash
+# 1. Click "Code" → "Create codespace on [branch]"
+# 2. Wait for container to build (~5 minutes first time)
+# 3. Run in terminal:
+docker-compose up -d
+
+# 4. Click on forwarded ports in VS Code
+# Shiny App: Port 3838
+# AI Copilot API: Port 8001
+```
+
+### Option 2: Docker (Local Development)
+
+```bash
+# 1. Clone the repository
+git clone https://github.com/your-org/evidenceos-prime.git
+cd evidenceos-prime
+
+# 2. Start the application
+docker-compose up -d
+
+# 3. Wait 30 seconds for services to start
+
+# 4. Open your browser
+# Shiny App: http://localhost:3838
+# AI Copilot API: http://localhost:8001/docs
+```
+
+### Option 3: Docker (Legacy - Single Container)
 
 ```bash
 # 1. Navigate to docker directory
@@ -15,10 +45,10 @@ docker-compose up -d
 
 # 4. Open your browser
 # Shiny App: http://localhost:3838
-# API Docs: http://localhost:8000/docs
+# Main API: http://localhost:8000/docs
 ```
 
-### Option 2: Local Development
+### Option 4: Local Development (No Docker)
 
 **Terminal 1 - Python Backend:**
 ```bash

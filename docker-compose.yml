@@ -45,6 +45,8 @@ services:
       # Mount outputs directory for persistent storage
       - ./frontend/outputs:/srv/shiny-server/evidenceos/outputs
       - ./frontend/data/uploads:/srv/shiny-server/evidenceos/data/uploads
+      # Mount config directory from root
+      - ./config:/srv/shiny-server/evidenceos/config:ro
     depends_on:
       ai-backend:
         condition: service_healthy

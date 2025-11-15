@@ -24,6 +24,11 @@ FROM python:3.11-slim
 # Set working directory
 WORKDIR /app
 
+# Install runtime dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
 # Copy Python packages from builder
 COPY --from=builder /root/.local /root/.local
 
@@ -32,6 +37,7 @@ ENV PATH=/root/.local/bin:$PATH
 
 # Copy application code
 COPY nlq.py .
+COPY __init__.py .
 
 # Create non-root user for security
 RUN useradd -m -u 1000 appuser && \

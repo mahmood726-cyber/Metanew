@@ -50,7 +50,7 @@ RUN mkdir -p /srv/shiny-server/evidenceos
 COPY app.R /srv/shiny-server/evidenceos/
 COPY modules/ /srv/shiny-server/evidenceos/modules/
 COPY utils/ /srv/shiny-server/evidenceos/utils/
-COPY config/ /srv/shiny-server/evidenceos/config/
+# Note: config directory should be mounted as volume or copied from parent context
 
 # Create outputs directory with proper permissions
 RUN mkdir -p /srv/shiny-server/evidenceos/outputs && \

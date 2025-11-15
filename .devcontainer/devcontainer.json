@@ -1,0 +1,53 @@
+{
+  "name": "EvidenceOS PRIME",
+  "dockerComposeFile": "../docker-compose.yml",
+  "service": "shiny-frontend",
+  "workspaceFolder": "/workspace",
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "REditorSupport.r",
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        "ms-azuretools.vscode-docker",
+        "eamodio.gitlens",
+        "redhat.vscode-yaml"
+      ],
+      "settings": {
+        "python.defaultInterpreterPath": "/usr/local/bin/python",
+        "python.linting.enabled": true,
+        "python.linting.pylintEnabled": false,
+        "python.linting.flake8Enabled": true,
+        "python.formatting.provider": "black",
+        "r.rterm.linux": "/usr/bin/R",
+        "r.lsp.enabled": true
+      }
+    }
+  },
+
+  "forwardPorts": [3838, 8001, 80],
+  "portsAttributes": {
+    "3838": {
+      "label": "Shiny Frontend",
+      "onAutoForward": "notify"
+    },
+    "8001": {
+      "label": "AI Copilot API",
+      "onAutoForward": "silent"
+    },
+    "80": {
+      "label": "Nginx (Production)",
+      "onAutoForward": "ignore"
+    }
+  },
+
+  "postCreateCommand": "echo 'EvidenceOS PRIME Codespace ready! Run: docker-compose up -d' && docker-compose ps",
+
+  "features": {
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {},
+    "ghcr.io/devcontainers/features/git:1": {}
+  },
+
+  "remoteUser": "root"
+}
