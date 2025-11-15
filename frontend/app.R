@@ -176,18 +176,32 @@ server <- function(input, output, session) {
     )
   })
 
-  # API status check
+  # API status check - OPTIMIZED: Use reactivePoll to check every 30s instead of on every render
+  api_health_status <- reactivePoll(
+    intervalMillis = 30000,  # Check every 30 seconds
+    session,
+    checkFunc = function() {
+      # Return current time to trigger valueFunc periodically
+      as.numeric(Sys.time())
+    },
+    valueFunc = function() {
+      # Only run expensive check when time changes
+      tryCatch({
+        status <- check_api_health()
+        if (status$healthy) {
+          "✓ API Connected"
+        } else {
+          "✗ API Offline"
+        }
+      }, error = function(e) {
+        "✗ API Unavailable"
+      })
+    }
+  )
+
+  # Render the cached status
   output$api_status <- renderText({
-    tryCatch({
-      status <- check_api_health()
-      if (status$healthy) {
-        "✓ API Connected"
-      } else {
-        "✗ API Offline"
-      }
-    }, error = function(e) {
-      "✗ API Unavailable"
-    })
+    api_health_status()
   })
 
   # Module servers

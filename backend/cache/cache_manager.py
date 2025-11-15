@@ -30,6 +30,8 @@ class CacheManager:
         self.cache_dir.mkdir(parents=True, exist_ok=True)
         self.index_file = self.cache_dir / "cache_index.parquet"
         self._load_index()
+        self._index_dirty = False  # Track if index needs saving
+        self._access_count = 0  # Count accesses between saves
 
     def _load_index(self):
         """Load cache index or create new one"""
@@ -53,13 +55,22 @@ class CacheManager:
             })
             self._save_index()
 
-    def _save_index(self):
-        """Save cache index to disk"""
+    def _save_index(self, force: bool = False):
+        """
+        Save cache index to disk with write-back caching
+
+        Args:
+            force: Force immediate write even if not dirty
+        """
+        if not force and not self._index_dirty:
+            return
+
         # Ensure dtypes before saving
         if len(self.index) > 0:
             self.index['access_count'] = self.index['access_count'].astype('int64')
             self.index['size_bytes'] = self.index['size_bytes'].astype('int64')
         self.index.to_parquet(self.index_file, compression='snappy')
+        self._index_dirty = False
 
     def _generate_cache_key(self, analysis_type: str, parameters: Dict[str, Any]) -> str:
         """
@@ -105,10 +116,19 @@ class CacheManager:
             self._save_index()
             return None
 
-        # Update access statistics
-        self.index.loc[self.index['cache_key'] == cache_key, 'last_accessed'] = datetime.now()
-        self.index.loc[self.index['cache_key'] == cache_key, 'access_count'] += 1
-        self._save_index()
+        # Update access statistics - OPTIMIZED: Combined update + write-back caching
+        mask = self.index['cache_key'] == cache_key
+        self.index.loc[mask, ['last_accessed', 'access_count']] = [
+            datetime.now(),
+            self.index.loc[mask, 'access_count'].values[0] + 1
+        ]
+        self._index_dirty = True
+        self._access_count += 1
+
+        # Only save index every 10 accesses (configurable)
+        if self._access_count >= 10:
+            self._save_index()
+            self._access_count = 0
 
         # Load and return data
         try:
@@ -155,7 +175,8 @@ class CacheManager:
         # Remove old entry if exists
         self.index = self.index[self.index['cache_key'] != cache_key]
         self.index = pd.concat([self.index, new_entry], ignore_index=True)
-        self._save_index()
+        self._index_dirty = True
+        self._save_index(force=True)  # Always save immediately after put
 
         return cache_key
 
@@ -181,7 +202,8 @@ class CacheManager:
 
         # Remove from index
         self.index = self.index[self.index['cache_key'] != cache_key]
-        self._save_index()
+        self._index_dirty = True
+        self._save_index(force=True)  # Save immediately after invalidation
 
         return True
 
@@ -208,9 +230,21 @@ class CacheManager:
 
         # Update index
         self.index = self.index[pd.to_datetime(self.index['last_accessed']) >= cutoff]
-        self._save_index()
+        self._index_dirty = True
+        self._save_index(force=True)  # Save immediately after cleanup
 
         return count
+
+    def flush(self):
+        """Manually flush index to disk"""
+        self._save_index(force=True)
+
+    def __del__(self):
+        """Ensure index is saved on destruction"""
+        try:
+            self._save_index(force=True)
+        except:
+            pass  # Ignore errors during cleanup
 
     def get_stats(self) -> Dict[str, Any]:
         """Get cache statistics"""

@@ -36,17 +36,16 @@ create_forest_plot <- function(ma_result, outcome_name = "Outcome", save_path = 
   # Create interactive forest plot
   p <- plot_ly()
 
-  # Add confidence intervals
-  for (i in 1:nrow(data)) {
-    p <- p %>%
-      add_segments(
-        x = data$ci_lower[i], xend = data$ci_upper[i],
-        y = data$study_order[i], yend = data$study_order[i],
-        line = list(color = 'steelblue', width = 2),
-        showlegend = FALSE,
-        hoverinfo = "none"
-      )
-  }
+  # Add confidence intervals - OPTIMIZED: Vectorized instead of loop
+  p <- p %>%
+    add_segments(
+      data = data,
+      x = ~ci_lower, xend = ~ci_upper,
+      y = ~study_order, yend = ~study_order,
+      line = list(color = 'steelblue', width = 2),
+      showlegend = FALSE,
+      hoverinfo = "none"
+    )
 
   # Add point estimates (box size proportional to weight)
   p <- p %>%

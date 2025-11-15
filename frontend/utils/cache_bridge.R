@@ -1,24 +1,49 @@
-# R Bridge to Python Caching Layer
+# R Bridge to Python Caching Layer - OPTIMIZED
 # Provides R interface to Parquet caching for fast meta-analysis results storage
 
 library(reticulate)
 library(digest)
 library(jsonlite)
 
-#' Initialize cache manager
+# Global cache manager instance (singleton pattern)
+.cache_manager_instance <- NULL
+.cache_manager_dir <- NULL
+
+#' Initialize cache manager - OPTIMIZED: Singleton pattern
 #'
 #' @param cache_dir Directory for cache storage (default: "cache/parquet")
 #' @return Cache manager object
 init_cache_manager <- function(cache_dir = "cache/parquet") {
+  # Return existing instance if already initialized with same directory
+  if (!is.null(.cache_manager_instance) &&
+      !is.null(.cache_manager_dir) &&
+      .cache_manager_dir == cache_dir) {
+    return(.cache_manager_instance)
+  }
+
+  # Initialize new cache manager
   tryCatch({
     # Import Python cache module
     cache_module <- import_from_path("cache_manager", path = "../../backend/cache")
     cache_manager <- cache_module$CacheManager(cache_dir = cache_dir)
+
+    # Store globally
+    .cache_manager_instance <<- cache_manager
+    .cache_manager_dir <<- cache_dir
+
+    message(sprintf("✓ Cache manager initialized: %s", cache_dir))
     return(cache_manager)
   }, error = function(e) {
     warning(paste("Could not initialize cache manager:", e$message))
     return(NULL)
   })
+}
+
+#' Reset cache manager (for testing or cleanup)
+reset_cache_manager <- function() {
+  .cache_manager_instance <<- NULL
+  .cache_manager_dir <<- NULL
+  message("Cache manager reset")
 }
 
 #' Generate cache key from analysis parameters

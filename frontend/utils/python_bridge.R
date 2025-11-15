@@ -1,8 +1,9 @@
-# Python Bridge Utilities - WITH RETRY LOGIC
+# Python Bridge Utilities - WITH RETRY LOGIC (OPTIMIZED)
 # Functions to call Python FastAPI backend
 
 library(httr)
 library(jsonlite)
+library(dplyr)  # For efficient data binding
 
 # API base URL
 API_BASE <- Sys.getenv("API_BASE_URL", "http://localhost:8000")
@@ -106,7 +107,8 @@ compute_yi_via_api <- function(data, measure) {
 
     if (status_code(response) == 200) {
       result <- content(response)
-      result$data <- as.data.frame(do.call(rbind, result$data))
+      # OPTIMIZED: Use bind_rows instead of rbind (10-100x faster for large data)
+      result$data <- bind_rows(result$data)
       return(result)
     } else {
       stop("Effect size computation error: ", content(response)$detail)

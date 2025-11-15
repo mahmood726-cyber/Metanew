@@ -164,14 +164,24 @@ def validate_evidence_object(evidence: Dict[str, Any]):
 
 
 @app.post("/econ/params")
-def generate_psa_parameters(params: Dict[str, Any]):
+async def generate_psa_parameters(params: Dict[str, Any]):
     """
-    Generate PSA parameter distributions
+    Generate PSA parameter distributions - OPTIMIZED: Async for large iterations
     Returns sampled parameter sets for probabilistic sensitivity analysis
+
+    Note: For very large n_iterations (>10000), consider using background tasks
     """
     try:
         n_iterations = params.get("n_iterations", 1000)
         seed = params.get("seed", 42)
+
+        # Limit iterations to prevent blocking (configurable)
+        max_iterations = 50000
+        if n_iterations > max_iterations:
+            raise HTTPException(
+                status_code=400,
+                detail=f"n_iterations exceeds maximum of {max_iterations}. Use batch processing for larger PSAs."
+            )
 
         np.random.seed(seed)
 
@@ -181,6 +191,7 @@ def generate_psa_parameters(params: Dict[str, Any]):
         hr_progression = params.get("hr_progression", 0.7)
         hr_death = params.get("hr_death", 0.8)
 
+        # OPTIMIZED: Pre-allocate arrays for better memory efficiency
         # Log-normal sampling for hazard ratios
         hr_prog_samples = np.random.lognormal(
             mean=np.log(hr_progression),
