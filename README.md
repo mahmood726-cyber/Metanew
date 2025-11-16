@@ -8,6 +8,21 @@ A comprehensive, end-to-end platform for systematic reviews, meta-analysis, netw
 [![R](https://img.shields.io/badge/R-4.0+-blue.svg)](https://www.r-project.org/)
 [![Python](https://img.shields.io/badge/Python-3.9+-blue.svg)](https://www.python.org/)
 ![Status](https://img.shields.io/badge/Status-100%25%20Complete-brightgreen.svg)
+[![Open in GitHub Codespaces](https://img.shields.io/badge/Open%20in-Codespaces-blue?logo=github)](https://github.com/codespaces/new)
+
+---
+
+## 🚀 Instant Setup with GitHub Codespaces
+
+**Get started in 3 clicks - no local setup required!**
+
+1. Click "Code" → "Codespaces" → "Create codespace"
+2. Wait ~10 minutes for automatic setup (first time only)
+3. Open http://localhost:3838 when ready
+
+All dependencies (Python, R, packages) install automatically. Services start on every launch.
+
+📖 [Full Codespaces Guide](CODESPACES_SETUP.md)
 
 ---
 
