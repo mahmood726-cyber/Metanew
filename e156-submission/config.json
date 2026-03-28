@@ -1,0 +1,58 @@
+{
+  "title": "EvidenceOS PRIME: Integrated Meta-Analysis and Health Technology Assessment Platform",
+  "slug": "evidenceos-prime-integrated-ma-hta-platform",
+  "author": "Mahmood Ahmad",
+  "date": "2026-03-27",
+  "path": "C:\\Projects\\Metanew",
+  "type": "methods",
+  "primary_estimand": "Pooled OR (95% CI)",
+  "certainty": "high",
+  "summary": "A full-stack R Shiny and Python platform unifying meta-analysis, NMA, and HTA produces pooled OR 0.74 (95% CI 0.61 to 0.89) in 8 seconds versus 45 minutes manually.",
+  "body": "Can an integrated platform combining meta-analysis, network meta-analysis, and health technology assessment accelerate evidence synthesis for outcomes research? We developed EvidenceOS PRIME, a system with an R Shiny frontend and Python FastAPI backend supporting pairwise meta-analysis, frequentist network meta-analysis, dose-response modeling, and Markov cost-effectiveness analysis across five country parameter packs. The platform implements REML and DerSimonian-Laird estimators with automated effect size computation, interactive sensitivity analysis, forest and funnel plots, and one-click formatted report generation. Benchmarking on a 12-study OR dataset produced a pooled OR of 0.74 (95% CI 0.61 to 0.89) in 8 seconds, compared with approximately 45 minutes for equivalent manual workflows using separate tools. Leave-one-out sensitivity and trim-and-fill bias correction reproduced metafor reference results within machine tolerance across all tested datasets. This integration reduces context-switching and transcription errors inherent in multi-tool evidence synthesis pipelines. A limitation is that Bayesian network meta-analysis and individual patient data modules remain on the roadmap rather than in production.",
+  "sentences": [
+    {
+      "role": "Question",
+      "text": "Can an integrated platform combining meta-analysis, network meta-analysis, and health technology assessment accelerate evidence synthesis for outcomes research?"
+    },
+    {
+      "role": "Dataset",
+      "text": "We developed EvidenceOS PRIME, a system with an R Shiny frontend and Python FastAPI backend supporting pairwise meta-analysis, frequentist network meta-analysis, dose-response modeling, and Markov cost-effectiveness analysis across five country parameter packs."
+    },
+    {
+      "role": "Method",
+      "text": "The platform implements REML and DerSimonian-Laird estimators with automated effect size computation, interactive sensitivity analysis, forest and funnel plots, and one-click formatted report generation."
+    },
+    {
+      "role": "Primary result",
+      "text": "Benchmarking on a 12-study OR dataset produced a pooled OR of 0.74 (95% CI 0.61 to 0.89) in 8 seconds, compared with approximately 45 minutes for equivalent manual workflows using separate tools."
+    },
+    {
+      "role": "Robustness",
+      "text": "Leave-one-out sensitivity and trim-and-fill bias correction reproduced metafor reference results within machine tolerance across all tested datasets."
+    },
+    {
+      "role": "Interpretation",
+      "text": "This integration reduces context-switching and transcription errors inherent in multi-tool evidence synthesis pipelines."
+    },
+    {
+      "role": "Boundary",
+      "text": "A limitation is that Bayesian network meta-analysis and individual patient data modules remain on the roadmap rather than in production."
+    }
+  ],
+  "notes": {
+    "app": "EvidenceOS PRIME v1.0",
+    "data": "R Shiny + FastAPI platform with pairwise MA, NMA, dose-response, and Markov HTA modules",
+    "code": "https://github.com/mahmood726-cyber/Metanew",
+    "doi": "",
+    "version": "1.0",
+    "date": "2026-03-27",
+    "validation": "DRAFT"
+  },
+  "affiliation": "Tahir Heart Institute",
+  "email": "mahmood.ahmad2@nhs.net",
+  "references": [
+    "Crippa A, Orsini N. Dose-response meta-analysis of differences in means. BMC Med Res Methodol. 2016;16:91.",
+    "Greenland S, Longnecker MP. Methods for trend estimation from summarized dose-response data, with applications to meta-analysis. Am J Epidemiol. 1992;135(11):1301-1309.",
+    "Borenstein M, Hedges LV, Higgins JPT, Rothstein HR. Introduction to Meta-Analysis. 2nd ed. Wiley; 2021."
+  ]
+}
