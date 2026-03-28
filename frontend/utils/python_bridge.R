@@ -9,13 +9,11 @@ API_BASE <- Sys.getenv("API_BASE_URL", "http://localhost:8000")
 
 # Retry wrapper with exponential backoff
 retry_api_call <- function(func, max_retries = 4, initial_delay = 2) {
-  """
-  Wrapper for API calls with exponential backoff retry logic
-  Args:
-    func: Function to call (should return httr response)
-    max_retries: Maximum number of retry attempts (default 4)
-    initial_delay: Initial delay in seconds (default 2)
-  """
+  # Wrapper for API calls with exponential backoff retry logic
+  # Args:
+  #   func: Function to call (should return httr response)
+  #   max_retries: Maximum number of retry attempts (default 4)
+  #   initial_delay: Initial delay in seconds (default 2)
   delays <- initial_delay * 2^(0:(max_retries - 1))  # Exponential: 2, 4, 8, 16
 
   for (attempt in 1:max_retries) {

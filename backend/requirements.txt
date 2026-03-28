@@ -3,15 +3,16 @@
 # Core framework
 fastapi==0.104.1
 uvicorn[standard]==0.24.0
-pydantic==2.5.0
+# Bump pydantic to a version with 3.13 wheels
+pydantic>=2.7.0
 
 # Data processing
-pandas==2.1.3
-numpy==1.26.2
+numpy>=2.0.0
+pandas>=2.2.0
 openpyxl==3.1.2  # Excel support
 
 # JSON handling
-orjson==3.9.10
+orjson>=3.9.10
 
 # Optional: Bayesian analysis (PyMC)
 # pymc==5.10.0
