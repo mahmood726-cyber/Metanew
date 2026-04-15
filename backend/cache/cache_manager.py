@@ -272,7 +272,7 @@ class MetaAnalysisCacheWrapper:
         if not force_refresh:
             cached = self.cache.get(analysis_type, parameters)
             if cached is not None:
-                print(f"✓ Cache hit for {analysis_type}")
+                print(f"[OK] Cache hit for {analysis_type}")
                 return cached
 
         # Run analysis
@@ -288,5 +288,5 @@ class MetaAnalysisCacheWrapper:
         }
         self.cache.put(analysis_type, parameters, results, metadata)
 
-        print(f"✓ Computed and cached in {elapsed:.2f}s")
+        print(f"[OK] Computed and cached in {elapsed:.2f}s")
         return results

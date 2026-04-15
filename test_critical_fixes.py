@@ -49,12 +49,12 @@ for country in countries:
         assert 'costs' in config
         assert 'utilities' in config
 
-        print(f"✓ {country.upper():8} - {config['country']}")
+        print(f"[OK] {country.upper():8} - {config['country']}")
         print(f"  WTP: {config['currency_symbol']}{config['wtp']['primary_threshold']:,}")
         print(f"  Discount: {config['discounting']['costs']*100}%")
 
     except Exception as e:
-        print(f"✗ {country.upper():8} - FAILED: {e}")
+        print(f"[FAIL] {country.upper():8} - FAILED: {e}")
         sys.exit(1)
 
 print()
@@ -80,7 +80,7 @@ result = validate_table(data_duplicates, data_type="continuous")
 duplicate_errors = [p for p in result.problems if 'Duplicate' in p.message]
 assert len(duplicate_errors) > 0, "Duplicate detection failed!"
 
-print(f"✓ Duplicate detection working")
+print(f"[OK] Duplicate detection working")
 print(f"  Found {len(duplicate_errors)} duplicate(s)")
 for err in duplicate_errors:
     print(f"  - {err.message}")
@@ -108,7 +108,7 @@ result = validate_table(data_outlier, data_type="continuous")
 outlier_warnings = [p for p in result.problems if 'outlier' in p.message.lower()]
 assert len(outlier_warnings) > 0, "Outlier detection failed!"
 
-print(f"✓ Outlier detection working")
+print(f"[OK] Outlier detection working")
 print(f"  Found {len(outlier_warnings)} outlier(s)")
 for warn in outlier_warnings:
     print(f"  - {warn.message}")
@@ -135,7 +135,7 @@ result = validate_table(data_multiarm, data_type="continuous")
 # Check for multi-arm validation
 multiarm_checks = [p for p in result.problems if 'Multi-arm' in p.message or 'variance heterogeneity' in p.message]
 # Multi-arm function may return info messages
-print(f"✓ Multi-arm validation called")
+print(f"[OK] Multi-arm validation called")
 if multiarm_checks:
     print(f"  Found {len(multiarm_checks)} multi-arm issue(s)")
     for check in multiarm_checks:
@@ -168,7 +168,7 @@ implausible_warnings = [p for p in result.problems if any(x in p.message.lower()
                         for x in ['extreme', 'very large', 'very small', 'small sample'])]
 assert len(implausible_warnings) > 0, "Implausible value detection failed!"
 
-print(f"✓ Implausible value detection working")
+print(f"[OK] Implausible value detection working")
 print(f"  Found {len(implausible_warnings)} implausible value(s)")
 for warn in implausible_warnings:
     print(f"  - {warn.message}")
@@ -192,9 +192,9 @@ for filepath, functions in r_files_to_check:
 
     for func_name in functions:
         if f"{func_name} <- function" in content or f"{func_name}=function" in content:
-            print(f"✓ {filepath:40} - {func_name}")
+            print(f"[OK] {filepath:40} - {func_name}")
         else:
-            print(f"✗ {filepath:40} - {func_name} NOT FOUND")
+            print(f"[FAIL] {filepath:40} - {func_name} NOT FOUND")
             sys.exit(1)
 
 # Check that he_params sources config_loader
@@ -202,9 +202,9 @@ with open("frontend/modules/he_params.R", 'r') as f:
     he_params_content = f.read()
 
 if 'source("utils/config_loader.R"' in he_params_content:
-    print(f"✓ {'frontend/modules/he_params.R':40} - sources config_loader.R")
+    print(f"[OK] {'frontend/modules/he_params.R':40} - sources config_loader.R")
 else:
-    print(f"✗ {'frontend/modules/he_params.R':40} - does NOT source config_loader.R")
+    print(f"[FAIL] {'frontend/modules/he_params.R':40} - does NOT source config_loader.R")
     sys.exit(1)
 
 print()
@@ -220,7 +220,7 @@ with open("frontend/modules/he_model.R", 'r') as f:
 
 # Check for hardcoded rbeta(n_sim, 80, 20)
 if "rbeta(n_sim, 80, 20)" in he_model_content:
-    print("✗ FAILED: Still using hardcoded rbeta(n_sim, 80, 20)")
+    print("[FAIL] FAILED: Still using hardcoded rbeta(n_sim, 80, 20)")
     sys.exit(1)
 
 # Check for proper parameter calculation
@@ -234,11 +234,11 @@ required_patterns = [
 all_found = all(pattern in he_model_content for pattern in required_patterns)
 
 if all_found:
-    print("✓ PSA distributions now use actual parameters")
+    print("[OK] PSA distributions now use actual parameters")
     print("  - Calculates alpha/beta from params$utility_stable")
     print("  - Uses rbeta(n_sim, alpha_stable, beta_stable)")
 else:
-    print("✗ FAILED: PSA distribution fix not complete")
+    print("[FAIL] FAILED: PSA distribution fix not complete")
     sys.exit(1)
 
 print()
@@ -254,7 +254,7 @@ with open("frontend/modules/meta_pairwise.R", 'r') as f:
 
 # Check for incorrect field access
 if "tf_ma$yi.fill" in ma_content or "tf_ma$sei.fill" in ma_content:
-    print("✗ FAILED: Still using incorrect tf_ma$yi.fill/sei.fill")
+    print("[FAIL] FAILED: Still using incorrect tf_ma$yi.fill/sei.fill")
     sys.exit(1)
 
 # Check for correct field access
@@ -267,12 +267,12 @@ required_patterns = [
 all_found = all(pattern in ma_content for pattern in required_patterns)
 
 if all_found:
-    print("✓ Trim-and-fill now uses correct metafor object structure")
+    print("[OK] Trim-and-fill now uses correct metafor object structure")
     print("  - Uses tf_ma$yi (not tf_ma$yi.fill)")
     print("  - Uses sqrt(tf_ma$vi) for SEI")
     print("  - Uses tf_ma$fill for imputed flag")
 else:
-    print("✗ FAILED: Trim-and-fill fix not complete")
+    print("[FAIL] FAILED: Trim-and-fill fix not complete")
     sys.exit(1)
 
 print()
@@ -281,21 +281,21 @@ print()
 # TEST SUMMARY
 # ============================================================================
 print("=" * 70)
-print("ALL CRITICAL BUG FIXES VERIFIED ✓")
+print("ALL CRITICAL BUG FIXES VERIFIED [OK]")
 print("=" * 70)
 print()
 print("Fixed Issues:")
-print("  1. ✓ Plot save functions (save_forest_plot, save_funnel_plot) now exist")
-print("  2. ✓ Trim-and-fill uses correct metafor object fields")
-print("  3. ✓ Multi-country configs load successfully")
-print("  4. ✓ PSA distributions use actual parameter values")
-print("  5. ✓ Multi-arm validation is called")
+print("  1. [OK] Plot save functions (save_forest_plot, save_funnel_plot) now exist")
+print("  2. [OK] Trim-and-fill uses correct metafor object fields")
+print("  3. [OK] Multi-country configs load successfully")
+print("  4. [OK] PSA distributions use actual parameter values")
+print("  5. [OK] Multi-arm validation is called")
 print()
 print("Enhanced Validation Working:")
-print("  ✓ Duplicate detection")
-print("  ✓ Outlier detection (IQR-based)")
-print("  ✓ Multi-arm trial consistency checks")
-print("  ✓ Implausible value detection")
+print("  [OK] Duplicate detection")
+print("  [OK] Outlier detection (IQR-based)")
+print("  [OK] Multi-arm trial consistency checks")
+print("  [OK] Implausible value detection")
 print()
 print("All tests passed! Code is ready for production.")
 print()

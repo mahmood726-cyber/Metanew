@@ -324,7 +324,7 @@ class LLMHandler:
                     n_gpu_layers=0  # CPU-only for now
                 )
                 self.use_llm = True
-                print(f"✓ LLM loaded from {model_path}")
+                print(f"[OK] LLM loaded from {model_path}")
             except ImportError:
                 print("⚠ llama-cpp-python not installed. Using rule-based fallback.")
             except Exception as e:
