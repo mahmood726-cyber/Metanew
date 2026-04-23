@@ -62,3 +62,5 @@ temp/
 # Data (exclude large datasets, keep samples)
 data/large_datasets/
 !data/sample_*.csv
+STUCK_FAILURES.md
+STUCK_FAILURES.jsonl
