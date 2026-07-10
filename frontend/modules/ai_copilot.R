@@ -116,7 +116,7 @@ ai_copilot_ui <- function(id) {
       layout_columns(
         col_widths = c(6, 3, 3),
         textInput(ns("api_url"), "API Endpoint",
-                  value = "http://localhost:8001",
+                  value = Sys.getenv("AI_BACKEND_URL", "http://localhost:8001"),
                   placeholder = "http://localhost:8001"),
         actionButton(ns("btn_test_connection"), "Test Connection",
                      class = "btn-sm btn-outline-secondary w-100"),

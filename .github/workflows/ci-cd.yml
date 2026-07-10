@@ -41,14 +41,10 @@ jobs:
           flags: backend
           name: backend-coverage
 
-      - name: Check test results
+      - name: Run full test suite (ETL + statistical core + cache)
         run: |
-          if [ $? -eq 0 ]; then
-            echo "✅ All 37 backend tests passed!"
-          else
-            echo "❌ Backend tests failed"
-            exit 1
-          fi
+          pip install -r backend/requirements.txt
+          python -m pytest tests/py backend -q
 
   # ============================================================================
   # LINTING AND CODE QUALITY
